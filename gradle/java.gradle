@@ -1,0 +1,29 @@
+
+
+allprojects {
+    afterEvaluate { javaProject ->
+        plugins.withType(JavaPlugin) {
+            def productResourcesDir = new File(processResources.destinationDir, 'env_product')
+
+            task copyResources(type: Copy) {
+                group processResources.group
+                from productResourcesDir
+                into processResources.destinationDir
+                description = "复制${mainSpec.sourcePaths}目录下的配置文件到${destinationDir}。"
+                doFirst { logger.info(description) }
+                doLast {
+                    inputs.files.each { logger.info("复制文件：${it.absolutePath}") }
+                }
+            }
+            processResources.finalizedBy copyResources
+
+            task deleteResources(type: Delete) {
+                group processResources.group
+                delete productResourcesDir
+                description = "删除${delete}。"
+                doFirst { logger.info(description) }
+            }
+            processResources.finalizedBy deleteResources
+        }
+    }
+}

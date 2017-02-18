@@ -1,0 +1,22 @@
+{
+  "groups": [{
+    "name": "mybatis.page",
+    "type": "com.jeeweb.framework.core.configure.MybatisPageProperties",
+    "sourceType": "com.jeeweb.framework.core.configure.MybatisPageProperties"
+  }],
+  "properties": [
+    {
+      "name": "mybatis.page.dialect",
+      "type": "java.lang.String",
+      "description": "数据库方言（类型）",
+      "sourceType": "com.jeeweb.framework.core.configure.MybatisPageProperties"
+    },
+    {
+      "name": "mybatis.page.sql-id-regex",
+      "type": "java.lang.String",
+      "description": "应用分页插件的SQL语句的ID（正则表达式匹配）",
+      "sourceType": "com.jeeweb.framework.core.configure.MybatisPageProperties"
+    }
+  ],
+  "hints": []
+}
