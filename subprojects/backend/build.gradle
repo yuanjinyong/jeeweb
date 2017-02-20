@@ -6,26 +6,16 @@
  * For more details take a look at the Java Quickstart chapter in the Gradle
  * user guide available at https://docs.gradle.org/3.2.1/userguide/tutorial_java_projects.html
  */
-
-
 // 添加Gradle插件
 plugins {
     id "org.springframework.boot" version "1.4.3.RELEASE"
 }
-
 apply plugin: 'war'
+apply from: "${gradleDir}/java.gradle"
 apply plugin: 'eclipse-wtp'
 
-apply from: "../gradle/java.gradle"
-apply from: "../gradle/war.gradle"
-apply from: "../gradle/eclipse.gradle"
 
-
-//指定编码格式
-[compileJava,compileTestJava,javadoc]*.options*.encoding = 'UTF-8'
-//指定JDK的版本
-//sourceCompatibility = 1.8
-//targetCompatibility = 1.8
+description = 'J2EE Web项目 - 后台工程'
 
 
 configurations {
@@ -38,7 +28,7 @@ configurations {
 dependencies {
     // spring-mvc，支持 Web 应用开发，包含 Tomcat 和 
     compile("org.springframework.boot:spring-boot-starter-web")
-    providedCompile("org.springframework.boot:spring-boot-starter-tomcat")
+    //providedCompile("org.springframework.boot:spring-boot-starter-tomcat")
     providedCompile("org.apache.tomcat:servlet-api:6.0.45")
     //compile("org.springframework.boot:spring-boot-starter-security")
     // 用于生成spring-configuration-metadata.json文件

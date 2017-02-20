@@ -10,6 +10,28 @@
  */
 
 rootProject.name = 'jeeweb'
- 
-include 'jeeweb-backend'
-include 'jeeweb-frontend'
+
+// Begin of include
+include 'backend'
+include 'frontend'
+// End of include
+
+
+settingProjects(rootProject)
+//设置工程的构建脚本名称和工程同名
+def settingProjects(parentProject) {
+    parentProject.children.each { project ->
+        if (project.children) {
+            settingProjects(project)
+        } else {
+            String projectRelativePath = project.path.replaceAll(':', '/').substring(1)
+
+            project.name = rootProject.name + '-' + project.path.replaceAll(':', '/').substring(1)
+            project.projectDir = new File(settingsDir, "subprojects/${projectRelativePath}")
+            //project.buildFileName = "${project.name}.gradle"
+
+            assert project.projectDir.isDirectory()
+            assert project.buildFile.isFile()
+        }
+    }
+}

@@ -1,32 +1,39 @@
+afterEvaluate { gradleProject ->
+    def serverName = 'Apache Tomcat v8.5'
+    def isJavaProject = false
+    plugins.withType(JavaPlugin) {
+        isJavaProject = true
+    }
 
+    plugins.withType(EclipsePlugin) {
+        eclipse {
+            project { project ->
+                comment = "${version}"
 
-allprojects {
-    afterEvaluate { gradleProject ->
-        plugins.withType(EclipsePlugin) {
-            eclipse {
-                project { project ->
-                    comment = "${version}"
+                file.withXml { xmlProvider ->
+                    def addFilterNode = { Node filteredResource, Long id, String name, Integer type, String arguments ->
+                        Node fileterNode = filteredResource.appendNode('filter')
+                        fileterNode.appendNode('id', id)
+                        fileterNode.appendNode('name', name)
+                        fileterNode.appendNode('type', type)
+                        Node matcherNode = fileterNode.appendNode('matcher')
+                        matcherNode.appendNode('id', 'org.eclipse.ui.ide.multiFilter')
+                        matcherNode.appendNode('arguments', arguments)
+                    }
 
-                    file.withXml { xmlProvider ->
-                        def addFilterNode = { Node filteredResource, Long id, String name, Integer type, String arguments ->
-                            Node fileterNode = filteredResource.appendNode('filter')
-                            fileterNode.appendNode('id', id)
-                            fileterNode.appendNode('name', name)
-                            fileterNode.appendNode('type', type)
-                            Node matcherNode = fileterNode.appendNode('matcher')
-                            matcherNode.appendNode('id', 'org.eclipse.ui.ide.multiFilter')
-                            matcherNode.appendNode('arguments', arguments)
-                        }
-
-                        def nodeId = new Date().getTime()
-                        Node projectNode = xmlProvider.asNode()
-                        Node filteredResource = projectNode.appendNode('filteredResources')
-                        //所有工程过滤掉svn目录和Gradle构建临时目录
-                        addFilterNode(filteredResource, nodeId++, '', 30, '1.0-name-matches-true-false-.svn')
-                        addFilterNode(filteredResource, nodeId++, '', 30, '1.0-name-matches-true-false-build')
+                    def nodeId = new Date().getTime()
+                    Node projectNode = xmlProvider.asNode()
+                    Node filteredResource = projectNode.appendNode('filteredResources')
+                    //所有工程过滤掉svn目录和Gradle构建临时目录
+                    addFilterNode(filteredResource, nodeId++, '', 30, '1.0-name-matches-true-false-.svn')
+                    addFilterNode(filteredResource, nodeId++, '', 30, '1.0-name-matches-true-false-build')
+                    if (gradleProject.equals(rootProject)) {
+                        addFilterNode(filteredResource, nodeId++, '', 30, '1.0-name-matches-true-false-subprojects')
                     }
                 }
+            }
 
+            if (isJavaProject) {
                 classpath {
                     downloadSources = true
                     downloadJavadoc = false
@@ -37,80 +44,80 @@ allprojects {
                             def libs = classpath.entries.findAll { entry -> entry.kind == 'lib' }
                             def cons = classpath.entries.findAll { entry -> entry.kind == 'con' }
                             def output = classpath.entries.findAll { entry -> entry.kind == 'output' }
-
+                
                             classpath.entries.clear()
                             classpath.entries.addAll(srcs)
                             classpath.entries.addAll(libs)
                             classpath.entries.addAll(cons.reverse())
                             classpath.entries.addAll(output)
-
+                
                             classpath.entries.findAll { entry -> entry.kind == 'lib' }*.exported = true
                         }
                     }
                 }
             }
         }
+    }
 
-        plugins.withType(EclipseWtpPlugin) {
-            def libDir = new File(webAppDir, 'WEB-INF/lib')
-            eclipse {
-                classpath {
-                    defaultOutputDir = new File(projectDir, "${webAppDirName}/WEB-INF/classes")
-                    containers 'org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v8.5'
-                }
+    plugins.withType(EclipseWtpPlugin) {
+        def libDir = new File(webAppDir, 'WEB-INF/lib')
+        eclipse {
+            classpath {
+                defaultOutputDir = new File(projectDir, "${webAppDirName}/WEB-INF/classes")
+                containers "org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/${serverName}"
+            }
 
-                wtp {
-                    component {
-                        gradleProject.sourceSets.test.allSource.srcDirs.each { file ->
-                            sourceDirs += file
-                        }
-                    }
-
-                    facet {
-                        file {
-                            withXml { provider ->
-                                Node node = provider.asNode()
-                                node.fixed.find { it.@facet == 'jst.java' }.@facet = 'java'
-                                node.installed.find { it.@facet == 'jst.java' }.@facet = 'java'
-                                node.installed.find { it.@facet == 'jst.web' }.@version = '3.0'
-                                node.appendNode('runtime', [name: 'Apache Tomcat v8.5'])
-                                node.appendNode('fixed', [facet: 'wst.jsdt.web'])
-                                node.appendNode('installed', [facet: 'wst.jsdt.web', version: '1.0'])
-                            }
-                        }
+            wtp {
+                component {
+                    gradleProject.sourceSets.test.allSource.srcDirs.each { file ->
+                        sourceDirs += file
                     }
                 }
-            }
 
-            task copyDependencyLibs(type: Copy) {
-                group eclipseWtp.group
-                from(configurations.compile+configurations.runtime-configurations.providedCompile-configurations.providedRuntime) {
-                    //exclude 'tomcat-embed-*.jar', 'tomcat-jdbc-*.jar'
+                facet {
+                    file {
+                        withXml { provider ->
+                            Node node = provider.asNode()
+                            node.fixed.find { it.@facet == 'jst.java' }.@facet = 'java'
+                            node.installed.find { it.@facet == 'jst.java' }.@facet = 'java'
+                            node.installed.find { it.@facet == 'jst.web' }.@version = '3.0'
+                            node.appendNode('runtime', [name: "${serverName}"])
+                            node.appendNode('fixed', [facet: 'wst.jsdt.web'])
+                            node.appendNode('installed', [facet: 'wst.jsdt.web', version: '1.0'])
+                        }
+                    }
                 }
-                into libDir
-                description = "复制依赖到的jar包到${destinationDir}。"
-                doFirst { logger.info(description) }
-                doLast {
-                    inputs.files.each { logger.info("复制文件：${it.absolutePath}") }
-                }
             }
-            eclipseClasspath.finalizedBy copyDependencyLibs
-
-            task cleanDependencyLibs(type: Delete) {
-                group eclipseWtp.group
-                delete libDir
-                description = "删除${libDir}。"
-                doFirst { logger.info(description) }
-            }
-            cleanEclipseClasspath.finalizedBy cleanDependencyLibs
-
-            task cleanClasses(type: Delete) {
-                group eclipseWtp.group
-                delete eclipse.classpath.defaultOutputDir
-                description = "删除${eclipse.classpath.defaultOutputDir}。"
-                doFirst { logger.info(description) }
-            }
-            cleanEclipseClasspath.finalizedBy cleanClasses
         }
+
+        task copyDependencyLibs(type: Copy) {
+            group eclipseWtp.group
+            from(configurations.compile+configurations.runtime-configurations.providedCompile-configurations.providedRuntime) {
+                //exclude 'tomcat-embed-*.jar', 'tomcat-jdbc-*.jar'
+            }
+            into libDir
+            description = "复制依赖到的jar包到${destinationDir}。"
+            doFirst { logger.info(description) }
+            doLast {
+                inputs.files.each { logger.info("复制文件：${it.absolutePath}") }
+            }
+        }
+        eclipseClasspath.finalizedBy copyDependencyLibs
+
+        task cleanDependencyLibs(type: Delete) {
+            group eclipseWtp.group
+            delete libDir
+            description = "删除${libDir}。"
+            doFirst { logger.info(description) }
+        }
+        cleanEclipseClasspath.finalizedBy cleanDependencyLibs
+
+        task cleanClasses(type: Delete) {
+            group eclipseWtp.group
+            delete eclipse.classpath.defaultOutputDir
+            description = "删除${eclipse.classpath.defaultOutputDir}。"
+            doFirst { logger.info(description) }
+        }
+        cleanEclipseClasspath.finalizedBy cleanClasses
     }
 }

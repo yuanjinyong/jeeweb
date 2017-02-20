@@ -6,13 +6,25 @@
  * For more details take a look at the Java Quickstart chapter in the Gradle
  * user guide available at https://docs.gradle.org/3.2.1/userguide/tutorial_java_projects.html
  */
+description = 'J2EE Web项目'
 
-configure(subprojects.findAll{!it.childProjects}) { project ->
-    group = "com.jeeweb.core"
-    version = "0.0.1-snapshot"
-    
-    apply plugin: 'java'
+
+allprojects {
+    ext {
+        gradleDir = new File(rootProject.projectDir, 'gradle') // gradle目录
+    }
+
     apply plugin: 'eclipse'
+    apply from: "${gradleDir}/eclipse.gradle"
+}
+
+
+
+// 这里只对最底层的子工程进行通用配置
+configure(subprojects.findAll{!it.childProjects}) { project ->
+    group = "com.jeeweb"
+    version = "0.0.1-snapshot"
+
 
     // In this section you declare where to find the dependencies of your project
     repositories {

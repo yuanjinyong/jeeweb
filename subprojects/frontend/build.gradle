@@ -6,13 +6,31 @@
  * For more details take a look at the Java Quickstart chapter in the Gradle
  * user guide available at https://docs.gradle.org/3.2.1/userguide/tutorial_java_projects.html
  */
-
-
 // 添加Gradle插件
 plugins {
     id "com.moowork.node" version "1.0.1"
 }
+apply plugin: 'java'
+apply from: "${gradleDir}/java.gradle"
 
+
+description = 'J2EE Web项目 - 前台工程'
+
+
+// configure gradle-node-plugin
+node {
+    //version = '6.9.1'
+    //npmVersion = '3.10.8'
+    //distBaseUrl = 'https://nodejs.org/dist'
+    distBaseUrl = 'http://175.6.228.214:8081/nexus/content/groups/public/download/nodejs'
+    download = true
+    //workDir = file("${project.projectDir}/.gradle/nodejs")
+    //nodeModulesDir = file("${project.projectDir}") // package.json文件所在的目录
+}
+
+npmInstall {
+    args = ['-d', '--registry=https://registry.npm.taobao.org']
+}
 
 task cnpmInstall(type: NpmTask) {
     group = 'node'
