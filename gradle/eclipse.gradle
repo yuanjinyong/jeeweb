@@ -93,7 +93,7 @@ afterEvaluate { gradleProject ->
         task copyDependencyLibs(type: Copy) {
             group eclipseWtp.group
             from(configurations.compile+configurations.runtime-configurations.providedCompile-configurations.providedRuntime) {
-                //exclude 'tomcat-embed-*.jar', 'tomcat-jdbc-*.jar'
+                exclude 'tomcat-embed-*.jar', "${rootProject.name}-frontend-*.jar" // 这里排除内嵌的tomcat和前台工程的jar包，本地开发使用外部Tomcat，前台工程独立开发。
             }
             into libDir
             description = "复制依赖到的jar包到${destinationDir}。"

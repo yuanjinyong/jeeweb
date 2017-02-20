@@ -12,38 +12,11 @@ plugins {
 }
 apply plugin: 'java'
 apply from: "${gradleDir}/java.gradle"
+apply from: "${gradleDir}/node.gradle"
 
 
 description = 'J2EE Web项目 - 前台工程'
 
 
-// configure gradle-node-plugin
-node {
-    //version = '6.9.1'
-    //npmVersion = '3.10.8'
-    //distBaseUrl = 'https://nodejs.org/dist'
-    distBaseUrl = 'http://175.6.228.214:8081/nexus/content/groups/public/download/nodejs'
-    download = true
-    //workDir = file("${project.projectDir}/.gradle/nodejs")
-    //nodeModulesDir = file("${project.projectDir}") // package.json文件所在的目录
-}
-
-npmInstall {
-    args = ['-d', '--registry=https://registry.npm.taobao.org']
-}
-
-task cnpmInstall(type: NpmTask) {
-    group = 'node'
-    args = ['install', '--registry=http://registry.cnpmjs.org']
-}
-
-task runBuild(type: NpmTask, dependsOn: cnpmInstall) {
-    group = 'node'
-    args = ['run', 'build']
-}
+// 把前台文件打到jar包的static目录下，供Springboot用。
 jar.dependsOn runBuild
-
-task runDev(type: NpmTask, dependsOn: cnpmInstall) {
-    group = 'node'
-    args = ['run', 'dev']
-}

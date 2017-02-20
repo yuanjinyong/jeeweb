@@ -16,6 +16,7 @@ allprojects {
 
     apply plugin: 'eclipse'
     apply from: "${gradleDir}/eclipse.gradle"
+    apply from: "${gradleDir}/maven.gradle"
 }
 
 
@@ -24,13 +25,4 @@ allprojects {
 configure(subprojects.findAll{!it.childProjects}) { project ->
     group = "com.jeeweb"
     version = "0.0.1-snapshot"
-
-
-    // In this section you declare where to find the dependencies of your project
-    repositories {
-        maven {
-            url "http://175.6.228.214:8081/nexus/content/groups/public"
-        }
-        mavenCentral()
-    }
 }

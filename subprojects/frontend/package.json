@@ -1,6 +1,6 @@
 {
-  "name": "ui",
-  "version": "1.0.0",
+  "name": "jeeweb",
+  "version": "0.0.1-snapshot",
   "description": "A Vue.js project",
   "author": "kevin <kevinz@weghst.com>",
   "private": true,

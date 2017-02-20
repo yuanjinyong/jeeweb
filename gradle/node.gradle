@@ -1,0 +1,35 @@
+//plugins.withType(NodePlugin) {
+    // configure gradle-node-plugin
+    node {
+        //version = '6.9.1'
+        //npmVersion = '3.10.8'
+        //distBaseUrl = 'https://nodejs.org/dist'
+        distBaseUrl = 'http://175.6.228.214:8081/nexus/content/groups/public/download/nodejs'
+        download = true
+        workDir = file("${rootProject.projectDir}/.gradle/nodejs")
+        //nodeModulesDir = file("${project.projectDir}") // package.json文件所在的目录
+    }
+
+    npmInstall {
+        description '从https://registry.npm.taobao.org安装依赖的js库。'
+        args = ['-d', '--registry=https://registry.npm.taobao.org']
+    }
+
+    task cnpmInstall(type: NpmTask) {
+        description '从http://registry.cnpmjs.org安装依赖的js库。'
+        group = npmInstall.group
+        args = ['install', '--registry=http://registry.cnpmjs.org']
+    }
+
+    task runBuild(type: NpmTask, dependsOn: cnpmInstall) {
+        description '执行run build。'
+        group = npmInstall.group
+        args = ['run', 'build']
+    }
+
+    task runDev(type: NpmTask, dependsOn: cnpmInstall) {
+        description '执行run dev。'
+        group = npmInstall.group
+        args = ['run', 'dev']
+    }
+//}

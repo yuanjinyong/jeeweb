@@ -1,7 +1,7 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
 
-var assetsRoot = path.resolve(__dirname, '../build/resources/main/ui')
+var assetsRoot = path.resolve(__dirname, '../build/resources/main')
 module.exports = {
   build: {
     env: require('./prod.env'),

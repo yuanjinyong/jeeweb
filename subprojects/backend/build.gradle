@@ -26,9 +26,11 @@ configurations {
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
-    // spring-mvc，支持 Web 应用开发，包含 Tomcat 和 
+    compile project(":jeeweb-frontend") // 把前台工程依赖进来，这样就会自动的先构建前台的文件打成jar包。
+
+    // spring-mvc，支持 Web 应用开发，这里不使用内嵌的Tomcat
     compile("org.springframework.boot:spring-boot-starter-web")
-    //providedCompile("org.springframework.boot:spring-boot-starter-tomcat")
+    providedCompile("org.springframework.boot:spring-boot-starter-tomcat")
     providedCompile("org.apache.tomcat:servlet-api:6.0.45")
     //compile("org.springframework.boot:spring-boot-starter-security")
     // 用于生成spring-configuration-metadata.json文件
