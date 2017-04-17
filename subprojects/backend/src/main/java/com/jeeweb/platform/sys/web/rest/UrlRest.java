@@ -1,4 +1,4 @@
-package com.jeeweb.platform.sys.web.controller;
+package com.jeeweb.platform.sys.web.rest;
 
 import javax.annotation.Resource;
 
@@ -12,22 +12,18 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.jeeweb.framework.business.service.BaseService;
 import com.jeeweb.framework.business.web.controller.BaseController;
 import com.jeeweb.framework.core.model.ResponseResult;
-import com.jeeweb.platform.security.SecurityCacheManager;
-import com.jeeweb.platform.sys.entity.MenuEntity;
-import com.jeeweb.platform.sys.service.MenuService;
+import com.jeeweb.platform.sys.entity.UrlEntity;
+import com.jeeweb.platform.sys.service.UrlService;
 
 @RestController
-@RequestMapping(value = "/api/sys/menus")
-public class MenuController extends BaseController<String, MenuEntity> {
-
+@RequestMapping(value = "/api/admin/sys/urls")
+public class UrlRest extends BaseController<String, UrlEntity> {
     @Resource
-    private MenuService menuService;
-    @Resource
-    private SecurityCacheManager securityCacheManager;
+    private UrlService urlService;
 
     @Override
-    protected BaseService<String, MenuEntity> getService() {
-        return menuService;
+    protected BaseService<String, UrlEntity> getService() {
+        return urlService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -36,11 +32,8 @@ public class MenuController extends BaseController<String, MenuEntity> {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseResult create(UriComponentsBuilder ucBuilder, @RequestBody MenuEntity entity) {
-        ResponseResult result = super.createEntity(entity, ucBuilder);
-        // 刷新权限控制的缓存
-        securityCacheManager.loadUrlAuthoritiesCache();
-        return result;
+    public ResponseResult create(UriComponentsBuilder ucBuilder, @RequestBody UrlEntity entity) {
+        return super.createEntity(entity, ucBuilder);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -49,15 +42,17 @@ public class MenuController extends BaseController<String, MenuEntity> {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseResult update(@PathVariable("id") String primaryKey, @RequestBody MenuEntity entity) {
-        ResponseResult result = super.updateEntity(primaryKey, entity);
-        // 刷新权限控制的缓存
-        securityCacheManager.loadUrlAuthoritiesCache();
-        return result;
+    public ResponseResult update(@PathVariable("id") String primaryKey, @RequestBody UrlEntity entity) {
+        return super.updateEntity(primaryKey, entity);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseResult delete(@PathVariable("id") String primaryKey) {
         return super.deleteEntity(primaryKey);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE)
+    public ResponseResult delete() {
+        return super.deleteEntities();
     }
 }

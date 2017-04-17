@@ -1,7 +1,9 @@
 // In this section you declare where to find the dependencies of your project
 repositories {
     maven {
-        url "http://175.6.228.214:8081/nexus/content/groups/public"
+        url "${nexusUrl}/content/groups/public"
     }
+
     mavenCentral()
+    jcenter()
 }

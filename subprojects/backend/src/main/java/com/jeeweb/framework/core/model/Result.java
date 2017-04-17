@@ -8,16 +8,17 @@ package com.jeeweb.framework.core.model;
  *
  */
 public class Result {
+    public static final String SUCCESS_MESSAGE = "处理成功。";
     private Boolean success; // 处理结果
     private String message; // 结果描述
     private Object data; // 结果数据
 
     public Result() {
-        this(true, null, null);
+        this(true, SUCCESS_MESSAGE, null);
     }
 
     public Result(Object data) {
-        this(true, null, data);
+        this(true, SUCCESS_MESSAGE, data);
     }
 
     public Result(String message) {

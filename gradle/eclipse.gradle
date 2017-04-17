@@ -1,14 +1,18 @@
 afterEvaluate { gradleProject ->
-    def serverName = 'Apache Tomcat v8.5'
-    def isJavaProject = false
-    plugins.withType(JavaPlugin) {
-        isJavaProject = true
-    }
+    def serverName = 'Apache Tomcat v8.0'
 
     plugins.withType(EclipsePlugin) {
         eclipse {
+            if (plugins.hasPlugin(EclipseWtpPlugin)) {
+                classpath {
+                    defaultOutputDir = new File(projectDir, "${webAppDirName}/WEB-INF/classes")
+                    containers "org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/${serverName}"
+                }
+            }
+
             project { project ->
-                comment = "${version}"
+                name = gradleProject == rootProject ? rootProject.name : (rootProject.name + '-' + gradleProject.path.replaceAll(':', '-').substring(1))
+                comment = "${gradleProject.description}"
 
                 file.withXml { xmlProvider ->
                     def addFilterNode = { Node filteredResource, Long id, String name, Integer type, String arguments ->
@@ -33,7 +37,7 @@ afterEvaluate { gradleProject ->
                 }
             }
 
-            if (isJavaProject) {
+            if (plugins.hasPlugin(JavaPlugin)) {
                 classpath {
                     downloadSources = true
                     downloadJavadoc = false
@@ -55,18 +59,36 @@ afterEvaluate { gradleProject ->
                         }
                     }
                 }
+
+                //清理classes目录的任务
+                task cleanClasses(type: Delete) {
+                    group cleanEclipseClasspath.group
+                    delete eclipse.classpath.defaultOutputDir
+                    description = "删除${eclipse.classpath.defaultOutputDir}。"
+                    onlyIf { eclipse.classpath.defaultOutputDir.exists() }
+                    doFirst { logger.info(description) }
+                }
+                cleanEclipseClasspath.finalizedBy cleanClasses
             }
         }
+
+        //清理.settings目录的任务
+        task cleanEclipseSettings(type: Delete) {
+            ext {
+                eclipseSettingsDir = new File(projectDir, '.settings')
+            }
+            group cleanEclipse.group
+            delete eclipseSettingsDir
+            description = "删除${eclipseSettingsDir}。"
+            onlyIf { eclipseSettingsDir.exists() }
+            doFirst { logger.info(description) }
+        }
+        cleanEclipse.dependsOn cleanEclipseSettings
     }
 
     plugins.withType(EclipseWtpPlugin) {
         def libDir = new File(webAppDir, 'WEB-INF/lib')
         eclipse {
-            classpath {
-                defaultOutputDir = new File(projectDir, "${webAppDirName}/WEB-INF/classes")
-                containers "org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/${serverName}"
-            }
-
             wtp {
                 component {
                     gradleProject.sourceSets.test.allSource.srcDirs.each { file ->
@@ -91,7 +113,7 @@ afterEvaluate { gradleProject ->
         }
 
         task copyDependencyLibs(type: Copy) {
-            group eclipseWtp.group
+            group eclipseClasspath.group
             from(configurations.compile+configurations.runtime-configurations.providedCompile-configurations.providedRuntime) {
                 exclude 'tomcat-embed-*.jar', "${rootProject.name}-frontend-*.jar" // 这里排除内嵌的tomcat和前台工程的jar包，本地开发使用外部Tomcat，前台工程独立开发。
             }
@@ -105,19 +127,11 @@ afterEvaluate { gradleProject ->
         eclipseClasspath.finalizedBy copyDependencyLibs
 
         task cleanDependencyLibs(type: Delete) {
-            group eclipseWtp.group
+            group cleanEclipseClasspath.group
             delete libDir
             description = "删除${libDir}。"
             doFirst { logger.info(description) }
         }
         cleanEclipseClasspath.finalizedBy cleanDependencyLibs
-
-        task cleanClasses(type: Delete) {
-            group eclipseWtp.group
-            delete eclipse.classpath.defaultOutputDir
-            description = "删除${eclipse.classpath.defaultOutputDir}。"
-            doFirst { logger.info(description) }
-        }
-        cleanEclipseClasspath.finalizedBy cleanClasses
     }
 }

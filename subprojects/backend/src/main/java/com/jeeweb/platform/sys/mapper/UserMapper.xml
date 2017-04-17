@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeweb.platform.sys.mapper.UserMapper">
+    <sql id="Insert_Clause">
+        INSERT INTO t_sys_user(
+        f_account,
+        f_password,
+        f_name,
+        f_remark,
+        f_status,
+        f_department_id,
+        f_create_time,
+        f_last_login_time,
+        f_locked_time,
+        f_unregister_time,
+        f_is_can_login,
+        f_tenant_id
+        )
+        VALUES
+    </sql>
+    <sql id="Insert_Value_Clause">
+        (
+        #{f_account},
+        #{f_password},
+        #{f_name},
+        #{f_remark},
+        #{f_status},
+        #{f_department_id},
+        #{f_create_time},
+        #{f_last_login_time},
+        #{f_locked_time},
+        #{f_unregister_time},
+        #{f_is_can_login},
+        #{f_tenant_id}
+        )
+    </sql>
+    <sql id="Insert_Values_Clause">
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.f_account},
+            #{item.f_password},
+            #{item.f_name},
+            #{item.f_remark},
+            #{item.f_status},
+            #{item.f_department_id},
+            #{item.f_create_time},
+            #{item.f_last_login_time},
+            #{item.f_locked_time},
+            #{item.f_unregister_time},
+            #{item.f_is_can_login},
+            #{item.f_tenant_id}
+            )
+        </foreach>
+    </sql>
+
+    <sql id="Select_Clause">
+        SELECT
+        t.f_id,
+        t.f_account,
+        t.f_password,
+        t.f_name,
+        t.f_remark,
+        t.f_status,
+        t.f_department_id,
+        d.f_name f_department_name,
+        t.f_create_time,
+        t.f_last_login_time,
+        t.f_locked_time,
+        t.f_unregister_time,
+        t.f_is_can_login,
+        t.f_tenant_id
+    </sql>
+    <sql id="From_Clause">
+        FROM t_sys_user t
+        LEFT JOIN t_sys_department d ON d.f_id = t.f_department_id
+    </sql>
+    <sql id="Where_Clause">
+        WHERE 1=1
+        <if test="f_tenant_id != null and f_tenant_id != ''">AND t.f_tenant_id = #{f_tenant_id}</if>
+        <if test="f_tenant_id_in != null and f_tenant_id_in != ''">AND t.f_tenant_id IN (${f_tenant_id_in})</if>
+        <if test="f_department_id != null and f_department_id != ''">AND t.f_department_id = #{f_department_id}</if>
+        <if test="f_department_id_in != null and f_department_id_in != ''">AND t.f_department_id IN (${f_department_id_in})</if>
+        <if test="f_account != null and f_account != ''">AND t.f_account = #{f_account}</if>
+        <if test="f_account_like != null and f_account_like != ''">AND t.f_account LIKE CONCAT('%', #{f_account_like}, '%')</if>
+        <if test="f_account_notIn != null and f_account_notIn != ''">AND t.f_account NOT IN (${f_account_notIn})</if>
+        <if test="f_name_like != null and f_name_like != ''">AND t.f_name LIKE CONCAT('%', #{f_name_like}, '%')</if>
+        <if test="f_status != null and f_status != ''">AND t.f_status = #{f_status}</if>
+        <if test="f_status_in != null and f_status_in != ''">AND t.f_status IN (${f_status_in})</if>
+        <if test="f_create_time_begin != null and f_create_time_begin != ''">AND t.f_create_time &gt;= #{f_create_time_begin} </if>
+        <if test="f_create_time_end != null and f_create_time_end != ''">AND t.f_create_time &lt;= #{f_create_time_end} </if>
+        <if test="f_unregister_time_begin != null and f_unregister_time_begin != ''">AND t.f_unregister_time &gt;= #{f_unregister_time_begin} </if>
+        <if test="f_unregister_time_end != null and f_unregister_time_end != ''">AND t.f_unregister_time &lt;= #{f_unregister_time_end} </if>
+        <if test="f_is_can_login != null and f_is_can_login != ''">AND t.f_is_can_login = #{f_is_can_login}</if>
+    </sql>
+
+
+    <!-- select -->
+    <select id="selectEntity" parameterType="java.lang.Integer" resultType="com.jeeweb.platform.sys.entity.UserEntity">
+        <include refid="Select_Clause" />
+        <include refid="From_Clause" />
+        WHERE t.f_id = #{f_id}
+    </select>
+    <select id="selectEntityListPage" parameterType="com.jeeweb.framework.core.model.ParameterMap" resultType="com.jeeweb.platform.sys.entity.UserEntity">
+        <include refid="Select_Clause" />
+        <include refid="From_Clause" />
+        <include refid="Where_Clause" />
+    </select>
+    <select id="selectMapEntityListPage" parameterType="com.jeeweb.framework.core.model.ParameterMap" resultType="com.jeeweb.framework.core.model.RowMap">
+        <include refid="Select_Clause" />
+        <include refid="From_Clause" />
+        <include refid="Where_Clause" />
+    </select>
+
+    <!-- insert -->
+    <insert id="insertEntity" parameterType="com.jeeweb.platform.sys.entity.UserEntity">
+        <selectKey resultType="java.lang.Integer" keyProperty="f_id" order="AFTER">
+            SELECT @@IDENTITY
+        </selectKey>
+        <include refid="Insert_Clause" />
+        <include refid="Insert_Value_Clause" />
+    </insert>
+    <insert id="insertEntities" parameterType="java.util.ArrayList">
+        <include refid="Insert_Clause" />
+        <include refid="Insert_Values_Clause" />
+    </insert>
+
+    <!-- update -->
+    <update id="updateEntity" parameterType="com.jeeweb.platform.sys.entity.UserEntity">
+        UPDATE t_sys_user SET
+        <if test="f_account != null">f_account=#{f_account},</if>
+        <if test="f_password != null">f_password=#{f_password},</if>
+        <if test="f_name != null">f_name=#{f_name},</if>
+        <if test="f_remark != null">f_remark=#{f_remark},</if>
+        <if test="f_status != null">f_status=#{f_status},</if>
+        <if test="f_department_id != null">f_department_id=#{f_department_id},</if>
+        <!--if test="f_create_time != null">f_create_time=#{f_create_time},</if -->
+        <if test="f_last_login_time != null">f_last_login_time=#{f_last_login_time},</if>
+        <if test="f_locked_time != null">f_locked_time=#{f_locked_time},</if>
+        <if test="f_unregister_time != null">f_unregister_time=#{f_unregister_time},</if>
+        <if test="f_is_can_login != null">f_is_can_login=#{f_is_can_login},</if>
+        <if test="f_tenant_id != null">f_tenant_id=#{f_tenant_id},</if>
+        f_id=#{f_id}
+        WHERE f_id=#{f_id}
+    </update>
+
+    <!-- delete -->
+    <select id="isCanDeleteEntity" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT 1 FROM DUAL
+    </select>
+    <delete id="deleteEntity" parameterType="java.lang.Integer">
+        DELETE FROM t_sys_user WHERE f_id=#{f_id}
+    </delete>
+    <delete id="deleteEntities" parameterType="com.jeeweb.framework.core.model.ParameterMap">
+        DELETE FROM t_sys_user WHERE 1=1
+        <if test="f_id_in != null and f_id_in != ''">AND f_id IN(${f_id_in})</if>
+    </delete>
+
+    <!-- 其他SQL -->
+    <select id="selectUserByAccount" parameterType="java.lang.String" resultType="com.jeeweb.platform.sys.entity.UserEntity">
+        <include refid="Select_Clause" />
+        ,
+        tenant.f_id f_tenant_id,
+        tenant.f_name f_tenant_name
+        <include refid="From_Clause" />
+        LEFT JOIN t_sys_tenant tenant ON tenant.f_id = t.f_tenant_id
+        WHERE t.f_is_can_login = 1 AND t.f_account = #{f_account}
+    </select>
+</mapper>
