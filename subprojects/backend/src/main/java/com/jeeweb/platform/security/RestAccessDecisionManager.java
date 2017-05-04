@@ -81,7 +81,6 @@ public class RestAccessDecisionManager implements AccessDecisionManager {
                 // 一般报未配置的异常时，需要开发人员在开发阶段就把功能（菜单页面和按钮）可以访问的URL地址配置好。
                 LOG.error("未配置[" + method + "][" + uri + "]的访问权限，请联系系统技术支持人员！");
                 throw new AccessDeniedException("未配置[" + method + "][" + uri + "]的访问权限，请联系系统技术支持人员！");
-                // return;
             }
         }
 

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeweb.platform.tools.mapper.GenerateRuleFieldMapper">
+
+    <sql id="Insert_Clause">
+        INSERT INTO t_tool_generate_rule_field(
+        f_table_id,
+        f_order,
+        f_column_name,
+        f_column_comment,
+        f_full_java_type,
+        f_is_primary,
+        f_is_super_class_field,
+        f_is_insert,
+        f_is_update,
+        f_is_select,
+        f_is_equal,
+        f_is_like,
+        f_is_left_like,
+        f_is_right_like,
+        f_is_in,
+        f_is_not_in,
+        f_is_between,
+        f_is_search,
+        f_is_grid,
+        f_is_form
+        )
+        VALUES
+    </sql>
+    <sql id="Insert_Value_Clause">
+        (
+        #{f_table_id},
+        #{f_order},
+        #{f_column_name},
+        #{f_column_comment},
+        #{f_full_java_type},
+        #{f_is_primary},
+        #{f_is_super_class_field},
+        #{f_is_insert},
+        #{f_is_update},
+        #{f_is_select},
+        #{f_is_equal},
+        #{f_is_like},
+        #{f_is_left_like},
+        #{f_is_right_like},
+        #{f_is_in},
+        #{f_is_not_in},
+        #{f_is_between},
+        #{f_is_search},
+        #{f_is_grid},
+        #{f_is_form}
+        )
+    </sql>
+    <sql id="Insert_Values_Clause">
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.f_table_id},
+            #{item.f_order},
+            #{item.f_column_name},
+            #{item.f_column_comment},
+            #{item.f_full_java_type},
+            #{item.f_is_primary},
+            #{item.f_is_super_class_field},
+            #{item.f_is_insert},
+            #{item.f_is_update},
+            #{item.f_is_select},
+            #{item.f_is_equal},
+            #{item.f_is_like},
+            #{item.f_is_left_like},
+            #{item.f_is_right_like},
+            #{item.f_is_in},
+            #{item.f_is_not_in},
+            #{item.f_is_between},
+            #{item.f_is_search},
+            #{item.f_is_grid},
+            #{item.f_is_form}
+            )
+        </foreach>
+    </sql>
+
+    <sql id="Select_Clause">
+        SELECT
+        t.f_id,
+        t.f_table_id,
+        t.f_order,
+        t.f_column_name,
+        t.f_column_comment,
+        t.f_full_java_type,
+        t.f_is_primary,
+        t.f_is_super_class_field,
+        t.f_is_insert,
+        t.f_is_update,
+        t.f_is_select,
+        t.f_is_equal,
+        t.f_is_like,
+        t.f_is_left_like,
+        t.f_is_right_like,
+        t.f_is_in,
+        t.f_is_not_in,
+        t.f_is_between,
+        t.f_is_search,
+        t.f_is_grid,
+        t.f_is_form
+    </sql>
+    <sql id="From_Clause">
+        FROM t_tool_generate_rule_field t
+    </sql>
+    <sql id="Where_Clause">
+        WHERE 1=1
+        <if test="f_table_id != null and f_table_id != ''">AND t.f_table_id = #{f_table_id}</if>
+        <if test="f_is_primary != null and f_is_primary != ''">AND t.f_is_primary = #{f_is_primary}</if>
+    </sql>
+
+
+    <!-- select -->
+    <select id="selectEntity" parameterType="java.lang.Integer" resultType="com.jeeweb.platform.tools.entity.GenerateRuleFieldEntity">
+        <include refid="Select_Clause" />
+        <include refid="From_Clause" />
+        WHERE t.f_id = #{f_id}
+    </select>
+    <select id="selectEntityListPage" parameterType="com.jeeweb.framework.core.model.ParameterMap"
+        resultType="com.jeeweb.platform.tools.entity.GenerateRuleFieldEntity">
+        <include refid="Select_Clause" />
+        <include refid="From_Clause" />
+        <include refid="Where_Clause" />
+    </select>
+    <select id="selectMapEntityListPage" parameterType="com.jeeweb.framework.core.model.ParameterMap"
+        resultType="com.jeeweb.framework.core.model.RowMap">
+        <include refid="Select_Clause" />
+        <include refid="From_Clause" />
+        <include refid="Where_Clause" />
+    </select>
+
+    <!-- insert -->
+    <insert id="insertEntity" parameterType="com.jeeweb.platform.tools.entity.GenerateRuleFieldEntity">
+        <selectKey resultType="java.lang.Integer" keyProperty="f_id" order="AFTER">
+            SELECT @@IDENTITY
+        </selectKey>
+        <include refid="Insert_Clause" />
+        <include refid="Insert_Value_Clause" />
+    </insert>
+    <insert id="insertEntities" parameterType="java.util.ArrayList">
+        <include refid="Insert_Clause" />
+        <include refid="Insert_Values_Clause" />
+    </insert>
+
+    <!-- update -->
+    <update id="updateEntity" parameterType="com.jeeweb.platform.tools.entity.GenerateRuleFieldEntity">
+        UPDATE t_tool_generate_rule_field SET
+        <if test="f_table_id != null">f_table_id=#{f_table_id},</if>
+        <if test="f_order != null">f_order=#{f_order},</if>
+        <if test="f_column_name != null">f_column_name=#{f_column_name},</if>
+        <if test="f_column_comment != null">f_column_comment=#{f_column_comment},</if>
+        <if test="f_full_java_type != null">f_full_java_type=#{f_full_java_type},</if>
+        <if test="f_is_primary != null">f_is_primary=#{f_is_primary},</if>
+        <if test="f_is_super_class_field != null">f_is_super_class_field=#{f_is_super_class_field},</if>
+        <if test="f_is_insert != null">f_is_insert=#{f_is_insert},</if>
+        <if test="f_is_update != null">f_is_update=#{f_is_update},</if>
+        <if test="f_is_select != null">f_is_select=#{f_is_select},</if>
+        <if test="f_is_equal != null">f_is_equal=#{f_is_equal},</if>
+        <if test="f_is_like != null">f_is_like=#{f_is_like},</if>
+        <if test="f_is_left_like != null">f_is_left_like=#{f_is_left_like},</if>
+        <if test="f_is_right_like != null">f_is_right_like=#{f_is_right_like},</if>
+        <if test="f_is_in != null">f_is_in=#{f_is_in},</if>
+        <if test="f_is_not_in != null">f_is_not_in=#{f_is_not_in},</if>
+        <if test="f_is_between != null">f_is_between=#{f_is_between},</if>
+        <if test="f_is_search != null">f_is_search=#{f_is_search},</if>
+        <if test="f_is_grid != null">f_is_grid=#{f_is_grid},</if>
+        <if test="f_is_form != null">f_is_form=#{f_is_form},</if>
+        f_id=#{f_id}
+        WHERE f_id=#{f_id}
+    </update>
+
+    <!-- delete -->
+    <select id="isCanDeleteEntity" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT 0 FROM DUAL
+    </select>
+    <delete id="deleteEntity" parameterType="java.lang.Integer">
+        DELETE FROM t_tool_generate_rule_field WHERE f_id=#{f_id}
+    </delete>
+    <delete id="deleteEntities" parameterType="com.jeeweb.framework.core.model.ParameterMap">
+        DELETE FROM t_tool_generate_rule_field WHERE 1=1
+        <if test="f_id_in != null and f_id_in != ''">AND f_id IN(${f_id_in})</if>
+        <if test="f_table_id != null and f_table_id != ''">AND f_table_id = #{f_table_id}</if>
+        <if test="f_f_table_id_in != null and f_table_id_in != ''">AND f_table_id IN(${f_table_id_in})</if>
+        <if test="f_rule_id != null and f_rule_id != ''">AND f_table_id IN(SELECT f_id FROM t_tool_generate_rule_table WHERE f_rule_id = #{f_rule_id})</if>
+        <if test="f_rule_id_in != null and f_rule_id_in != ''">AND f_table_id IN(SELECT f_id FROM t_tool_generate_rule_table WHERE f_rule_id IN(${f_rule_id_in}))
+        </if>
+    </delete>
+
+    <!-- 其他SQL -->
+</mapper>

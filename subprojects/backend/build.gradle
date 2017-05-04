@@ -43,6 +43,14 @@ dependencies {
     // MySQL
     runtime('mysql:mysql-connector-java')
 
+    // Redis缓存
+    compile "redis.clients:jedis:2.4.0"
+    compile "org.springframework.boot:spring-boot-starter-redis"
+
+    // 代码生成
+    compile "org.codehaus.groovy:groovy-all:2.4.7"
+    compile "commons-io:commons-io:2.5"
+
     // 添加适用于生产环境的功能，如性能指标和监测等功能
     runtime("org.springframework.boot:spring-boot-starter-actuator")
 

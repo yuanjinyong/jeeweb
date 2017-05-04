@@ -6,6 +6,7 @@ package com.jeeweb.platform.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -16,6 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.jeeweb.platform.security.filter.RestSecurityFilter;
 import com.jeeweb.platform.security.filter.RestTokenProcessingFilter;
@@ -27,18 +31,18 @@ import com.jeeweb.platform.security.filter.RestTokenProcessingFilter;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    private static final String PARAMETER_USER_NAME = "f_account";
-    private static final String PARAMETER_PASSWORD = "f_password";
-    private static final String API_LOGIN = "/api/admin/login";
-    private static final String API_LOGOUT = "/api/admin/logout";
+    // private static final String PARAMETER_USER_NAME = "f_account";
+    // private static final String PARAMETER_PASSWORD = "f_password";
+    // private static final String API_LOGIN = "/api/login";
+    private static final String API_LOGOUT = "/api/logout";
 
     @Autowired
     private RestTokenProcessingFilter restTokenProcessingFilter;
 
-    @Autowired
-    private RestAuthenticationSuccessHandler restAuthenticationSuccessHandler;
-    @Autowired
-    private RestAuthenticationFailureHandler restAuthenticationFailureHandler;
+    // @Autowired
+    // private RestAuthenticationSuccessHandler restAuthenticationSuccessHandler;
+    // @Autowired
+    // private RestAuthenticationFailureHandler restAuthenticationFailureHandler;
     @Autowired
     private RestLogoutSuccessHandler restLogoutSuccessHandler;
     @Autowired
@@ -64,15 +68,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // 禁用CSRF和HTTPSession，采用自定义的RestToken进行认证
         http.addFilterAfter(restTokenProcessingFilter, SecurityContextPersistenceFilter.class) // 添加RestToken的过滤器
-                .csrf().disable() // 禁用CSRF，RestToken来防止跨站攻击
+                .cors().configurationSource(corsConfigurationSource()) // 启用CORS跨域，使用corsConfigurationSource这个Bean中的跨域配置。
+                .and().csrf().disable() // 禁用CSRF，RestToken来防止跨站攻击
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // 禁用HTTPSession，Restful采用无Session的管理
 
         // 对登录进行配置
-        http.formLogin() // 这里使用RESTful，不需要配置登录成功、失败的跳转地址successForwardUrl和failureForwardUrl，改为配置：successHandler和failureHandler
-                .usernameParameter(PARAMETER_USER_NAME).passwordParameter(PARAMETER_PASSWORD) // 配置登录时传过来的用户名、密码字段名称
-                .loginProcessingUrl(API_LOGIN) // 配置登录处理的URL，这个URL对应的API不需要自己写，Spring Security会自动拦截提交到此URL的请求，将其视为登录请求。
-                .successHandler(restAuthenticationSuccessHandler) // 认证通过之后，将调用该对象的onAuthenticationSuccess方法
-                .failureHandler(restAuthenticationFailureHandler); // 认证失败之后，将调用该对象的onAuthenticationFailure方法
+        http.httpBasic().authenticationEntryPoint(restAuthenticationEntryPoint);
+        // http.formLogin() //
+        // 这里使用RESTful，不需要配置登录成功、失败的跳转地址successForwardUrl和failureForwardUrl，改为配置：successHandler和failureHandler
+        // .usernameParameter(PARAMETER_USER_NAME).passwordParameter(PARAMETER_PASSWORD) // 配置登录时传过来的用户名、密码字段名称
+        // .loginProcessingUrl(API_LOGIN) // 配置登录处理的URL，这个URL对应的API不需要自己写，Spring Security会自动拦截提交到此URL的请求，将其视为登录请求。
+        // .successHandler(restAuthenticationSuccessHandler) // 认证通过之后，将调用该对象的onAuthenticationSuccess方法
+        // .failureHandler(restAuthenticationFailureHandler); // 认证失败之后，将调用该对象的onAuthenticationFailure方法
 
         // 对登出进行配置
         http.logout() // 这里使用RESTful，不需要配置登出成功之后的调整地址logoutSuccessUrl，改为配置：logoutSuccessHandler
@@ -92,10 +99,27 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedOrigin(CorsConfiguration.ALL);
+        config.addAllowedHeader(CorsConfiguration.ALL);
+        config.addExposedHeader(RestTokenService.REST_TOKEN);
+        config.addAllowedMethod(HttpMethod.GET);
+        config.addAllowedMethod(HttpMethod.POST);
+        config.addAllowedMethod(HttpMethod.PUT);
+        config.addAllowedMethod(HttpMethod.DELETE);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/api/**", config);
+        return source;
+    }
+
+    @Bean
     public RestSecurityFilter restSecurityFilter() throws Exception {
         RestSecurityFilter filter = new RestSecurityFilter();
-        filter.addPermitAllMatchers("/api/anonymous/**"); // 配置不登陆（授权）也可以访问的URL
+        filter.addPermitAllMatchers("/api/anonymous/**", "/api/token"); // 配置不登陆（授权）也可以访问的URL
         filter.addAuthenticatedMatchers("/api/authenticated/**", "/api/admin/index/**", API_LOGOUT); // 配置只要登陆即可访问的URL
+
         filter.setAuthenticationEntryPoint(restAuthenticationEntryPoint);
         filter.setSecurityMetadataSource(restSecurityMetadataSource);
         filter.setAccessDecisionManager(restAccessDecisionManager);

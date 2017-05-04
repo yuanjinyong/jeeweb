@@ -55,13 +55,21 @@ public class ParameterMap extends RowMap {
         return this.put(PAGE_NO, pageNo);
     }
 
+    /**
+     * 从0开始编号，0为第一页
+     * 
+     * @return
+     */
     public Integer getPageNo() {
         Integer pageNo = this.getInteger(PAGE_NO, null);
-        if (pageNo == null || pageNo < 1) {
-            pageNo = 1;
+        if (pageNo == null) {
+            pageNo = 0;
             this.put(PAGE_NO, pageNo);
+            return pageNo;
         }
-        return pageNo;
+
+        int maxPageNo = this.getTotalCount() / this.getPageSize();
+        return pageNo >= maxPageNo ? maxPageNo : pageNo;
     }
 
     public <E> ParameterMap setPageItems(List<E> pageItems) {
@@ -72,8 +80,13 @@ public class ParameterMap extends RowMap {
         return (List<?>) this.get(PAGE_ITEMS);
     }
 
+    /**
+     * 从0开始编号，0为第一条
+     * 
+     * @return
+     */
     public Integer getBeginRowNo() {
-        return (this.getPageNo() - 1) * this.getPageSize();
+        return this.getPageNo() * this.getPageSize();
     }
 
     public ParameterMap setTotalCount(Integer totalCount) {

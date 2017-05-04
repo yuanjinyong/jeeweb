@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.util.UrlPathHelper;
@@ -26,7 +27,6 @@ import com.jeeweb.platform.security.utils.RequestMappingInfoUtil;
 import com.jeeweb.platform.sys.entity.MenuEntity;
 import com.jeeweb.platform.sys.entity.UrlEntity;
 import com.jeeweb.platform.sys.entity.UserEntity;
-import com.jeeweb.platform.sys.mapper.MenuMapper;
 import com.jeeweb.platform.sys.mapper.MenuUrlMapper;
 import com.jeeweb.platform.sys.mapper.UserMapper;
 import com.jeeweb.platform.sys.mapper.UserMenuMapper;
@@ -39,21 +39,18 @@ import com.jeeweb.platform.sys.mapper.UserMenuMapper;
 public class SecurityCacheManager {
     private static final Logger LOG = LoggerFactory.getLogger(SecurityCacheManager.class);
 
-    private static List<MenuEntity> pagesCache = new ArrayList<MenuEntity>();
     // 权限缓存
     private static Map<String, SecurityAuthority> authoritiesCache = new HashMap<String, SecurityAuthority>();
     // URL配置的权限缓存
     private static Map<String, Collection<ConfigAttribute>> urlAuthoritiesCache = new HashMap<String, Collection<ConfigAttribute>>();
     // 后台URL地址如果未配置访问权限
     private static Collection<ConfigAttribute> unconfigAuthority = new ArrayList<ConfigAttribute>();
-    // 操作员缓存
+    // 操作员缓存，采用集群部署时，不能使用下面的单机版缓存。
     private static Map<String, SecurityUser> securityUserCache = new HashMap<String, SecurityUser>();
 
     private UrlPathHelper urlPathHelper = new UrlPathHelper();
     private RequestMappingHandlerMapping requestMappingHandlerMapping;
 
-    @Autowired
-    private MenuMapper menuMapper;
     @Autowired
     private MenuUrlMapper menuUrlMapper;
     @Autowired
@@ -71,10 +68,8 @@ public class SecurityCacheManager {
     }
 
     public void loadUrlAuthoritiesCache() {
-        loadPagesCache();
-
         List<RowMap> menuUrlMapList = menuUrlMapper
-                .selectMapEntityListPage(new ParameterMap("f_is_show", 1).setOrderBy("f_patterns, f_methods"));
+                .selectMapEntityListPage(new ParameterMap("f_status", 1).setOrderBy("f_patterns, f_methods"));
 
         urlAuthoritiesCache.clear();
 
@@ -87,24 +82,8 @@ public class SecurityCacheManager {
                 urlAuthoritiesCache.put(urlId, authorityList);
             }
 
-            String menuId = menuUrlMap.getString("f_menu_id");
-            SecurityAuthority authority = authoritiesCache.get(menuId);
-            if (authority == null) {
-                authority = new SecurityAuthority(menuId);
-                authoritiesCache.put(menuId, authority);
-            }
-            authorityList.add(authority);
+            authorityList.add(getAuthority(menuUrlMap.getString("f_menu_id")));
         }
-    }
-
-    private void loadPagesCache() {
-        ParameterMap params = new ParameterMap();
-        params.put("f_type", 2);
-        params.put("f_is_show", 1);
-        params.setPageSizeWithMax().setOrderBy("f_parent_path, f_order");
-        List<MenuEntity> pages = menuMapper.selectEntityListPage(params);
-        pagesCache.clear();
-        pagesCache.addAll(pages);
     }
 
     public void reloadSecurityUserCache() {
@@ -114,7 +93,7 @@ public class SecurityCacheManager {
         for (Map.Entry<String, SecurityUser> entry : securityUserCache.entrySet()) {
             UserEntity user = userMapper.selectUserByAccount(entry.getKey());
             if (user != null && user.getF_is_can_login() == 1) {
-                securityUserCache.put(user.getF_account(), new SecurityUser(user, getAuthorities(user)));
+                securityUserCache.put(user.getF_account(), new SecurityUser(user, getUserAuthorities(user)));
             } else {
                 securityUserCache.remove(entry.getKey());
             }
@@ -133,7 +112,8 @@ public class SecurityCacheManager {
                 securityUserCache.remove(f_account);
 
                 if (user.getF_is_can_login() == 1) {
-                    securityUserCache.put(user.getF_account(), new SecurityUser(user, getAuthorities(user)));
+                    SecurityUser securityUser = new SecurityUser(user, getUserAuthorities(user));
+                    securityUserCache.put(securityUser.getUsername(), securityUser);
                 }
             }
         } finally {
@@ -141,8 +121,8 @@ public class SecurityCacheManager {
         }
     }
 
-    private List<GrantedAuthority> getAuthorities(UserEntity user) {
-        ParameterMap params = new ParameterMap("f_is_show", 1);
+    private List<GrantedAuthority> getUserAuthorities(UserEntity user) {
+        ParameterMap params = new ParameterMap("f_status", 1);
         if (!user.isSuperAdmin()) {
             params.put("f_user_id", user.getF_id());
         }
@@ -150,16 +130,19 @@ public class SecurityCacheManager {
 
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         for (MenuEntity menu : menuList) {
-            SecurityAuthority authority = authoritiesCache.get(menu.getF_id());
-            if (authority == null) {
-                authority = new SecurityAuthority(menu.getF_id());
-                authoritiesCache.put(menu.getF_id(), authority);
-            }
-
-            authorities.add(authority);
+            authorities.add(getAuthority(menu.getF_id()));
         }
 
         return authorities;
+    }
+
+    private SecurityAuthority getAuthority(String menuId) {
+        SecurityAuthority authority = authoritiesCache.get(menuId);
+        if (authority == null) {
+            authority = new SecurityAuthority(menuId);
+            authoritiesCache.put(menuId, authority);
+        }
+        return authority;
     }
 
     public Collection<ConfigAttribute> getRequestAuthorities(final HttpServletRequest request) {
@@ -183,19 +166,29 @@ public class SecurityCacheManager {
     }
 
     public SecurityUser getSecurityUser(String username) {
-        SecurityUser securityUser = securityUserCache.get(username);
-        if (securityUser == null) {
-            UserEntity user = userMapper.selectUserByAccount(username);
-            if (user != null && user.getF_is_can_login() == 1) {
-                securityUser = new SecurityUser(user, getAuthorities(user));
-                securityUserCache.put(user.getF_account(), securityUser);
-            }
-        }
-
-        return securityUser;
+        // 如果不采用集群部署，可以使用本地单机版的缓存。
+        // return getSecurityUserFromLocalCache(username);
+        return getSecurityUserFromDB(username);
     }
 
-    public List<MenuEntity> getAllPages() {
-        return pagesCache;
+    // // 如果不采用集群部署，可以使用本地单机版的缓存。
+    // private SecurityUser getSecurityUserFromLocalCache(String username) {
+    // SecurityUser securityUser = securityUserCache.get(username);
+    // if (securityUser == null) {
+    // securityUser = getSecurityUserFromDB(username);
+    // securityUserCache.put(securityUser.getUsername(), securityUser);
+    // }
+    //
+    // return securityUser;
+    // }
+
+    private SecurityUser getSecurityUserFromDB(String f_account) {
+        UserEntity user = userMapper.selectUserByAccount(f_account);
+        if (user != null && user.getF_is_can_login() == 1) {
+            return new SecurityUser(user, getUserAuthorities(user));
+        }
+
+        LOG.error("账号[{}]不存在！", f_account);
+        throw new UsernameNotFoundException("账号[" + f_account + "]不存在");
     }
 }

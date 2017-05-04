@@ -10,9 +10,12 @@
         f_order,
         f_name,
         f_desc,
-        f_type,
         f_icon,
-        f_url_id,
+        f_type,
+        f_route_path,
+        f_is_web,
+        f_is_android,
+        f_is_ios,
         f_status,
         f_remark
         )
@@ -26,9 +29,12 @@
         #{f_order},
         #{f_name},
         #{f_desc},
-        #{f_type},
         #{f_icon},
-        #{f_url_id},
+        #{f_type},
+        #{f_route_path},
+        #{f_is_web},
+        #{f_is_android},
+        #{f_is_ios},
         #{f_status},
         #{f_remark}
         )
@@ -42,9 +48,12 @@
             #{item.f_order},
             #{item.f_name},
             #{item.f_desc},
-            #{item.f_type},
             #{item.f_icon},
-            #{item.f_url_id},
+            #{item.f_type},
+            #{item.f_route_path},
+            #{item.f_is_web},
+            #{item.f_is_android},
+            #{item.f_is_ios},
             #{item.f_status},
             #{item.f_remark}
             )
@@ -60,9 +69,12 @@
         t.f_order,
         t.f_name,
         t.f_desc,
-        t.f_type,
         t.f_icon,
-        t.f_url_id,
+        t.f_type,
+        t.f_route_path,
+        t.f_is_web,
+        t.f_is_android,
+        t.f_is_ios,
         t.f_status,
         t.f_remark
     </sql>
@@ -79,7 +91,11 @@
         <if test="f_parent_path_like != null and f_parent_path_like != ''">AND t.f_parent_path LIKE CONCAT('%', #{f_parent_path_like}, '%')</if>
         <if test="f_type != null and f_type != ''">AND t.f_type = #{f_type}</if>
         <if test="f_type_in != null and f_type_in != ''">AND t.f_type IN(${f_type_in})</if>
-        <if test="f_url_id != null and f_url_id != ''">AND t.f_url_id = #{f_url_id}</if>
+        <if test="f_route_path != null and f_route_path != ''">AND t.f_route_path = #{f_route_path}</if>
+        <if test="f_route_path_like != null and f_route_path_like != ''">AND t.f_route_path LIKE CONCAT('%', #{f_route_path_like}, '%')</if>
+        <if test="f_is_web != null and f_is_web != ''">AND t.f_is_web = #{f_is_web}</if>
+        <if test="f_is_android != null and f_is_android != ''">AND t.f_is_android = #{f_is_android}</if>
+        <if test="f_is_ios != null and f_is_ios != ''">AND t.f_is_ios = #{f_is_ios}</if>
         <if test="f_status != null and f_status != ''">AND t.f_status = #{f_status}</if>
         <if test="cur_user_id != null and cur_role_id_in == null">AND t.f_id IN(SELECT f_menu_id FROM t_sys_user_menu WHERE f_user_id=#{cur_user_id})</if>
         <if test="cur_user_id != null and cur_role_id_in != null">AND t.f_id IN(SELECT f_menu_id FROM t_sys_user_menu WHERE f_user_id=#{cur_user_id} UNION SELECT f_menu_id FROM t_sys_role_menu WHERE f_role_id IN(${cur_role_id_in}))</if>
@@ -121,9 +137,12 @@
         <if test="f_order != null">f_order=#{f_order},</if>
         <if test="f_name != null">f_name=#{f_name},</if>
         <if test="f_desc != null">f_desc=#{f_desc},</if>
-        <if test="f_type != null">f_type=#{f_type},</if>
         <if test="f_icon != null">f_icon=#{f_icon},</if>
-        <if test="f_url_id != null">f_url_id=#{f_url_id},</if>
+        <if test="f_type != null">f_type=#{f_type},</if>
+        <if test="f_route_path != null">f_route_path=#{f_route_path},</if>
+        <if test="f_is_web != null">f_is_web=#{f_is_web},</if>
+        <if test="f_is_android != null">f_is_android=#{f_is_android},</if>
+        <if test="f_is_ios != null">f_is_ios=#{f_is_ios},</if>
         <if test="f_status != null">f_status=#{f_status},</if>
         <if test="f_remark != null">f_remark=#{f_remark},</if>
         f_id=#{f_id}

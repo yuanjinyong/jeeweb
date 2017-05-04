@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuc
 import org.springframework.stereotype.Component;
 
 import com.jeeweb.framework.core.model.Result;
-import com.jeeweb.framework.core.utils.ResponseUtil;
+import com.jeeweb.platform.security.utils.ResponseUtil;
 
 /**
  * @author 袁进勇

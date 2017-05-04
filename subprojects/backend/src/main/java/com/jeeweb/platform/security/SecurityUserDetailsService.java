@@ -3,8 +3,6 @@
  */
 package com.jeeweb.platform.security;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class SecurityUserDetailsService implements UserDetailsService {
-    private static final Logger LOG = LoggerFactory.getLogger(SecurityUserDetailsService.class);
-
     @Autowired
     private SecurityCacheManager securityCacheManager;
 
@@ -31,12 +27,9 @@ public class SecurityUserDetailsService implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        SecurityUser securityUser = securityCacheManager.getSecurityUser(username);
-        if (securityUser == null) {
-            LOG.error("账号[{}]不存在！", username);
-            throw new UsernameNotFoundException("账号[" + username + "]不存在");
-        }
+        // return securityCacheManager.getSecurityUser(username);
 
+        SecurityUser securityUser = securityCacheManager.getSecurityUser(username);
         SecurityUser curUser = new SecurityUser(securityUser.getUsername(), securityUser.getPassword(),
                 securityUser.getAuthorities());
         curUser.setUser(securityUser.getUser());

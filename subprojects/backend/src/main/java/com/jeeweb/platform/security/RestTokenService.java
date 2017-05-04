@@ -3,12 +3,15 @@
  */
 package com.jeeweb.platform.security;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+
+import com.jeeweb.platform.redis.RedisService;
+
 
 /**
  * @author 袁进勇
@@ -17,27 +20,27 @@ import org.springframework.stereotype.Component;
 @Component
 public class RestTokenService {
     public static final String REST_TOKEN = "X-REST-TOKEN";
-    private static Map<String, Authentication> tokenCache = new HashMap<String, Authentication>();
+
+    @Autowired
+    private RedisService redisService;
 
     public String generateToken(Authentication authentication) {
-        // TODO 后续需要改为Redis，添加过期时间
         String token = UUID.randomUUID().toString();
-        tokenCache.put(token, authentication);
+        redisService.set(token, authentication, 24 * 60 * 60);
         return token;
     }
 
     public void removeToken(String token) {
-        // TODO 后续需要改为Redis，添加过期时间
-        tokenCache.remove(token);
+        redisService.del(token);
     }
 
     public boolean validate(String token) {
         // TODO 后续需要改为Redis，添加过期时间
-        return tokenCache.containsKey(token);
+        return true;
     }
 
     public Authentication getAuthentication(String token) {
-        return tokenCache.get(token);
+        return redisService.get(token, UsernamePasswordAuthenticationToken.class);
     }
 
     public String getTokenName() {

@@ -1,4 +1,4 @@
-package com.jeeweb.platform.sys.web.rest;
+package com.jeeweb.platform.sys.web.api;
 
 import javax.annotation.Resource;
 
@@ -21,7 +21,7 @@ import com.jeeweb.platform.sys.service.MenuService;
 
 @RestController
 @RequestMapping(value = "/api/admin/sys/menus")
-public class MenuRest extends BaseController<String, MenuEntity> {
+public class MenuApi extends BaseController<String, MenuEntity> {
 
     @Resource
     private MenuService menuService;
@@ -40,7 +40,7 @@ public class MenuRest extends BaseController<String, MenuEntity> {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseResult create(UriComponentsBuilder ucBuilder, @RequestBody MenuEntity entity) {
+    public ResponseResult create(@RequestBody MenuEntity entity, UriComponentsBuilder ucBuilder) {
         ResponseResult result = super.createEntity(entity, ucBuilder);
         // 刷新权限控制的缓存
         securityCacheManager.loadUrlAuthoritiesCache();
@@ -62,6 +62,9 @@ public class MenuRest extends BaseController<String, MenuEntity> {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseResult delete(@PathVariable("id") String primaryKey) {
-        return super.deleteEntity(primaryKey);
+        ResponseResult result = super.deleteEntity(primaryKey);
+        // 刷新权限控制的缓存
+        securityCacheManager.loadUrlAuthoritiesCache();
+        return result;
     }
 }

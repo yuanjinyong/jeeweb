@@ -9,7 +9,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import com.jeeweb.framework.core.utils.HelpUtil;
-import com.jeeweb.platform.sys.entity.MenuEntity;
 import com.jeeweb.platform.sys.entity.UserEntity;
 
 /**
@@ -20,7 +19,6 @@ public class SecurityUser extends User {
     private static final long serialVersionUID = -106245041227776233L;
 
     private UserEntity user; // 系统操作员
-    private MenuEntity menu; // 以ROOT为根节点构造的菜单树
 
     public SecurityUser(UserEntity user, Collection<? extends GrantedAuthority> authorities) {
         this(user.getF_account(), user.getF_password(), authorities);
@@ -54,13 +52,5 @@ public class SecurityUser extends User {
 
     public void setUser(UserEntity user) {
         this.user = user;
-    }
-
-    public MenuEntity getMenu() {
-        return menu;
-    }
-
-    public void setMenu(MenuEntity menu) {
-        this.menu = menu;
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 public class Page<T> {
     private Integer totalCount;
     private Integer pageSize;
-    private Integer pageNo;
+    private Integer pageNo; // 从0开始编号，0为第一页
     private String orderBy;
     private List<T> items;
 

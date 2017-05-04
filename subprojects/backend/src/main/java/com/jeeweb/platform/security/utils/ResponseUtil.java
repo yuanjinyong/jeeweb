@@ -1,14 +1,22 @@
 /**
  * 
  */
-package com.jeeweb.framework.core.utils;
+package com.jeeweb.platform.security.utils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.util.StringUtils;
+import org.springframework.web.cors.CorsConfiguration;
+
 import com.jeeweb.framework.core.model.Result;
+import com.jeeweb.framework.core.utils.JsonUtil;
+import com.jeeweb.platform.security.RestTokenService;
 
 /**
  * @author 袁进勇
@@ -35,6 +43,11 @@ public final class ResponseUtil {
         response.setStatus(sc);
         response.setContentType("application/json; charset=utf-8");
         response.setCharacterEncoding("UTF-8");
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, CorsConfiguration.ALL);
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, CorsConfiguration.ALL);
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, RestTokenService.REST_TOKEN);
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, StringUtils.collectionToCommaDelimitedString(
+                Arrays.asList(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE)));
 
         PrintWriter out = response.getWriter();
         out.println(JsonUtil.toString(result == null ? new Result() : result));

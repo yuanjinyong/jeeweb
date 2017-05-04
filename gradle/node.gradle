@@ -2,34 +2,43 @@
     // configure gradle-node-plugin
     node {
         //version = '6.9.1'
-        //npmVersion = '3.10.8'
+        //npmVersion = '3.10.8' // 不需要指定，默认使用nodejs自带的。
+        //yarnVersion = '0.22.0'// 不需要指定，默认使用最新版的。
         //distBaseUrl = 'https://nodejs.org/dist'
         distBaseUrl = "${nexusUrl}/content/groups/public/download/nodejs"
         download = true
-        workDir = file("${rootProject.projectDir}/.gradle/nodejs")
-        //nodeModulesDir = file("${project.projectDir}") // package.json文件所在的目录
+        workDir = file("${rootProject.projectDir}/.gradle/nodejs") // 把nodejs安装到Root Project的.gradle目录下
+        yarnWorkDir = file("${rootProject.projectDir}/.gradle/nodejs/yarn")
     }
 
-    npmInstall {
-        description '从https://registry.npm.taobao.org安装依赖的js库。'
-        args = ['-d', '--registry=https://registry.npm.taobao.org']
+    task copyCfg(type: Copy) {
+        ext {
+            envCfgDir = new File(project.projectDir, "env/${project.env}")
+            srcDir = new File(project.projectDir, "src")
+        }
+        group yarn.group
+        from envCfgDir
+        into srcDir
+        description = "复制${envCfgDir}目录下的配置文件到${srcDir}。"
+        onlyIf { envCfgDir.exists() }
+        outputs.upToDateWhen { false }
+        doFirst { logger.lifecycle(description) }
+        doLast {
+            inputs.files.each { logger.info("复制文件：${it.absolutePath}") }
+        }
     }
 
-    task cnpmInstall(type: NpmTask) {
-        description '从http://registry.cnpmjs.org安装依赖的js库。'
-        group = npmInstall.group
-        args = ['install', '--registry=http://registry.cnpmjs.org']
-    }
-
-    task runBuild(type: NpmTask, dependsOn: cnpmInstall) {
+    task runBuild(type: YarnTask) {
+        dependsOn yarn, copyCfg
         description '执行run build。'
-        group = npmInstall.group
+        group = yarn.group
         args = ['run', 'build']
     }
 
-    task runDev(type: NpmTask, dependsOn: cnpmInstall) {
+    task runDev(type: YarnTask) {
+        dependsOn yarn, copyCfg
         description '执行run dev。'
-        group = npmInstall.group
+        group = yarn.group
         args = ['run', 'dev']
     }
 //}

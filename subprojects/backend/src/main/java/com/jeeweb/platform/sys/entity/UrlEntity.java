@@ -5,6 +5,8 @@ import org.springframework.util.DigestUtils;
 import com.jeeweb.framework.business.entity.BaseEntity;
 
 public class UrlEntity extends BaseEntity<String> {
+    private static final long serialVersionUID = -1131848227396986177L;
+
     private String f_url; // URL
     private String f_desc; // URL描述
     private String f_patterns; // URL表达式

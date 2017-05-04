@@ -10,6 +10,8 @@ import java.util.List;
  *
  */
 public abstract class TreeNodeEntity<P, E extends TreeNodeEntity<P, E>> extends BaseEntity<P> {
+    private static final long serialVersionUID = 531613364966668278L;
+
     private P f_parent_id; // 父级ID
     private String f_parent_name; // 父级名称
     private String f_parent_path; // 树形结构的路径，以“/”开头、分隔和结尾。
@@ -38,6 +40,10 @@ public abstract class TreeNodeEntity<P, E extends TreeNodeEntity<P, E>> extends 
 
     public void setF_parent_path(String f_parent_path) {
         this.f_parent_path = f_parent_path;
+    }
+
+    public String getF_full_path() {
+        return getF_parent_path() + getF_id() + "/";
     }
 
     public Integer getF_order() {

@@ -16,7 +16,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import com.jeeweb.framework.core.utils.ResponseUtil;
+import com.jeeweb.platform.security.utils.ResponseUtil;
+
 
 /**
  * @author 袁进勇

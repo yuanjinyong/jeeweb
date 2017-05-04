@@ -1,4 +1,4 @@
-package com.jeeweb.platform.sys.web.rest;
+package com.jeeweb.platform.sys.web.api;
 
 import javax.annotation.Resource;
 
@@ -17,7 +17,7 @@ import com.jeeweb.platform.sys.service.UrlService;
 
 @RestController
 @RequestMapping(value = "/api/admin/sys/urls")
-public class UrlRest extends BaseController<String, UrlEntity> {
+public class UrlApi extends BaseController<String, UrlEntity> {
     @Resource
     private UrlService urlService;
 
@@ -32,7 +32,7 @@ public class UrlRest extends BaseController<String, UrlEntity> {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseResult create(UriComponentsBuilder ucBuilder, @RequestBody UrlEntity entity) {
+    public ResponseResult create(@RequestBody UrlEntity entity, UriComponentsBuilder ucBuilder) {
         return super.createEntity(entity, ucBuilder);
     }
 
