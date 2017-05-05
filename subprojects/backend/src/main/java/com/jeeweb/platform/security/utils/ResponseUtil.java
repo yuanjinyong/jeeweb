@@ -16,7 +16,7 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.framework.core.utils.JsonUtil;
-import com.jeeweb.platform.security.RestTokenService;
+import com.jeeweb.platform.security.service.RestTokenService;
 
 /**
  * @author 袁进勇

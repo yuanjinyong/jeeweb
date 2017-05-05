@@ -5,7 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.jeeweb.framework.core.model.ParameterMap;
-import com.jeeweb.platform.security.SecurityUser;
+import com.jeeweb.platform.security.model.SecurityUser;
 import com.jeeweb.platform.sys.entity.UserEntity;
 
 public class SysUtil {

@@ -23,7 +23,7 @@ import com.jeeweb.platform.sys.entity.RoleEntity;
 import com.jeeweb.platform.sys.service.RoleService;
 
 @RestController
-@RequestMapping(value = "/api/admin/sys/roles")
+@RequestMapping(value = "/api/platform/sys/roles")
 public class RoleApi extends BaseController<Integer, RoleEntity> {
 
     @Resource

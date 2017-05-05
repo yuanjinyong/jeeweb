@@ -107,7 +107,7 @@ public class RestSecurityFilter extends AbstractSecurityInterceptor implements F
             return;
         }
 
-        // 将调用RestMetadataSource的getAttributes获取用户的权限，然后调用RestAccessDecisionManager的decide方法进行权限判断
+        // 将调用RestSecurityMetadataSource的getAttributes获取用户的权限，然后调用RestAccessDecisionManager的decide方法进行权限判断
         InterceptorStatusToken token = super.beforeInvocation(fi);
 
         try {

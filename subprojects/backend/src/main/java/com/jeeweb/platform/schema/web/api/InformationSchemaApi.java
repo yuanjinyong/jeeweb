@@ -14,7 +14,7 @@ import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.platform.schema.service.InformationSchemaService;
 
 @RestController
-@RequestMapping(value = "/api/platform/tools/information/schema")
+@RequestMapping(value = "/api/platform/schema/information")
 public class InformationSchemaApi extends SuperController {
     @Resource
     private InformationSchemaService informationSchemaService;

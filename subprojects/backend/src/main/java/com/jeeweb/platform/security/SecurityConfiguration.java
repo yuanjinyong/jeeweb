@@ -21,8 +21,15 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.jeeweb.platform.security.filter.RestAccessDecisionManager;
 import com.jeeweb.platform.security.filter.RestSecurityFilter;
+import com.jeeweb.platform.security.filter.RestSecurityMetadataSource;
 import com.jeeweb.platform.security.filter.RestTokenProcessingFilter;
+import com.jeeweb.platform.security.handler.RestAccessDeniedHandler;
+import com.jeeweb.platform.security.handler.RestAuthenticationEntryPoint;
+import com.jeeweb.platform.security.handler.RestLogoutSuccessHandler;
+import com.jeeweb.platform.security.service.RestTokenService;
+import com.jeeweb.platform.security.service.SecurityUserDetailsService;
 
 /**
  * @author 袁进勇

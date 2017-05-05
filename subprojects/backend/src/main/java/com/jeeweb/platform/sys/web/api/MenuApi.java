@@ -20,7 +20,7 @@ import com.jeeweb.platform.sys.entity.MenuEntity;
 import com.jeeweb.platform.sys.service.MenuService;
 
 @RestController
-@RequestMapping(value = "/api/admin/sys/menus")
+@RequestMapping(value = "/api/platform/sys/menus")
 public class MenuApi extends BaseController<String, MenuEntity> {
 
     @Resource

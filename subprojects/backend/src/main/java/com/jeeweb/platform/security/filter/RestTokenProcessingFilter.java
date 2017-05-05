@@ -19,9 +19,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.jeeweb.framework.core.utils.HelpUtil;
-import com.jeeweb.platform.security.RestAuthenticationEntryPoint;
-import com.jeeweb.platform.security.RestTokenService;
 import com.jeeweb.platform.security.exception.RestInvalidTokenException;
+import com.jeeweb.platform.security.handler.RestAuthenticationEntryPoint;
+import com.jeeweb.platform.security.service.RestTokenService;
 
 /**
  * @author 袁进勇

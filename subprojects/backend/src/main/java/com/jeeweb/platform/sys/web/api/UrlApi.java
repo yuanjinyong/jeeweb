@@ -16,7 +16,7 @@ import com.jeeweb.platform.sys.entity.UrlEntity;
 import com.jeeweb.platform.sys.service.UrlService;
 
 @RestController
-@RequestMapping(value = "/api/admin/sys/urls")
+@RequestMapping(value = "/api/platform/sys/urls")
 public class UrlApi extends BaseController<String, UrlEntity> {
     @Resource
     private UrlService urlService;
