@@ -376,15 +376,8 @@
           vm.$http.delete(vm.url + '/' + entity.f_id).then(function (response) {
             if (response.body.success) {
               vm.query()
-              vm.$message({type: 'success', message: response.body.message})
-            } else {
-              vm.$alert(response.body.message, '删除菜单', {
-                confirmButtonText: '关闭',
-                type: 'error'
-              })
             }
           })
-        }).catch(() => {
         })
       },
       onSaved () {

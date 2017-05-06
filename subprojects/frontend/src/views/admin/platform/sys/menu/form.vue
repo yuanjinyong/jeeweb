@@ -225,7 +225,8 @@
             f_status: 1,
             f_is_web: 1,
             f_is_android: 1,
-            f_is_ios: 1
+            f_is_ios: 1,
+            urlList: []
           }
           if (parentEntity.children && parentEntity.children.length > 0) {
             var lastChild = parentEntity.children[parentEntity.children.length - 1]
@@ -260,11 +261,16 @@
         var vm = this
         vm.showSelectUrlDialog = false
         var selectedUrlList = vm.$refs.urlSelector.getSelectedRows()
-        console.debug('onUrlSelected', selectedUrlList)
+        console.debug('onUrlSelected', selectedUrlList, vm.entity.urlList)
         selectedUrlList.forEach(function (selectedUrl) {
-          var exist = vm.entity.urlList.some(function (url) {
-            return url.f_url_id === selectedUrl.f_id
-          })
+          var exist = false
+          if (vm.entity.urlList) {
+            vm.entity.urlList.some(function (url) {
+              return url.f_url_id === selectedUrl.f_id
+            })
+          } else {
+            vm.entity.urlList = []
+          }
 
           if (!exist) {
             vm.entity.urlList.push({
@@ -287,27 +293,25 @@
       onSubmitForm (formName) {
         var vm = this
         vm.$refs[formName].validate(function (valid) {
-          if (valid) {
-            if (vm.params.operation === 'add') {
-              vm.$http.post(vm.url, vm.entity).then(function (response) {
-                console && console.debug(response.body)
-                if (response.body.success) {
-                  this.$emit('submit')
-                }
-              })
-            } else {
-              vm.$http.put(vm.url + '/' + vm.params.entity.f_id, vm.entity).then(function (response) {
-                console && console.debug(response.body)
-                if (response.body.success) {
-                  this.$emit('submit')
-                }
-              })
-            }
-
-            return true
+          if (!valid) {
+            return false
           }
 
-          return false
+          if (vm.params.operation === 'add') {
+            vm.$http.post(vm.url, vm.entity).then(function (response) {
+              if (response.body.success) {
+                this.$emit('submit')
+              }
+            })
+          } else {
+            vm.$http.put(vm.url + '/' + vm.params.entity.f_id, vm.entity).then(function (response) {
+              if (response.body.success) {
+                this.$emit('submit')
+              }
+            })
+          }
+
+          return true
         })
       }
     }

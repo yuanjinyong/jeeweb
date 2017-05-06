@@ -63,8 +63,8 @@
         vm.$refs[formName].validate(function (valid) {
           vm.errorMessage = null
           if (valid) {
-            // vm.$http.post('api/admin/login', vm.entity, {emulateJSON: true}).then(function (response) {
             vm.$http.post('api/platform/security/token', {}, {
+              showSuccessMessage: false,
               headers: {
                 Authorization: 'Basic ' + btoa(vm.entity.f_account + ':' + vm.entity.f_password)
               }
