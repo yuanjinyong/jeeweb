@@ -25,7 +25,7 @@
     methods: {
       onLogout () {
         var vm = this
-        vm.$http.post('api/admin/logout').then(function (response) {
+        vm.$http.post('api/logout').then(function (response) {
           vm.result = response.body
           if (vm.result.success) {
             vm.$store.commit('logout')
