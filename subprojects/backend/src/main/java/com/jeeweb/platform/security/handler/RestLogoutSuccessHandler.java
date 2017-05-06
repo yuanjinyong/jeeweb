@@ -43,7 +43,7 @@ public class RestLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
         LOG.debug("登出成功。");
 
         // 登出成功后，清理token
-        restTokenService.removeToken(request.getHeader(restTokenService.getTokenName()));
+        restTokenService.removeToken(request.getHeader(RestTokenService.REST_TOKEN));
 
         ResponseUtil.success(response, new Result(true, authentication == null ? "未检测到认证信息。" : Result.SUCCESS_MESSAGE));
     }

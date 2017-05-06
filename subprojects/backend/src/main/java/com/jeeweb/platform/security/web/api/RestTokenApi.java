@@ -23,7 +23,7 @@ public class RestTokenApi extends SuperController {
     public ResponseResult getToken() {
         String token = restTokenService.generateToken(SecurityContextHolder.getContext().getAuthentication());
         HttpHeaders headers = new HttpHeaders();
-        headers.add(restTokenService.getTokenName(), token);
+        headers.add(RestTokenService.REST_TOKEN, token);
         return new ResponseResult(new Result(), headers, HttpStatus.OK);
     }
 }

@@ -47,7 +47,7 @@ public class RestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
         clearAuthenticationAttributes(request);
 
         // 登录成功后，生成新的Token设置到响应头中
-        response.setHeader(restTokenService.getTokenName(), restTokenService.generateToken(authentication));
+        response.setHeader(RestTokenService.REST_TOKEN, restTokenService.generateToken(authentication));
 
         ResponseUtil.success(response);
     }

@@ -4,14 +4,13 @@
 package com.jeeweb.platform.security.service;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import com.jeeweb.platform.redis.RedisService;
-
+import com.jeeweb.platform.redis.ByteRedisTemplate;
 
 /**
  * @author 袁进勇
@@ -22,16 +21,16 @@ public class RestTokenService {
     public static final String REST_TOKEN = "X-REST-TOKEN";
 
     @Autowired
-    private RedisService redisService;
+    private ByteRedisTemplate<Authentication> byteRedisTemplate;
 
     public String generateToken(Authentication authentication) {
         String token = UUID.randomUUID().toString();
-        redisService.set(token, authentication, 24 * 60 * 60);
+        byteRedisTemplate.opsForValue().set("token:" + token, authentication, 1, TimeUnit.DAYS);
         return token;
     }
 
     public void removeToken(String token) {
-        redisService.del(token);
+        byteRedisTemplate.delete("token:" + token);
     }
 
     public boolean validate(String token) {
@@ -40,10 +39,6 @@ public class RestTokenService {
     }
 
     public Authentication getAuthentication(String token) {
-        return redisService.get(token, UsernamePasswordAuthenticationToken.class);
-    }
-
-    public String getTokenName() {
-        return REST_TOKEN;
+        return byteRedisTemplate.opsForValue().get("token:" + token);
     }
 }

@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.jeeweb.framework.core.exception.BusinessException;
 
-public class SerializeUtil {
+public class SerializerUtil {
     private static final Logger LOG = LoggerFactory.getLogger(JsonUtil.class);
 
     /**
@@ -23,7 +23,7 @@ public class SerializeUtil {
      */
     public static byte[] serialize(Object object) {
         if (object == null) {
-            return null;
+            return new byte[0];
         }
 
         ObjectOutputStream oos = null;
@@ -48,8 +48,8 @@ public class SerializeUtil {
      * @param bytes
      * @return
      */
-    public static Object unserialize(byte[] bytes) {
-        if (bytes == null) {
+    public static Object deserialize(byte[] bytes) {
+        if (bytes == null || bytes.length == 0) {
             return null;
         }
 
@@ -69,8 +69,8 @@ public class SerializeUtil {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T unserialize(byte[] bytes, Class<T> clazz) {
-        return (T) unserialize(bytes);
+    public static <T> T deserialize(byte[] bytes, Class<T> clazz) {
+        return (T) deserialize(bytes);
     }
 
     private static void close(Closeable stream) {

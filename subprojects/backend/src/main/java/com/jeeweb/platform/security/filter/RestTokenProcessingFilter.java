@@ -56,13 +56,13 @@ public class RestTokenProcessingFilter extends OncePerRequestFilter {
             // 验证Token是否有效
             if (!restTokenService.validate(token)) {
                 LOG.warn("无效的" + RestTokenService.REST_TOKEN + "：" + token);
-                new RestInvalidTokenException("无效的" + restTokenService.getTokenName() + "：" + token);
+                new RestInvalidTokenException("无效的" + RestTokenService.REST_TOKEN + "：" + token);
             }
 
             Authentication authentication = restTokenService.getAuthentication(token);
             if (authentication == null) {
                 LOG.warn("无效的" + RestTokenService.REST_TOKEN + "：" + token);
-                new RestInvalidTokenException("无效的" + restTokenService.getTokenName() + "：" + token);
+                new RestInvalidTokenException("无效的" + RestTokenService.REST_TOKEN + "：" + token);
             }
 
             // Set the authentication into the SecurityContext
