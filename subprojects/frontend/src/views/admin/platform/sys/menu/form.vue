@@ -261,7 +261,6 @@
         var vm = this
         vm.showSelectUrlDialog = false
         var selectedUrlList = vm.$refs.urlSelector.getSelectedRows()
-        console.debug('onUrlSelected', selectedUrlList, vm.entity.urlList)
         selectedUrlList.forEach(function (selectedUrl) {
           var exist = false
           if (vm.entity.urlList) {

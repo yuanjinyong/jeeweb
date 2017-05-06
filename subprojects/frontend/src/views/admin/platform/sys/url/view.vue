@@ -40,7 +40,6 @@
     beforeMount () {
       var vm = this
       vm.gridOptions = {
-        debug: true,
         context: {
           parentComponent: this,
           url: vm.url,
@@ -111,8 +110,6 @@
         },
         datasource: {
           getRows (gridParams) {
-            console.debug('getRows', 'datasource', this, 'gridParams', gridParams)
-
             var page = {
               pageSize: gridParams.endRow - gridParams.startRow,
               pageNo: gridParams.startRow / (gridParams.endRow - gridParams.startRow)

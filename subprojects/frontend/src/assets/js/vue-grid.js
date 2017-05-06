@@ -69,7 +69,7 @@ const agGridOptions = {
   },
   datasource: {
     getRows (gridParams) {
-      console.debug('this', this, 'gridParams', gridParams)
+      // console.debug('this', this, 'gridParams', gridParams)
     }
   },
   columnDefs: []
