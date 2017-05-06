@@ -1,0 +1,130 @@
+{
+  "success": true,
+  "message": "系统处理成功。",
+  "data": {
+    "f_id": 0,
+    "f_tenant_id": 0,
+    "f_tenant_name": "系统租户",
+    "f_account": "SuperAdmin",
+    "f_name": "超级管理员",
+    "f_remark": "该账号是开发人员维护系统用，不能提供给客户使用。",
+    "f_status": 1,
+    "f_department_id": 0,
+    "f_department_name": "系统组织机构",
+    "f_create_time": -28800000,
+    "f_last_login_time": 1491375965923,
+    "f_locked_time": null,
+    "f_unregister_time": null,
+    "f_is_can_login": 1,
+    "roleList": [],
+    "f_role_ids": null,
+    "f_role_names": null,
+    "f_tenant_ids": null,
+    "superAdmin": true,
+    "admin": false,
+    "menuList": [
+      {
+        "f_id": "AdminHome",
+        "f_name": "首页",
+        "f_route_path": "/admin/home",
+        "f_closable": false,
+        "f_type": 2
+      },
+      {
+        "f_id": "KFGJ",
+        "f_name": "开发工具",
+        "f_type": 1,
+        "children": [
+          {
+            "f_id": "DMSC",
+            "f_name": "代码生成",
+            "f_route_path": "/admin/tools/code/generation",
+            "f_type": 2
+          },
+          {
+            "f_id": "CD12",
+            "f_name": "二级菜单1.2",
+            "f_type": 1,
+            "children": [
+              {
+                "f_id": "CD121",
+                "f_name": "三级菜单1.2.1",
+                "f_type": 2
+              },
+              {
+                "f_id": "CD122",
+                "f_name": "三级菜单1.2.2",
+                "f_type": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "f_id": "CD2",
+        "f_name": "一级菜单2",
+        "f_type": 1,
+        "children": [
+          {
+            "f_id": "CD21",
+            "f_name": "二级菜单2.1",
+            "f_type": 1,
+            "children": [
+              {
+                "f_id": "CD211",
+                "f_name": "三级菜单2.1.1",
+                "f_type": 2
+              },
+              {
+                "f_id": "CD212",
+                "f_name": "三级菜单2.1.2",
+                "f_type": 2
+              }
+            ]
+          },
+          {
+            "f_id": "CD22",
+            "f_name": "二级菜单2.2",
+            "f_type": 1,
+            "children": [
+              {
+                "f_id": "CD221",
+                "f_name": "三级菜单2.2.1",
+                "f_type": 2
+              },
+              {
+                "f_id": "CD222",
+                "f_name": "三级菜单2.2.2",
+                "f_type": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "f_id": "CD3",
+        "f_name": "一级菜单3",
+        "f_type": 1,
+        "children": [
+          {
+            "f_id": "CD31",
+            "f_name": "二级菜单3.1",
+            "f_type": 2
+          }
+        ]
+      },
+      {
+        "f_id": "CD4",
+        "f_name": "一级菜单4",
+        "f_type": 1,
+        "children": [
+          {
+            "f_id": "CD41",
+            "f_name": "二级菜单4.1",
+            "f_type": 2
+          }
+        ]
+      }
+    ]
+  }
+}

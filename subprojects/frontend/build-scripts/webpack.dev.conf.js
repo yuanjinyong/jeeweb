@@ -1,9 +1,10 @@
-var config = require('../config')
-var webpack = require('webpack')
-var merge = require('webpack-merge')
 var utils = require('./utils')
+var webpack = require('webpack')
+var config = require('../config')
+var merge = require('webpack-merge')
 var baseWebpackConfig = require('./webpack.base.conf')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
+var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 
 // add hot-reload related code to entry chunks
 Object.keys(baseWebpackConfig.entry).forEach(function (name) {
@@ -12,23 +13,25 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
 
 module.exports = merge(baseWebpackConfig, {
   module: {
-    loaders: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
+    rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
   },
-  // eval-source-map is faster for development
-  devtool: '#eval-source-map',
+  // cheap-module-eval-source-map is faster for development
+  devtool: '#cheap-module-eval-source-map',
   plugins: [
     new webpack.DefinePlugin({
       'process.env': config.dev.env
     }),
     // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
-    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: 'index.html',
-      inject: true
-    })
+    new HtmlWebpackPlugin({ //根据模板插入css/js等生成最终HTML
+      favicon:'src/assets/favicon.ico', //favicon路径
+      title: config.build.title,
+      filename: 'index.html', //生成的html存放路径，相对于 path
+      template: 'src/index.html', //html模板路径
+      inject: true //允许插件修改哪些内容，包括head与body
+    }),
+    new FriendlyErrorsPlugin()
   ]
 })

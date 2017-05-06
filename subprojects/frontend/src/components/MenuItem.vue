@@ -1,0 +1,27 @@
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+</style>
+
+
+<template>
+  <el-menu-item :index="menu.f_id" :route="{path: menu.f_route_path, params: menu}">
+    <div class="jw-menu-item-text">
+      <i :class="menu.f_icon || 'fa fa-file-o'"></i>{{menu.f_name}}
+    </div>
+  </el-menu-item>
+</template>
+
+
+<script type="text/ecmascript-6">
+  export default {
+    name: 'jw-menu-item',
+    props: {
+      menu: {
+        type: Object,
+        default: function () {
+          return {}
+        }
+      }
+    }
+  }
+</script>

@@ -1,10 +1,44 @@
+// The Vue build version to load with the `import` command
+// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import VueResource from 'vue-resource'
+import VueCookie from 'vue-cookie'
+import 'font-awesome-loader'
+import 'bootstrap-loader'
+
+import VueCfg from './assets/js/vue-cfg'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-default/index.css'
+
+import 'ag-grid/dist/styles/ag-grid.css'
+import 'ag-grid/dist/styles/theme-blue.css'
+import 'ag-grid/dist/styles/theme-bootstrap.css'
+import 'ag-grid/dist/styles/theme-dark.css'
+import 'ag-grid/dist/styles/theme-fresh.css'
+import 'ag-grid/dist/styles/theme-material.css'
+// import 'ag-grid-enterprise/main' // need if you use ag-grid enterprise features
+import VueGrid from './assets/js/vue-grid'
+
+import store from './store'
+import router from './router'
+import './resource'
+import './filters'
+import './components'
 import App from './App'
 
-Vue.use(VueResource)
+window.devMode = process.env.NODE_ENV === 'development'
+window.devMode && console && console.debug('调试模式开启')
+
+Vue.use(VueCfg)
+
+Vue.use(VueCookie)
+Vue.use(ElementUI)
+Vue.use(VueGrid)
+
 /* eslint-disable no-new */
 new Vue({
-  el: 'body',
-  components: { App }
+  el: '#app',
+  store,
+  router,
+  template: '<App/>',
+  components: {App}
 })

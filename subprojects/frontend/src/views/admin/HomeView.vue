@@ -1,0 +1,127 @@
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+</style>
+
+<template>
+  <div>
+    首页<br>
+    <div style="width: 900px;">首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页首页</div>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+    首页<br>
+  </div>
+</template>
+
+
+<script type="text/ecmascript-6">
+  export default {
+    name: 'home',
+    data () {
+      return {}
+    },
+    mounted () {
+      window.devMode && console.info('mounted', this.$options.name, this._uid)
+    },
+    activated () {
+      window.devMode && console.info('activated', this.$options.name, this._uid)
+    },
+    methods: {}
+  }
+</script>
