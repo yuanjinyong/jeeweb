@@ -7,8 +7,8 @@
       <div style="display: inline-block;">
         <img src="assets/img/logo.png">
       </div>
-      <div class="pull-right" style="vertical-align: bottom;" v-if="curUser">
-        <el-button type="warning" @click="onLogout">退出</el-button>
+      <div style="position: absolute; right: 0px; bottom: 0px;padding: 20px;" v-if="curUser">
+        <el-button type="warning" @click="onLogout"><i class="fa fa-power-off"></i>&nbsp;退出</el-button>
       </div>
     </el-col>
   </el-row>
