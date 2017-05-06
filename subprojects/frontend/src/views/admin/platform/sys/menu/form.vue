@@ -37,11 +37,8 @@
         <el-form-item label="图标" prop="f_icon">
           <el-input v-model="entity.f_icon"></el-input>
         </el-form-item>
-        <el-form-item label="路由路径" prop="f_route_path" v-show="entity.f_type === 2">
-          <el-input v-model="entity.f_route_path"></el-input>
-        </el-form-item>
         <el-form-item label="状态" prop="f_status">
-          <el-radio-group v-model="entity.f_status" style="width: 496px;">
+          <el-radio-group v-model="entity.f_status">
             <el-radio :label="1">启用</el-radio>
             <el-radio :label="2">禁用</el-radio>
           </el-radio-group>
@@ -52,6 +49,9 @@
             <el-checkbox v-model="entity.f_is_android" :true-label="1" :false-label="2">Android</el-checkbox>
             <el-checkbox v-model="entity.f_is_ios" :true-label="1" :false-label="2">IOS</el-checkbox>
           </div>
+        </el-form-item>
+        <el-form-item label="路由路径" prop="f_route_path" v-show="entity.f_type === 2">
+          <el-input v-model="entity.f_route_path" style="width: 496px;"></el-input>
         </el-form-item>
         <el-form-item label="备注" prop="f_remark">
           <el-input v-model="entity.f_remark" type="textarea" autosize style="width: 496px;"></el-input>
