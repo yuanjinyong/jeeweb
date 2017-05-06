@@ -223,20 +223,20 @@ CREATE TABLE `t_sys_menu_url` (
 
 /*Data for the table `t_sys_menu_url` */
 
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','046c08d74e672dad8c4e016842297174');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','d7b50feb3835cfaee07af5703055d99f');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','4ebe71b91dd9ca51dda6b10fbd704302');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','df0f8c74f6c2a2954484b505cb43e905');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','4050f6a3ffd77bdc4534d886e11f8012');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','55847dc87d27c4b9146caf118c45321c');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','0c0362062f72869516168ed479fa82bb');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','d7b9102569dc7cfdc45956fa9cd32ad3');
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL-DCSQL','dc940553c07e3e561120940431832c19');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL-SC','67e5bfda9cd39145fb42561260d52172');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL-XG','cacd68394f8084ac5d976f2e731142a5');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL-ZJ','40622ad404445a261096d512a00c3fa0');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL','4ebe71b91dd9ca51dda6b10fbd704302');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL','df0f8c74f6c2a2954484b505cb43e905');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL-SC','bdee6d0b5143adf05fbd6bb86370cc3a');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL-SC','6ac746bb710ac542326a47799b156742');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL-XG','266ee076745fd0f573baa8b79ed6350c');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL-ZJ','43fd1b1b6aaa2993aad33076ed7f34dd');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL-SC','5a91bc0915d3e5c0b2e49d45c1b168ca');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL-XG','fed4f0beac39e30f0c8354eaa65fd25f');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL-ZJ','a61340a1087d2e7bed041cf57d43a397');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL','0c0362062f72869516168ed479fa82bb');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL','d7b9102569dc7cfdc45956fa9cd32ad3');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL-SC','66e99840d588bd859cad21d43a1d8ae3');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL-SC','4087eb30e3c4c0dac2765498b3b0cab7');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL-XG','b73c369d73f83cd700ca2c554f76d504');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL-ZJ','f59ac63ca88503cd64ed14020d1cbead');
 
 /*Table structure for table `t_sys_parameter` */
 

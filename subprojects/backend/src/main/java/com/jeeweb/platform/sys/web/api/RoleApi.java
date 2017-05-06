@@ -19,6 +19,7 @@ import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
+import com.jeeweb.framework.core.utils.TreeUtil;
 import com.jeeweb.platform.sys.entity.RoleEntity;
 import com.jeeweb.platform.sys.service.RoleService;
 
@@ -76,7 +77,11 @@ public class RoleApi extends BaseController<Integer, RoleEntity> {
             menuList = new ArrayList<RowMap>();
         }
 
-        return new ResponseResult(new Result(menuList), HttpStatus.OK);
+        if ($bool("treeData", true)) {
+            return new ResponseResult(new Result(TreeUtil.listToTree(menuList, "f_id", "f_parent_id")), HttpStatus.OK);
+        } else {
+            return new ResponseResult(new Result(menuList), HttpStatus.OK);
+        }
     }
 
     @RequestMapping(value = "/{id}/menus", method = RequestMethod.POST)

@@ -14,11 +14,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.jeeweb.framework.core.utils.HelpUtil;
+import com.jeeweb.platform.security.exception.RestException;
 import com.jeeweb.platform.security.exception.RestInvalidTokenException;
 import com.jeeweb.platform.security.handler.RestAuthenticationEntryPoint;
 import com.jeeweb.platform.security.service.RestTokenService;
@@ -44,27 +46,37 @@ public class RestTokenProcessingFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String token = request.getHeader(restTokenService.getTokenName());
+        String token = request.getHeader(RestTokenService.REST_TOKEN);
         if (HelpUtil.isEmpty(token)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        if (!restTokenService.validate(token)) { // 验证Token是否有效
-            LOG.warn("无效的" + restTokenService.getTokenName() + "：" + token);
-            restAuthenticationEntryPoint.commence(request, response,
-                    new RestInvalidTokenException("无效的" + restTokenService.getTokenName() + "：" + token));
+        try {
+            // 验证Token是否有效
+            if (!restTokenService.validate(token)) {
+                LOG.warn("无效的" + RestTokenService.REST_TOKEN + "：" + token);
+                new RestInvalidTokenException("无效的" + restTokenService.getTokenName() + "：" + token);
+            }
+
+            Authentication authentication = restTokenService.getAuthentication(token);
+            if (authentication == null) {
+                LOG.warn("无效的" + RestTokenService.REST_TOKEN + "：" + token);
+                new RestInvalidTokenException("无效的" + restTokenService.getTokenName() + "：" + token);
+            }
+
+            // Set the authentication into the SecurityContext
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        } catch (Exception e) {
+            if (e instanceof AuthenticationException) {
+                restAuthenticationEntryPoint.commence(request, response, (AuthenticationException) e);
+            } else {
+                restAuthenticationEntryPoint.commence(request, response, new RestException(e.getMessage(), e));
+            }
+
+            return;
         }
 
-        Authentication authentication = restTokenService.getAuthentication(token);
-        if (authentication == null) {
-            LOG.warn("无效的" + restTokenService.getTokenName() + "：" + token);
-            restAuthenticationEntryPoint.commence(request, response,
-                    new RestInvalidTokenException("无效的" + restTokenService.getTokenName() + "：" + token));
-        }
-
-        // Set the authentication into the SecurityContext
-        SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);
     }
 }

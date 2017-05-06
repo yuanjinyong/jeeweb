@@ -6,9 +6,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.jeeweb.framework.business.mapper.BaseMapper;
+import com.jeeweb.framework.business.model.ICreator;
+import com.jeeweb.framework.business.model.IPreset;
 import com.jeeweb.framework.core.exception.BusinessException;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.RowMap;
+import com.jeeweb.framework.core.utils.HelpUtil;
+import com.jeeweb.platform.sys.entity.UserEntity;
+import com.jeeweb.platform.sys.utils.SysUtil;
 
 
 
@@ -30,13 +35,8 @@ public abstract class BaseService<P, E> {
     }
 
     public void insertEntity(E entity) {
-        // if (entity instanceof ICreatorEntity) {
-        // UserEntity user = SysUtil.getCurUser();
-        // ICreatorEntity creator = (ICreatorEntity) entity;
-        // creator.setF_creator_id(user.getF_id());
-        // creator.setF_creator_name(user.getF_name());
-        // creator.setF_created_time(HelpUtil.getNowTime());
-        // }
+        fillCreator(entity);
+        fillPreset(entity);
 
         getMapper().insertEntity(entity);
     }
@@ -50,6 +50,9 @@ public abstract class BaseService<P, E> {
     }
 
     public void deleteEntity(P primaryKey) {
+        E entity = getMapper().selectEntity(primaryKey);
+        checkPreset(entity);
+
         if (getMapper().isCanDeleteEntity(primaryKey) > 0) {
             throw new BusinessException("存在关联数据，不能删除！");
         }
@@ -59,5 +62,31 @@ public abstract class BaseService<P, E> {
 
     public void deleteEntities(ParameterMap params) {
         getMapper().deleteEntities(params);
+    }
+
+    protected void fillCreator(E entity) {
+        if (entity instanceof ICreator) {
+            UserEntity user = SysUtil.getCurUser();
+            ICreator creator = (ICreator) entity;
+            creator.setF_creator_id(user.getF_id());
+            creator.setF_creator_name(user.getF_name());
+            creator.setF_created_time(HelpUtil.getNowTime());
+        }
+    }
+
+    protected void fillPreset(E entity) {
+        if (entity instanceof IPreset) {
+            IPreset preset = (IPreset) entity;
+            preset.setF_is_preset(IPreset.NO); // 系统预置数据是不能通过程序来修改的，这里能够写入的数据都不是系统预置的。
+        }
+    }
+
+    protected void checkPreset(E entity) {
+        if (entity instanceof IPreset) {
+            IPreset preset = (IPreset) entity;
+            if (preset.isPreset()) {
+                throw new BusinessException("系统预置数据，不能删除！");
+            }
+        }
     }
 }

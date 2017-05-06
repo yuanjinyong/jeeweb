@@ -124,7 +124,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public RestSecurityFilter restSecurityFilter() throws Exception {
         RestSecurityFilter filter = new RestSecurityFilter();
-        filter.addPermitAllMatchers("/api/anonymous/**", "/api/token"); // 配置不登陆（授权）也可以访问的URL
+        filter.addPermitAllMatchers("/api/anonymous/**", "/api/platform/security/token"); // 配置不登陆（授权）也可以访问的URL
         filter.addAuthenticatedMatchers("/api/authenticated/**", "/api/admin/index/**", API_LOGOUT); // 配置只要登陆即可访问的URL
 
         filter.setAuthenticationEntryPoint(restAuthenticationEntryPoint);

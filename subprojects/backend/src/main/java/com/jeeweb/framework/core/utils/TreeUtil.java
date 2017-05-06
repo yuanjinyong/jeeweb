@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jeeweb.framework.business.entity.TreeNodeEntity;
+import com.jeeweb.framework.core.model.RowMap;
 
 
 /**
@@ -41,6 +42,31 @@ public final class TreeUtil {
 
             if (node.getChildren() == null) {
                 node.setChildren(new ArrayList<T>());
+            }
+        }
+
+        return nodeTree;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<RowMap> listToTree(List<RowMap> nodeList, String f_id, String f_parent_id) {
+        // 找出顶层的节点返回
+        List<RowMap> nodeTree = new ArrayList<RowMap>();
+
+        // 组织好父子关系
+        Map<Object, RowMap> nodeMap = new HashMap<Object, RowMap>();
+        for (RowMap node : nodeList) {
+            nodeMap.put(node.get(f_id), node);
+
+            RowMap parentNode = nodeMap.get(node.get(f_parent_id));
+            if (parentNode == null) {
+                nodeTree.add(node);
+            } else {
+                ((List<RowMap>) parentNode.get("children")).add(node);
+            }
+
+            if (!node.containsKey("children")) {
+                node.put("children", new ArrayList<RowMap>());
             }
         }
 

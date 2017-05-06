@@ -14,6 +14,8 @@ import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.framework.core.utils.SerializeUtil;
 
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.exceptions.JedisConnectionException;
+import redis.clients.jedis.exceptions.JedisDataException;
 
 /**
  * @author 袁进勇
@@ -135,7 +137,16 @@ public class RedisService implements InitializingBean {
             throw new BusinessException(errorMsg);
         }
 
-        jedis = new Jedis(host, port);
-        jedis.auth(password);
+        try {
+            jedis = new Jedis(host, port);
+            jedis.auth(password);
+        } catch (JedisConnectionException e) {
+            LOG.error("连接Redis服务器" + host + ":" + port
+                    + "失败，请检查Redis服务器是否启动，或者classpath:cfg/application.properties文件中的“redis.host”、“redis.port”是否正确。");
+            throw new BusinessException(e);
+        } catch (JedisDataException e) {
+            LOG.error("密码错误，请检查classpath:cfg/application.properties文件中的“redis.password”是否为正确的密码。");
+            throw new BusinessException(e);
+        }
     }
 }
