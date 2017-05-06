@@ -368,7 +368,7 @@
       },
       onRemove (entity) {
         var vm = this
-        vm.$confirm('确定要删除所选的菜单及其子菜单?', '删除菜单', {
+        vm.$confirm('确定要删除所选的菜单及其子菜单吗?', '删除菜单', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
