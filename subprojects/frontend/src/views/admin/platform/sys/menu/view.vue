@@ -130,7 +130,7 @@
             headerName: '名称',
             field: 'f_name',
             cellRendererFramework: Vue.extend({
-              template: `<a @click.prevent="onView">
+              template: `<a @click.prevent="onView" style="cursor: pointer;">
                             <i style="display:inline-block;min-width:14px;" :class="params.node.data.f_icon">&nbsp;</i>{{ params.value }}
                           </a>`,
               methods: {

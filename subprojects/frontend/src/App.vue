@@ -100,6 +100,8 @@
 
   .jw-dialog {
     min-width: 650px;
+    margin-bottom: 30px;
+    top: 30px;
   }
 
   .jw-dialog .el-dialog__header {
@@ -110,6 +112,12 @@
   .jw-dialog .el-dialog__body {
     padding: 0px;
     color: #48576a;
+  }
+
+  .jw-sub-dialog {
+    min-width: 350px;
+    margin-bottom: 20px;
+    top: 20px;
   }
 
   .jw-form {

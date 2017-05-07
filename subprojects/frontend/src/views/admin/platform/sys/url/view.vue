@@ -5,6 +5,13 @@
 <template>
   <div :style="contentStyle">
     <ag-grid-vue style="width: 100%; height: 100%;" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid-vue>
+
+    <el-dialog v-model="showFormDialog" :title="formDialogTitle" :close-on-click-modal="false"
+      :modal="mode !== 'selector'" :size="'small'" :top="mode !== 'selector' ? '30px': '20px'"
+      :custom-class="mode !== 'selector' ? 'jw-dialog' : 'jw-dialog jw-sub-dialog'">
+      <url-form :params="formParams" @cancel="showFormDialog = false" @submit="onSaved" v-if="showFormDialog">
+      </url-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -12,11 +19,13 @@
 <script type="text/ecmascript-6">
   import Vue from 'vue'
   import { AgGridVue } from 'ag-grid-vue'
+  import UrlForm from './form'
 
   export default {
     name: 'url',
     components: {
-      'ag-grid-vue': AgGridVue
+      'ag-grid-vue': AgGridVue,
+      UrlForm
     },
     props: {
       mode: {type: String, default: ''}
@@ -25,7 +34,13 @@
       return {
         url: 'api/platform/sys/urls',
         gridOptions: null,
-        entities: []
+        showFormDialog: false,
+        formDialogTitle: '查看角色',
+        formParams: {
+          maxHeight: this.mode === 'selector' ? 400 : 500,
+          operation: 'view',
+          entity: {}
+        }
       }
     },
     computed: {
@@ -80,6 +95,14 @@
             field: 'f_url',
             pinned: 'left',
             suppressMenu: true,
+            cellRendererFramework: Vue.extend({
+              template: '<a @click.prevent="onView" style="cursor: pointer;">{{ this.params.value }}</a>',
+              methods: {
+                onView () {
+                  this.params.context.parentComponent.onView(this.params.node.data)
+                }
+              }
+            }),
             filterFramework: Vue.extend({
               template: `<el-input :ref="'input'" v-model="text" placeholder="支持模糊过滤"></el-input>`,
               data () {
@@ -110,10 +133,6 @@
                 },
                 setModel (model) {
                   this.text = model.filter
-                },
-                afterGuiAttached () {
-                  // console.debug('afterGuiAttached', this.$refs.input)
-                  // this.$refs.input.focus()
                 }
               }
             }),
@@ -226,6 +245,19 @@
       },
       clearSelectedRows () {
         return this.gridOptions.api.deselectAll()
+      },
+      onView (entity) {
+        this.formParams.operation = 'view'
+        this.formParams.entity = entity
+        this.formDialogTitle = '查看URL'
+        this.showFormDialog = true
+      },
+      onSaved () {
+        this._refreshGrid()
+        this.showFormDialog = false
+      },
+      _refreshGrid () {
+        this.gridOptions.api.setDatasource(this.gridOptions.datasource)
       }
     }
   }

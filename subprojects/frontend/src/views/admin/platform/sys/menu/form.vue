@@ -4,7 +4,7 @@
 
 <template>
   <div class="jw-form">
-    <div class="jw-form-body" style="max-height: 500px;overflow-y: auto;">
+    <div class="jw-form-body" :style="{'max-height': 500+'px','overflow-y': 'auto'}">
       <el-form label-width="100px" ref="menuForm" :inline="true" :model="entity" :rules="rules">
         <fieldset :disabled="params.operation === 'view'">
           <el-form-item label="父菜单编码" prop="f_parent_id">
@@ -74,7 +74,8 @@
     </div>
 
     <el-dialog title="选择授权的URL" v-model="showSelectUrlDialog"
-      :close-on-click-modal="false" :modal="false" :size="'large'">
+      :close-on-click-modal="false" :modal="false" :size="'large'" :top="'20px'"
+      :custom-class="'jw-dialog jw-sub-dialog'">
       <url-selector ref="urlSelector" :mode="'selector'"></url-selector>
       <div slot="footer" class="dialog-footer">
         <el-button @click="showSelectUrlDialog = false">取 消</el-button>

@@ -96,7 +96,7 @@
             suppressSorting: true,
             suppressMenu: true,
             cellRendererFramework: Vue.extend({
-              template: '<a @click.prevent="onView">{{ this.params.value }}</a>',
+              template: '<a @click.prevent="onView" style="cursor: pointer;">{{ this.params.value }}</a>',
               methods: {
                 onView () {
                   this.params.context.parentComponent.onView(this.params.node.data)
