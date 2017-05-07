@@ -5,7 +5,7 @@ Vue.use(VueResource)
 
 Vue.http.interceptors.push(function (request, next) {
   // 在请求之前可以进行一些预处理和配置
-  var vm = this // 此处this为请求所在页面的Vue实例
+  var vm = this || {} // 此处this为请求所在页面的Vue实例
   vm.loading = true // 正在加载
   vm.errorMessage = null
 

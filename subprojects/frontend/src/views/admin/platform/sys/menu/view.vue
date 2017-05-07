@@ -306,7 +306,7 @@
                             <button type="button" class="btn btn-xs btn-primary" @click.prevent="onAdd" title="增加子菜单" :disabled="params.node.data.f_type > 2">
                               <i class="fa fa-plus"></i>
                             </button>
-                            <button type="button" class="btn btn btn-xs btn-info" @click.prevent="onEdit"title="编辑" >
+                            <button type="button" class="btn btn btn-xs btn-info" @click.prevent="onEdit"title="修改" >
                               <i class="fa fa-edit"></i>
                             </button>
                             <button type="button" class="btn btn-xs btn-danger" @click.prevent="onRemove"title="删除" :disabled="!params.node.data.f_parent_id">

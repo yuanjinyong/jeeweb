@@ -77,12 +77,13 @@
     </sql>
     <sql id="Where_Clause">
         WHERE 1=1
-        <if test="f_url != null and f_url != ''">AND f_url like "%" #{f_url} "%"</if>
-        <if test="f_patterns != null and f_patterns != ''">AND f_patterns like "%" #{f_patterns} "%"</if>
-        <if test="f_desc != null and f_desc != ''">AND f_desc like "%" #{f_desc} "%"</if>
-        <if test="f_methods != null and f_methods != ''">AND f_methods like "%" #{f_methods} "%"</if>
-        <if test="f_consumes != null and f_consumes != ''">AND f_consumes like "%" #{f_consumes} "%"</if>
-        <if test="f_handler_method != null and f_handler_method != ''">AND f_handler_method like "%" #{f_handler_method} "%"</if>
+        <if test="f_url_like != null and f_url_like != ''">AND f_url LIKE CONCAT('%', #{f_url_like}, '%')</if>
+        <if test="f_patterns_like != null and f_patterns_like != ''">AND f_patterns LIKE CONCAT('%', #{f_patterns_like}, '%')</if>
+        <if test="f_desc_like != null and f_desc_like != ''">AND f_desc LIKE CONCAT('%', #{f_desc_like}, '%')</if>
+        <if test="f_methods != null and f_methods != ''">AND f_methods = #{f_methods}</if>
+        <if test="f_methods_like != null and f_methods_like != ''">AND f_methods LIKE CONCAT('%', #{f_methods_like}, '%')</if>
+        <if test="f_consumes_like != null and f_consumes_like != ''">AND f_consumes LIKE CONCAT('%', #{f_consumes_like}, '%')</if>
+        <if test="f_handler_method_like != null and f_handler_method_like != ''">AND f_handler_method LIKE CONCAT('%', #{f_handler_method_like}, '%')</if>
         <if test="f_is_log != null and f_is_log != ''">AND f_is_log = #{f_is_log}</if>
         <if test="f_is_auto != null and f_is_auto != ''">AND f_is_auto = #{f_is_auto}</if>
     </sql>

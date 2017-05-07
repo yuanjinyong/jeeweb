@@ -7,8 +7,8 @@
         INSERT INTO t_sys_role(
         f_id,
         f_name,
-        f_desc，
-        f_is_sys，
+        f_desc,
+        f_is_sys,
         f_remark
         )
         VALUES

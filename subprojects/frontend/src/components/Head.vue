@@ -8,7 +8,7 @@
         <img src="assets/img/logo.png">
       </div>
       <div style="position: absolute; right: 0px; bottom: 0px;padding: 20px;" v-if="curUser">
-        <el-button type="warning" @click="onLogout"><i class="fa fa-power-off"></i>&nbsp;退出</el-button>
+        <el-button type="warning" @click="onLogout"><i class="fa fa-sign-out"></i>&nbsp;退出</el-button>
       </div>
     </el-col>
   </el-row>
