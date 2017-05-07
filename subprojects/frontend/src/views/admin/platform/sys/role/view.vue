@@ -11,6 +11,15 @@
       <role-form :params="formParams" @cancel="showFormDialog = false" @submit="onSaved" v-if="showFormDialog">
       </role-form>
     </el-dialog>
+
+    <el-dialog v-model="authorizeDialogShown" :title="authorizeDialogTitle" :close-on-click-modal="false"
+      :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
+      <role-authorize-form :params="authorizeDialogOptions"
+        @cancel="authorizeDialogShown = false"
+        @submit="authorizeDialogShown = false"
+        v-if="authorizeDialogShown">
+      </role-authorize-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -19,12 +28,14 @@
   import Vue from 'vue'
   import { AgGridVue } from 'ag-grid-vue'
   import RoleForm from './form'
+  import RoleAuthorizeForm from './authorize'
 
   export default {
     name: 'role',
     components: {
       'ag-grid-vue': AgGridVue,
-      RoleForm
+      RoleForm,
+      RoleAuthorizeForm
     },
     data () {
       return {
@@ -33,6 +44,12 @@
         showFormDialog: false,
         formDialogTitle: '查看角色',
         formParams: {
+          operation: 'view',
+          entity: {}
+        },
+        authorizeDialogShown: false,
+        authorizeDialogTitle: '查看授权',
+        authorizeDialogOptions: {
           operation: 'view',
           entity: {}
         }
@@ -246,10 +263,14 @@
         this.showFormDialog = false
       },
       _refreshGrid () {
+        this.gridOptions.context.params.totalCount = 0
         this.gridOptions.api.setDatasource(this.gridOptions.datasource)
       },
-      onAuthorize () {
-        alert('onAuthorize')
+      onAuthorize (entity) {
+        this.authorizeDialogOptions.operation = 'edit'
+        this.authorizeDialogOptions.entity = entity
+        this.authorizeDialogTitle = '修改授权'
+        this.authorizeDialogShown = true
       }
     }
   }

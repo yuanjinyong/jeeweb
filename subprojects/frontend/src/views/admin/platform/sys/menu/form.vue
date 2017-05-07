@@ -270,7 +270,7 @@
         selectedUrlList.forEach(function (selectedUrl) {
           var exist = false
           if (vm.entity.urlList) {
-            vm.entity.urlList.some(function (url) {
+            exist = vm.entity.urlList.some(function (url) {
               return url.f_url_id === selectedUrl.f_id
             })
           } else {
