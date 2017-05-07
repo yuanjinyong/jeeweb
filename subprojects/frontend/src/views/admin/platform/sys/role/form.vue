@@ -6,27 +6,29 @@
   <div class="jw-form">
     <div class="jw-form-body" style="max-height: 500px;overflow-y: auto;">
       <el-form label-width="100px" ref="form" :inline="true" :model="entity" :rules="rules">
-        <el-form-item label="名称" prop="f_name">
-          <el-input v-model="entity.f_name"></el-input>
-        </el-form-item>
-        <el-form-item label="系统预置" prop="f_is_sys">
-          <el-radio-group v-model="entity.f_is_sys">
-            <el-radio :label="1" disabled>是</el-radio>
-            <el-radio :label="2" disabled>否</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="描述" prop="f_desc">
-          <el-input v-model="entity.f_desc" type="textarea" autosize style="width: 496px;"></el-input>
-        </el-form-item>
-        <el-form-item label="备注" prop="f_remark">
-          <el-input v-model="entity.f_remark" type="textarea" autosize style="width: 496px;"></el-input>
-        </el-form-item>
+        <fieldset :disabled="params.operation === 'view'">
+          <el-form-item label="名称" prop="f_name">
+            <el-input v-model="entity.f_name"></el-input>
+          </el-form-item>
+          <el-form-item label="系统预置" prop="f_is_sys">
+            <el-radio-group v-model="entity.f_is_sys">
+              <el-radio :label="1" disabled>是</el-radio>
+              <el-radio :label="2" disabled>否</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="描述" prop="f_desc">
+            <el-input v-model="entity.f_desc" type="textarea" autosize style="width: 496px;"></el-input>
+          </el-form-item>
+          <el-form-item label="备注" prop="f_remark">
+            <el-input v-model="entity.f_remark" type="textarea" autosize style="width: 496px;"></el-input>
+          </el-form-item>
+        </fieldset>
       </el-form>
     </div>
 
     <div class="jw-form-footer" style="text-align: right;">
       <el-button @click="onCancelForm('form')">取 消</el-button>
-      <el-button type="primary" @click="onSubmitForm('form')">确 定</el-button>
+      <el-button type="primary" @click="onSubmitForm('form')" :disabled="params.operation === 'view'">确 定</el-button>
     </div>
   </div>
 </template>

@@ -95,6 +95,14 @@
             pinned: 'left',
             suppressSorting: true,
             suppressMenu: true,
+            cellRendererFramework: Vue.extend({
+              template: '<a @click.prevent="onView">{{ this.params.value }}</a>',
+              methods: {
+                onView () {
+                  this.params.context.parentComponent.onView(this.params.node.data)
+                }
+              }
+            }),
             filterFramework: Vue.extend({
               template: `<el-input :ref="'input'" v-model="text" placeholder="支持模糊过滤"></el-input>`,
               data () {
@@ -205,6 +213,12 @@
       onAdd () {
         this.formParams.operation = 'add'
         this.formDialogTitle = '增加角色'
+        this.showFormDialog = true
+      },
+      onView (entity) {
+        this.formParams.operation = 'view'
+        this.formParams.entity = entity
+        this.formDialogTitle = '查看角色'
         this.showFormDialog = true
       },
       onEdit (entity) {

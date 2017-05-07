@@ -6,8 +6,8 @@
   <div :style="contentStyle">
     <ag-grid-vue style="width: 100%; height: 100%;" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid-vue>
 
-    <el-dialog title="菜单详情" v-model="showFormDialog" :close-on-click-modal="false" :size="'small'" :top="'30px'"
-      :custom-class="'jw-dialog'">
+    <el-dialog v-model="showFormDialog" :title="formDialogTitle" :close-on-click-modal="false" :size="'small'"
+      :top="'30px'" :custom-class="'jw-dialog'">
       <menu-form :params="formParams" @cancel="showFormDialog = false" @submit="onSaved"
         v-if="showFormDialog"></menu-form>
     </el-dialog>
@@ -31,6 +31,7 @@
         url: 'api/platform/sys/menus',
         gridOptions: null,
         showFormDialog: false,
+        formDialogTitle: '查看菜单',
         formParams: {
           operation: 'view',
           entity: {}
@@ -129,7 +130,14 @@
             headerName: '名称',
             field: 'f_name',
             cellRendererFramework: Vue.extend({
-              template: '<div><div style="display:inline-block;min-width:14px;" :class="params.node.data.f_icon">&nbsp;</div>{{ params.value }}</div>'
+              template: `<a @click.prevent="onView">
+                            <i style="display:inline-block;min-width:14px;" :class="params.node.data.f_icon">&nbsp;</i>{{ params.value }}
+                          </a>`,
+              methods: {
+                onView () {
+                  this.params.context.parentComponent.onView(this.params.node.data)
+                }
+              }
             }),
             suppressSorting: true,
             suppressMenu: true,
@@ -359,11 +367,19 @@
       onAdd (entity) {
         this.formParams.operation = 'add'
         this.formParams.parentEntity = entity
+        this.formDialogTitle = '增加菜单'
+        this.showFormDialog = true
+      },
+      onView (entity) {
+        this.formParams.operation = 'view'
+        this.formParams.entity = entity
+        this.formDialogTitle = '查看菜单'
         this.showFormDialog = true
       },
       onEdit (entity) {
         this.formParams.operation = 'edit'
         this.formParams.entity = entity
+        this.formDialogTitle = '修改菜单'
         this.showFormDialog = true
       },
       onRemove (entity) {
