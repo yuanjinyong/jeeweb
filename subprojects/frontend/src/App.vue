@@ -114,6 +114,10 @@
     color: #48576a;
   }
 
+  .jw-dialog.el-dialog--tiny {
+    min-width: 0px;
+  }
+
   .jw-sub-dialog {
     min-width: 350px;
     margin-bottom: 20px;
@@ -148,6 +152,7 @@
 
   .el-select {
     min-width: 196px;
+    width: 196px;
   }
 
   .el-radio-group {

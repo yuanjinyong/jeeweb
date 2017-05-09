@@ -54,4 +54,10 @@ public class IndexApi extends SuperController {
         page.setItems(TreeUtil.listToTree(menuList));
         return new ResponseResult(new Result(page), HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/change/password", method = RequestMethod.POST)
+    public ResponseResult changePassword() {
+        userService.changePassword($("oldPassword"), $("newPassword"));
+        return new ResponseResult(new Result(), HttpStatus.OK);
+    }
 }

@@ -1,17 +1,21 @@
 package com.jeeweb.platform.sys.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jeeweb.framework.business.mapper.BaseMapper;
+import com.jeeweb.framework.business.mapper.SqlMapper;
 import com.jeeweb.framework.business.service.BaseService;
 import com.jeeweb.framework.core.exception.BusinessException;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
+import com.jeeweb.framework.core.utils.TreeUtil;
 import com.jeeweb.platform.sys.entity.MenuEntity;
 import com.jeeweb.platform.sys.mapper.MenuMapper;
 import com.jeeweb.platform.sys.mapper.MenuUrlMapper;
@@ -23,6 +27,9 @@ public class MenuService extends BaseService<String, MenuEntity> {
     private MenuMapper menuMapper;
     @Autowired
     private MenuUrlMapper menuUrlMapper;
+
+    @Autowired
+    private SqlMapper sqlMapper;
 
     @Override
     protected BaseMapper<String, MenuEntity> getMapper() {
@@ -76,6 +83,35 @@ public class MenuService extends BaseService<String, MenuEntity> {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public RowMap getSqlData(String f_menu_id) {
+        MenuEntity menu = menuMapper.selectEntity(f_menu_id);
+
+        List<MenuEntity> menuList = new ArrayList<>();
+        menuList.add(menu);
+        menuList.addAll(menuMapper.selectEntityListPage(
+                new ParameterMap("f_parent_path_like", menu.getF_full_path()).setOrderBy("f_parent_path,f_order")));
+
+        List<Map<String, Object>> menuUrlList = new ArrayList<>();
+        menuUrlList.addAll(sqlMapper.selectListPage("SELECT * FROM `t_sys_menu_url` WHERE f_menu_id = #{f_menu_id}",
+                new ParameterMap("f_menu_id", menu.getF_id()).setOrderBy("f_menu_id,f_url_id")));
+        menuUrlList.addAll(sqlMapper.selectListPage(
+                "SELECT * FROM `t_sys_menu_url` WHERE f_menu_id IN (SELECT f_id FROM `t_sys_menu` WHERE f_parent_path LIKE CONCAT('%', #{f_parent_path_like}, '%'))",
+                new ParameterMap("f_parent_path_like", menu.getF_full_path()).setOrderBy("f_menu_id,f_url_id")));
+
+        List<Map<String, Object>> roleMenuList = new ArrayList<>();
+        roleMenuList.addAll(sqlMapper.selectListPage("SELECT * FROM `t_sys_role_menu` WHERE f_menu_id = #{f_menu_id}",
+                new ParameterMap("f_menu_id", menu.getF_id()).setOrderBy("f_role_id,f_menu_id")));
+        roleMenuList.addAll(sqlMapper.selectListPage(
+                "SELECT * FROM `t_sys_role_menu` WHERE f_menu_id IN (SELECT f_id FROM `t_sys_menu` WHERE f_parent_path LIKE CONCAT('%', #{f_parent_path_like}, '%'))",
+                new ParameterMap("f_parent_path_like", menu.getF_full_path()).setOrderBy("f_role_id,f_menu_id")));
+
+        RowMap data = new RowMap();
+        data.put("menuList", TreeUtil.listToTree(menuList));
+        data.put("menuUrlList", menuUrlList);
+        data.put("roleMenuList", roleMenuList);
+        return data;
+    }
+
     private List<RowMap> selectMenuUrlList(ParameterMap params) {
         return menuUrlMapper.selectEntityListPage(params);
     }

@@ -11,6 +11,15 @@
       <menu-form :params="formParams" @cancel="showFormDialog = false" @submit="onSaved"
         v-if="showFormDialog"></menu-form>
     </el-dialog>
+
+    <el-dialog v-model="sqlDialog.shown" :title="sqlDialog.title" :close-on-click-modal="false"
+      :size="'large'" :top="'30px'" :custom-class="'jw-dialog'">
+      <sql-form :params="sqlDialog.params"
+        @cancel="sqlDialog.shown = false"
+        @submit="sqlDialog.shown = false"
+        v-if="sqlDialog.shown">
+      </sql-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -19,12 +28,14 @@
   import Vue from 'vue'
   import { AgGridVue } from 'ag-grid-vue'
   import MenuForm from './form'
+  import SqlForm from './sql'
 
   export default {
     name: 'menu',
     components: {
       'ag-grid-vue': AgGridVue,
-      'menuForm': MenuForm
+      MenuForm,
+      SqlForm
     },
     data () {
       return {
@@ -35,6 +46,13 @@
         formParams: {
           operation: 'view',
           entity: {}
+        },
+        sqlDialog: {
+          shown: false,
+          title: 'SQL脚本',
+          params: {
+            entity: {}
+          }
         }
       }
     },
@@ -329,6 +347,10 @@
                               @click.prevent="onRemove" :disabled="!params.context.permission.remove || !params.node.data.f_parent_id">
                               <i class="fa fa-trash"></i>
                             </button>
+                            <button type="button" class="btn btn-xs btn-default" title="SQL脚本"
+                              @click.prevent="onSql" :disabled="!params.context.permission.sql">
+                              <i class="fa fa-file-code-o"></i>
+                            </button>
                           </div>`,
               methods: {
                 onAdd () {
@@ -339,6 +361,9 @@
                 },
                 onRemove () {
                   this.params.context.parentComponent.onRemove(this.params.node.data)
+                },
+                onSql () {
+                  this.params.context.parentComponent.onSql(this.params.node.data)
                 }
               }
             }),
@@ -347,7 +372,7 @@
             suppressFilter: true,
             pinned: 'right',
             cellStyle: {'text-align': 'center'},
-            width: 80
+            width: 96
           }
         ]
       }
@@ -404,6 +429,10 @@
             }
           })
         })
+      },
+      onSql (entity) {
+        this.sqlDialog.shown = true
+        this.sqlDialog.params.entity = entity
       },
       onSaved () {
         this.query()

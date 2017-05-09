@@ -178,6 +178,16 @@ public class UserService extends BaseService<Integer, UserEntity> {
         super.updateEntity(entity);
     }
 
+    public void changePassword(String oldPassword, String newPassword) {
+        UserEntity entity = userMapper.selectEntity(SysUtil.getCurUser().getF_id());
+        if (HelpUtil.isEmpty(oldPassword) || !passwordEncoder.matches(oldPassword, entity.getF_password())) {
+            throw new BusinessException("旧密码不正确！");
+        }
+
+        entity.setF_password(passwordEncoder.encode(newPassword));
+        super.updateEntity(entity);
+    }
+
     private String generatePassword() {
         return passwordEncoder.encode("12345678"); // TODO 这里需要改成随机密码，然后通过短信或者通知的方式通知用户
     }

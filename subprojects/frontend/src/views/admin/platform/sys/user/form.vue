@@ -14,33 +14,35 @@
             <el-input v-model="entity.f_name"></el-input>
           </el-form-item>
           <el-form-item label="角色">
-            <el-select v-model="entity.roleIdList" placeholder="请选择角色" multiple style="width: 496px;">
+            <el-select v-model="entity.roleIdList" placeholder="请选择角色" multiple style="width: 496px;"
+              :disabled="params.subOperation === 'change'">
               <el-option v-for="role in roleList" :key="role.f_id" :value="role.f_id" :label="role.f_name">
-                {{role.f_name}} {{role.f_desc}}
+                <div style="float: left;">{{role.f_name}}</div>
+                <div style="float: right;padding-right:30px;">{{role.f_desc}}</div>
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="创建时间" prop="f_created_time">
-            <el-input v-model="entity.f_created_time" disabled></el-input>
+            <el-date-picker v-model="entity.f_created_time" type="datetime" disabled></el-date-picker>
           </el-form-item>
           <el-form-item label="创建人" prop="f_creator_name">
             <el-input v-model="entity.f_creator_name" disabled></el-input>
           </el-form-item>
           <el-form-item label="最近登录时间" prop="f_last_login_time">
-            <el-input v-model="entity.f_last_login_time" disabled></el-input>
+            <el-date-picker v-model="entity.f_last_login_time" type="datetime" disabled></el-date-picker>
           </el-form-item>
           <el-form-item label="状态" prop="f_status">
             <el-select v-model="entity.f_status" disabled>
-              <el-option :value="1">正常</el-option>
-              <el-option :value="2">锁定</el-option>
-              <el-option :value="3">注销</el-option>
+              <el-option :value="1" :label="'正常'">正常</el-option>
+              <el-option :value="2" :label="'锁定'">锁定</el-option>
+              <el-option :value="3" :label="'注销'">注销</el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="锁定时间" prop="f_locked_time">
-            <el-input v-model="entity.f_locked_time" disabled></el-input>
+            <el-date-picker v-model="entity.f_locked_time" type="datetime" disabled></el-date-picker>
           </el-form-item>
           <el-form-item label="注销时间" prop="f_unregister_time">
-            <el-input v-model="entity.f_unregister_time" disabled></el-input>
+            <el-date-picker v-model="entity.f_unregister_time" type="datetime" disabled></el-date-picker>
           </el-form-item>
           <el-form-item label="允许登录" prop="f_is_can_login">
             <el-radio-group v-model="entity.f_is_can_login" disabled>
