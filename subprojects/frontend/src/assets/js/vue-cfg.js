@@ -4,7 +4,7 @@
 
 import Cfg from './cfg'
 
-function plugin (Vue) {
+const plugin = function (Vue) {
   if (plugin.installed) {
     return
   }

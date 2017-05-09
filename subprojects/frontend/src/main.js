@@ -21,6 +21,7 @@ import VueGrid from './assets/js/vue-grid'
 import store from './store'
 import router from './router'
 import './resource'
+import VueJw from './assets/js/vue-jw'
 import './filters'
 import './components'
 import App from './App'
@@ -33,6 +34,7 @@ Vue.use(VueCfg)
 Vue.use(VueCookie)
 Vue.use(ElementUI)
 Vue.use(VueGrid)
+Vue.use(VueJw)
 
 /* eslint-disable no-new */
 new Vue({

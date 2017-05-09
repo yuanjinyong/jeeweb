@@ -6,7 +6,7 @@
     var timestamp = parseInt(value)
 
     if (!timestamp) {
-      return '-'
+      return ''
     } else if (format) {
       return moment(timestamp).format(format)
     } else {

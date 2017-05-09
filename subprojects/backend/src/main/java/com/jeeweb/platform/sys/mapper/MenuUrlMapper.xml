@@ -94,4 +94,6 @@
         <if test="f_parent_id != null and f_parent_id != ''">AND f_menu_id IN (SELECT f_id FROM t_sys_menu WHERE f_parent_id = #{f_parent_id})</if>
         <if test="f_parent_path_like != null and f_parent_path_like != ''">AND f_menu_id IN (SELECT f_id FROM t_sys_menu WHERE f_parent_path like CONCAT('%', #{f_parent_path_like}, '%'))</if>
     </delete>
+
+    <!-- 其他SQL -->
 </mapper>

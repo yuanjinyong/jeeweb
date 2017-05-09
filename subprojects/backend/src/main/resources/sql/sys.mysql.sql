@@ -202,12 +202,26 @@ insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL-SC','KFGJ-CDGL','/ROOT/KFGJ/KFGJ-CDGL/',30,'删除','删除菜单',NULL,3,NULL,1,0,0,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL-XG','KFGJ-CDGL','/ROOT/KFGJ/KFGJ-CDGL/',20,'修改','修改菜单',NULL,3,NULL,1,0,0,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL-ZJ','KFGJ-CDGL','/ROOT/KFGJ/KFGJ-CDGL/',10,'增加','增加菜单',NULL,3,NULL,1,0,0,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-DMSC','KFGJ','/ROOT/KFGJ/',200,'代码生成','代码生成配置页面','fa fa-file-code-o',2,'/admin/platform/tools/code/generation',1,0,0,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-SJKGL','KFGJ','/ROOT/KFGJ/',100,'数据库管理','数据库管理页面','fa fa-table',2,'/admin/platform/tools/information/schema',1,0,0,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-URLGL','KFGJ','/ROOT/KFGJ/',30,'URL管理','URL管理页面','fa fa-link',2,'/admin/platform/sys/url',1,0,0,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-URLGL-SC','KFGJ-URLGL','/ROOT/KFGJ/KFGJ-URLGL/',30,'删除','删除URL',NULL,3,NULL,1,0,0,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-URLGL-XG','KFGJ-URLGL','/ROOT/KFGJ/KFGJ-URLGL/',20,'修改','修改URL',NULL,3,NULL,1,0,0,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-URLGL-ZJ','KFGJ-URLGL','/ROOT/KFGJ/KFGJ-URLGL/',10,'增加','增加URL',NULL,3,NULL,1,0,0,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('ROOT',NULL,'/',0,'系统菜单','根菜单',NULL,0,NULL,1,1,1,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL','ROOT','/ROOT/',990,'系统管理','系统管理模块','fa fa-cog',1,NULL,1,1,1,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-JSGL','XTGL','/ROOT/XTGL/',20,'角色管理','角色管理页面','fa fa-flag',2,'/admin/platform/sys/role',1,0,0,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-JSGL-SC','XTGL-JSGL','/ROOT/XTGL/XTGL-JSGL/',30,'删除','删除角色',NULL,3,NULL,1,0,0,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-JSGL-SQ','XTGL-JSGL','/ROOT/XTGL/XTGL-JSGL/',40,'授权','授权可操作的功能',NULL,3,NULL,1,0,0,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-JSGL-XG','XTGL-JSGL','/ROOT/XTGL/XTGL-JSGL/',20,'修改','修改角色',NULL,3,NULL,1,0,0,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-JSGL-ZJ','XTGL-JSGL','/ROOT/XTGL/XTGL-JSGL/',10,'增加','增加角色',NULL,3,NULL,1,0,0,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL','XTGL','/ROOT/XTGL/',30,'用户管理','用户管理页面','fa fa-user',2,'/admin/platform/sys/user',1,2,2,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-CZMM','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',50,'重置密码','重置用户密码',NULL,3,NULL,1,2,2,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-JS','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',60,'解锁','解锁用户',NULL,3,NULL,1,2,2,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-SC','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',30,'删除','删除用户',NULL,3,NULL,1,2,2,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-SQ','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',40,'授权','授权可以操作的功能',NULL,3,NULL,1,2,2,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-XG','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',20,'修改','修改用户',NULL,3,NULL,1,2,2,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-ZJ','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',10,'增加','增加用户',NULL,3,NULL,1,2,2,1,NULL);
 
 /*Table structure for table `t_sys_menu_url` */
 
@@ -237,6 +251,23 @@ insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL-SC','6
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL-SC','4087eb30e3c4c0dac2765498b3b0cab7');
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL-XG','b73c369d73f83cd700ca2c554f76d504');
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL-ZJ','f59ac63ca88503cd64ed14020d1cbead');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL','0eadc8c7c022f13cdedaa7e7413a0fe1');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL','2f12fc88084ea062e3bdde086342a323');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL','83b5dcfd8eae19d04a703d55c507f35b');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL-SC','eace04d50010a26a1e37225f2e203b26');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL-SQ','2d32ed761f669dfccc7ef6fbff98a9b6');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL-XG','d5d29576cc3167cbdb8fe3a0b2e9cb58');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL-ZJ','fa4524d97c93bb8f196782d4a66ecdd0');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL','2f12fc88084ea062e3bdde086342a323');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL','954c06cf2c5133fb3bdf244d26955a14');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL','c2e253ad345ea3998b90df4e6e97e356');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL','d44c436777a17f4868813efbbb2ffffb');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL-CZMM','394365a60a740d7c0527badd4b964897');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL-JS','c2d22998a0d5e0fac6400a86e9a14a3f');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL-SC','ff40e182cbb096c35d1e4ad60c3eab09');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL-SQ','30d0c0b3dbcb1124cd1d5b0bbd514dde');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL-XG','b91a4be3d763864cbc7efe78010e3980');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL-ZJ','b640c19e353f49757e9fa7991b62ed7a');
 
 /*Table structure for table `t_sys_parameter` */
 
@@ -285,7 +316,7 @@ CREATE TABLE `t_sys_role` (
   `f_id` int(11) NOT NULL AUTO_INCREMENT,
   `f_name` varchar(50) COLLATE utf8_bin NOT NULL COMMENT '角色名称',
   `f_desc` text COLLATE utf8_bin COMMENT '角色描述',
-  `f_is_sys` int(11) NOT NULL DEFAULT '2' COMMENT '是否系统预置，1、系统预置的角色；2、前台创建的角色',
+  `f_is_preset` int(2) NOT NULL DEFAULT '2' COMMENT '是否系统预置，1、系统预置；2、操作员创建',
   `f_remark` longtext COLLATE utf8_bin COMMENT '备注',
   PRIMARY KEY (`f_id`),
   UNIQUE KEY `UNI_ROLE_NAME` (`f_name`)
@@ -293,7 +324,7 @@ CREATE TABLE `t_sys_role` (
 
 /*Data for the table `t_sys_role` */
 
-insert  into `t_sys_role`(`f_id`,`f_name`,`f_desc`,`f_is_sys`,`f_remark`) values (0,'系统管理员角色','维护系统的权限分配。',1,'系统预置的角色，不能删除。');
+insert  into `t_sys_role`(`f_id`,`f_name`,`f_desc`,`f_is_preset`,`f_remark`) values (0,'系统管理员角色','维护系统的权限分配。',1,'系统预置的角色，不能删除。');
 
 /*Table structure for table `t_sys_role_menu` */
 
@@ -337,7 +368,7 @@ DROP TABLE IF EXISTS `t_sys_url`;
 CREATE TABLE `t_sys_url` (
   `f_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT 'f_url和f_methods的MD5值',
   `f_url` varchar(512) COLLATE utf8_bin NOT NULL COMMENT 'URL',
-  `f_desc` text COLLATE utf8_bin DEFAULT NULL COMMENT 'URL描述',
+  `f_desc` varchar(512) COLLATE utf8_bin DEFAULT NULL COMMENT 'URL描述',
   `f_patterns` varchar(512) COLLATE utf8_bin NOT NULL COMMENT 'URL表达式',
   `f_methods` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT '[]' COMMENT '提交方式',
   `f_params` varchar(128) COLLATE utf8_bin DEFAULT NULL COMMENT '匹配查询参数',
@@ -346,7 +377,7 @@ CREATE TABLE `t_sys_url` (
   `f_produces` varchar(128) COLLATE utf8_bin DEFAULT NULL,
   `f_custom` varchar(128) COLLATE utf8_bin DEFAULT NULL,
   `f_handler_method` varchar(512) COLLATE utf8_bin DEFAULT NULL COMMENT '处理方法',
-  `f_is_log` int(11) NOT NULL DEFAULT '2' COMMENT '是否记录日志。如查询列表，进入增加界面等，都不记录，而删除、修改、增加就需要记录',
+  `f_is_log` int(11) NOT NULL DEFAULT '2' COMMENT '是否记录日志。如查询列表，详情界面等，都不记录，而删除、修改、增加就需要记录',
   `f_is_auto` int(11) NOT NULL DEFAULT '1' COMMENT '是否自动扫描生成',
   PRIMARY KEY (`f_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='URL定义表';
@@ -370,6 +401,7 @@ CREATE TABLE `t_sys_user` (
   `f_locked_time` datetime DEFAULT NULL COMMENT '锁定时间',
   `f_unregister_time` datetime DEFAULT NULL COMMENT '注销时间',
   `f_is_can_login` int(11) NOT NULL DEFAULT '1' COMMENT '是否允许登录，1、是；2、否',
+  `f_is_preset` int(2) NOT NULL DEFAULT '2' COMMENT '是否系统预置，1、系统预置；2、操作员创建',
   `f_status` int(11) NOT NULL DEFAULT '1' COMMENT '状态，1、正常；2、锁定；3、注销',
   `f_remark` longtext COLLATE utf8_bin COMMENT '备注',
   PRIMARY KEY (`f_id`),
@@ -380,8 +412,8 @@ CREATE TABLE `t_sys_user` (
 
 /*Data for the table `t_sys_user` */
 
-insert  into `t_sys_user`(`f_id`,`f_tenant_id`,`f_account`,`f_password`,`f_name`,`f_department_id`,`f_creator_id`,`f_created_time`,`f_last_login_time`,`f_locked_time`,`f_unregister_time`,`f_is_can_login`,`f_status`,`f_remark`) values (0,0,'SuperAdmin','$2a$10$o6R1D7JhRW7d56inhUm50eF5xy8fF1l3KPCc0kdgpKBMw6olsamiq','超级管理员',0,0,'1970-01-01 00:00:00',NULL,NULL,NULL,1,1,'该账号是开发人员维护系统用，不能提供给客户使用。');
-insert  into `t_sys_user`(`f_id`,`f_tenant_id`,`f_account`,`f_password`,`f_name`,`f_department_id`,`f_creator_id`,`f_created_time`,`f_last_login_time`,`f_locked_time`,`f_unregister_time`,`f_is_can_login`,`f_status`,`f_remark`) values (1,0,'admin','$2a$10$o6R1D7JhRW7d56inhUm50eF5xy8fF1l3KPCc0kdgpKBMw6olsamiq','系统管理员',0,0,'1970-01-01 00:00:00',NULL,NULL,NULL,1,1,'该账号用于维护系统设置和权限分配。');
+insert  into `t_sys_user`(`f_id`,`f_tenant_id`,`f_account`,`f_password`,`f_name`,`f_department_id`,`f_creator_id`,`f_created_time`,`f_last_login_time`,`f_locked_time`,`f_unregister_time`,`f_is_can_login`,`f_is_preset`,`f_status`,`f_remark`) values (0,0,'SuperAdmin','$2a$10$o6R1D7JhRW7d56inhUm50eF5xy8fF1l3KPCc0kdgpKBMw6olsamiq','超级管理员',0,0,'1970-01-01 00:00:00',NULL,NULL,NULL,1,1,1,'该账号是开发人员维护系统用，不能提供给客户使用。');
+insert  into `t_sys_user`(`f_id`,`f_tenant_id`,`f_account`,`f_password`,`f_name`,`f_department_id`,`f_creator_id`,`f_created_time`,`f_last_login_time`,`f_locked_time`,`f_unregister_time`,`f_is_can_login`,`f_is_preset`,`f_status`,`f_remark`) values (1,0,'admin','$2a$10$o6R1D7JhRW7d56inhUm50eF5xy8fF1l3KPCc0kdgpKBMw6olsamiq','系统管理员',0,0,'1970-01-01 00:00:00',NULL,NULL,NULL,1,1,1,'该账号用于维护系统设置和权限分配。');
 
 /*Table structure for table `t_sys_user_menu` */
 

@@ -105,7 +105,7 @@
         LEFT JOIN (SELECT f_menu_id FROM t_sys_user_menu WHERE f_user_id = #{f_user_id}) r ON m.f_id = r.f_menu_id
         WHERE 1=1
         <if test="f_parent_path_like != null and f_parent_path_like != ''">AND m.f_parent_path LIKE CONCAT(#{f_parent_path_like}, '%')</if>
-        <if test="f_is_show != null and f_is_show != ''">AND m.f_is_show = #{f_is_show}</if>
+        <if test="f_status != null and f_status != ''">AND m.f_status = #{f_status}</if>
         <if test="cur_user_id != null and cur_role_id_in == null">AND m.f_id IN(SELECT f_menu_id FROM t_sys_user_menu WHERE f_user_id=#{cur_user_id})</if>
         <if test="cur_user_id != null and cur_role_id_in != null">AND m.f_id IN(SELECT f_menu_id FROM t_sys_user_menu WHERE f_user_id=#{cur_user_id} UNION SELECT f_menu_id FROM t_sys_role_menu WHERE f_role_id IN(${cur_role_id_in}))</if>
     </select>
@@ -128,7 +128,7 @@
         ) t ON t.f_menu_id = m.f_id
         </if>
         WHERE 1=1
-        <if test="f_is_show != null and f_is_show != ''">AND m.f_is_show = #{f_is_show}</if>
+        <if test="f_status != null and f_status != ''">AND m.f_status = #{f_status}</if>
         <if test="f_type_in != null and f_type_in != ''">AND m.f_type IN(${f_type_in})</if>
     </select>
 </mapper>

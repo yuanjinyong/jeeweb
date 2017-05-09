@@ -48,6 +48,12 @@
       vm.gridOptions = {
         context: {
           parentComponent: this,
+          permission: {
+            sql: this.$jw.hasPermission('KFGJ-CDGL-DCSQL'),
+            add: this.$jw.hasPermission('KFGJ-CDGL-ZJ'),
+            edit: this.$jw.hasPermission('KFGJ-CDGL-XG'),
+            remove: this.$jw.hasPermission('KFGJ-CDGL-SC')
+          },
           url: vm.url
         },
         enableFilter: true,
@@ -131,7 +137,7 @@
             field: 'f_name',
             cellRendererFramework: Vue.extend({
               template: `<a @click.prevent="onView" style="cursor: pointer;">
-                            <i style="display:inline-block;min-width:14px;" :class="params.node.data.f_icon">&nbsp;</i>{{ params.value }}
+                            <i style="display:inline-block;min-width:20px;" :class="params.node.data.f_icon"></i>{{ params.value }}
                           </a>`,
               methods: {
                 onView () {
@@ -311,13 +317,16 @@
             field: '',
             cellRendererFramework: Vue.extend({
               template: `<div class="btn-group">
-                            <button type="button" class="btn btn-xs btn-primary" @click.prevent="onAdd" title="增加子菜单" :disabled="params.node.data.f_type > 2">
+                            <button type="button" class="btn btn-xs btn-primary" title="增加子菜单"
+                              @click.prevent="onAdd" :disabled="!params.context.permission.add || params.node.data.f_type > 2">
                               <i class="fa fa-plus"></i>
                             </button>
-                            <button type="button" class="btn btn btn-xs btn-info" @click.prevent="onEdit"title="修改" >
+                            <button type="button" class="btn btn btn-xs btn-info" title="修改"
+                              @click.prevent="onEdit" :disabled="!params.context.permission.edit">
                               <i class="fa fa-edit"></i>
                             </button>
-                            <button type="button" class="btn btn-xs btn-danger" @click.prevent="onRemove"title="删除" :disabled="!params.node.data.f_parent_id">
+                            <button type="button" class="btn btn-xs btn-danger" title="删除"
+                              @click.prevent="onRemove" :disabled="!params.context.permission.remove || !params.node.data.f_parent_id">
                               <i class="fa fa-trash"></i>
                             </button>
                           </div>`,

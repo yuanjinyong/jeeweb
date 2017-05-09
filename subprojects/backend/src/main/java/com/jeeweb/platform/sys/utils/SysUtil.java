@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.platform.security.model.SecurityUser;
 import com.jeeweb.platform.sys.entity.UserEntity;
 
@@ -67,7 +68,7 @@ public class SysUtil {
         // 是否为超级管理员
         if (user != null && !user.isSuperAdmin()) {
             params.put("cur_user_id", user.getF_id());
-            params.put("cur_role_id_in", user.getF_role_ids());
+            params.put("cur_role_id_in", HelpUtil.joinToInString(user.getRoleIdList()));
         }
     }
 

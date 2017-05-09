@@ -65,9 +65,15 @@
       vm.gridOptions = this.$buildGridOptions({
         context: {
           parentComponent: this,
+          permission: {
+            authorize: this.$jw.hasPermission('XTGL-JSGL-SQ'),
+            add: this.$jw.hasPermission('XTGL-JSGL-ZJ'),
+            edit: this.$jw.hasPermission('XTGL-JSGL-XG'),
+            remove: this.$jw.hasPermission('XTGL-JSGL-SC')
+          },
           url: vm.url,
           params: {
-            orderBy: 'f_is_sys,f_name',
+            orderBy: 'f_is_preset,f_name',
             totalCount: 0
           }
         },
@@ -87,7 +93,9 @@
             pinned: 'left',
             headerComponentFramework: Vue.extend({
               template: `<div class="ag-header-component" style="padding: 5px;">
-                              <button type="button" class="btn btn-xs btn-primary" title="增加" @click.prevent="onAdd">
+                              <button type="button" class="btn btn-xs btn-primary" title="增加"
+                                @click.prevent="onAdd"
+                                :disabled="!params.context.permission.add">
                                 <i class="fa fa-plus"></i>
                               </button>
                             </div>`,
@@ -165,7 +173,7 @@
           },
           {
             headerName: '是否预置',
-            field: 'f_is_sys',
+            field: 'f_is_preset',
             cellStyle: {'text-align': 'center'},
             cellRendererFramework: Vue.extend({
               template: '<span>{{ this.params.value | dict({1: "是", 2: "否"}) }}</span>'
@@ -188,13 +196,16 @@
             field: '',
             cellRendererFramework: Vue.extend({
               template: `<div class="btn-group">
-                            <button type="button" class="btn btn-xs btn-primary" @click.prevent="onAuthorize" title="授权可以操作的功能">
+                            <button type="button" class="btn btn-xs btn-primary" title="授权可以操作的功能"
+                              @click.prevent="onAuthorize" :disabled="!params.context.permission.authorize">
                               <i class="fa fa-key"></i>
                             </button>
-                            <button type="button" class="btn btn btn-xs btn-info" @click.prevent="onEdit"title="修改" >
+                            <button type="button" class="btn btn btn-xs btn-info" title="修改"
+                              @click.prevent="onEdit" :disabled="!params.context.permission.edit">
                               <i class="fa fa-edit"></i>
                             </button>
-                            <button type="button" class="btn btn-xs btn-danger" @click.prevent="onRemove"title="删除" :disabled="params.node.data && params.node.data.f_is_sys === 1">
+                            <button type="button" class="btn btn-xs btn-danger" title="删除"
+                            @click.prevent="onRemove" :disabled="!params.context.permission.remove || (params.node.data && params.node.data.f_is_preset === 1)">
                               <i class="fa fa-trash"></i>
                             </button>
                           </div>`,

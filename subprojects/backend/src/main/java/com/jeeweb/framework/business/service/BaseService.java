@@ -51,7 +51,7 @@ public abstract class BaseService<P, E> {
 
     public void deleteEntity(P primaryKey) {
         E entity = getMapper().selectEntity(primaryKey);
-        checkPreset(entity);
+        validateDeleteEntity(entity);
 
         if (getMapper().isCanDeleteEntity(primaryKey) > 0) {
             throw new BusinessException("存在关联数据，不能删除！");
@@ -62,6 +62,10 @@ public abstract class BaseService<P, E> {
 
     public void deleteEntities(ParameterMap params) {
         getMapper().deleteEntities(params);
+    }
+
+    protected void validateDeleteEntity(E entity) {
+        checkPreset(entity);
     }
 
     protected void fillCreator(E entity) {

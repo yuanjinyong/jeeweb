@@ -15,32 +15,36 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.jeeweb.framework.business.service.BaseService;
 import com.jeeweb.framework.business.web.controller.BaseController;
+import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.framework.core.utils.TreeUtil;
-import com.jeeweb.platform.sys.entity.RoleEntity;
-import com.jeeweb.platform.sys.service.RoleService;
+import com.jeeweb.platform.sys.entity.UserEntity;
+import com.jeeweb.platform.sys.service.UserService;
 
 @RestController
-@RequestMapping(value = "/api/platform/sys/roles")
-public class RoleApi extends BaseController<Integer, RoleEntity> {
+@RequestMapping(value = "/api/platform/sys/users")
+public class UserApi extends BaseController<Integer, UserEntity> {
     @Resource
-    private RoleService roleService;
+    private UserService userService;
 
     @Override
-    protected BaseService<Integer, RoleEntity> getService() {
-        return roleService;
+    protected BaseService<Integer, UserEntity> getService() {
+        return userService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseResult list() {
-        return super.listEntities();
+        ParameterMap params = $params();
+        params.put("f_account_notIn", "'" + UserEntity.SUPERADMIN + "'");
+        List<UserEntity> entities = getService().selectEntityListPage(params);
+        return new ResponseResult(new Result(params.page(entities)), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseResult create(@RequestBody RoleEntity entity, UriComponentsBuilder ucBuilder) {
+    public ResponseResult create(@RequestBody UserEntity entity, UriComponentsBuilder ucBuilder) {
         return super.createEntity(entity, ucBuilder);
     }
 
@@ -50,18 +54,16 @@ public class RoleApi extends BaseController<Integer, RoleEntity> {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseResult update(@PathVariable("id") Integer primaryKey, @RequestBody RoleEntity entity) {
+    public ResponseResult update(@PathVariable("id") Integer primaryKey, @RequestBody UserEntity entity) {
         return super.updateEntity(primaryKey, entity);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseResult delete(@PathVariable("id") Integer primaryKey) {
-        return super.deleteEntity(primaryKey);
-    }
-
-    @RequestMapping(method = RequestMethod.DELETE)
-    public ResponseResult delete() {
-        return super.deleteEntities();
+        // return super.deleteEntity(primaryKey);
+        // 这里改为注销，不是普通的物理删除。
+        userService.deregisterUser(primaryKey);
+        return new ResponseResult(new Result(), HttpStatus.OK);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +73,7 @@ public class RoleApi extends BaseController<Integer, RoleEntity> {
     public ResponseResult listMenu(@PathVariable("id") Integer primaryKey) {
         List<RowMap> menuList = null;
         if (primaryKey >= 0) {
-            menuList = roleService.selectRoleMenuListPage(primaryKey);
+            menuList = userService.selectUserMenuListPage(primaryKey);
         } else {
             menuList = new ArrayList<RowMap>();
         }
@@ -85,7 +87,19 @@ public class RoleApi extends BaseController<Integer, RoleEntity> {
 
     @RequestMapping(value = "/{id}/menus", method = RequestMethod.POST)
     public ResponseResult saveMenu(@PathVariable("id") Integer primaryKey) {
-        roleService.updateRoleMenuList(primaryKey, HelpUtil.splitToList($("f_menu_ids")));
+        userService.updateUserMenuList(primaryKey, HelpUtil.splitToList($("f_menu_ids")));
+        return new ResponseResult(new Result(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{id}/unlock", method = RequestMethod.POST)
+    public ResponseResult unlock(@PathVariable("id") Integer primaryKey) {
+        userService.unlockUser(primaryKey);
+        return new ResponseResult(new Result(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{id}/reset/password", method = RequestMethod.POST)
+    public ResponseResult resetPassword(@PathVariable("id") Integer primaryKey) {
+        userService.resetPassword(primaryKey);
         return new ResponseResult(new Result(), HttpStatus.OK);
     }
 }

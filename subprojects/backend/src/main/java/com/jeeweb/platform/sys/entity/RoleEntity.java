@@ -1,13 +1,14 @@
 package com.jeeweb.platform.sys.entity;
 
 import com.jeeweb.framework.business.entity.BaseEntity;
+import com.jeeweb.framework.business.model.IPreset;
 
-public class RoleEntity extends BaseEntity<Integer> {
+public class RoleEntity extends BaseEntity<Integer> implements IPreset {
     private static final long serialVersionUID = 5663590213239944053L;
 
     private String f_name;// 角色名称
-    private String f_desc; // 角色描述
-    private Integer f_is_sys;// 是否系统预置，1、系统预置的角色；2、前台创建的角色
+    private String f_desc;// 角色描述
+    private Integer f_is_preset;// 是否系统预置，1、系统预置；2、操作员创建
     private String f_remark;// 角色描述
 
     public String getF_name() {
@@ -26,12 +27,19 @@ public class RoleEntity extends BaseEntity<Integer> {
         this.f_desc = f_desc;
     }
 
-    public Integer getF_is_sys() {
-        return f_is_sys;
+    @Override
+    public Integer getF_is_preset() {
+        return f_is_preset;
     }
 
-    public void setF_is_sys(Integer f_is_sys) {
-        this.f_is_sys = f_is_sys;
+    @Override
+    public void setF_is_preset(Integer f_is_preset) {
+        this.f_is_preset = f_is_preset;
+    }
+
+    @Override
+    public Boolean isPreset() {
+        return this.f_is_preset == IPreset.YES;
     }
 
     public String getF_remark() {

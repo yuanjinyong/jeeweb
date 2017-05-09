@@ -147,11 +147,15 @@
   }
 
   .el-select {
-    width: 196px;
+    min-width: 196px;
+  }
+
+  .el-radio-group {
+    min-width: 196px;
   }
 
   .el-input-number {
-    width: 196px;
+    min-width: 196px;
   }
 </style>
 

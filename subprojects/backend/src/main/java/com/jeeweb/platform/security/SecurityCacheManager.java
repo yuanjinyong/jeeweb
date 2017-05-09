@@ -32,6 +32,7 @@ import com.jeeweb.platform.sys.entity.UserEntity;
 import com.jeeweb.platform.sys.mapper.MenuUrlMapper;
 import com.jeeweb.platform.sys.mapper.UserMapper;
 import com.jeeweb.platform.sys.mapper.UserMenuMapper;
+import com.jeeweb.platform.sys.mapper.UserRoleMapper;
 
 /**
  * @author 袁进勇
@@ -59,6 +60,8 @@ public class SecurityCacheManager {
     private UserMapper userMapper;
     @Autowired
     private UserMenuMapper userMenuMapper;
+    @Autowired
+    private UserRoleMapper userRoleMapper;
 
     static {
         unconfigAuthority.add(new SecurityAuthority(SecurityAuthority.UNCONFIGURED_AUTHORITY));
@@ -124,6 +127,13 @@ public class SecurityCacheManager {
     }
 
     private List<GrantedAuthority> getUserAuthorities(UserEntity user) {
+        List<RowMap> roleList = userRoleMapper.selectEntityListPage(new ParameterMap("f_user_id", user.getF_id()));
+        List<Integer> roleIdList = new ArrayList<>();
+        user.setRoleIdList(roleIdList);
+        for (RowMap role : roleList) {
+            roleIdList.add(role.getInteger("f_role_id", null));
+        }
+
         ParameterMap params = new ParameterMap("f_status", 1);
         if (!user.isSuperAdmin()) {
             params.put("f_user_id", user.getF_id());
@@ -187,6 +197,11 @@ public class SecurityCacheManager {
     private SecurityUser getSecurityUserFromDB(String f_account) {
         UserEntity user = userMapper.selectUserByAccount(f_account);
         if (user != null && user.getF_is_can_login() == 1) {
+            if (user.getF_status() == UserEntity.STATUS_LOCKED) {
+                LOG.error("账号[{}]已锁定，请联系系统管理员解锁！", f_account);
+                throw new UsernameNotFoundException("账号[" + f_account + "]已锁定，请联系系统管理员解锁");
+            }
+
             return new SecurityUser(user, getUserAuthorities(user));
         }
 

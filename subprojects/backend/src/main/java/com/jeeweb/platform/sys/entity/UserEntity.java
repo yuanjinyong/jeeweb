@@ -5,9 +5,10 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jeeweb.framework.business.entity.BaseEntity;
-import com.jeeweb.framework.core.model.RowMap;
+import com.jeeweb.framework.business.model.ICreator;
+import com.jeeweb.framework.business.model.IPreset;
 
-public class UserEntity extends BaseEntity<Integer> {
+public class UserEntity extends BaseEntity<Integer> implements ICreator, IPreset {
     public static final String SUPERADMIN = "SuperAdmin";
     public static final String ADMIN = "admin";
     public static final Integer STATUS_NORMAL = 1;
@@ -31,12 +32,11 @@ public class UserEntity extends BaseEntity<Integer> {
     private Timestamp f_locked_time; // 锁定时间
     private Timestamp f_unregister_time; // 注销时间
     private Integer f_is_can_login; // 是否允许登录，1(是)、2(否)
+    private Integer f_is_preset;// 是否系统预置，1、系统预置；2、操作员创建
     private Integer f_status;// 状态，1(正常)、2（锁定）、3（注销）
     private String f_remark;// 备注说明
 
-    private List<RowMap> roleList; // 用户（操作员）角色列表
-    private String f_role_ids;
-    private String f_role_names;
+    private List<Integer> roleIdList; // 用户（操作员）角色ID列表
     private String f_tenant_ids; // 用户所能够操作的租户ID
 
     public Integer getF_tenant_id() {
@@ -95,26 +95,32 @@ public class UserEntity extends BaseEntity<Integer> {
         this.f_department_name = f_department_name;
     }
 
+    @Override
     public Integer getF_creator_id() {
         return f_creator_id;
     }
 
+    @Override
     public void setF_creator_id(Integer f_creator_id) {
         this.f_creator_id = f_creator_id;
     }
 
+    @Override
     public String getF_creator_name() {
         return f_creator_name;
     }
 
+    @Override
     public void setF_creator_name(String f_creator_name) {
         this.f_creator_name = f_creator_name;
     }
 
+    @Override
     public Timestamp getF_created_time() {
         return f_created_time;
     }
 
+    @Override
     public void setF_created_time(Timestamp f_created_time) {
         this.f_created_time = f_created_time;
     }
@@ -151,6 +157,21 @@ public class UserEntity extends BaseEntity<Integer> {
         this.f_is_can_login = f_is_can_login;
     }
 
+    @Override
+    public Integer getF_is_preset() {
+        return f_is_preset;
+    }
+
+    @Override
+    public void setF_is_preset(Integer f_is_preset) {
+        this.f_is_preset = f_is_preset;
+    }
+
+    @Override
+    public Boolean isPreset() {
+        return this.f_is_preset == IPreset.YES;
+    }
+
     public Integer getF_status() {
         return f_status;
     }
@@ -167,28 +188,12 @@ public class UserEntity extends BaseEntity<Integer> {
         this.f_remark = f_remark;
     }
 
-    public List<RowMap> getRoleList() {
-        return roleList;
+    public void setRoleIdList(List<Integer> roleIdList) {
+        this.roleIdList = roleIdList;
     }
 
-    public void setRoleList(List<RowMap> roleList) {
-        this.roleList = roleList;
-    }
-
-    public String getF_role_ids() {
-        return f_role_ids;
-    }
-
-    public void setF_role_ids(String f_role_ids) {
-        this.f_role_ids = f_role_ids;
-    }
-
-    public String getF_role_names() {
-        return f_role_names;
-    }
-
-    public void setF_role_names(String f_role_names) {
-        this.f_role_names = f_role_names;
+    public List<Integer> getRoleIdList() {
+        return roleIdList;
     }
 
     public String getF_tenant_ids() {

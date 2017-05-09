@@ -14,6 +14,7 @@
         f_locked_time,
         f_unregister_time,
         f_is_can_login,
+        f_is_preset,
         f_status,
         f_remark
         )
@@ -32,6 +33,7 @@
         #{f_locked_time},
         #{f_unregister_time},
         #{f_is_can_login},
+        #{f_is_preset},
         #{f_status},
         #{f_remark}
         )
@@ -50,6 +52,7 @@
             #{item.f_locked_time},
             #{item.f_unregister_time},
             #{item.f_is_can_login},
+            #{item.f_is_preset},
             #{item.f_status},
             #{item.f_remark}
             )
@@ -72,13 +75,14 @@
         t.f_locked_time,
         t.f_unregister_time,
         t.f_is_can_login,
+        t.f_is_preset,
         t.f_status,
         t.f_remark
     </sql>
     <sql id="From_Clause">
         FROM t_sys_user t
-        LEFT JOIN t_sys_department d ON d.f_id = t.f_department_id
         LEFT JOIN t_sys_user u ON u.f_id = t.f_creator_id
+        LEFT JOIN t_sys_department d ON d.f_id = t.f_department_id
     </sql>
     <sql id="Where_Clause">
         WHERE 1=1
@@ -144,6 +148,7 @@
         <if test="f_locked_time != null">f_locked_time=#{f_locked_time},</if>
         <if test="f_unregister_time != null">f_unregister_time=#{f_unregister_time},</if>
         <if test="f_is_can_login != null">f_is_can_login=#{f_is_can_login},</if>
+        <!--if test="f_is_preset != null">f_is_preset=#{f_is_preset},</if -->
         <if test="f_status != null">f_status=#{f_status},</if>
         <if test="f_remark != null">f_remark=#{f_remark},</if>
         f_id=#{f_id}
@@ -172,4 +177,11 @@
         LEFT JOIN t_sys_tenant tenant ON tenant.f_id = t.f_tenant_id
         WHERE t.f_is_can_login = 1 AND t.f_account = #{f_account}
     </select>
+    <update id="unlockUser" parameterType="java.lang.Integer">
+        UPDATE t_sys_user SET
+        f_locked_time=null,
+        f_status=1,
+        f_id=#{f_id}
+        WHERE f_id=#{f_id}
+    </update>
 </mapper>

@@ -10,8 +10,8 @@
           <el-form-item label="名称" prop="f_name">
             <el-input v-model="entity.f_name"></el-input>
           </el-form-item>
-          <el-form-item label="系统预置" prop="f_is_sys">
-            <el-radio-group v-model="entity.f_is_sys">
+          <el-form-item label="系统预置" prop="f_is_preset">
+            <el-radio-group v-model="entity.f_is_preset">
               <el-radio :label="1" disabled>是</el-radio>
               <el-radio :label="2" disabled>否</el-radio>
             </el-radio-group>
@@ -75,7 +75,7 @@
         var vm = this
         if (vm.params.operation === 'add') {
           vm.entity = {
-            f_is_sys: 2
+            f_is_preset: 2
           }
         } else {
           vm.$http.get(vm.url + '/' + vm.params.entity.f_id).then(function (response) {

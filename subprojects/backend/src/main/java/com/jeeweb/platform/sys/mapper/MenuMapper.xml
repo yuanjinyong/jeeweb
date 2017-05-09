@@ -86,7 +86,6 @@
         WHERE 1=1
         <if test="f_id_like != null and f_id_like != ''">AND t.f_id LIKE CONCAT('%', #{f_id_like}, '%')</if>
         <if test="f_name_like != null and f_name_like != ''">AND t.f_name LIKE CONCAT('%', #{f_name_like}, '%')</if>
-        <if test="f_desc_like != null and f_desc_like != ''">AND t.f_desc LIKE CONCAT('%', #{f_desc_like}, '%')</if>
         <if test="f_parent_id != null and f_parent_id != ''">AND t.f_parent_id = #{f_parent_id}</if>
         <if test="f_parent_path_like != null and f_parent_path_like != ''">AND t.f_parent_path LIKE CONCAT('%', #{f_parent_path_like}, '%')</if>
         <if test="f_type != null and f_type != ''">AND t.f_type = #{f_type}</if>

@@ -8,7 +8,7 @@
         f_id,
         f_name,
         f_desc,
-        f_is_sys,
+        f_is_preset,
         f_remark
         )
         VALUES
@@ -18,7 +18,7 @@
         #{f_id},
         #{f_name},
         #{f_desc},
-        #{f_is_sys},
+        #{f_is_preset},
         #{f_remark}
         )
     </sql>
@@ -28,7 +28,7 @@
             #{item.f_id},
             #{item.f_name},
             #{item.f_desc},
-            #{item.f_is_sys},
+            #{item.f_is_preset},
             #{item.f_remark}
             )
         </foreach>
@@ -39,7 +39,7 @@
         t.f_id,
         t.f_name,
         t.f_desc,
-        t.f_is_sys,
+        t.f_is_preset,
         t.f_remark
     </sql>
     <sql id="From_Clause">
@@ -48,7 +48,7 @@
     <sql id="Where_Clause">
         WHERE 1=1
         <if test="f_name_like != null and f_name_like != ''">AND t.f_name LIKE CONCAT('%', #{f_name_like}, '%')</if>
-        <if test="f_is_sys != null and f_is_sys != ''">AND t.f_is_sys = #{f_is_sys}</if>
+        <if test="f_is_preset != null and f_is_preset != ''">AND t.f_is_preset = #{f_is_preset}</if>
     </sql>
 
 
@@ -87,7 +87,7 @@
         UPDATE t_sys_role SET
         <if test="f_name != null">f_name=#{f_name},</if>
         <if test="f_desc != null">f_desc=#{f_desc},</if>
-        <if test="f_is_sys != null">f_is_sys=#{f_is_sys},</if>
+        <if test="f_is_preset != null">f_is_preset=#{f_is_preset},</if>
         <if test="f_remark != null">f_remark=#{f_remark},</if>
         f_id=#{f_id}
         WHERE f_id=#{f_id}

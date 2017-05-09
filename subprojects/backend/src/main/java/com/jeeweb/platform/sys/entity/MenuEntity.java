@@ -18,7 +18,7 @@ public class MenuEntity extends TreeNodeEntity<String, MenuEntity> {
     private String f_route_path; // 菜单对应的URL，目录和按钮不需要填写，只有对应页面的菜单才需要填写
     private Integer f_is_web; // Web端是否启用，1启用，2不启用
     private Integer f_is_android; // Android端是否启用，1启用，2不启用
-    private Integer f_is_ios; // IOS端是否启用，1启用，2不启用    private String f_remark; // 备注
+    private Integer f_is_ios; // IOS端是否启用，1启用，2不启用
     private Integer f_status; // 当前站是否启用，1、启用；2、禁用
     private String f_remark; // 备注
     private List<RowMap> urlList; // 页面或者按钮需要访问的URL地址

@@ -79,7 +79,7 @@
       <url-selector ref="urlSelector" :mode="'selector'"></url-selector>
       <div slot="footer" class="dialog-footer">
         <el-button @click="showSelectUrlDialog = false">取 消</el-button>
-        <el-button type="primary" @click="onUrlSelected">选 择</el-button>
+        <el-button type="primary" @click="onSelected">选 择</el-button>
       </div>
     </el-dialog>
   </div>
@@ -89,13 +89,13 @@
 <script type="text/ecmascript-6">
   import Vue from 'vue'
   import { AgGridVue } from 'ag-grid-vue'
-  import Url from 'views/admin/platform/sys/url/view'
+  import UrlView from 'views/admin/platform/sys/url/view'
 
   export default {
     name: 'menuForm',
     components: {
       'ag-grid-vue': AgGridVue,
-      'url-selector': Url
+      'url-selector': UrlView
     },
     props: {
       params: {
@@ -263,7 +263,7 @@
         }
         vm.urlGridOptions.api.setRowData(vm.entity.urlList)
       },
-      onUrlSelected () {
+      onSelected () {
         var vm = this
         vm.showSelectUrlDialog = false
         var selectedUrlList = vm.$refs.urlSelector.getSelectedRows()

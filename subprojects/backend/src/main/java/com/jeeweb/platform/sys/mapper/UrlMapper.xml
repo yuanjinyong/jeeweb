@@ -135,6 +135,7 @@
     </delete>
     <delete id="deleteEntities" parameterType="com.jeeweb.framework.core.model.ParameterMap">
         DELETE FROM t_sys_url WHERE 1=1
+        <if test="f_id_in != null and f_id_in != ''">AND f_id IN(${f_id_in})</if>
         <if test="f_is_auto != null and f_is_auto !=''">AND f_is_auto = #{f_is_auto}</if>
     </delete>
 

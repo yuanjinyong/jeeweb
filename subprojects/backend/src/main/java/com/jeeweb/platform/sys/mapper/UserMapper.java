@@ -5,4 +5,6 @@ import com.jeeweb.platform.sys.entity.UserEntity;
 
 public interface UserMapper extends BaseMapper<Integer, UserEntity> {
     UserEntity selectUserByAccount(String f_account);
+
+    void unlockUser(Integer primaryKey);
 }

@@ -35,18 +35,18 @@ Vue.http.interceptors.push(function (request, next) {
     if (response.status === 200) {
       if (response.body.success === true) {
         if (request.showSuccessMessage !== false && (request.method === 'POST' || request.method === 'PUT' || request.method === 'DELETE')) {
-          vm.$message({type: 'success', duration: 1500, message: response.body.message})
+          Vue.prototype.$message({type: 'success', duration: 1500, message: response.body.message})
         }
       } else {
         console && console.error('response', response)
         vm.errorMessage = response.body.message
-        vm.$alert(vm.errorMessage, '错误', {
+        Vue.prototype.$alert(vm.errorMessage, '错误', {
           confirmButtonText: '关闭',
           type: 'error'
         })
       }
     } else if (response.status === 201) {
-      vm.$message({type: 'success', duration: 1500, message: response.body.message})
+      Vue.prototype.$message({type: 'success', duration: 1500, message: response.body.message})
     } else if (response.status === 401) {
       if (vm.$route.path === '/admin/login') {
         console && console.error('账号密码错误，请重新输入！')
@@ -61,19 +61,19 @@ Vue.http.interceptors.push(function (request, next) {
       console && console.error('response', response)
       if (response.status === 0) {
         vm.errorMessage = '访问 [' + response.url + '] 失败，请联系系统技术支持人员！'
-        vm.$alert(vm.errorMessage, '错误', {
+        Vue.prototype.$alert(vm.errorMessage, '错误', {
           confirmButtonText: '关闭',
           type: 'error'
         })
       } else if (response.status === 404) {
         vm.errorMessage = '访问 [' + response.url + '] 失败，请联系系统技术支持人员！'
-        vm.$alert(vm.errorMessage, '错误', {
+        Vue.prototype.$alert(vm.errorMessage, '错误', {
           confirmButtonText: '关闭',
           type: 'error'
         })
       } else if (response.status === 504) {
         vm.errorMessage = '请求超时，请稍后重试！'
-        vm.$alert(vm.errorMessage, '错误', {
+        Vue.prototype.$alert(vm.errorMessage, '错误', {
           confirmButtonText: '关闭',
           type: 'error'
         })
