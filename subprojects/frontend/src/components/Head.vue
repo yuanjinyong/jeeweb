@@ -15,7 +15,7 @@
             </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="showUserInfo">
-                <i class="fa fa-user" style="min-width:14px;"></i> 我的信息
+                <i class="fa fa-user" style="min-width:14px;"></i> 个人信息
               </el-dropdown-item>
               <el-dropdown-item command="changePassword">
                 <i class="fa fa-cog" style="min-width:14px;"></i> 修改密码

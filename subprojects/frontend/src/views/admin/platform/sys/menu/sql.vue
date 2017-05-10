@@ -17,8 +17,7 @@
     </div>
 
     <div class="jw-form-footer" style="text-align: right;">
-      <el-button @click="onCancelForm('form')">取 消</el-button>
-      <el-button type="primary" @click="onSubmitForm('form')">确 定</el-button>
+      <el-button type="primary" @click="onCancelForm('form')">关 闭</el-button>
     </div>
   </div>
 </template>
@@ -110,22 +109,6 @@
       },
       onCancelForm (formName) {
         this.$emit('cancel')
-      },
-      onSubmitForm (formName) {
-        var vm = this
-        vm.$refs[formName].validate(function (valid) {
-          if (!valid) {
-            return false
-          }
-
-          vm.$http.post(vm.url, vm.entity, {emulateJSON: true}).then(function (response) {
-            if (response.body.success) {
-              this.$emit('submit')
-            }
-          })
-
-          return true
-        })
       }
     }
   }
