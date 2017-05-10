@@ -99,10 +99,11 @@ public class MenuService extends BaseService<String, MenuEntity> {
                 new ParameterMap("f_parent_path_like", menu.getF_full_path()).setOrderBy("f_menu_id,f_url_id")));
 
         List<Map<String, Object>> roleMenuList = new ArrayList<>();
-        roleMenuList.addAll(sqlMapper.selectListPage("SELECT * FROM `t_sys_role_menu` WHERE f_menu_id = #{f_menu_id}",
+        roleMenuList.addAll(sqlMapper.selectListPage(
+                "SELECT * FROM `t_sys_role_menu` WHERE f_role_id = 0 AND f_menu_id = #{f_menu_id}",
                 new ParameterMap("f_menu_id", menu.getF_id()).setOrderBy("f_role_id,f_menu_id")));
         roleMenuList.addAll(sqlMapper.selectListPage(
-                "SELECT * FROM `t_sys_role_menu` WHERE f_menu_id IN (SELECT f_id FROM `t_sys_menu` WHERE f_parent_path LIKE CONCAT('%', #{f_parent_path_like}, '%'))",
+                "SELECT * FROM `t_sys_role_menu` WHERE  f_role_id = 0 AND f_menu_id IN (SELECT f_id FROM `t_sys_menu` WHERE f_parent_path LIKE CONCAT('%', #{f_parent_path_like}, '%'))",
                 new ParameterMap("f_parent_path_like", menu.getF_full_path()).setOrderBy("f_role_id,f_menu_id")));
 
         RowMap data = new RowMap();

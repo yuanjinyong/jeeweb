@@ -162,6 +162,14 @@
   .el-input-number {
     min-width: 196px;
   }
+
+  .jw-textarea-full-width {
+    width: 100%;
+  }
+
+  .jw-textarea-nowrap .el-textarea__inner {
+    white-space: nowrap;
+  }
 </style>
 
 <template>
