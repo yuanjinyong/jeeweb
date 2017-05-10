@@ -196,33 +196,6 @@ CREATE TABLE `t_sys_menu` (
 
 /*Data for the table `t_sys_menu` */
 
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ','ROOT','/ROOT/',995,'开发人员工具','开发人员工具模块','fa fa-wrench',1,NULL,1,0,0,1,'仅限开发人员使用，请不要授权给客户使用。');
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL','KFGJ','/ROOT/KFGJ/',20,'菜单管理','菜单管理页面','fa fa-bars',2,'/admin/platform/sys/menu',1,0,0,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL-DCSQL','KFGJ-CDGL','/ROOT/KFGJ/KFGJ-CDGL/',100,'导出SQL','导出SQL脚本',NULL,3,NULL,1,0,0,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL-SC','KFGJ-CDGL','/ROOT/KFGJ/KFGJ-CDGL/',30,'删除','删除菜单',NULL,3,NULL,1,0,0,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL-XG','KFGJ-CDGL','/ROOT/KFGJ/KFGJ-CDGL/',20,'修改','修改菜单',NULL,3,NULL,1,0,0,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL-ZJ','KFGJ-CDGL','/ROOT/KFGJ/KFGJ-CDGL/',10,'增加','增加菜单',NULL,3,NULL,1,0,0,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-DMSC','KFGJ','/ROOT/KFGJ/',200,'代码生成','代码生成配置页面','fa fa-file-code-o',2,'/admin/platform/tools/code/generation',1,0,0,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-SJKGL','KFGJ','/ROOT/KFGJ/',100,'数据库管理','数据库管理页面','fa fa-table',2,'/admin/platform/tools/information/schema',1,0,0,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-URLGL','KFGJ','/ROOT/KFGJ/',30,'URL管理','URL管理页面','fa fa-link',2,'/admin/platform/sys/url',1,0,0,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-URLGL-SC','KFGJ-URLGL','/ROOT/KFGJ/KFGJ-URLGL/',30,'删除','删除URL',NULL,3,NULL,1,0,0,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-URLGL-XG','KFGJ-URLGL','/ROOT/KFGJ/KFGJ-URLGL/',20,'修改','修改URL',NULL,3,NULL,1,0,0,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-URLGL-ZJ','KFGJ-URLGL','/ROOT/KFGJ/KFGJ-URLGL/',10,'增加','增加URL',NULL,3,NULL,1,0,0,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('ROOT',NULL,'/',0,'系统菜单','根菜单',NULL,0,NULL,1,1,1,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL','ROOT','/ROOT/',990,'系统管理','系统管理模块','fa fa-cog',1,NULL,1,1,1,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-JSGL','XTGL','/ROOT/XTGL/',20,'角色管理','角色管理页面','fa fa-flag',2,'/admin/platform/sys/role',1,0,0,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-JSGL-SC','XTGL-JSGL','/ROOT/XTGL/XTGL-JSGL/',30,'删除','删除角色',NULL,3,NULL,1,0,0,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-JSGL-SQ','XTGL-JSGL','/ROOT/XTGL/XTGL-JSGL/',40,'授权','授权可操作的功能',NULL,3,NULL,1,0,0,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-JSGL-XG','XTGL-JSGL','/ROOT/XTGL/XTGL-JSGL/',20,'修改','修改角色',NULL,3,NULL,1,0,0,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-JSGL-ZJ','XTGL-JSGL','/ROOT/XTGL/XTGL-JSGL/',10,'增加','增加角色',NULL,3,NULL,1,0,0,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL','XTGL','/ROOT/XTGL/',30,'用户管理','用户管理页面','fa fa-user',2,'/admin/platform/sys/user',1,2,2,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-CZMM','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',50,'重置密码','重置用户密码',NULL,3,NULL,1,2,2,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-JS','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',60,'解锁','解锁用户',NULL,3,NULL,1,2,2,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-SC','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',30,'删除','删除用户',NULL,3,NULL,1,2,2,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-SQ','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',40,'授权','授权可以操作的功能',NULL,3,NULL,1,2,2,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-XG','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',20,'修改','修改用户',NULL,3,NULL,1,2,2,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-ZJ','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',10,'增加','增加用户',NULL,3,NULL,1,2,2,1,NULL);
-
 /*Table structure for table `t_sys_menu_url` */
 
 DROP TABLE IF EXISTS `t_sys_menu_url`;
@@ -236,38 +209,6 @@ CREATE TABLE `t_sys_menu_url` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='菜单可以访问的URL地址';
 
 /*Data for the table `t_sys_menu_url` */
-
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','4050f6a3ffd77bdc4534d886e11f8012');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','55847dc87d27c4b9146caf118c45321c');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','0c0362062f72869516168ed479fa82bb');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','d7b9102569dc7cfdc45956fa9cd32ad3');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL-DCSQL','dc940553c07e3e561120940431832c19');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL-SC','5a91bc0915d3e5c0b2e49d45c1b168ca');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL-XG','fed4f0beac39e30f0c8354eaa65fd25f');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL-ZJ','a61340a1087d2e7bed041cf57d43a397');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL','0c0362062f72869516168ed479fa82bb');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL','d7b9102569dc7cfdc45956fa9cd32ad3');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL-SC','66e99840d588bd859cad21d43a1d8ae3');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL-SC','4087eb30e3c4c0dac2765498b3b0cab7');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL-XG','b73c369d73f83cd700ca2c554f76d504');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL-ZJ','f59ac63ca88503cd64ed14020d1cbead');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL','0eadc8c7c022f13cdedaa7e7413a0fe1');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL','2f12fc88084ea062e3bdde086342a323');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL','83b5dcfd8eae19d04a703d55c507f35b');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL-SC','eace04d50010a26a1e37225f2e203b26');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL-SQ','2d32ed761f669dfccc7ef6fbff98a9b6');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL-XG','d5d29576cc3167cbdb8fe3a0b2e9cb58');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL-ZJ','fa4524d97c93bb8f196782d4a66ecdd0');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL','2f12fc88084ea062e3bdde086342a323');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL','954c06cf2c5133fb3bdf244d26955a14');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL','c2e253ad345ea3998b90df4e6e97e356');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL','d44c436777a17f4868813efbbb2ffffb');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL-CZMM','394365a60a740d7c0527badd4b964897');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL-JS','c2d22998a0d5e0fac6400a86e9a14a3f');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL-SC','ff40e182cbb096c35d1e4ad60c3eab09');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL-SQ','30d0c0b3dbcb1124cd1d5b0bbd514dde');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL-XG','b91a4be3d763864cbc7efe78010e3980');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL-ZJ','b640c19e353f49757e9fa7991b62ed7a');
 
 /*Table structure for table `t_sys_parameter` */
 
@@ -338,9 +279,6 @@ CREATE TABLE `t_sys_role_menu` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='角色权限表';
 
 /*Data for the table `t_sys_role_menu` */
-
-insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (0,'ROOT');
-insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (0,'XTGL');
 
 /*Table structure for table `t_sys_tenant` */
 
@@ -442,6 +380,89 @@ CREATE TABLE `t_sys_user_role` (
 /*Data for the table `t_sys_user_role` */
 
 insert  into `t_sys_user_role`(`f_user_id`,`f_role_id`) values (1,0);
+
+
+
+
+-- ROOT 系统菜单
+/*Data for the table `t_sys_menu` */
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('ROOT','null','/',0,'系统菜单','根菜单',NULL,0,NULL,1,1,1,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL','ROOT','/ROOT/',990,'系统管理','系统管理模块','fa fa-cog',1,NULL,1,1,1,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-JSGL','XTGL','/ROOT/XTGL/',20,'角色管理','角色管理页面','fa fa-flag',2,'/admin/platform/sys/role',1,0,0,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-JSGL-ZJ','XTGL-JSGL','/ROOT/XTGL/XTGL-JSGL/',10,'增加','增加角色',NULL,3,NULL,1,0,0,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-JSGL-XG','XTGL-JSGL','/ROOT/XTGL/XTGL-JSGL/',20,'修改','修改角色',NULL,3,NULL,1,0,0,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-JSGL-SC','XTGL-JSGL','/ROOT/XTGL/XTGL-JSGL/',30,'删除','删除角色',NULL,3,NULL,1,0,0,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-JSGL-SQ','XTGL-JSGL','/ROOT/XTGL/XTGL-JSGL/',40,'授权','授权可操作的功能',NULL,3,NULL,1,0,0,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL','XTGL','/ROOT/XTGL/',30,'用户管理','用户管理页面','fa fa-user',2,'/admin/platform/sys/user',1,2,2,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-ZJ','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',10,'增加','增加用户',NULL,3,NULL,1,2,2,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-XG','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',20,'修改','修改用户',NULL,3,NULL,1,2,2,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-SC','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',30,'删除','删除用户',NULL,3,NULL,1,2,2,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-SQ','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',40,'授权','授权可以操作的功能',NULL,3,NULL,1,2,2,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-CZMM','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',50,'重置密码','重置用户密码',NULL,3,NULL,1,2,2,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-JS','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',60,'解锁','解锁用户',NULL,3,NULL,1,2,2,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ','ROOT','/ROOT/',995,'开发人员工具','开发人员工具模块','fa fa-wrench',1,NULL,1,0,0,1,'仅限开发人员使用，请不要授权给客户使用。');
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL','KFGJ','/ROOT/KFGJ/',20,'菜单管理','菜单管理页面','fa fa-bars',2,'/admin/platform/sys/menu',1,0,0,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL-ZJ','KFGJ-CDGL','/ROOT/KFGJ/KFGJ-CDGL/',10,'增加','增加菜单',NULL,3,NULL,1,0,0,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL-XG','KFGJ-CDGL','/ROOT/KFGJ/KFGJ-CDGL/',20,'修改','修改菜单',NULL,3,NULL,1,0,0,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL-SC','KFGJ-CDGL','/ROOT/KFGJ/KFGJ-CDGL/',30,'删除','删除菜单',NULL,3,NULL,1,0,0,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL-DCSQL','KFGJ-CDGL','/ROOT/KFGJ/KFGJ-CDGL/',100,'导出SQL','导出SQL脚本',NULL,3,NULL,1,0,0,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-URLGL','KFGJ','/ROOT/KFGJ/',30,'URL管理','URL管理页面','fa fa-link',2,'/admin/platform/sys/url',1,0,0,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-URLGL-ZJ','KFGJ-URLGL','/ROOT/KFGJ/KFGJ-URLGL/',10,'增加','增加URL',NULL,3,NULL,1,0,0,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-URLGL-XG','KFGJ-URLGL','/ROOT/KFGJ/KFGJ-URLGL/',20,'修改','修改URL',NULL,3,NULL,1,0,0,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-URLGL-SC','KFGJ-URLGL','/ROOT/KFGJ/KFGJ-URLGL/',30,'删除','删除URL',NULL,3,NULL,1,0,0,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-SJKGL','KFGJ','/ROOT/KFGJ/',100,'数据库管理','数据库管理页面','fa fa-table',2,'/admin/platform/tools/information/schema',1,0,0,1,NULL);
+insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-DMSC','KFGJ','/ROOT/KFGJ/',200,'代码生成','代码生成配置页面','fa fa-file-code-o',2,'/admin/platform/tools/code/generation',1,0,0,1,NULL);
+
+/*Data for the table `t_sys_menu_url` */
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','0c0362062f72869516168ed479fa82bb');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','4050f6a3ffd77bdc4534d886e11f8012');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','55847dc87d27c4b9146caf118c45321c');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','d7b9102569dc7cfdc45956fa9cd32ad3');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL-DCSQL','d7e533dd5cc473d1f2fcec5557881f91');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL-SC','5a91bc0915d3e5c0b2e49d45c1b168ca');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL-XG','fed4f0beac39e30f0c8354eaa65fd25f');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL-ZJ','a61340a1087d2e7bed041cf57d43a397');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL','0c0362062f72869516168ed479fa82bb');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL','d7b9102569dc7cfdc45956fa9cd32ad3');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL-SC','4087eb30e3c4c0dac2765498b3b0cab7');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL-SC','66e99840d588bd859cad21d43a1d8ae3');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL-XG','b73c369d73f83cd700ca2c554f76d504');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL-ZJ','f59ac63ca88503cd64ed14020d1cbead');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL','0eadc8c7c022f13cdedaa7e7413a0fe1');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL','2f12fc88084ea062e3bdde086342a323');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL','83b5dcfd8eae19d04a703d55c507f35b');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL-SC','eace04d50010a26a1e37225f2e203b26');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL-SQ','2d32ed761f669dfccc7ef6fbff98a9b6');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL-XG','d5d29576cc3167cbdb8fe3a0b2e9cb58');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL-ZJ','fa4524d97c93bb8f196782d4a66ecdd0');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL','2f12fc88084ea062e3bdde086342a323');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL','954c06cf2c5133fb3bdf244d26955a14');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL','c2e253ad345ea3998b90df4e6e97e356');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL','d44c436777a17f4868813efbbb2ffffb');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL-CZMM','394365a60a740d7c0527badd4b964897');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL-JS','c2d22998a0d5e0fac6400a86e9a14a3f');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL-SC','ff40e182cbb096c35d1e4ad60c3eab09');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL-SQ','30d0c0b3dbcb1124cd1d5b0bbd514dde');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL-XG','b91a4be3d763864cbc7efe78010e3980');
+insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL-ZJ','b640c19e353f49757e9fa7991b62ed7a');
+
+/*Data for the table `t_sys_role_menu` */
+insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (0,'ROOT');
+insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (0,'XTGL');
+insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (0,'XTGL-JSGL');
+insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (0,'XTGL-JSGL-SC');
+insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (0,'XTGL-JSGL-SQ');
+insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (0,'XTGL-JSGL-XG');
+insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (0,'XTGL-JSGL-ZJ');
+insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (0,'XTGL-YHGL');
+insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (0,'XTGL-YHGL-CZMM');
+insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (0,'XTGL-YHGL-JS');
+insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (0,'XTGL-YHGL-SC');
+insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (0,'XTGL-YHGL-SQ');
+insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (0,'XTGL-YHGL-XG');
+insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (0,'XTGL-YHGL-ZJ');
+
+
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
