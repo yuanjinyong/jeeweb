@@ -4,6 +4,7 @@
 package com.jeeweb.platform.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -21,6 +22,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.platform.security.filter.RestAccessDecisionManager;
 import com.jeeweb.platform.security.filter.RestSecurityFilter;
 import com.jeeweb.platform.security.filter.RestSecurityMetadataSource;
@@ -42,6 +44,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     // private static final String PARAMETER_PASSWORD = "f_password";
     // private static final String API_LOGIN = "/api/login";
     private static final String API_LOGOUT = "/api/logout";
+    private static final String API_TOKEN = "/api/platform/security/token";
 
     @Autowired
     private RestTokenProcessingFilter restTokenProcessingFilter;
@@ -64,6 +67,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private SecurityUserDetailsService securityUserDetailsService;
+
+    @Value("${spring.security.permitAllUrls:#{null}}")
+    private String permitAllUrls;
+    @Value("${spring.security.authenticatedUrls:#{null}}")
+    private String authenticatedUrls;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -124,8 +132,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public RestSecurityFilter restSecurityFilter() throws Exception {
         RestSecurityFilter filter = new RestSecurityFilter();
-        filter.addPermitAllMatchers("/api/anonymous/**", "/api/platform/security/token"); // 配置不登陆（授权）也可以访问的URL
-        filter.addAuthenticatedMatchers("/api/authenticated/**", "/api/admin/index/**", API_LOGOUT); // 配置只要登陆即可访问的URL
+        // 配置不登陆（授权）也可以访问的URL
+        filter.addPermitAllMatchers(API_TOKEN);
+        if (!HelpUtil.isEmpty(permitAllUrls)) {
+            filter.addPermitAllMatchers(permitAllUrls.trim().split(","));
+        }
+
+        // 配置只要登陆即可访问的URL
+        filter.addAuthenticatedMatchers(API_LOGOUT);
+        if (!HelpUtil.isEmpty(authenticatedUrls)) {
+            filter.addAuthenticatedMatchers(authenticatedUrls.trim().split(","));
+        }
 
         filter.setAuthenticationEntryPoint(restAuthenticationEntryPoint);
         filter.setSecurityMetadataSource(restSecurityMetadataSource);

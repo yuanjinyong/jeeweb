@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.jeeweb.platform.redis;
+package com.jeeweb.framework.redis;
 
 import java.lang.reflect.Method;
 

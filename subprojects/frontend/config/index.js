@@ -54,12 +54,12 @@ module.exports = {
     assetsSubDirectory: assetsSubDirectory,
     assetsPublicPath: assetsPublicPath,
     proxyTable: {
-      '/api/**': {
-        target: apiUrl,
-        onProxyRes (proxyRes, req, res) {
-          setCookie(proxyRes, req, res)
-        }
-      }
+      // '/api/**': {
+      //   target: apiUrl,
+      //   onProxyRes (proxyRes, req, res) {
+      //     setCookie(proxyRes, req, res)
+      //   }
+      // }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README

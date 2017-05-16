@@ -16,7 +16,7 @@ import com.jeeweb.framework.core.listener.ApplicationStartupListener;
  *
  */
 @SpringBootApplication(scanBasePackages = { "com.jeeweb.**.web.api.**", "com.jeeweb.**.service.**",
-        "com.jeeweb.**.mapper.**", "com.jeeweb.**.interceptor.**", "com.jeeweb.platform.redis.**",
+        "com.jeeweb.**.mapper.**", "com.jeeweb.**.interceptor.**", "com.jeeweb.framework.redis.**",
         "com.jeeweb.platform.schema.**", "com.jeeweb.platform.security.**" })
 @MapperScan(basePackages = { "com.jeeweb.**.mapper.**" })
 public class JeeWebApplication extends SpringBootServletInitializer {

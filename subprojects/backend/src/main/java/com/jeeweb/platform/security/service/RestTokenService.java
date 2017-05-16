@@ -11,7 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import com.jeeweb.framework.core.utils.HelpUtil;
-import com.jeeweb.platform.redis.ByteRedisTemplate;
+import com.jeeweb.framework.redis.ByteRedisTemplate;
 import com.jeeweb.platform.security.model.SecurityUser;
 import com.jeeweb.platform.sys.entity.UserEntity;
 import com.jeeweb.platform.sys.mapper.UserMapper;

@@ -48,7 +48,7 @@
         if (this.mode === 'selector') {
           return {'padding': '0px', 'height': (this.$store.state.layout.body.height - 111) + 'px'}
         } else {
-          return {'padding': '20px', 'height': (this.$store.state.layout.body.height - 35) + 'px'}
+          return {'padding': '20px', 'height': this.$store.state.layout.body.height + 'px'}
         }
       }
     },

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.jeeweb.platform.redis;
+package com.jeeweb.framework.redis;
 
 import org.springframework.data.redis.connection.DefaultStringRedisConnection;
 import org.springframework.data.redis.connection.RedisConnection;
