@@ -17,8 +17,6 @@ import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.jeeweb.framework.core.model.ParameterMap;
 
@@ -28,17 +26,9 @@ import com.jeeweb.framework.core.model.ParameterMap;
  * @author 袁进勇
  *
  */
-@Component
-public class SqlMapper implements InitializingBean {
-    @Autowired
-    private SqlSessionFactory platformSqlSessionFactory;
+public abstract class SqlMapper implements InitializingBean {
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        if (platformSqlSessionFactory == null) {
-            throw new Exception("请先定义Bean platformSqlSessionFactory！");
-        }
-    }
+    protected abstract SqlSessionFactory getSqlSessionFactory();
 
     /**
      * 查询返回一个结果，多个结果时抛出异常
@@ -249,10 +239,6 @@ public class SqlMapper implements InitializingBean {
         SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
         String id = getSqlId(SqlCommandType.DELETE, sqlSessionFactory.getConfiguration(), sql, parameter, int.class);
         return sqlSessionFactory.openSession().delete(id, parameter);
-    }
-
-    protected SqlSessionFactory getSqlSessionFactory() {
-        return platformSqlSessionFactory;
     }
 
     private String getSqlId(SqlCommandType sqlCommandType, final Configuration configuration, String sql,

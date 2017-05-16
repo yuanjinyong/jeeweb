@@ -3,7 +3,6 @@
  */
 package com.jeeweb;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -16,9 +15,7 @@ import com.jeeweb.framework.core.listener.ApplicationStartupListener;
  *
  */
 @SpringBootApplication(scanBasePackages = { "com.jeeweb.**.web.api.**", "com.jeeweb.**.service.**",
-        "com.jeeweb.**.mapper.**", "com.jeeweb.**.interceptor.**", "com.jeeweb.framework.redis.**",
-        "com.jeeweb.platform.schema.**", "com.jeeweb.platform.security.**" })
-@MapperScan(basePackages = { "com.jeeweb.**.mapper.**" })
+        "com.jeeweb.**.mapper.**", "com.jeeweb.framework.**", "com.jeeweb.platform.**" })
 public class JeeWebApplication extends SpringBootServletInitializer {
     /*
      * (non-Javadoc)

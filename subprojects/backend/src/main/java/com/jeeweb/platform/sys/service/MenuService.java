@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,7 @@ public class MenuService extends BaseService<String, MenuEntity> {
     private MenuUrlMapper menuUrlMapper;
 
     @Autowired
+    @Qualifier("jeewebMapper")
     private SqlMapper sqlMapper;
 
     @Override
