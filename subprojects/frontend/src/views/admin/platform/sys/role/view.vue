@@ -151,20 +151,20 @@
           headerName: '操作',
           field: '',
           cellRendererFramework: Vue.extend({
-            template: `<div class="btn-group">
-                            <button type="button" class="btn btn-xs btn-primary" title="授权可以操作的功能"
-                              @click.prevent="onAuthorize" :disabled="!permission.authorize">
-                              <i class="fa fa-key"></i>
-                            </button>
-                            <button type="button" class="btn btn btn-xs btn-info" title="修改"
-                              @click.prevent="onEdit" :disabled="!permission.edit">
-                              <i class="fa fa-edit"></i>
-                            </button>
-                            <button type="button" class="btn btn-xs btn-danger" title="删除"
+            template: `<el-button-group>
+                          <el-button type="warning" size="mini" title="授权可以操作的功能"
+                            @click.prevent="onAuthorize" :disabled="!permission.authorize">
+                            <i class="fa fa-key"></i>
+                          </el-button>
+                          <el-button type="info" size="mini" title="修改"
+                            @click.prevent="onEdit" :disabled="!permission.edit">
+                            <i class="fa fa-edit"></i>
+                          </el-button>
+                          <el-button type="danger" size="mini" title="删除"
                             @click.prevent="onRemove" :disabled="!permission.remove || (entity.f_is_preset === 1)">
                               <i class="fa fa-trash"></i>
-                            </button>
-                          </div>`,
+                          </el-button>
+                        </el-button-group>`,
             computed: {
               permission () {
                 return this.params.context.featureComponent.featureOptions.permission

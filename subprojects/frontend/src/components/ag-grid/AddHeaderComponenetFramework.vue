@@ -3,9 +3,7 @@
 
 <template>
   <div class="ag-header-component" style="padding: 5px;">
-    <button type="button" class="btn btn-xs btn-primary" title="增加" @click.prevent="onAdd">
-      <i class="fa fa-plus"></i>
-    </button>
+    <el-button type="primary" size="mini" title="增加" @click.prevent="onAdd"><i class="fa fa-plus"></i></el-button>
   </div>
 </template>
 
