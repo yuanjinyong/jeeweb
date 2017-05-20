@@ -18,7 +18,32 @@ const store = new Vuex.Store({
     },
     originalRoute: null,
     user: null,
-    menuList: []
+    menuList: [],
+    dicts: {
+      'YesNo': {1: '是', 2: '否'},
+      'HttpMethods': [
+        {
+          f_item_code: '[]',
+          f_item_text: '[]'
+        },
+        {
+          f_item_code: '[DELETE]',
+          f_item_text: '[DELETE]'
+        },
+        {
+          f_item_code: '[GET]',
+          f_item_text: '[GET]'
+        },
+        {
+          f_item_code: '[POST]',
+          f_item_text: '[POST]'
+        },
+        {
+          f_item_code: '[PUT]',
+          f_item_text: '[PUT]'
+        }
+      ]
+    }
   },
   mutations: {
     setMock (state, payload) {

@@ -4,9 +4,9 @@
 
 <template>
   <div class="jw-form">
-    <div class="jw-form-body" :style="{'max-height': params.maxHeight+'px','overflow-y': 'auto'}">
-      <el-form label-width="100px" ref="form" :inline="true" :model="entity" :rules="rules">
-        <fieldset :disabled="params.operation === 'view'">
+    <div class="jw-form-body" :style="formBodyStyle">
+      <el-form ref="form" :model="entity" :rules="rules" :inline="true" :label-width="labelWidth">
+        <fieldset :disabled="formOptions.operation === 'view'">
           <el-form-item label="URL" prop="f_url">
             <el-input v-model="entity.f_url"></el-input>
           </el-form-item>
@@ -52,7 +52,8 @@
 
     <div class="jw-form-footer" style="text-align: right;">
       <el-button @click="onCancelForm('form')">取 消</el-button>
-      <el-button type="primary" @click="onSubmitForm('form')" :disabled="params.operation === 'view'">确 定</el-button>
+      <el-button type="primary" @click="onSubmitForm('form')" :disabled="formOptions.operation === 'view'">确 定
+      </el-button>
     </div>
   </div>
 </template>
@@ -62,21 +63,40 @@
   export default {
     name: 'urlForm',
     props: {
-      params: {
+      formOptions: {
         type: Object,
         default: function () {
           return {
             operation: 'view',
-            entity: {}
+            title: '查看详情',
+            maxHeight: 500,
+            labelWidth: 100,
+            params: {},
+            context: {
+              featureComponent: {}
+            }
           }
         }
       }
     },
     data () {
       return {
-        url: 'api/platform/sys/urls',
         entity: {},
         rules: {}
+      }
+    },
+    computed: {
+      formBodyStyle () {
+        return {
+          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : 500) + 'px',
+          'overflow-y': 'auto'
+        }
+      },
+      labelWidth () {
+        return (this.formOptions.labelWidth ? this.formOptions.labelWidth : 100) + 'px'
+      },
+      featureOptions () {
+        return this.formOptions.context.featureComponent.featureOptions
       }
     },
     mounted () {
@@ -92,12 +112,10 @@
       },
       query (params) {
         var vm = this
-        if (vm.params.operation === 'add') {
-          vm.entity = {
-            f_is_sys: 2
-          }
+        if (vm.formOptions.operation === 'add') {
+          vm.entity = {}
         } else {
-          vm.$http.get(vm.url + '/' + vm.params.entity.f_id).then(function (response) {
+          vm.$http.get(vm.featureOptions.url + '/' + vm.formOptions.params.f_id).then(function (response) {
             var result = response.body
             if (result.success) {
               vm.entity = result.data
@@ -108,6 +126,7 @@
         }
       },
       onCancelForm (formName) {
+        this._closeForm()
         this.$emit('cancel')
       },
       onSubmitForm (formName) {
@@ -117,22 +136,37 @@
             return false
           }
 
-          if (vm.params.operation === 'add') {
-            vm.$http.post(vm.url, vm.entity).then(function (response) {
-              if (response.body.success) {
-                this.$emit('submit')
-              }
+          if (vm.formOptions.operation === 'add') {
+            vm.$http.post(vm.featureOptions.url, vm.entity).then(function (response) {
+              vm._submitted(response)
             })
           } else {
-            vm.$http.put(vm.url + '/' + vm.params.entity.f_id, vm.entity).then(function (response) {
-              if (response.body.success) {
-                this.$emit('submit')
-              }
+            vm.$http.put(vm.featureOptions.url + '/' + vm.formOptions.params.f_id, vm.entity).then(function (response) {
+              vm._submitted(response)
             })
           }
 
           return true
         })
+      },
+      _submitted (response) {
+        if (response.body.success) {
+          this._closeForm()
+          this._refreshGrid()
+
+          this.$emit('submit', {type: this.formOptions.operation, data: response.body.data})
+        }
+      },
+      _closeForm () {
+        if (this.formOptions.context.featureComponent.formOptions) {
+          this.formOptions.context.featureComponent.formOptions.isShow = false
+        }
+      },
+      _refreshGrid () {
+        if (this.formOptions.context.featureComponent.gridOptions) {
+          this.formOptions.context.featureComponent.gridOptions.context.params.totalCount = 0
+          this.formOptions.context.featureComponent.gridOptions.api.setDatasource(this.formOptions.context.featureComponent.gridOptions.datasource)
+        }
       }
     }
   }

@@ -2,16 +2,21 @@
   import Vue from 'vue'
 
   Vue.filter('dict', function (value, dict) {
-    if (typeof (dict) === 'object') {
-      if (typeof (dict.length) !== 'undefined') {
-        for (var i = 0; i < dict.length; i++) {
-          var dictItem = dict[i]
-          if (dictItem.f_item_code === value + '') {
-            return dictItem.f_item_text
+    var items = dict
+    if (typeof (dict) === 'string') {
+      items = Vue.store.state.dicts[dict]
+    }
+
+    if (typeof (items) === 'object') {
+      if (typeof (items.length) !== 'undefined') {
+        for (var i = 0; i < items.length; i++) {
+          var item = items[i]
+          if (item.f_item_code === value + '') {
+            return item.f_item_text
           }
         }
       } else {
-        return dict[value]
+        return items[value]
       }
     }
 

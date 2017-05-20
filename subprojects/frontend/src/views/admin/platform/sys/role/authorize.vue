@@ -4,9 +4,9 @@
 
 <template>
   <div class="jw-form">
-    <div class="jw-form-body" style="max-height: 500px;overflow-y: auto;">
-      <el-form label-width="100px" ref="form" :inline="true" :model="entity" :rules="rules">
-        <fieldset :disabled="params.operation === 'view'">
+    <div class="jw-form-body" :style="formBodyStyle">
+      <el-form ref="form" :model="entity" :rules="rules" :inline="true" :label-width="labelWidth">
+        <fieldset :disabled="formOptions.operation === 'view'">
           <el-tree ref="menuTree"
             show-checkbox
             node-key="f_id"
@@ -23,7 +23,8 @@
 
     <div class="jw-form-footer" style="text-align: right;">
       <el-button @click="onCancelForm('form')">取 消</el-button>
-      <el-button type="primary" @click="onSubmitForm('form')" :disabled="params.operation === 'view'">确 定</el-button>
+      <el-button type="primary" @click="onSubmitForm('form')" :disabled="formOptions.operation === 'view'">确 定
+      </el-button>
     </div>
   </div>
 </template>
@@ -33,19 +34,24 @@
   export default {
     name: 'roleAuthorizeForm',
     props: {
-      params: {
+      formOptions: {
         type: Object,
         default: function () {
           return {
             operation: 'view',
-            entity: {}
+            title: '查看详情',
+            maxHeight: 500,
+            labelWidth: 100,
+            params: {},
+            context: {
+              featureComponent: {}
+            }
           }
         }
       }
     },
     data () {
       return {
-        url: 'api/platform/sys/roles',
         entity: {},
         rules: {},
         menus: [],
@@ -55,6 +61,20 @@
           children: 'children',
           label: 'f_name'
         }
+      }
+    },
+    computed: {
+      formBodyStyle () {
+        return {
+          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : 500) + 'px',
+          'overflow-y': 'auto'
+        }
+      },
+      labelWidth () {
+        return (this.formOptions.labelWidth ? this.formOptions.labelWidth : 100) + 'px'
+      },
+      featureOptions () {
+        return this.formOptions.context.featureComponent.featureOptions
       }
     },
     mounted () {
@@ -70,7 +90,7 @@
       },
       query (params) {
         var vm = this
-        vm.$http.get(vm.url + '/' + vm.params.entity.f_id + '/menus').then(function (response) {
+        vm.$http.get(vm.featureOptions.url + '/' + vm.formOptions.params.f_id + '/menus').then(function (response) {
           if (response.body.success) {
             vm.menus = response.body.data
             vm._updateCheckedNode(response.body.data)
@@ -133,6 +153,7 @@
         }
       },
       onCancelForm (formName) {
+        this._closeForm()
         this.$emit('cancel')
       },
       onSubmitForm (formName) {
@@ -143,14 +164,23 @@
           }
 
           var selectedMenuIds = vm.$refs.menuTree.getCheckedKeys()
-          vm.$http.post(vm.url + '/' + vm.params.entity.f_id + '/menus', {f_menu_ids: selectedMenuIds.join(',')}, {emulateJSON: true}).then(function (response) {
-            if (response.body.success) {
-              this.$emit('submit')
-            }
+          vm.$http.post(vm.featureOptions.url + '/' + vm.formOptions.params.f_id + '/menus', {f_menu_ids: selectedMenuIds.join(',')}, {emulateJSON: true}).then(function (response) {
+            vm._submitted(response)
           })
 
           return true
         })
+      },
+      _submitted (response) {
+        if (response.body.success) {
+          this._closeForm()
+          this.$emit('submit', {type: this.formOptions.operation, data: response.body.data})
+        }
+      },
+      _closeForm () {
+        if (this.formOptions.context.featureComponent.authorizeFormOptions) {
+          this.formOptions.context.featureComponent.authorizeFormOptions.isShow = false
+        }
       }
     }
   }

@@ -6,18 +6,15 @@
   <div :style="contentStyle">
     <ag-grid-vue style="width: 100%; height: 100%;" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid-vue>
 
-    <el-dialog v-model="showFormDialog" :title="formDialogTitle" :close-on-click-modal="false" :size="'small'"
-      :top="'30px'" :custom-class="'jw-dialog'">
-      <role-form :params="formParams" @cancel="showFormDialog = false" @submit="onSaved" v-if="showFormDialog">
-      </role-form>
+    <el-dialog v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false" :modal="true"
+      :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
+      <role-form :form-options="formOptions" v-if="formOptions.isShow"></role-form>
     </el-dialog>
 
-    <el-dialog v-model="authorizeDialogShown" :title="authorizeDialogTitle" :close-on-click-modal="false"
+    <el-dialog v-model="authorizeFormOptions.isShow" :title="authorizeFormOptions.title" :close-on-click-modal="false"
       :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
-      <role-authorize-form :params="authorizeDialogOptions"
-        @cancel="authorizeDialogShown = false"
-        @submit="authorizeDialogShown = false"
-        v-if="authorizeDialogShown">
+      <role-authorize-form :form-options="authorizeFormOptions"
+        v-if="authorizeFormOptions.isShow">
       </role-authorize-form>
     </el-dialog>
   </div>
@@ -27,6 +24,11 @@
 <script type="text/ecmascript-6">
   import Vue from 'vue'
   import { AgGridVue } from 'ag-grid-vue'
+  import AddHeaderComponenetFramework from 'components/ag-grid/AddHeaderComponenetFramework'
+  import LikeFilterFramework from 'components/ag-grid/LikeFilterFramework'
+  import IndexRendernerFramework from 'components/ag-grid/IndexRendernerFramework'
+  import ViewRendernerFramework from 'components/ag-grid/ViewRendernerFramework'
+  import DictRendernerFramework from 'components/ag-grid/DictRendernerFramework'
   import RoleForm from './form'
   import RoleAuthorizeForm from './authorize'
 
@@ -39,19 +41,43 @@
     },
     data () {
       return {
-        url: 'api/platform/sys/roles',
-        gridOptions: null,
-        showFormDialog: false,
-        formDialogTitle: '查看角色',
-        formParams: {
-          operation: 'view',
-          entity: {}
+        featureOptions: {
+          name: 'URL',
+          url: 'api/platform/sys/roles',
+          permission: {
+            authorize: this.$jw.hasPermission('XTGL-JSGL-SQ'),
+            add: this.$jw.hasPermission('XTGL-JSGL-ZJ'),
+            edit: this.$jw.hasPermission('XTGL-JSGL-XG'),
+            remove: this.$jw.hasPermission('XTGL-JSGL-SC')
+          }
         },
-        authorizeDialogShown: false,
-        authorizeDialogTitle: '查看授权',
-        authorizeDialogOptions: {
+        formOptions: {
+          isShow: false,
           operation: 'view',
-          entity: {}
+          title: '查看URL',
+          maxHeight: this.mode === 'selector' ? 400 : 500,
+          params: {},
+          context: {
+            featureComponent: this
+          }
+        },
+        gridOptions: this.$grid.buildOptions({
+          context: {
+            featureComponent: this,
+            params: {
+              orderBy: 'f_is_preset,f_name',
+              totalCount: 0
+            }
+          }
+        }),
+        authorizeFormOptions: {
+          isShow: false,
+          operation: 'edit',
+          title: '修改授权',
+          params: {},
+          context: {
+            featureComponent: this
+          }
         }
       }
     },
@@ -60,176 +86,113 @@
         return {'padding': '20px', 'height': (this.$store.state.layout.body.height) + 'px'}
       }
     },
-    beforeMount () {
+    created () {
       var vm = this
-      vm.gridOptions = this.$buildGridOptions({
-        context: {
-          parentComponent: this,
-          permission: {
-            authorize: this.$jw.hasPermission('XTGL-JSGL-SQ'),
-            add: this.$jw.hasPermission('XTGL-JSGL-ZJ'),
-            edit: this.$jw.hasPermission('XTGL-JSGL-XG'),
-            remove: this.$jw.hasPermission('XTGL-JSGL-SC')
-          },
-          url: vm.url,
-          params: {
-            orderBy: 'f_is_preset,f_name',
-            totalCount: 0
-          }
+      vm.gridOptions.columnDefs = [
+        {
+          headerName: '',
+          checkboxSelection: true,
+          pinned: 'left',
+          cellStyle: {'text-align': 'center'},
+          suppressSorting: true,
+          suppressMenu: true,
+          suppressFilter: true,
+          width: 24
         },
-        columnDefs: [
-          {
-            headerName: '',
-            checkboxSelection: true,
-            pinned: 'left',
-            cellStyle: {'text-align': 'center'},
-            suppressSorting: true,
-            suppressMenu: true,
-            suppressFilter: true,
-            width: 24
-          },
-          {
-            headerName: '#',
-            pinned: 'left',
-            headerComponentFramework: Vue.extend({
-              template: `<div class="ag-header-component" style="padding: 5px;">
-                              <button type="button" class="btn btn-xs btn-primary" title="增加"
-                                @click.prevent="onAdd"
-                                :disabled="!params.context.permission.add">
-                                <i class="fa fa-plus"></i>
-                              </button>
-                            </div>`,
-              methods: {
-                onAdd () {
-                  this.params.context.parentComponent.onAdd()
-                }
-              }
-            }),
-            cellStyle: {'text-align': 'right'},
-            cellRenderer: function (params) {
-              return params.rowIndex + 1
-            },
-            suppressSorting: true,
-            suppressMenu: true,
-            suppressFilter: true,
-            width: 38
-          },
-          {
-            headerName: '角色名称',
-            field: 'f_name',
-            pinned: 'left',
-            suppressSorting: true,
-            suppressMenu: true,
-            cellRendererFramework: Vue.extend({
-              template: '<a @click.prevent="onView" style="cursor: pointer;">{{ this.params.value }}</a>',
-              methods: {
-                onView () {
-                  this.params.context.parentComponent.onView(this.params.node.data)
-                }
-              }
-            }),
-            filterFramework: Vue.extend({
-              template: `<el-input :ref="'input'" v-model="text" placeholder="支持模糊过滤"></el-input>`,
-              data () {
-                return {
-                  text: '',
-                  valueGetter: null
-                }
-              },
-              watch: {
-                'text': function (val, oldVal) {
-                  if (val !== oldVal) {
-                    this.params.filterChangedCallback()
-                  }
-                }
-              },
-              created () {
-                this.valueGetter = this.params.valueGetter
-              },
-              methods: {
-                isFilterActive () {
-                  return this.text !== undefined && this.text !== null && this.text !== ''
-                },
-                doesFilterPass (params) {
-                  window.devMode && console.info('doesFilterPass', this.$options.name, params)
-                },
-                getModel () {
-                  return {filter: this.text, filterType: 'text', type: 'contains'}
-                },
-                setModel (model) {
-                  this.text = model.filter
-                }
-              }
-            }),
-            width: 160
-          },
-          {
-            headerName: '角色描述',
-            field: 'f_desc',
-            suppressSorting: true,
-            suppressMenu: true,
-            suppressFilter: true,
-            width: 300
-          },
-          {
-            headerName: '是否预置',
-            field: 'f_is_preset',
-            cellStyle: {'text-align': 'center'},
-            cellRendererFramework: Vue.extend({
-              template: '<span>{{ this.params.value | dict({1: "是", 2: "否"}) }}</span>'
-            }),
-            suppressSorting: true,
-            suppressMenu: true,
-            suppressFilter: true,
-            width: 75
-          },
-          {
-            headerName: '备注',
-            field: 'f_remark',
-            suppressSorting: true,
-            suppressMenu: true,
-            suppressFilter: true,
-            width: 300
-          },
-          {
-            headerName: '操作',
-            field: '',
-            cellRendererFramework: Vue.extend({
-              template: `<div class="btn-group">
+        {
+          headerName: '#',
+          pinned: 'left',
+          headerComponentFramework: AddHeaderComponenetFramework,
+          cellStyle: {'text-align': 'right'},
+          cellRendererFramework: IndexRendernerFramework,
+          suppressSorting: true,
+          suppressMenu: true,
+          suppressFilter: true,
+          width: 38
+        },
+        {
+          headerName: '角色名称',
+          field: 'f_name',
+          pinned: 'left',
+          cellRendererFramework: ViewRendernerFramework,
+          filterFramework: LikeFilterFramework,
+          suppressSorting: true,
+          suppressMenu: true,
+          width: 160
+        },
+        {
+          headerName: '角色描述',
+          field: 'f_desc',
+          suppressSorting: true,
+          suppressMenu: true,
+          suppressFilter: true,
+          width: 300
+        },
+        {
+          headerName: '是否预置',
+          field: 'f_is_preset',
+          cellStyle: {'text-align': 'center'},
+          cellRendererFramework: DictRendernerFramework,
+          cellRendererParams: {dict: 'YesNo'},
+          suppressSorting: true,
+          suppressMenu: true,
+          suppressFilter: true,
+          width: 75
+        },
+        {
+          headerName: '备注',
+          field: 'f_remark',
+          suppressSorting: true,
+          suppressMenu: true,
+          suppressFilter: true,
+          width: 300
+        },
+        {
+          headerName: '操作',
+          field: '',
+          cellRendererFramework: Vue.extend({
+            template: `<div class="btn-group">
                             <button type="button" class="btn btn-xs btn-primary" title="授权可以操作的功能"
-                              @click.prevent="onAuthorize" :disabled="!params.context.permission.authorize">
+                              @click.prevent="onAuthorize" :disabled="!permission.authorize">
                               <i class="fa fa-key"></i>
                             </button>
                             <button type="button" class="btn btn btn-xs btn-info" title="修改"
-                              @click.prevent="onEdit" :disabled="!params.context.permission.edit">
+                              @click.prevent="onEdit" :disabled="!permission.edit">
                               <i class="fa fa-edit"></i>
                             </button>
                             <button type="button" class="btn btn-xs btn-danger" title="删除"
-                            @click.prevent="onRemove" :disabled="!params.context.permission.remove || (params.node.data && params.node.data.f_is_preset === 1)">
+                            @click.prevent="onRemove" :disabled="!permission.remove || (entity.f_is_preset === 1)">
                               <i class="fa fa-trash"></i>
                             </button>
                           </div>`,
-              methods: {
-                onAuthorize () {
-                  this.params.context.parentComponent.onAuthorize(this.params.node.data)
-                },
-                onEdit () {
-                  this.params.context.parentComponent.onEdit(this.params.node.data)
-                },
-                onRemove () {
-                  this.params.context.parentComponent.onRemove(this.params.node.data)
-                }
+            computed: {
+              permission () {
+                return this.params.context.featureComponent.featureOptions.permission
+              },
+              entity () {
+                return this.params.node.data ? this.params.node.data : {}
               }
-            }),
-            suppressSorting: true,
-            suppressMenu: true,
-            suppressFilter: true,
-            pinned: 'right',
-            cellStyle: {'text-align': 'center'},
-            width: 80
-          }
-        ]
-      })
+            },
+            methods: {
+              onAuthorize () {
+                this.params.context.featureComponent.onAuthorize(this.params.node.data)
+              },
+              onEdit () {
+                this.params.context.featureComponent.onEdit(this.params.node.data)
+              },
+              onRemove () {
+                this.params.context.featureComponent.onRemove(this.params.node.data)
+              }
+            }
+          }),
+          pinned: 'right',
+          cellStyle: {'text-align': 'center'},
+          suppressSorting: true,
+          suppressMenu: true,
+          suppressFilter: true,
+          width: 80
+        }
+      ]
     },
     mounted () {
       window.devMode && console.info('mounted', this.$options.name, this._uid)
@@ -238,22 +201,11 @@
       window.devMode && console.info('activated', this.$options.name, this._uid)
     },
     methods: {
-      onAdd () {
-        this.formParams.operation = 'add'
-        this.formDialogTitle = '增加角色'
-        this.showFormDialog = true
-      },
-      onView (entity) {
-        this.formParams.operation = 'view'
-        this.formParams.entity = entity
-        this.formDialogTitle = '查看角色'
-        this.showFormDialog = true
-      },
       onEdit (entity) {
-        this.formParams.operation = 'edit'
-        this.formParams.entity = entity
-        this.formDialogTitle = '修改角色'
-        this.showFormDialog = true
+        this.formOptions.operation = 'edit'
+        this.formOptions.title = '修改' + this.featureOptions.name
+        this.formOptions.params = entity
+        this.formOptions.isShow = true
       },
       onRemove (entity) {
         var vm = this
@@ -262,26 +214,17 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          vm.$http.delete(vm.url + '/' + entity.f_id).then(function (response) {
+          vm.$http.delete(vm.featureOptions.url + '/' + entity.f_id).then(function (response) {
             if (response.body.success) {
-              vm._refreshGrid()
+              this.gridOptions.context.params.totalCount = 0
+              this.gridOptions.api.setDatasource(this.gridOptions.datasource)
             }
           })
         })
       },
-      onSaved () {
-        this._refreshGrid()
-        this.showFormDialog = false
-      },
-      _refreshGrid () {
-        this.gridOptions.context.params.totalCount = 0
-        this.gridOptions.api.setDatasource(this.gridOptions.datasource)
-      },
       onAuthorize (entity) {
-        this.authorizeDialogOptions.operation = 'edit'
-        this.authorizeDialogOptions.entity = entity
-        this.authorizeDialogTitle = '修改授权'
-        this.authorizeDialogShown = true
+        this.authorizeFormOptions.params = entity
+        this.authorizeFormOptions.isShow = true
       }
     }
   }
