@@ -20,9 +20,9 @@
   import { AgGridVue } from 'ag-grid-vue'
   import LikeFilterFramework from 'components/ag-grid/LikeFilterFramework'
   import DictFilterFramework from 'components/ag-grid/DictFilterFramework'
-  import IndexRendernerFramework from 'components/ag-grid/IndexRendernerFramework'
-  import ViewRendernerFramework from 'components/ag-grid/ViewRendernerFramework'
-  import DictRendernerFramework from 'components/ag-grid/DictRendernerFramework'
+  import IndexRendererFramework from 'components/ag-grid/IndexRendererFramework'
+  import ViewRendererFramework from 'components/ag-grid/ViewRendererFramework'
+  import DictRendererFramework from 'components/ag-grid/DictRendererFramework'
   import UrlForm from './form'
 
   export default {
@@ -90,7 +90,7 @@
           headerName: '#',
           pinned: 'left',
           cellStyle: {'text-align': 'right'},
-          cellRendererFramework: IndexRendernerFramework,
+          cellRendererFramework: IndexRendererFramework,
           suppressSorting: true,
           suppressMenu: true,
           suppressFilter: true,
@@ -101,7 +101,7 @@
           field: 'f_url',
           pinned: 'left',
           suppressMenu: true,
-          cellRendererFramework: ViewRendernerFramework,
+          cellRendererFramework: ViewRendererFramework,
           filterFramework: LikeFilterFramework,
           width: 400
         },
@@ -125,7 +125,7 @@
           headerName: '记录日志',
           field: 'f_is_log',
           cellStyle: {'text-align': 'center'},
-          cellRendererFramework: DictRendernerFramework,
+          cellRendererFramework: DictRendererFramework,
           cellRendererParams: {dict: 'YesNo'},
           suppressSorting: true,
           suppressMenu: true,

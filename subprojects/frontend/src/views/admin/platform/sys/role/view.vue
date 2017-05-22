@@ -22,13 +22,14 @@
 
 
 <script type="text/ecmascript-6">
-  import Vue from 'vue'
+  // import Vue from 'vue'
   import { AgGridVue } from 'ag-grid-vue'
   import AddHeaderComponenetFramework from 'components/ag-grid/AddHeaderComponenetFramework'
   import LikeFilterFramework from 'components/ag-grid/LikeFilterFramework'
-  import IndexRendernerFramework from 'components/ag-grid/IndexRendernerFramework'
-  import ViewRendernerFramework from 'components/ag-grid/ViewRendernerFramework'
-  import DictRendernerFramework from 'components/ag-grid/DictRendernerFramework'
+  import IndexRendererFramework from 'components/ag-grid/IndexRendererFramework'
+  import ViewRendererFramework from 'components/ag-grid/ViewRendererFramework'
+  import DictRendererFramework from 'components/ag-grid/DictRendererFramework'
+  import OperationRendererFramework from 'components/ag-grid/OperationRendererFramework'
   import RoleForm from './form'
   import RoleAuthorizeForm from './authorize'
 
@@ -42,7 +43,7 @@
     data () {
       return {
         featureOptions: {
-          name: 'URL',
+          name: '角色',
           url: 'api/platform/sys/roles',
           permission: {
             authorize: this.$jw.hasPermission('XTGL-JSGL-SQ'),
@@ -54,7 +55,7 @@
         formOptions: {
           isShow: false,
           operation: 'view',
-          title: '查看URL',
+          title: '查看详情',
           maxHeight: this.mode === 'selector' ? 400 : 500,
           params: {},
           context: {
@@ -87,8 +88,7 @@
       }
     },
     created () {
-      var vm = this
-      vm.gridOptions.columnDefs = [
+      this.gridOptions.columnDefs = [
         {
           headerName: '',
           checkboxSelection: true,
@@ -104,7 +104,7 @@
           pinned: 'left',
           headerComponentFramework: AddHeaderComponenetFramework,
           cellStyle: {'text-align': 'right'},
-          cellRendererFramework: IndexRendernerFramework,
+          cellRendererFramework: IndexRendererFramework,
           suppressSorting: true,
           suppressMenu: true,
           suppressFilter: true,
@@ -114,7 +114,8 @@
           headerName: '角色名称',
           field: 'f_name',
           pinned: 'left',
-          cellRendererFramework: ViewRendernerFramework,
+          cellRendererFramework: ViewRendererFramework,
+          cellRendererParams: {oncli: 'YesNo'},
           filterFramework: LikeFilterFramework,
           suppressSorting: true,
           suppressMenu: true,
@@ -132,7 +133,7 @@
           headerName: '是否预置',
           field: 'f_is_preset',
           cellStyle: {'text-align': 'center'},
-          cellRendererFramework: DictRendernerFramework,
+          cellRendererFramework: DictRendererFramework,
           cellRendererParams: {dict: 'YesNo'},
           suppressSorting: true,
           suppressMenu: true,
@@ -150,43 +151,28 @@
         {
           headerName: '操作',
           field: '',
-          cellRendererFramework: Vue.extend({
-            template: `<el-button-group>
-                          <el-button type="warning" size="mini" title="授权可以操作的功能"
-                            @click.prevent="onAuthorize" :disabled="!permission.authorize">
-                            <i class="fa fa-key"></i>
-                          </el-button>
-                          <el-button type="info" size="mini" title="修改"
-                            @click.prevent="onEdit" :disabled="!permission.edit">
-                            <i class="fa fa-edit"></i>
-                          </el-button>
-                          <el-button type="danger" size="mini" title="删除"
-                            @click.prevent="onRemove" :disabled="!permission.remove || (entity.f_is_preset === 1)">
-                              <i class="fa fa-trash"></i>
-                          </el-button>
-                        </el-button-group>`,
-            computed: {
-              permission () {
-                return this.params.context.featureComponent.featureOptions.permission
-              },
-              entity () {
-                return this.params.node.data ? this.params.node.data : {}
-              }
-            },
-            methods: {
-              onAuthorize () {
-                this.params.context.featureComponent.onAuthorize(this.params.node.data)
-              },
-              onEdit () {
-                this.params.context.featureComponent.onEdit(this.params.node.data)
-              },
-              onRemove () {
-                this.params.context.featureComponent.onRemove(this.params.node.data)
-              }
-            }
-          }),
           pinned: 'right',
           cellStyle: {'text-align': 'center'},
+          cellRendererFramework: OperationRendererFramework,
+          cellRendererParams: {
+            operations: [{
+              id: 'authorize',
+              title: '授权可以操作的功能',
+              type: 'warning',
+              icon: 'fa fa-key',
+              permission: 'authorize',
+              onClick (params, entity) {
+                params.context.featureComponent.onAuthorize(entity)
+              }
+            }, {
+              id: 'edit'
+            }, {
+              id: 'remove',
+              isDisabled: function (entity) {
+                return entity.f_is_preset === 1
+              }
+            }]
+          },
           suppressSorting: true,
           suppressMenu: true,
           suppressFilter: true,
@@ -201,27 +187,6 @@
       window.devMode && console.info('activated', this.$options.name, this._uid)
     },
     methods: {
-      onEdit (entity) {
-        this.formOptions.operation = 'edit'
-        this.formOptions.title = '修改' + this.featureOptions.name
-        this.formOptions.params = entity
-        this.formOptions.isShow = true
-      },
-      onRemove (entity) {
-        var vm = this
-        vm.$confirm('确定要删除所选的角色吗?', '删除菜单', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          vm.$http.delete(vm.featureOptions.url + '/' + entity.f_id).then(function (response) {
-            if (response.body.success) {
-              this.gridOptions.context.params.totalCount = 0
-              this.gridOptions.api.setDatasource(this.gridOptions.datasource)
-            }
-          })
-        })
-      },
       onAuthorize (entity) {
         this.authorizeFormOptions.params = entity
         this.authorizeFormOptions.isShow = true

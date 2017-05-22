@@ -9,10 +9,6 @@
   import Vue from 'vue'
 
   export default Vue.extend({
-    methods: {
-      onView () {
-        this.params.context.featureComponent.onView && this.params.context.featureComponent.onView(this.params.node.data)
-      }
-    }
+    methods: {}
   })
 </script>
