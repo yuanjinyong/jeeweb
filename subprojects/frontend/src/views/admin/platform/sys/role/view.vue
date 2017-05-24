@@ -22,7 +22,6 @@
 
 
 <script type="text/ecmascript-6">
-  // import Vue from 'vue'
   import { AgGridVue } from 'ag-grid-vue'
   import AddHeaderComponenetFramework from 'components/ag-grid/AddHeaderComponenetFramework'
   import LikeFilterFramework from 'components/ag-grid/LikeFilterFramework'
@@ -115,7 +114,6 @@
           field: 'f_name',
           pinned: 'left',
           cellRendererFramework: ViewRendererFramework,
-          cellRendererParams: {oncli: 'YesNo'},
           filterFramework: LikeFilterFramework,
           suppressSorting: true,
           suppressMenu: true,
@@ -165,9 +163,11 @@
                 params.context.featureComponent.onAuthorize(entity)
               }
             }, {
-              id: 'edit'
+              id: 'edit',
+              permission: 'edit'
             }, {
               id: 'remove',
+              permission: 'remove',
               isDisabled: function (entity) {
                 return entity.f_is_preset === 1
               }

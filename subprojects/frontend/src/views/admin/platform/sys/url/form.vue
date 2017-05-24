@@ -113,15 +113,10 @@
       query (params) {
         var vm = this
         if (vm.formOptions.operation === 'add') {
-          vm.entity = {}
+          vm.entity = vm._createEntity()
         } else {
           vm.$http.get(vm.featureOptions.url + '/' + vm.formOptions.params.f_id).then(function (response) {
-            var result = response.body
-            if (result.success) {
-              vm.entity = result.data
-            } else {
-              vm.entity = {}
-            }
+            vm.entity = response.body.success ? response.body.data : {}
           })
         }
       },
@@ -148,6 +143,9 @@
 
           return true
         })
+      },
+      _createEntity () {
+        return {}
       },
       _submitted (response) {
         if (response.body.success) {

@@ -4,18 +4,18 @@
 
 <template>
   <div class="jw-form">
-    <div class="jw-form-body" style="max-height: 500px;overflow-y: auto;">
-      <el-form label-width="100px" ref="form" :inline="true" :model="entity" :rules="rules">
-        <fieldset :disabled="params.operation === 'view'">
+    <div class="jw-form-body" :style="formBodyStyle">
+      <el-form ref="form" :model="entity" :rules="rules" :inline="true" :label-width="labelWidth">
+        <fieldset :disabled="formOptions.operation === 'view'">
           <el-form-item label="账号" prop="f_account">
-            <el-input v-model="entity.f_account" :disabled="params.operation !== 'add'"></el-input>
+            <el-input v-model="entity.f_account" :disabled="formOptions.operation !== 'add'"></el-input>
           </el-form-item>
           <el-form-item label="姓名" prop="f_name">
             <el-input v-model="entity.f_name"></el-input>
           </el-form-item>
           <el-form-item label="角色">
             <el-select v-model="entity.roleIdList" placeholder="请选择角色" multiple style="width: 496px;"
-              :disabled="params.subOperation === 'change'">
+              :disabled="formOptions.subOperation === 'change'">
               <el-option v-for="role in roleList" :key="role.f_id" :value="role.f_id" :label="role.f_name">
                 <div style="float: left;">{{role.f_name}}</div>
                 <div style="float: right;padding-right:30px;">{{role.f_desc}}</div>
@@ -65,7 +65,8 @@
 
     <div class="jw-form-footer" style="text-align: right;">
       <el-button @click="onCancelForm('form')">取 消</el-button>
-      <el-button type="primary" @click="onSubmitForm('form')" :disabled="params.operation === 'view'">确 定</el-button>
+      <el-button type="primary" @click="onSubmitForm('form')" :disabled="formOptions.operation === 'view'">确 定
+      </el-button>
     </div>
   </div>
 </template>
@@ -75,19 +76,24 @@
   export default {
     name: 'userForm',
     props: {
-      params: {
+      formOptions: {
         type: Object,
         default: function () {
           return {
             operation: 'view',
-            entity: {}
+            title: '查看详情',
+            maxHeight: 500,
+            labelWidth: 100,
+            params: {},
+            context: {
+              featureComponent: {}
+            }
           }
         }
       }
     },
     data () {
       return {
-        url: 'api/platform/sys/users',
         roleList: [],
         entity: {roleIdList: []},
         rules: {
@@ -103,6 +109,18 @@
       }
     },
     computed: {
+      formBodyStyle () {
+        return {
+          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : 500) + 'px',
+          'overflow-y': 'auto'
+        }
+      },
+      labelWidth () {
+        return (this.formOptions.labelWidth ? this.formOptions.labelWidth : 100) + 'px'
+      },
+      featureOptions () {
+        return this.formOptions.context.featureComponent.featureOptions
+      },
       f_role_names () {
         var f_role_names = []
         this.entity.roleList.forEach((role) => {
@@ -123,31 +141,26 @@
       window.devMode && console.info('activated', this.$options.name, this._uid)
     },
     methods: {
-      _init () {
-        this.query()
-      },
       _loadRoleList () {
         this.$http.get('api/platform/sys/roles?orderBy=f_is_preset,f_name').then((response) => {
           this.roleList = response.body.success ? response.body.data.items : []
         })
       },
+      _init () {
+        this.query()
+      },
       query (params) {
         var vm = this
-        if (vm.params.operation === 'add') {
-          vm.entity = {
-            f_department_id: 0,
-            f_is_can_login: 1,
-            f_is_preset: 2,
-            f_status: 1,
-            roleIdList: []
-          }
+        if (vm.formOptions.operation === 'add') {
+          vm.entity = vm._createEntity()
         } else {
-          vm.$http.get(vm.url + '/' + vm.params.entity.f_id).then((response) => {
+          vm.$http.get(vm.featureOptions.url + '/' + vm.formOptions.params.f_id).then((response) => {
             vm.entity = response.body.success ? response.body.data : {roleIdList: []}
           })
         }
       },
       onCancelForm (formName) {
+        this._closeForm()
         this.$emit('cancel')
       },
       onSubmitForm (formName) {
@@ -157,22 +170,42 @@
             return false
           }
 
-          if (vm.params.operation === 'add') {
-            vm.$http.post(vm.url, vm.entity).then(function (response) {
-              if (response.body.success) {
-                this.$emit('submit')
-              }
-            })
+          if (vm.formOptions.operation === 'add') {
+            vm.$http.post(vm.featureOptions.url, vm.entity).then((response) => { vm._submitted(response) })
           } else {
-            vm.$http.put(vm.url + '/' + vm.params.entity.f_id, vm.entity).then(function (response) {
-              if (response.body.success) {
-                this.$emit('submit')
-              }
-            })
+            vm.$http.put(vm.featureOptions.url + '/' + vm.formOptions.params.f_id, vm.entity).then((response) => { vm._submitted(response) })
           }
 
           return true
         })
+      },
+      _createEntity () {
+        return {
+          f_department_id: 0,
+          f_is_can_login: 1,
+          f_is_preset: 2,
+          f_status: 1,
+          roleIdList: []
+        }
+      },
+      _submitted (response) {
+        if (response.body.success) {
+          this._closeForm()
+          this._refreshGrid()
+
+          this.$emit('submit', {type: this.formOptions.operation, data: response.body.data})
+        }
+      },
+      _closeForm () {
+        if (this.formOptions.context.featureComponent.formOptions) {
+          this.formOptions.context.featureComponent.formOptions.isShow = false
+        }
+      },
+      _refreshGrid () {
+        if (this.formOptions.context.featureComponent.gridOptions) {
+          this.formOptions.context.featureComponent.gridOptions.context.params.totalCount = 0
+          this.formOptions.context.featureComponent.gridOptions.api.setDatasource(this.formOptions.context.featureComponent.gridOptions.datasource)
+        }
       }
     }
   }

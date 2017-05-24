@@ -21,6 +21,7 @@ const store = new Vuex.Store({
     menuList: [],
     dicts: {
       'YesNo': {1: '是', 2: '否'},
+      'UserStatus': {1: '正常', 2: '锁定', 3: '注销'},
       'HttpMethods': [
         {
           f_item_code: '[]',

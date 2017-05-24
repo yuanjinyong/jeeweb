@@ -94,17 +94,10 @@
       query (params) {
         var vm = this
         if (vm.formOptions.operation === 'add') {
-          vm.entity = {
-            f_is_preset: 2
-          }
+          vm.entity = vm._createEntity()
         } else {
-          vm.$http.get(vm.featureOptions.url + '/' + vm.formOptions.params.f_id).then(function (response) {
-            var result = response.body
-            if (result.success) {
-              vm.entity = result.data
-            } else {
-              vm.entity = {}
-            }
+          vm.$http.get(vm.featureOptions.url + '/' + vm.formOptions.params.f_id).then((response) => {
+            vm.entity = response.body.success ? response.body.data : {}
           })
         }
       },
@@ -120,17 +113,16 @@
           }
 
           if (vm.formOptions.operation === 'add') {
-            vm.$http.post(vm.featureOptions.url, vm.entity).then(function (response) {
-              vm._submitted(response)
-            })
+            vm.$http.post(vm.featureOptions.url, vm.entity).then((response) => { vm._submitted(response) })
           } else {
-            vm.$http.put(vm.featureOptions.url + '/' + vm.formOptions.params.f_id, vm.entity).then(function (response) {
-              vm._submitted(response)
-            })
+            vm.$http.put(vm.featureOptions.url + '/' + vm.formOptions.params.f_id, vm.entity).then((response) => { vm._submitted(response) })
           }
 
           return true
         })
+      },
+      _createEntity () {
+        return {f_is_preset: 2}
       },
       _submitted (response) {
         if (response.body.success) {
