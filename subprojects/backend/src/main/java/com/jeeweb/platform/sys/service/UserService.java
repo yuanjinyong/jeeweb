@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +13,8 @@ import com.jeeweb.framework.core.exception.BusinessException;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
+import com.jeeweb.platform.security.service.PasswordService;
+import com.jeeweb.platform.security.utils.SecurityUtil;
 import com.jeeweb.platform.sys.entity.UserEntity;
 import com.jeeweb.platform.sys.mapper.UserMapper;
 import com.jeeweb.platform.sys.mapper.UserMenuMapper;
@@ -31,7 +32,7 @@ public class UserService extends BaseService<Integer, UserEntity> {
     private UserMenuMapper userMenuMapper;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private PasswordService passwordService;
 
     @Override
     protected BaseMapper<Integer, UserEntity> getMapper() {
@@ -49,7 +50,7 @@ public class UserService extends BaseService<Integer, UserEntity> {
     public void insertEntity(UserEntity entity) {
         entity.setF_tenant_id(0);
         entity.setF_department_id(0);
-        entity.setF_password(generatePassword());
+        entity.setF_password(passwordService.generatePassword());
         entity.setF_is_can_login(1); // 一般只有预置的用户才设置为不能登录。
         entity.setF_status(UserEntity.STATUS_NORMAL);
 
@@ -101,7 +102,7 @@ public class UserService extends BaseService<Integer, UserEntity> {
 
     private void insertUserMenu(Integer f_user_id, List<String> f_menu_ids) {
         if (!HelpUtil.isEmpty(f_menu_ids)) {
-            List<RowMap> userMenuList = new ArrayList<RowMap>();
+            List<RowMap> userMenuList = new ArrayList<>();
             for (String f_menu_id : f_menu_ids) {
                 RowMap userMenu = new RowMap();
                 userMenuList.add(userMenu);
@@ -155,7 +156,7 @@ public class UserService extends BaseService<Integer, UserEntity> {
 
         entity.setF_unregister_time(HelpUtil.getNowTime());
         entity.setF_status(UserEntity.STATUS_DEREGISTER);
-        entity.setF_remark("被操作员【" + SysUtil.getCurUser().getF_name() + "】注销。");
+        entity.setF_remark("被操作员【" + SecurityUtil.getCurUser().getF_name() + "】注销。");
         super.updateEntity(entity);
     }
 
@@ -174,21 +175,17 @@ public class UserService extends BaseService<Integer, UserEntity> {
             throw new BusinessException("已注销用户不能进行此操作！");
         }
 
-        entity.setF_password(generatePassword());
+        entity.setF_password(passwordService.generatePassword());
         super.updateEntity(entity);
     }
 
     public void changePassword(String oldPassword, String newPassword) {
-        UserEntity entity = userMapper.selectEntity(SysUtil.getCurUser().getF_id());
-        if (HelpUtil.isEmpty(oldPassword) || !passwordEncoder.matches(oldPassword, entity.getF_password())) {
+        UserEntity entity = userMapper.selectEntity(SecurityUtil.getCurUser().getF_id());
+        if (!passwordService.validatePassword(oldPassword, entity.getF_password())) {
             throw new BusinessException("旧密码不正确！");
         }
 
-        entity.setF_password(passwordEncoder.encode(newPassword));
+        entity.setF_password(passwordService.encodePassword(newPassword));
         super.updateEntity(entity);
-    }
-
-    private String generatePassword() {
-        return passwordEncoder.encode("12345678"); // TODO 这里需要改成随机密码，然后通过短信或者通知的方式通知用户
     }
 }

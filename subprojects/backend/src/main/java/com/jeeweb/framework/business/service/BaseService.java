@@ -12,8 +12,8 @@ import com.jeeweb.framework.core.exception.BusinessException;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
+import com.jeeweb.platform.security.utils.SecurityUtil;
 import com.jeeweb.platform.sys.entity.UserEntity;
-import com.jeeweb.platform.sys.utils.SysUtil;
 
 
 
@@ -70,7 +70,7 @@ public abstract class BaseService<P, E> {
 
     protected void fillCreator(E entity) {
         if (entity instanceof ICreator) {
-            UserEntity user = SysUtil.getCurUser();
+            UserEntity user = SecurityUtil.getCurUser();
             ICreator creator = (ICreator) entity;
             creator.setF_creator_id(user.getF_id());
             creator.setF_creator_name(user.getF_name());

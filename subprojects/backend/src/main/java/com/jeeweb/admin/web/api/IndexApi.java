@@ -15,6 +15,7 @@ import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.framework.core.utils.TreeUtil;
+import com.jeeweb.platform.security.utils.SecurityUtil;
 import com.jeeweb.platform.sys.entity.MenuEntity;
 import com.jeeweb.platform.sys.entity.UserEntity;
 import com.jeeweb.platform.sys.service.MenuService;
@@ -31,7 +32,7 @@ public class IndexApi extends SuperController {
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public ResponseResult getUser() {
-        UserEntity user = SysUtil.getCurUser();
+        UserEntity user = SecurityUtil.getCurUser();
         if (user != null) {
             return new ResponseResult(new Result(userService.selectEntity(user.getF_id())), HttpStatus.OK);
         } else {
@@ -50,7 +51,7 @@ public class IndexApi extends SuperController {
         params.put("orderBy", "f_parent_path,f_order");
         SysUtil.appendCurUserAndRoles(params);
         List<MenuEntity> menuList = menuService.selectEntityListPage(params);
-        Page<MenuEntity> page = new Page<MenuEntity>();
+        Page<MenuEntity> page = new Page<>();
         page.setItems(TreeUtil.listToTree(menuList));
         return new ResponseResult(new Result(page), HttpStatus.OK);
     }
