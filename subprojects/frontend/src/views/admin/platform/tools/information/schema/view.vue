@@ -266,8 +266,6 @@
           {
             headerName: '字段名',
             field: 'COLUMN_NAME',
-            filter: 'text',
-            filterParams: {applyButton: true, clearButton: true},
             suppressSorting: true,
             suppressMenu: true,
             width: 240
@@ -275,8 +273,6 @@
           {
             headerName: '字段说明',
             field: 'COLUMN_COMMENT',
-            filter: 'text',
-            filterParams: {applyButton: true, clearButton: true},
             suppressSorting: true,
             suppressMenu: true,
             width: 300

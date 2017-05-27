@@ -118,7 +118,7 @@ public class CodeGenerateService extends BaseService<Integer, GenerateRuleEntity
     }
 
     private void insertTableEntities(GenerateRuleEntity entity) {
-        List<GenerateRuleFieldEntity> fieldList = new ArrayList<GenerateRuleFieldEntity>();
+        List<GenerateRuleFieldEntity> fieldList = new ArrayList<>();
         for (GenerateRuleTableEntity table : entity.getTableList()) {
             table.setF_rule_id(entity.getF_id());
             fieldList.addAll(insertTableEntity(table));

@@ -113,8 +113,8 @@
           headerName: '角色名称',
           field: 'f_name',
           pinned: 'left',
-          cellRendererFramework: ViewRendererFramework,
           filterFramework: LikeFilterFramework,
+          cellRendererFramework: ViewRendererFramework,
           suppressSorting: true,
           suppressMenu: true,
           width: 160

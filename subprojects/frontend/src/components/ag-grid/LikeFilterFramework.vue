@@ -17,8 +17,12 @@
     },
     watch: {
       'text': function (val, oldVal) {
+        var vm = this
         if (val !== oldVal) {
-          this.params.filterChangedCallback()
+          vm.filterChangedTimer && clearTimeout(vm.filterChangedTimer)
+          vm.filterChangedTimer = setTimeout(function () {
+            vm.params.filterChangedCallback()
+          }, 200)
         }
       }
     },

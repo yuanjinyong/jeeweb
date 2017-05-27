@@ -64,6 +64,15 @@
     border-bottom-right-radius: 2px;
   }
 
+  .jw-grid .ag-ltr .ag-header-group-cell {
+    border-right: 1px solid #ddd;
+    text-align: center;
+  }
+
+  .jw-grid .ag-ltr .ag-header-group-cell-with-group {
+    border-bottom: 1px solid #ddd;
+  }
+
   .jw-grid .ag-ltr .ag-header-cell {
     border-right: 1px solid #ddd;
   }
@@ -104,6 +113,11 @@
     top: 30px;
   }
 
+  .jw-dialog-full {
+    margin-bottom: 0px;
+    top: 0px;
+  }
+
   .jw-dialog .el-dialog__header {
     padding: 20px;
     background-color: #f1f1f1;
@@ -140,6 +154,10 @@
 
   .el-form--inline .el-form-item {
     margin-right: 0px;
+  }
+
+  .jw-form .jw-field-col-2 {
+    width: 496px;
   }
 
   .el-radio {

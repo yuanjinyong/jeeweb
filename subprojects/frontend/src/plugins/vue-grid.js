@@ -234,14 +234,19 @@ var VueGrid = {
           }
         }
 
-        Vue.http.get(gridParams.context.featureComponent.featureOptions.url, {params: Object.assign({}, gridParams.context.params, page, filters)}).then(function (response) {
-          if (response.body.success) {
-            gridParams.context.params.totalCount = response.body.data.totalCount
-            gridParams.successCallback(response.body.data.items, response.body.data.totalCount)
-          } else {
-            gridParams.failCallback()
-          }
-        })
+        if (gridParams.context.featureComponent.featureOptions.url) {
+          Vue.http.get(gridParams.context.featureComponent.featureOptions.url, {params: Object.assign({}, gridParams.context.params, page, filters)}).then(function (response) {
+            if (response.body.success) {
+              gridParams.context.params.totalCount = response.body.data.totalCount
+              gridParams.successCallback(response.body.data.items, response.body.data.totalCount)
+            } else {
+              gridParams.failCallback()
+            }
+          })
+        } else {
+          gridParams.context.params.totalCount = 0
+          gridParams.successCallback([], 0)
+        }
       }
     },
     columnDefs: []
