@@ -174,6 +174,11 @@
     width: 496px;
   }
 
+  .jw-form .jw-field-col-3 {
+    min-width: 196px;
+    width: 796px;
+  }
+
   .el-radio {
     color: inherit;
   }

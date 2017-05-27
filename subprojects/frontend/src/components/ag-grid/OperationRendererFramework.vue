@@ -5,7 +5,7 @@
   <el-button-group>
     <el-button v-for="(operation, index) in params.operations" size="mini"
       :key="operation.id"
-      :type="operation.type ? operation.type : operations[operation.id].type"
+      :type="operation.type ? operation.type : (operations[operation.id] ? operations[operation.id].type : null)"
       :title="operation.title ? operation.title : (operations[operation.id].title + featureOptions.name)"
       :disabled="(operation.permission && !permission[operation.permission]) || (operation.isDisabled && operation.isDisabled(entity))"
       @click.prevent="onClick(operation)">

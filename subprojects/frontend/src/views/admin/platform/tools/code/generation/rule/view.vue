@@ -19,6 +19,7 @@
   import AddHeaderComponenetFramework from 'components/ag-grid/AddHeaderComponenetFramework'
   import LikeFilterFramework from 'components/ag-grid/LikeFilterFramework'
   import IndexRendererFramework from 'components/ag-grid/IndexRendererFramework'
+  import OperationRendererFramework from 'components/ag-grid/OperationRendererFramework'
   import ViewRendererFramework from 'components/ag-grid/ViewRendererFramework'
   import GenerationRuleForm from './form'
 
@@ -132,6 +133,34 @@
           suppressMenu: true,
           suppressFilter: true,
           width: 300
+        },
+        {
+          headerName: '操作',
+          field: '',
+          pinned: 'right',
+          cellStyle: {'text-align': 'center'},
+          cellRendererFramework: OperationRendererFramework,
+          cellRendererParams: {
+            operations: [{
+              id: 'edit',
+              permission: 'edit'
+            }, {
+              id: 'remove',
+              permission: 'remove'
+            }, {
+              id: 'generate',
+              title: '生成代码',
+              icon: 'fa fa-file-code-o',
+              permission: 'generate',
+              onClick (params, entity) {
+                params.context.featureComponent.onGenerate(entity)
+              }
+            }]
+          },
+          suppressSorting: true,
+          suppressMenu: true,
+          suppressFilter: true,
+          width: 80
         }
       ]
     },
@@ -141,6 +170,10 @@
     activated () {
       window.devMode && console.info('activated', this.$options.name, this._uid)
     },
-    methods: {}
+    methods: {
+      onGenerate (entity) {
+        alert('onGenerate')
+      }
+    }
   }
 </script>

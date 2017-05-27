@@ -42,7 +42,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="接口" prop="f_entity_interfaces">
-            <el-select v-model="f_entity_interfaces" class="jw-field-col-2" multiple>
+            <el-select v-model="f_entity_interfaces" class="jw-field-col-3" multiple>
               <el-option v-for="interface in interfaces"
                 :key="interface.fullName"
                 :value="interface.fullName"
@@ -64,11 +64,10 @@
           <el-form-item label="Api" prop="f_rest_class">
             <el-input v-model="entity.f_rest_class" class="jw-field-col-2"></el-input>
           </el-form-item>
-        </fieldset>
-        <div>
+
           <ag-grid-vue style="width: 100%; height: 450px;" class="ag-fresh jw-grid" :grid-options="gridOptions">
           </ag-grid-vue>
-        </div>
+        </fieldset>
       </el-form>
     </div>
 

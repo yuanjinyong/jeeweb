@@ -34,10 +34,10 @@
           <el-form-item label="模块包名" prop="f_package_name">
             <el-input v-model="entity.f_package_name" class="jw-field-col-2"></el-input>
           </el-form-item>
-        </fieldset>
 
-        <generation-rule-table style="height: 302px;" :generate-rule="entity">
-        </generation-rule-table>
+          <generation-rule-table style="height: 302px;" :generate-rule="entity">
+          </generation-rule-table>
+        </fieldset>
       </el-form>
     </div>
 
