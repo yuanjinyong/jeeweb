@@ -18,9 +18,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label="数据库表名" prop="f_table_name">
-            <el-autocomplete v-model="entity.f_table_name"
-              :fetch-suggestions="loadTables"
-              @select="loadFields">
+            <el-autocomplete v-model="entity.f_table_name" icon="search" class="jw-field-col-1"
+              :fetch-suggestions="loadTables" @select="loadFields">
             </el-autocomplete>
           </el-form-item>
           <el-form-item label="排序" prop="f_order">
@@ -67,7 +66,7 @@
           </el-form-item>
         </fieldset>
         <div>
-          <ag-grid-vue style="width: 100%; height: 300px;" class="ag-fresh jw-grid" :grid-options="gridOptions">
+          <ag-grid-vue style="width: 100%; height: 450px;" class="ag-fresh jw-grid" :grid-options="gridOptions">
           </ag-grid-vue>
         </div>
       </el-form>
@@ -173,7 +172,7 @@
       },
       formBodyStyle () {
         return {
-          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : 458) + 'px',
+          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : 500) + 'px',
           'overflow-y': 'auto'
         }
       },
@@ -405,11 +404,10 @@
         vm.loadTablesTimer && clearTimeout(vm.loadTablesTimer)
         vm.loadTablesTimer = setTimeout(() => {
           vm._loadTables(query, callback)
-        }, 200)
+        }, 500)
       },
       _loadTables (tableName, callback) {
         var vm = this
-        // vm.loading = true
         vm.$http.get('api/platform/schema/information/tables', {
           params: {
             TABLE_SCHEMA: vm.entity.f_db_name,
@@ -417,12 +415,13 @@
             orderBy: 'TABLE_NAME'
           }
         }).then(function (response) {
-          // vm.loading = false
           if (response.body.success) {
-            // vm.items = response.body.data.items
-            callback && callback(response.body.data.items)
+            var tables = []
+            response.body.data.items.forEach((table) => {
+              tables.push({value: table.TABLE_NAME})
+            })
+            callback && callback(tables)
           } else {
-            // vm.items = []
             callback && callback([])
           }
         })
@@ -444,10 +443,31 @@
           } else {
             vm.entity.fieldList = []
           }
+          vm.gridOptions.api.setRowData(vm.entity.fieldList)
         })
       },
       _buildFieldEntity (column) {
-        return {}
+        return {
+          f_order: column.ORDINAL_POSITION,
+          f_column_name: column.COLUMN_NAME,
+          f_column_comment: column.COLUMN_COMMENT,
+          f_full_java_type: 'java.lang.String',
+          f_is_primary: 2,
+          f_is_super_class_field: 2,
+          f_is_insert: 2,
+          f_is_update: 2,
+          f_is_select: 2,
+          f_is_equal: 2,
+          f_is_like: 2,
+          f_is_left_like: 2,
+          f_is_right_like: 2,
+          f_is_in: 2,
+          f_is_not_in: 2,
+          f_is_between: 2,
+          f_is_search: 2,
+          f_is_grid: 2,
+          f_is_form: 2
+        }
       },
       _init () {
         this._loadSchematas()

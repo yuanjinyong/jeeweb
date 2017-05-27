@@ -152,11 +152,25 @@
     background-color: #f1f1f1;
   }
 
+  .jw-form .el-form-item {
+    margin-bottom: 5px;
+  }
+
   .el-form--inline .el-form-item {
     margin-right: 0px;
   }
 
+  .el-form--inline .el-form-item .el-form-item__content {
+    line-height: 20px;
+  }
+
+  .jw-form .jw-field-col-1 {
+    min-width: 196px;
+    width: 196px;
+  }
+
   .jw-form .jw-field-col-2 {
+    min-width: 196px;
     width: 496px;
   }
 
@@ -175,10 +189,32 @@
 
   .el-radio-group {
     min-width: 196px;
+    line-height: 36px;
   }
 
   .el-input-number {
     min-width: 196px;
+  }
+
+  .el-input-number__decrease, .el-input-number__increase {
+    line-height: 35px;
+  }
+
+  .el-date-editor.el-input {
+    min-width: 196px;
+    width: 196px;
+  }
+
+  .el-checkbox {
+    line-height: 36px;
+  }
+
+  .el-textarea {
+    line-height: 36px;
+  }
+
+  .el-textarea__inner {
+    min-height: 36px;
   }
 
   .jw-textarea-full-width {

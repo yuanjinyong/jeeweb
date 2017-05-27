@@ -36,7 +36,7 @@
           </el-form-item>
         </fieldset>
 
-        <generation-rule-table style="height: 200px;" :generate-rule="entity">
+        <generation-rule-table style="height: 302px;" :generate-rule="entity">
         </generation-rule-table>
       </el-form>
     </div>
@@ -51,7 +51,7 @@
 
 
 <script type="text/ecmascript-6">
-  import GenerationRuleTable from './table/view'
+  import GenerationRuleTable from '../table/view'
 
   export default {
     name: 'generationRuleForm',

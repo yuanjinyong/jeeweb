@@ -1,4 +1,4 @@
-import CodeGeneration from './code/generation/view'
+import CodeGeneration from './code/generation/rule/view'
 import InformationSchema from './information/schema/view'
 
 export default [
