@@ -204,45 +204,63 @@
           width: 120
         },
         {
-          headerName: '描述',
-          field: 'f_column_comment',
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
-          width: 180
+          headerName: 'Database',
+          children: [
+            {
+              headerName: '描述',
+              field: 'f_column_comment',
+              tooltipField: 'f_column_comment',
+              suppressSorting: true,
+              suppressMenu: true,
+              suppressFilter: true,
+              width: 280
+            },
+            {
+              headerName: '列类型',
+              field: 'f_column_type',
+              suppressSorting: true,
+              suppressMenu: true,
+              suppressFilter: true,
+              width: 100
+            }]
         },
         {
-          headerName: 'Java数据类型',
-          field: 'f_full_java_type',
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
-          width: 180
+          headerName: 'Entity',
+          children: [
+            {
+              headerName: 'Java数据类型',
+              field: 'f_full_java_type',
+              suppressSorting: true,
+              suppressMenu: true,
+              suppressFilter: true,
+              width: 180
+            },
+            {
+              headerName: '继承',
+              headerTooltip: '继承父类的字段',
+              field: 'f_is_super_class_field',
+              cellStyle: {'text-align': 'center'},
+              cellRendererFramework: DictRendererFramework,
+              cellRendererParams: {dict: 'YesNo'},
+              suppressSorting: true,
+              suppressMenu: true,
+              suppressFilter: true,
+              width: 40
+            },
+            {
+              headerName: '主键',
+              field: 'f_is_primary',
+              cellStyle: {'text-align': 'center'},
+              cellRendererFramework: DictRendererFramework,
+              cellRendererParams: {dict: 'YesNo'},
+              suppressSorting: true,
+              suppressMenu: true,
+              suppressFilter: true,
+              width: 40
+            }]
         },
         {
-          headerName: '父类字段',
-          field: 'f_is_super_class_field',
-          cellStyle: {'text-align': 'center'},
-          cellRendererFramework: DictRendererFramework,
-          cellRendererParams: {dict: 'YesNo'},
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
-          width: 60
-        },
-        {
-          headerName: '主键',
-          field: 'f_is_primary',
-          cellStyle: {'text-align': 'center'},
-          cellRendererFramework: DictRendererFramework,
-          cellRendererParams: {dict: 'YesNo'},
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
-          width: 60
-        },
-        {
-          headerName: '插入',
+          headerName: 'Mapper.xml',
           children: [
             {
               headerName: '插入',
@@ -253,7 +271,7 @@
               suppressSorting: true,
               suppressMenu: true,
               suppressFilter: true,
-              width: 60
+              width: 40
             },
             {
               headerName: '更新',
@@ -264,7 +282,7 @@
               suppressSorting: true,
               suppressMenu: true,
               suppressFilter: true,
-              width: 60
+              width: 40
             },
             {
               headerName: '查询',
@@ -275,7 +293,7 @@
               suppressSorting: true,
               suppressMenu: true,
               suppressFilter: true,
-              width: 60
+              width: 40
             },
             {
               headerName: '等于',
@@ -286,7 +304,7 @@
               suppressSorting: true,
               suppressMenu: true,
               suppressFilter: true,
-              width: 60
+              width: 40
             },
             {
               headerName: '模糊',
@@ -297,7 +315,7 @@
               suppressSorting: true,
               suppressMenu: true,
               suppressFilter: true,
-              width: 60
+              width: 40
             },
             {
               headerName: '左模',
@@ -308,7 +326,7 @@
               suppressSorting: true,
               suppressMenu: true,
               suppressFilter: true,
-              width: 60
+              width: 40
             },
             {
               headerName: '右模',
@@ -319,7 +337,7 @@
               suppressSorting: true,
               suppressMenu: true,
               suppressFilter: true,
-              width: 60
+              width: 40
             },
             {
               headerName: 'In',
@@ -330,10 +348,11 @@
               suppressSorting: true,
               suppressMenu: true,
               suppressFilter: true,
-              width: 60
+              width: 40
             },
             {
               headerName: 'Not In',
+              headerTooltip: 'Not In',
               field: 'f_is_not_in',
               cellStyle: {'text-align': 'center'},
               cellRendererFramework: DictRendererFramework,
@@ -341,10 +360,11 @@
               suppressSorting: true,
               suppressMenu: true,
               suppressFilter: true,
-              width: 60
+              width: 40
             },
             {
               headerName: 'Between',
+              headerTooltip: 'Between',
               field: 'f_is_between',
               cellStyle: {'text-align': 'center'},
               cellRendererFramework: DictRendererFramework,
@@ -352,41 +372,45 @@
               suppressSorting: true,
               suppressMenu: true,
               suppressFilter: true,
-              width: 60
+              width: 40
             }]
         },
         {
-          headerName: '搜索',
-          field: 'f_is_search',
-          cellStyle: {'text-align': 'center'},
-          cellRendererFramework: DictRendererFramework,
-          cellRendererParams: {dict: 'YesNo'},
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
-          width: 60
-        },
-        {
-          headerName: '表格',
-          field: 'f_is_grid',
-          cellStyle: {'text-align': 'center'},
-          cellRendererFramework: DictRendererFramework,
-          cellRendererParams: {dict: 'YesNo'},
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
-          width: 60
-        },
-        {
-          headerName: '表单',
-          field: 'f_is_form',
-          cellStyle: {'text-align': 'center'},
-          cellRendererFramework: DictRendererFramework,
-          cellRendererParams: {dict: 'YesNo'},
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
-          width: 60
+          headerName: 'Web',
+          children: [
+            {
+              headerName: '搜索',
+              field: 'f_is_search',
+              cellStyle: {'text-align': 'center'},
+              cellRendererFramework: DictRendererFramework,
+              cellRendererParams: {dict: 'YesNo'},
+              suppressSorting: true,
+              suppressMenu: true,
+              suppressFilter: true,
+              width: 40
+            },
+            {
+              headerName: '表格',
+              field: 'f_is_grid',
+              cellStyle: {'text-align': 'center'},
+              cellRendererFramework: DictRendererFramework,
+              cellRendererParams: {dict: 'YesNo'},
+              suppressSorting: true,
+              suppressMenu: true,
+              suppressFilter: true,
+              width: 40
+            },
+            {
+              headerName: '表单',
+              field: 'f_is_form',
+              cellStyle: {'text-align': 'center'},
+              cellRendererFramework: DictRendererFramework,
+              cellRendererParams: {dict: 'YesNo'},
+              suppressSorting: true,
+              suppressMenu: true,
+              suppressFilter: true,
+              width: 40
+            }]
         }
       ]
     },
@@ -450,8 +474,9 @@
           f_order: column.ORDINAL_POSITION,
           f_column_name: column.COLUMN_NAME,
           f_column_comment: column.COLUMN_COMMENT,
+          f_column_type: column.COLUMN_TYPE,
           f_full_java_type: 'java.lang.String',
-          f_is_primary: 2,
+          f_is_primary: column.COLUMN_KEY === 'PRI' ? 1 : 2,
           f_is_super_class_field: 2,
           f_is_insert: 2,
           f_is_update: 2,

@@ -8,6 +8,7 @@
         f_order,
         f_column_name,
         f_column_comment,
+        f_column_type,
         f_full_java_type,
         f_is_primary,
         f_is_super_class_field,
@@ -33,6 +34,7 @@
         #{f_order},
         #{f_column_name},
         #{f_column_comment},
+        #{f_column_type},
         #{f_full_java_type},
         #{f_is_primary},
         #{f_is_super_class_field},
@@ -58,6 +60,7 @@
             #{item.f_order},
             #{item.f_column_name},
             #{item.f_column_comment},
+            #{item.f_column_type},
             #{item.f_full_java_type},
             #{item.f_is_primary},
             #{item.f_is_super_class_field},
@@ -85,6 +88,7 @@
         t.f_order,
         t.f_column_name,
         t.f_column_comment,
+        t.f_column_type,
         t.f_full_java_type,
         t.f_is_primary,
         t.f_is_super_class_field,
@@ -151,6 +155,7 @@
         <if test="f_order != null">f_order=#{f_order},</if>
         <if test="f_column_name != null">f_column_name=#{f_column_name},</if>
         <if test="f_column_comment != null">f_column_comment=#{f_column_comment},</if>
+        <if test="f_column_type != null">f_column_type=#{f_column_type},</if>
         <if test="f_full_java_type != null">f_full_java_type=#{f_full_java_type},</if>
         <if test="f_is_primary != null">f_is_primary=#{f_is_primary},</if>
         <if test="f_is_super_class_field != null">f_is_super_class_field=#{f_is_super_class_field},</if>

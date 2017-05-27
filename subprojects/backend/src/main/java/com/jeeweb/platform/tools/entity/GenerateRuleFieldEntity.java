@@ -9,6 +9,7 @@ public class GenerateRuleFieldEntity extends BaseEntity<Integer> {
     private Integer f_order; // 排序
     private String f_column_name; // 字段名
     private String f_column_comment; // 字段描述
+    private String f_column_type; // 字段类型
     private String f_full_java_type; // 字段对应Java数据类型的全路径类名
     private String f_java_type; // 字段对应Java数据类型的类名
     private Boolean f_is_primary; // 是否为主健，1是，2否
@@ -28,7 +29,6 @@ public class GenerateRuleFieldEntity extends BaseEntity<Integer> {
     private Boolean f_is_form; // 是否在Form表单中显示，1是，2否
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    private String f_column_type;
     private String f_is_nullable;
     private String f_default_value;
     private String f_data_type;
