@@ -57,6 +57,14 @@
       }
     },
     computed: {
+      permission () {
+        return {
+          sql: this.hasPermission('KFGJ-CDGL-DCSQL'),
+          add: this.hasPermission('KFGJ-CDGL-ZJ'),
+          edit: this.hasPermission('KFGJ-CDGL-XG'),
+          remove: this.hasPermission('KFGJ-CDGL-SC')
+        }
+      },
       contentStyle () {
         return {'padding': '20px', 'height': (this.$store.state.layout.body.height) + 'px'}
       }
@@ -65,13 +73,8 @@
       var vm = this
       vm.gridOptions = {
         context: {
+          featureComponent: this,
           parentComponent: this,
-          permission: {
-            sql: this.$jw.hasPermission('KFGJ-CDGL-DCSQL'),
-            add: this.$jw.hasPermission('KFGJ-CDGL-ZJ'),
-            edit: this.$jw.hasPermission('KFGJ-CDGL-XG'),
-            remove: this.$jw.hasPermission('KFGJ-CDGL-SC')
-          },
           url: vm.url
         },
         enableFilter: true,
@@ -336,22 +339,33 @@
             cellRendererFramework: Vue.extend({
               template: `<div class="btn-group">
                             <button type="button" class="btn btn-xs btn-primary" title="增加子菜单"
-                              @click.prevent="onAdd" :disabled="!params.context.permission.add || params.node.data.f_type > 2">
+                              @click.prevent="onAdd" :disabled="!permission.add || params.node.data.f_type > 2">
                               <i class="fa fa-plus"></i>
                             </button>
                             <button type="button" class="btn btn btn-xs btn-info" title="修改"
-                              @click.prevent="onEdit" :disabled="!params.context.permission.edit">
+                              @click.prevent="onEdit" :disabled="!permission.edit">
                               <i class="fa fa-edit"></i>
                             </button>
                             <button type="button" class="btn btn-xs btn-danger" title="删除"
-                              @click.prevent="onRemove" :disabled="!params.context.permission.remove || !params.node.data.f_parent_id">
+                              @click.prevent="onRemove" :disabled="!permission.remove || !params.node.data.f_parent_id">
                               <i class="fa fa-trash"></i>
                             </button>
                             <button type="button" class="btn btn-xs btn-default" title="SQL脚本"
-                              @click.prevent="onSql" :disabled="!params.context.permission.sql">
+                              @click.prevent="onSql" :disabled="!permission.sql">
                               <i class="fa fa-file-code-o"></i>
                             </button>
                           </div>`,
+              computed: {
+                featureOptions () {
+                  return this.params.context.featureComponent.featureOptions
+                },
+                permission () {
+                  return this.params.context.featureComponent.permission
+                },
+                entity () {
+                  return this.params.node.data ? this.params.node.data : {}
+                }
+              },
               methods: {
                 onAdd () {
                   this.params.context.parentComponent.onAdd(this.params.node.data)

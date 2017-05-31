@@ -46,12 +46,12 @@
           name: '用户',
           url: 'api/platform/sys/users',
           permission: {
-            unlock: this.$jw.hasPermission('XTGL-YHGL-JS'),
-            resetPassword: this.$jw.hasPermission('XTGL-YHGL-CZMM'),
-            authorize: this.$jw.hasPermission('XTGL-YHGL-SQ'),
-            add: this.$jw.hasPermission('XTGL-YHGL-ZJ'),
-            edit: this.$jw.hasPermission('XTGL-YHGL-XG'),
-            remove: this.$jw.hasPermission('XTGL-YHGL-SC')
+            unlock: this.$store.state.hasPermission('XTGL-YHGL-JS'),
+            resetPassword: this.$store.state.hasPermission('XTGL-YHGL-CZMM'),
+            authorize: this.$store.state.hasPermission('XTGL-YHGL-SQ'),
+            add: this.$store.state.hasPermission('XTGL-YHGL-ZJ'),
+            edit: this.$store.state.hasPermission('XTGL-YHGL-XG'),
+            remove: this.$store.state.hasPermission('XTGL-YHGL-SC')
           }
         },
         formOptions: {
@@ -84,6 +84,16 @@
       }
     },
     computed: {
+      permission () {
+        return {
+          unlock: this.hasPermission('XTGL-YHGL-JS'),
+          resetPassword: this.hasPermission('XTGL-YHGL-CZMM'),
+          authorize: this.hasPermission('XTGL-YHGL-SQ'),
+          add: this.hasPermission('XTGL-YHGL-ZJ'),
+          edit: this.hasPermission('XTGL-YHGL-XG'),
+          remove: this.hasPermission('XTGL-YHGL-SC')
+        }
+      },
       contentStyle () {
         return {'padding': '20px', 'height': (this.$store.state.layout.body.height) + 'px'}
       }

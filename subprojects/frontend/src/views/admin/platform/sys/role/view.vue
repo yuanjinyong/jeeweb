@@ -43,13 +43,7 @@
       return {
         featureOptions: {
           name: '角色',
-          url: 'api/platform/sys/roles',
-          permission: {
-            authorize: this.$jw.hasPermission('XTGL-JSGL-SQ'),
-            add: this.$jw.hasPermission('XTGL-JSGL-ZJ'),
-            edit: this.$jw.hasPermission('XTGL-JSGL-XG'),
-            remove: this.$jw.hasPermission('XTGL-JSGL-SC')
-          }
+          url: 'api/platform/sys/roles'
         },
         formOptions: {
           isShow: false,
@@ -82,6 +76,14 @@
       }
     },
     computed: {
+      permission () {
+        return {
+          authorize: this.$store.state.permissionList.indexOf('XTGL-JSGL-SQ') > -1,
+          add: this.$store.state.permissionList.indexOf('XTGL-JSGL-ZJ') > -1,
+          edit: this.$store.state.permissionList.indexOf('XTGL-JSGL-XG') > -1,
+          remove: this.$store.state.permissionList.indexOf('XTGL-JSGL-SC') > -1
+        }
+      },
       contentStyle () {
         return {'padding': '20px', 'height': (this.$store.state.layout.body.height) + 'px'}
       }

@@ -52,7 +52,7 @@
         return this.params.context.featureComponent.featureOptions
       },
       permission () {
-        return this.params.context.featureComponent.featureOptions.permission
+        return this.params.context.featureComponent.permission
       },
       entity () {
         return this.params.node.data ? this.params.node.data : {}

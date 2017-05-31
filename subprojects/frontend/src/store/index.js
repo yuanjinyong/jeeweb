@@ -19,6 +19,21 @@ const store = new Vuex.Store({
     originalRoute: null,
     user: null,
     menuList: [],
+    permissionList: [],
+    hasPermission (f_menu_id) {
+      return this.permissionList.indexOf(f_menu_id) > -1
+    },
+    _addPermission (menus, permissions) {
+      menus.forEach((menu) => {
+        if (menu.f_type >= 3) { // 只有按钮和令牌才需要在这里判断，根、目录、页面不需要进行权限判断
+          permissions.push(menu.f_id)
+        }
+
+        if (menu.children && menu.children.length > 0) {
+          this._addPermission(menu.children, permissions)
+        }
+      })
+    },
     dicts: {
       'YesNo': {1: '是', 2: '否'},
       'UserStatus': {1: '正常', 2: '锁定', 3: '注销'},
@@ -58,6 +73,8 @@ const store = new Vuex.Store({
     },
     setMenuList (state, payload) {
       state.menuList = payload.menuList
+      state.permissionList = []
+      state._addPermission(state.menuList, state.permissionList)
     },
     backupRoute (state, payload) {
       state.originalRoute = payload
@@ -69,5 +86,8 @@ const store = new Vuex.Store({
   }
 })
 Vue.store = store
+Vue.prototype.hasPermission = function (f_menu_id) {
+  return Vue.store.state.hasPermission(f_menu_id)
+}
 
 export default store

@@ -33,13 +33,7 @@
       return {
         featureOptions: {
           name: '生成规则',
-          url: 'api/platform/tools/code/generate/rules',
-          permission: {
-            generate: this.$jw.hasPermission('KFGJ-DMSC-SCDM'),
-            add: this.$jw.hasPermission('KFGJ-DMSC-ZJ'),
-            edit: this.$jw.hasPermission('KFGJ-DMSC-XG'),
-            remove: this.$jw.hasPermission('KFGJ-DMSC-SC')
-          }
+          url: 'api/platform/tools/code/generate/rules'
         },
         formOptions: {
           isShow: false,
@@ -62,6 +56,14 @@
       }
     },
     computed: {
+      permission () {
+        return {
+          generate: this.$store.state.hasPermission('KFGJ-DMSC-SCDM'),
+          add: this.$store.state.hasPermission('KFGJ-DMSC-ZJ'),
+          edit: this.$store.state.hasPermission('KFGJ-DMSC-XG'),
+          remove: this.$store.state.hasPermission('KFGJ-DMSC-SC')
+        }
+      },
       contentStyle () {
         return {'padding': '20px', 'height': (this.$store.state.layout.body.height) + 'px'}
       }
