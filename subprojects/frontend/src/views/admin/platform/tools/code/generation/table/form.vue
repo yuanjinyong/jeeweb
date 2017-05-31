@@ -82,7 +82,8 @@
 
 <script type="text/ecmascript-6">
   import { AgGridVue } from 'ag-grid-vue'
-  import DictRendererFramework from 'components/ag-grid/DictRendererFramework'
+  import CheckboxEditorFramework from 'components/ag-grid/CheckboxEditorFramework'
+  import DictEditorFramework from 'components/ag-grid/DictEditorFramework'
 
   export default {
     name: 'generateRuleTableForm',
@@ -183,24 +184,23 @@
       }
     },
     created () {
+      this.gridOptions.defaultColDef = {
+        suppressSorting: true,
+        suppressMenu: true,
+        suppressFilter: true
+      }
       this.gridOptions.columnDefs = [
         {
           headerName: '#',
           field: 'f_order',
           pinned: 'left',
           cellStyle: {'text-align': 'right'},
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 30
         },
         {
           headerName: '字段名',
           field: 'f_column_name',
           pinned: 'left',
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 120
         },
         {
@@ -210,17 +210,11 @@
               headerName: '描述',
               field: 'f_column_comment',
               tooltipField: 'f_column_comment',
-              suppressSorting: true,
-              suppressMenu: true,
-              suppressFilter: true,
               width: 280
             },
             {
               headerName: '列类型',
               field: 'f_column_type',
-              suppressSorting: true,
-              suppressMenu: true,
-              suppressFilter: true,
               width: 100
             }]
         },
@@ -230,9 +224,26 @@
             {
               headerName: 'Java数据类型',
               field: 'f_full_java_type',
-              suppressSorting: true,
-              suppressMenu: true,
-              suppressFilter: true,
+              editable: true,
+              cellRendererFramework: DictEditorFramework,
+              cellRendererParams: {
+                dict: [{
+                  f_item_code: 'java.lang.String',
+                  f_item_text: 'java.lang.String'
+                }, {
+                  f_item_code: 'java.lang.Integer',
+                  f_item_text: 'java.lang.Integer'
+                }, {
+                  f_item_code: 'java.lang.Double',
+                  f_item_text: 'java.lang.Double'
+                }, {
+                  f_item_code: 'java.lang.Boolean',
+                  f_item_text: 'java.lang.Boolean'
+                }, {
+                  f_item_code: 'java.sql.Timestamp',
+                  f_item_text: 'java.sql.Timestamp'
+                }]
+              },
               width: 180
             },
             {
@@ -240,22 +251,14 @@
               headerTooltip: '继承父类的字段',
               field: 'f_is_super_class_field',
               cellStyle: {'text-align': 'center'},
-              cellRendererFramework: DictRendererFramework,
-              cellRendererParams: {dict: 'YesNo'},
-              suppressSorting: true,
-              suppressMenu: true,
-              suppressFilter: true,
+              cellRendererFramework: CheckboxEditorFramework,
               width: 40
             },
             {
               headerName: '主键',
               field: 'f_is_primary',
               cellStyle: {'text-align': 'center'},
-              cellRendererFramework: DictRendererFramework,
-              cellRendererParams: {dict: 'YesNo'},
-              suppressSorting: true,
-              suppressMenu: true,
-              suppressFilter: true,
+              cellRendererFramework: CheckboxEditorFramework,
               width: 40
             }]
         },
@@ -266,88 +269,56 @@
               headerName: '插入',
               field: 'f_is_insert',
               cellStyle: {'text-align': 'center'},
-              cellRendererFramework: DictRendererFramework,
-              cellRendererParams: {dict: 'YesNo'},
-              suppressSorting: true,
-              suppressMenu: true,
-              suppressFilter: true,
+              cellRendererFramework: CheckboxEditorFramework,
               width: 40
             },
             {
               headerName: '更新',
               field: 'f_is_update',
               cellStyle: {'text-align': 'center'},
-              cellRendererFramework: DictRendererFramework,
-              cellRendererParams: {dict: 'YesNo'},
-              suppressSorting: true,
-              suppressMenu: true,
-              suppressFilter: true,
+              cellRendererFramework: CheckboxEditorFramework,
               width: 40
             },
             {
               headerName: '查询',
               field: 'f_is_select',
               cellStyle: {'text-align': 'center'},
-              cellRendererFramework: DictRendererFramework,
-              cellRendererParams: {dict: 'YesNo'},
-              suppressSorting: true,
-              suppressMenu: true,
-              suppressFilter: true,
+              cellRendererFramework: CheckboxEditorFramework,
               width: 40
             },
             {
               headerName: '等于',
               field: 'f_is_equal',
               cellStyle: {'text-align': 'center'},
-              cellRendererFramework: DictRendererFramework,
-              cellRendererParams: {dict: 'YesNo'},
-              suppressSorting: true,
-              suppressMenu: true,
-              suppressFilter: true,
+              cellRendererFramework: CheckboxEditorFramework,
               width: 40
             },
             {
               headerName: '模糊',
               field: 'f_is_like',
               cellStyle: {'text-align': 'center'},
-              cellRendererFramework: DictRendererFramework,
-              cellRendererParams: {dict: 'YesNo'},
-              suppressSorting: true,
-              suppressMenu: true,
-              suppressFilter: true,
+              cellRendererFramework: CheckboxEditorFramework,
               width: 40
             },
             {
               headerName: '左模',
               field: 'f_is_left_like',
               cellStyle: {'text-align': 'center'},
-              cellRendererFramework: DictRendererFramework,
-              cellRendererParams: {dict: 'YesNo'},
-              suppressSorting: true,
-              suppressMenu: true,
-              suppressFilter: true,
+              cellRendererFramework: CheckboxEditorFramework,
               width: 40
             },
             {
               headerName: '右模',
               field: 'f_is_right_like',
               cellStyle: {'text-align': 'center'},
-              cellRendererFramework: DictRendererFramework,
-              cellRendererParams: {dict: 'YesNo'},
-              suppressSorting: true,
-              suppressMenu: true,
-              suppressFilter: true,
+              cellRendererFramework: CheckboxEditorFramework,
               width: 40
             },
             {
               headerName: 'In',
               field: 'f_is_in',
               cellStyle: {'text-align': 'center'},
-              cellRendererFramework: DictRendererFramework,
-              cellRendererParams: {dict: 'YesNo'},
-              suppressSorting: true,
-              suppressMenu: true,
-              suppressFilter: true,
+              cellRendererFramework: CheckboxEditorFramework,
               width: 40
             },
             {
@@ -355,11 +326,7 @@
               headerTooltip: 'Not In',
               field: 'f_is_not_in',
               cellStyle: {'text-align': 'center'},
-              cellRendererFramework: DictRendererFramework,
-              cellRendererParams: {dict: 'YesNo'},
-              suppressSorting: true,
-              suppressMenu: true,
-              suppressFilter: true,
+              cellRendererFramework: CheckboxEditorFramework,
               width: 40
             },
             {
@@ -367,11 +334,7 @@
               headerTooltip: 'Between',
               field: 'f_is_between',
               cellStyle: {'text-align': 'center'},
-              cellRendererFramework: DictRendererFramework,
-              cellRendererParams: {dict: 'YesNo'},
-              suppressSorting: true,
-              suppressMenu: true,
-              suppressFilter: true,
+              cellRendererFramework: CheckboxEditorFramework,
               width: 40
             }]
         },
@@ -382,33 +345,21 @@
               headerName: '搜索',
               field: 'f_is_search',
               cellStyle: {'text-align': 'center'},
-              cellRendererFramework: DictRendererFramework,
-              cellRendererParams: {dict: 'YesNo'},
-              suppressSorting: true,
-              suppressMenu: true,
-              suppressFilter: true,
+              cellRendererFramework: CheckboxEditorFramework,
               width: 40
             },
             {
               headerName: '表格',
               field: 'f_is_grid',
               cellStyle: {'text-align': 'center'},
-              cellRendererFramework: DictRendererFramework,
-              cellRendererParams: {dict: 'YesNo'},
-              suppressSorting: true,
-              suppressMenu: true,
-              suppressFilter: true,
+              cellRendererFramework: CheckboxEditorFramework,
               width: 40
             },
             {
               headerName: '表单',
               field: 'f_is_form',
               cellStyle: {'text-align': 'center'},
-              cellRendererFramework: DictRendererFramework,
-              cellRendererParams: {dict: 'YesNo'},
-              suppressSorting: true,
-              suppressMenu: true,
-              suppressFilter: true,
+              cellRendererFramework: CheckboxEditorFramework,
               width: 40
             }]
         }

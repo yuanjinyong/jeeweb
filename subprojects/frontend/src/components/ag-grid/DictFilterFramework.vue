@@ -27,7 +27,6 @@
       }
     },
     created () {
-      console.info('created', this)
       this.valueGetter = this.params.valueGetter
       if (typeof (this.params.dict) === 'object') {
         if (typeof (this.params.dict.length) !== 'undefined') {
