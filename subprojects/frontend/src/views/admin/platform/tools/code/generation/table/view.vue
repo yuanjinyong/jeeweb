@@ -9,7 +9,11 @@
 
     <el-dialog v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false" :modal="false"
       :size="'full'" :custom-class="'jw-dialog jw-dialog-full'">
-      <generation-rule-table-form :form-options="formOptions" :generate-rule="generateRule" v-if="formOptions.isShow">
+      <generation-rule-table-form
+        :form-options="formOptions"
+        :generate-rule="generateRule"
+        @submit="onSubmit"
+        v-if="formOptions.isShow">
       </generation-rule-table-form>
     </el-dialog>
   </div>
@@ -31,6 +35,10 @@
       GenerationRuleTableForm
     },
     props: {
+      operation: {
+        type: String,
+        default: 'view'
+      },
       generateRule: {
         type: Object,
         default: function () {
@@ -86,6 +94,7 @@
       }
     },
     created () {
+      var vm = this
       this.gridOptions.columnDefs = [
         {
           headerName: '#',
@@ -145,9 +154,15 @@
           cellRendererFramework: OperationRendererFramework,
           cellRendererParams: {
             operations: [{
-              id: 'edit'
+              id: 'edit',
+              isDisabled: function (entity) {
+                return vm.operation === 'view'
+              }
             }, {
-              id: 'remove'
+              id: 'remove',
+              isDisabled: function (entity) {
+                return vm.operation === 'view'
+              }
             }]
           },
           suppressSorting: true,
@@ -157,6 +172,10 @@
         }
       ]
     },
-    methods: {}
+    methods: {
+      onSubmit (event) {
+        console.debug('onSubmit', event, this.formOptions.params)
+      }
+    }
   }
 </script>

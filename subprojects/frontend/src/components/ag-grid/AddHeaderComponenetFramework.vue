@@ -21,7 +21,7 @@
         return this.params.context.featureComponent.featureOptions
       },
       permission () {
-        return this.params.context.featureComponent.permission
+        return this.params.context.featureComponent.permission || {add: true}
       }
     },
     methods: {

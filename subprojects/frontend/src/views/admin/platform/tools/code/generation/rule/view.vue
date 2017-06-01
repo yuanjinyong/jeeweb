@@ -58,10 +58,10 @@
     computed: {
       permission () {
         return {
-          generate: this.$store.state.hasPermission('KFGJ-DMSC-SCDM'),
-          add: this.$store.state.hasPermission('KFGJ-DMSC-ZJ'),
-          edit: this.$store.state.hasPermission('KFGJ-DMSC-XG'),
-          remove: this.$store.state.hasPermission('KFGJ-DMSC-SC')
+          generate: this.hasPermission('KFGJ-DMSC-SCDM'),
+          add: this.hasPermission('KFGJ-DMSC-ZJ'),
+          edit: this.hasPermission('KFGJ-DMSC-XG'),
+          remove: this.hasPermission('KFGJ-DMSC-SC')
         }
       },
       contentStyle () {

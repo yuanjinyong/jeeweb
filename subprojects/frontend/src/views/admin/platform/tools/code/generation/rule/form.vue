@@ -35,7 +35,7 @@
             <el-input v-model="entity.f_package_name" class="jw-field-col-2"></el-input>
           </el-form-item>
 
-          <generation-rule-table style="height: 302px;" :generate-rule="entity">
+          <generation-rule-table style="height: 302px;" :operation="formOptions.operation" :generate-rule="entity">
           </generation-rule-table>
         </fieldset>
       </el-form>
@@ -127,6 +127,7 @@
             return false
           }
 
+          console.debug('onSubmitForm', vm.entity)
           if (vm.formOptions.operation === 'add') {
             vm.$http.post(vm.featureOptions.url, vm.entity).then((response) => {
               vm._submitted(response)

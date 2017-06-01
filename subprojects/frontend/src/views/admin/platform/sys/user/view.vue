@@ -44,15 +44,7 @@
       return {
         featureOptions: {
           name: '用户',
-          url: 'api/platform/sys/users',
-          permission: {
-            unlock: this.$store.state.hasPermission('XTGL-YHGL-JS'),
-            resetPassword: this.$store.state.hasPermission('XTGL-YHGL-CZMM'),
-            authorize: this.$store.state.hasPermission('XTGL-YHGL-SQ'),
-            add: this.$store.state.hasPermission('XTGL-YHGL-ZJ'),
-            edit: this.$store.state.hasPermission('XTGL-YHGL-XG'),
-            remove: this.$store.state.hasPermission('XTGL-YHGL-SC')
-          }
+          url: 'api/platform/sys/users'
         },
         formOptions: {
           isShow: false,

@@ -78,10 +78,10 @@
     computed: {
       permission () {
         return {
-          authorize: this.$store.state.permissionList.indexOf('XTGL-JSGL-SQ') > -1,
-          add: this.$store.state.permissionList.indexOf('XTGL-JSGL-ZJ') > -1,
-          edit: this.$store.state.permissionList.indexOf('XTGL-JSGL-XG') > -1,
-          remove: this.$store.state.permissionList.indexOf('XTGL-JSGL-SC') > -1
+          authorize: this.hasPermission('XTGL-JSGL-SQ'),
+          add: this.hasPermission('XTGL-JSGL-ZJ'),
+          edit: this.hasPermission('XTGL-JSGL-XG'),
+          remove: this.hasPermission('XTGL-JSGL-SC')
         }
       },
       contentStyle () {
