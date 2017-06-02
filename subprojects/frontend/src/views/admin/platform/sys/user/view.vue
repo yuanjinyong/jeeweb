@@ -113,9 +113,9 @@
           field: 'f_account',
           pinned: 'left',
           suppressFilter: false,
+          filterFramework: LikeFilterFramework,
           floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
           floatingFilterComponentParams: {suppressFilterButton: true},
-          filterFramework: LikeFilterFramework,
           cellRendererFramework: ViewRendererFramework,
           width: 100
         },

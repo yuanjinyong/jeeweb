@@ -2,7 +2,8 @@
 </style>
 
 <template>
-  <el-input :ref="'input'" v-model="value" @change="onChange" placeholder="支持模糊过滤"></el-input>
+  <el-input class="jw-floating-filter" :ref="'input'" v-model="value" @change="onChange" placeholder="支持模糊过滤">
+  </el-input>
 </template>
 
 <script type="text/ecmascript-6">

@@ -107,6 +107,10 @@
     margin-right: 20px;
   }
 
+  .jw-floating-filter {
+    font-size: 12px;
+  }
+
   .jw-dialog {
     min-width: 650px;
     margin-bottom: 30px;
