@@ -8,31 +8,31 @@
       <el-form ref="form" :model="entity" :rules="rules" :inline="true" :label-width="labelWidth">
         <fieldset :disabled="formOptions.operation === 'view'">
           <el-form-item label="规则编码" prop="f_code">
-            <el-input v-model="entity.f_code"></el-input>
+            <el-input class="jw-field-col-1" v-model="entity.f_code"></el-input>
           </el-form-item>
           <el-form-item label="规则名称" prop="f_name">
-            <el-input v-model="entity.f_name"></el-input>
+            <el-input class="jw-field-col-1" v-model="entity.f_name"></el-input>
           </el-form-item>
           <el-form-item label="父级菜单" prop="f_menu_parent_id">
-            <el-input v-model="entity.f_menu_parent_id"></el-input>
+            <el-input class="jw-field-col-1" v-model="entity.f_menu_parent_id"></el-input>
           </el-form-item>
           <el-form-item label="排序" prop="f_menu_order">
-            <el-input-number v-model="entity.f_menu_order" :step="5"></el-input-number>
+            <el-input-number class="jw-field-col-1" v-model="entity.f_menu_order" :step="5"></el-input-number>
           </el-form-item>
           <el-form-item label="菜单编码" prop="f_menu_id">
-            <el-input v-model="entity.f_menu_id"></el-input>
+            <el-input class="jw-field-col-1" v-model="entity.f_menu_id"></el-input>
           </el-form-item>
           <el-form-item label="菜单名称" prop="f_menu_name">
-            <el-input v-model="entity.f_menu_name"></el-input>
+            <el-input class="jw-field-col-1" v-model="entity.f_menu_name"></el-input>
           </el-form-item>
           <el-form-item label="菜单描述" prop="f_menu_remark">
-            <el-input v-model="entity.f_menu_remark"></el-input>
+            <el-input class="jw-field-col-1" v-model="entity.f_menu_remark"></el-input>
           </el-form-item>
           <el-form-item label="URL" prop="f_request_url">
-            <el-input v-model="entity.f_request_url" class="jw-field-col-2"></el-input>
+            <el-input class="jw-field-col-2" v-model="entity.f_request_url"></el-input>
           </el-form-item>
           <el-form-item label="模块包名" prop="f_package_name">
-            <el-input v-model="entity.f_package_name" class="jw-field-col-2"></el-input>
+            <el-input class="jw-field-col-2" v-model="entity.f_package_name"></el-input>
           </el-form-item>
 
           <generation-rule-table style="height: 302px;" :operation="formOptions.operation" :generate-rule="entity">
@@ -89,7 +89,7 @@
         }
       },
       labelWidth () {
-        return (this.formOptions.labelWidth ? this.formOptions.labelWidth : 100) + 'px'
+        return (this.formOptions.labelWidth ? this.formOptions.labelWidth : 150) + 'px'
       },
       featureOptions () {
         return this.formOptions.context.featureComponent.featureOptions

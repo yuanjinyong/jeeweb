@@ -8,19 +8,19 @@
       <el-form ref="form" :model="entity" :rules="rules" :inline="true" :label-width="labelWidth">
         <fieldset :disabled="formOptions.operation === 'view'">
           <el-form-item label="名称" prop="f_name">
-            <el-input v-model="entity.f_name"></el-input>
+            <el-input class="jw-field-col-1" v-model="entity.f_name"></el-input>
           </el-form-item>
           <el-form-item label="系统预置" prop="f_is_preset">
-            <el-radio-group v-model="entity.f_is_preset">
+            <el-radio-group class="jw-field-col-1" v-model="entity.f_is_preset">
               <el-radio :label="1" disabled>是</el-radio>
               <el-radio :label="2" disabled>否</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="描述" prop="f_desc">
-            <el-input v-model="entity.f_desc" type="textarea" autosize style="width: 496px;"></el-input>
+            <el-input class="jw-field-col-2" v-model="entity.f_desc" type="textarea" autosize></el-input>
           </el-form-item>
           <el-form-item label="备注" prop="f_remark">
-            <el-input v-model="entity.f_remark" type="textarea" autosize style="width: 496px;"></el-input>
+            <el-input class="jw-field-col-2" v-model="entity.f_remark" type="textarea" autosize></el-input>
           </el-form-item>
         </fieldset>
       </el-form>
@@ -74,7 +74,7 @@
         }
       },
       labelWidth () {
-        return (this.formOptions.labelWidth ? this.formOptions.labelWidth : 100) + 'px'
+        return (this.formOptions.labelWidth ? this.formOptions.labelWidth : 150) + 'px'
       },
       featureOptions () {
         return this.formOptions.context.featureComponent.featureOptions
@@ -113,9 +113,13 @@
           }
 
           if (vm.formOptions.operation === 'add') {
-            vm.$http.post(vm.featureOptions.url, vm.entity).then((response) => { vm._submitted(response) })
+            vm.$http.post(vm.featureOptions.url, vm.entity).then(function (response) {
+              vm._submitted(response)
+            })
           } else {
-            vm.$http.put(vm.featureOptions.url + '/' + vm.formOptions.params.f_id, vm.entity).then((response) => { vm._submitted(response) })
+            vm.$http.put(vm.featureOptions.url + '/' + vm.formOptions.params.f_id, vm.entity).then(function (response) {
+              vm._submitted(response)
+            })
           }
 
           return true

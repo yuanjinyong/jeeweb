@@ -8,7 +8,7 @@
       <el-form ref="form" :model="entity" :rules="rules" :inline="true" :label-width="labelWidth">
         <fieldset :disabled="formOptions.operation === 'view'">
           <el-form-item label="数据库名" prop="f_db_name">
-            <el-select v-model="entity.f_db_name">
+            <el-select class="jw-field-col-1" v-model="entity.f_db_name">
               <el-option v-for="item in schematas"
                 :key="item.SCHEMA_NAME"
                 :value="item.SCHEMA_NAME"
@@ -18,21 +18,21 @@
             </el-select>
           </el-form-item>
           <el-form-item label="数据库表名" prop="f_table_name">
-            <el-autocomplete v-model="entity.f_table_name" icon="search" class="jw-field-col-1"
+            <el-autocomplete class="jw-field-col-1" v-model="entity.f_table_name" icon="search"
               :fetch-suggestions="loadTables" @select="loadFields">
             </el-autocomplete>
           </el-form-item>
           <el-form-item label="排序" prop="f_order">
-            <el-input-number v-model="entity.f_order" :step="1"></el-input-number>
+            <el-input-number class="jw-field-col-1" v-model="entity.f_order" :step="1"></el-input-number>
           </el-form-item>
           <el-form-item label="主表" prop="f_is_main">
-            <el-radio-group v-model="entity.f_is_main">
+            <el-radio-group class="jw-field-col-1" v-model="entity.f_is_main">
               <el-radio :label="1">是</el-radio>
               <el-radio :label="2">否</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="父类" prop="f_entity_base_class">
-            <el-select v-model="entity.f_entity_base_class">
+            <el-select class="jw-field-col-1" v-model="entity.f_entity_base_class">
               <el-option v-for="baseClass in baseClasses"
                 :key="baseClass.fullName"
                 :value="baseClass.fullName"
@@ -42,7 +42,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="接口" prop="f_entity_interfaces">
-            <el-select v-model="f_entity_interfaces" class="jw-field-col-3" multiple>
+            <el-select class="jw-field-col-3" v-model="f_entity_interfaces" multiple>
               <el-option v-for="interface in interfaces"
                 :key="interface.fullName"
                 :value="interface.fullName"
@@ -52,20 +52,21 @@
             </el-select>
           </el-form-item>
           <el-form-item label="Entity" prop="f_entity_class">
-            <el-input v-model="entity.f_entity_class" class="jw-field-col-2"
-              placeholder="Map类型请填写“com.jeeweb.framework.core.model.RowMap”。"></el-input>
+            <el-input class="jw-field-col-2" v-model="entity.f_entity_class"
+              placeholder="Map类型请填写“com.jeeweb.framework.core.model.RowMap”。">
+            </el-input>
           </el-form-item>
           <el-form-item label="Mapper" prop="f_mapper_class">
-            <el-input v-model="entity.f_mapper_class" class="jw-field-col-2"></el-input>
+            <el-input class="jw-field-col-2" v-model="entity.f_mapper_class"></el-input>
           </el-form-item>
           <el-form-item label="Service" prop="f_service_class">
-            <el-input v-model="entity.f_service_class" class="jw-field-col-2"></el-input>
+            <el-input class="jw-field-col-2" v-model="entity.f_service_class"></el-input>
           </el-form-item>
           <el-form-item label="Api" prop="f_rest_class">
-            <el-input v-model="entity.f_rest_class" class="jw-field-col-2"></el-input>
+            <el-input class="jw-field-col-2" v-model="entity.f_rest_class"></el-input>
           </el-form-item>
 
-          <ag-grid-vue style="width: 100%; height: 450px;" class="ag-fresh jw-grid" :grid-options="gridOptions">
+          <ag-grid-vue style="width: 100%; height: 256px;" class="ag-fresh jw-grid" :grid-options="gridOptions">
           </ag-grid-vue>
         </fieldset>
       </el-form>
@@ -140,10 +141,7 @@
           rowData: [],
           pagination: false,
           enableFilter: false,
-          floatingFilter: false,
-          suppressContextMenu: true,
-          suppressMenuMainPanel: true,
-          suppressMenuColumnPanel: true
+          floatingFilter: false
         }),
         entity: {fieldList: []},
         rules: {
@@ -177,18 +175,13 @@
         }
       },
       labelWidth () {
-        return (this.formOptions.labelWidth ? this.formOptions.labelWidth : 100) + 'px'
+        return (this.formOptions.labelWidth ? this.formOptions.labelWidth : 150) + 'px'
       },
       featureOptions () {
         return this.formOptions.context.featureComponent.featureOptions
       }
     },
     created () {
-      this.gridOptions.defaultColDef = {
-        suppressSorting: true,
-        suppressMenu: true,
-        suppressFilter: true
-      }
       this.gridOptions.columnDefs = [
         {
           headerName: '#',
@@ -389,15 +382,13 @@
             orderBy: 'TABLE_NAME'
           }
         }).then(function (response) {
+          var tables = []
           if (response.body.success) {
-            var tables = []
             response.body.data.items.forEach((table) => {
               tables.push({value: table.TABLE_NAME})
             })
-            callback && callback(tables)
-          } else {
-            callback && callback([])
           }
+          callback && callback(tables)
         })
       },
       loadFields (item) {

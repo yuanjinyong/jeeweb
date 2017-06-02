@@ -4,7 +4,7 @@
 
 <template>
   <div class="jw-form">
-    <div class="jw-form-body" style="max-height: 500px;overflow-y: auto;">
+    <div class="jw-form-body" :style="formBodyStyle">
       <el-form ref="form" :model="entity">
         <fieldset>
           <el-form-item prop="sql">
@@ -25,22 +25,41 @@
 
 <script type="text/ecmascript-6">
   export default {
-    name: 'sqlForm',
+    name: 'menuSqlForm',
     props: {
-      params: {
+      formOptions: {
         type: Object,
         default: function () {
           return {
             operation: 'view',
-            entity: {}
+            title: 'SQL脚本',
+            maxHeight: 500,
+            labelWidth: 100,
+            params: {},
+            context: {
+              featureComponent: {}
+            }
           }
         }
       }
     },
     data () {
       return {
-        url: 'api/platform/sys/menus',
         entity: {sql: null}
+      }
+    },
+    computed: {
+      formBodyStyle () {
+        return {
+          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : 500) + 'px',
+          'overflow-y': 'auto'
+        }
+      },
+      labelWidth () {
+        return (this.formOptions.labelWidth ? this.formOptions.labelWidth : 150) + 'px'
+      },
+      featureOptions () {
+        return this.formOptions.context.featureComponent.featureOptions
       }
     },
     mounted () {
@@ -53,7 +72,7 @@
       },
       query (params) {
         var vm = this
-        vm.$http.get(vm.url + '/' + vm.params.entity.f_id + '/sql').then(function (response) {
+        vm.$http.get(vm.featureOptions.url + '/' + vm.formOptions.params.f_id + '/sql').then(function (response) {
           var data = response.body.success ? response.body.data : {}
           var menuStr = '/*Data for the table `t_sys_menu` */\n'
           menuStr += vm._appendMenus(data.menuList)
@@ -72,7 +91,7 @@
             })
           }
 
-          var sql = '-- ' + vm.params.entity.f_id + ' ' + vm.params.entity.f_name + '\n'
+          var sql = '-- ' + vm.formOptions.params.f_id + ' ' + vm.formOptions.params.f_name + '\n'
           sql += menuStr + '\n'
           sql += menuUrlStr + '\n'
           sql += roleMenuStr + '\n'
@@ -108,7 +127,13 @@
         return menuStr
       },
       onCancelForm (formName) {
+        this._closeForm()
         this.$emit('cancel')
+      },
+      _closeForm () {
+        if (this.formOptions.context.featureComponent.sqlFormOptions) {
+          this.formOptions.context.featureComponent.sqlFormOptions.isShow = false
+        }
       }
     }
   }

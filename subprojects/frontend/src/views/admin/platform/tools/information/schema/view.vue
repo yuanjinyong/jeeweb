@@ -20,8 +20,19 @@
     },
     data () {
       return {
-        url: 'api/platform/schema/information/columns',
-        gridOptions: null
+        featureOptions: {
+          name: '数据库列',
+          url: 'api/platform/schema/information/columns'
+        },
+        gridOptions: this.$grid.buildOptions({
+          context: {
+            featureComponent: this,
+            params: {
+              orderBy: 'TABLE_SCHEMA,TABLE_NAME,ORDINAL_POSITION',
+              totalCount: 0
+            }
+          }
+        })
       }
     },
     computed: {
@@ -29,256 +40,200 @@
         return {'padding': '20px', 'height': (this.$store.state.layout.body.height) + 'px'}
       }
     },
-    beforeMount () {
-      var vm = this
-      vm.gridOptions = this.$buildGridOptions({
-        context: {url: vm.url, params: {orderBy: 'TABLE_SCHEMA,TABLE_NAME,ORDINAL_POSITION', totalCount: 0}},
-        datasource: {
-          // rowCount: null,
-          getRows (gridParams) {
-            console.debug('getRows', 'datasource', this, 'gridParams', gridParams)
-
-            var page = {
-              pageSize: gridParams.endRow - gridParams.startRow,
-              pageNo: gridParams.startRow / (gridParams.endRow - gridParams.startRow)
-            }
-            if (gridParams.sortModel && gridParams.sortModel.length > 0) {
-              page.orderBy = ''
-              gridParams.sortModel.forEach(function (order, idx, orders) {
-                page.orderBy += page.orderBy + order.colId + ' ' + order.sort + ', '
-              })
-              page.orderBy = page.orderBy.substr(0, page.orderBy.length - 2)
-            }
-
-            var filters = {}
-            for (var key in gridParams.filterModel) {
-              var where = gridParams.filterModel[key]
-              if (!where.filter) {
-                continue
-              }
-
-              gridParams.context.params.totalCount = 0
-              if (where.filterType === 'text' && where.type === 'equals') {
-                filters[key] = where.filter
-              } else if (where.filterType === 'text' && where.type === 'contains') {
-                filters[key + '_like'] = where.filter
-              } else if (where.filterType === 'text' && where.type === 'startsWith') {
-                filters[key + '_rightLike'] = where.filter
-              } else if (where.filterType === 'text' && where.type === 'endsWith') {
-                filters[key + '_leftLike'] = where.filter
-              } else {
-                filters[key] = where.filter ? where.filter : null
-              }
-            }
-
-            vm.$http.get(gridParams.context.url, {params: Object.assign({}, gridParams.context.params, page, filters)}).then(function (response) {
-              if (response.body.success) {
-                gridParams.context.params.totalCount = response.body.data.totalCount
-                gridParams.successCallback(response.body.data.items, response.body.data.totalCount)
-              } else {
-                gridParams.failCallback()
-              }
-            })
-          }
+    created () {
+      this.gridOptions.columnDefs = [
+        {
+          headerName: '',
+          pinned: 'left',
+          checkboxSelection: true,
+          // headerCheckboxSelection: true,
+          cellStyle: {'text-align': 'center'},
+          suppressSorting: true,
+          suppressMenu: true,
+          suppressFilter: true,
+          width: 24
         },
-        columnDefs: [
-          {
-            headerName: '',
-            checkboxSelection: true,
-            // headerCheckboxSelection: true,
-            pinned: 'left',
-            cellStyle: {'text-align': 'center'},
-            width: 24,
-            suppressSorting: true,
-            suppressMenu: true,
-            suppressFilter: true
+        {
+          headerName: '#',
+          pinned: 'left',
+          cellStyle: {'text-align': 'right'},
+          cellRenderer: function (params) {
+            return params.rowIndex + 1
           },
-          {
-            headerName: '#',
-            pinned: 'left',
-            cellStyle: {'text-align': 'right'},
-            width: 38,
-            cellRenderer: function (params) {
-              return params.rowIndex + 1
+          suppressSorting: true,
+          suppressMenu: true,
+          suppressFilter: true,
+          width: 38
+        },
+        {
+          headerName: '数据库名',
+          field: 'TABLE_SCHEMA',
+          tooltipField: 'TABLE_SCHEMA',
+          pinned: 'left',
+          suppressFilter: false,
+          filterFramework: Vue.extend({
+            template: `<el-select :ref="'input'" v-model="text" clearable placeholder="请点击选择数据库名">
+                          <el-option v-for="item in items" :key="item.SCHEMA_NAME" :label="item.SCHEMA_NAME" :value="item.SCHEMA_NAME"></el-option>
+                        </el-select>`,
+            data () {
+              return {
+                items: [],
+                text: '',
+                valueGetter: null
+              }
             },
-            suppressSorting: true,
-            suppressMenu: true,
-            suppressFilter: true
-          },
-          {
-            headerName: '数据库名',
-            field: 'TABLE_SCHEMA',
-            // filter: 'text',
-            // filterParams: {applyButton: true, clearButton: true},
-            // floatingFilterComponentFramework: Vue.extend({
-            filterFramework: Vue.extend({
-              name: 'schemaSelect',
-              template: `<el-select :ref="'input'" v-model="text" clearable placeholder="请点击选择数据库名">
-                            <el-option v-for="item in items" :key="item.SCHEMA_NAME" :label="item.SCHEMA_NAME" :value="item.SCHEMA_NAME"></el-option>
-                          </el-select>`,
-              data () {
-                return {
-                  loading: false,
-                  items: [],
-                  text: '',
-                  valueGetter: null
-                }
-              },
-              watch: {
-                'text': function (val, oldVal) {
-                  if (val !== oldVal) {
-                    this.params.filterChangedCallback()
-                  }
-                }
-              },
-              created () {
-                window.devMode && console.info('created', this.$options.name, this._uid)
-                this.valueGetter = this.params.valueGetter
-                this.loadSchematas(null)
-              },
-              methods: {
-                remoteMethod (query) {
-                  var vm = this
-                  setTimeout(() => {
-                    vm.loadSchematas(query)
-                  }, 200)
-                },
-                loadSchematas (schemaName) {
-                  var vm = this
-                  vm.loading = true
-                  vm.$http.get('api/platform/schema/information/schematas', {params: {SCHEMA_NAME_like: schemaName}}).then(function (response) {
-                    vm.loading = false
-                    if (response.body.success) {
-                      vm.items = response.body.data.items
-                    } else {
-                      vm.items = []
-                    }
-                  })
-                },
-                isFilterActive () {
-                  return this.text !== undefined && this.text !== null && this.text !== ''
-                },
-                doesFilterPass (params) {
-                  window.devMode && console.info('doesFilterPass', this.$options.name, params)
-                  return !this.text || this.text.toLowerCase()
-                    .split(' ')
-                    .every((filterWord) => {
-                      return this.valueGetter(params.node).toString().toLowerCase().indexOf(filterWord) >= 0
-                    })
-                },
-                getModel () {
-                  return {filter: this.text, filterType: 'text', type: 'equals'}
-                },
-                setModel (model) {
-                  this.text = model.filter
-                },
-                afterGuiAttached () {
-                  // console.debug('afterGuiAttached', this.$refs.input)
-                  // this.$refs.input.focus()
-                },
-                onParentModelChanged (model) {
-
+            watch: {
+              'text': function (val, oldVal) {
+                if (val !== oldVal) {
+                  this.params.filterChangedCallback()
                 }
               }
-            }),
-            pinned: 'left',
-            width: 160
-          },
-          {
-            headerName: '表名',
-            field: 'TABLE_NAME',
-            filterFramework: Vue.extend({
-              name: 'schemaSelect',
-              template: `<el-autocomplete v-model="text" :fetch-suggestions="remoteMethod" placeholder="请输入内容" @select="handleSelect">
-                          </el-autocomplete>`,
-              data () {
-                return {
-                  loading: false,
-                  items: [],
-                  text: '',
-                  valueGetter: null
-                }
+            },
+            created () {
+              window.devMode && console.info('created', this.$options.name, this._uid)
+              this.valueGetter = this.params.valueGetter
+              this.loadSchematas(null)
+            },
+            methods: {
+              remoteMethod (query) {
+                var vm = this
+                setTimeout(() => {
+                  vm.loadSchematas(query)
+                }, 200)
               },
-              watch: {
-                'text': function (val, oldVal) {
-                  if (val !== oldVal) {
-                    this.params.filterChangedCallback()
-                  }
-                }
+              loadSchematas (schemaName) {
+                var vm = this
+                vm.$http.get('api/platform/schema/information/schematas', {params: {SCHEMA_NAME_like: schemaName}}).then(function (response) {
+                  vm.items = response.body.success ? response.body.data.items : []
+                })
               },
-              created () {
-                window.devMode && console.info('created', this.$options.name, this._uid)
-                this.valueGetter = this.params.valueGetter
-                // this.loadTables(null)
+              isFilterActive () {
+                return this.text !== undefined && this.text !== null && this.text !== ''
               },
-              methods: {
-                remoteMethod (query, cb) {
-                  var vm = this
-                  setTimeout(() => {
-                    vm.loadTables(query, cb)
-                  }, 200)
-                },
-                loadTables (tableName, cb) {
-                  var vm = this
-                  vm.loading = true
-                  vm.$http.get('api/platform/schema/information/tables', {params: {TABLE_NAME_like: tableName}}).then(function (response) {
-                    vm.loading = false
-                    if (response.body.success) {
-                      vm.items = response.body.data.items
-                      cb && cb(response.body.data.items)
-                    } else {
-                      vm.items = []
-                      cb && cb(response.body.data.items)
-                    }
+              doesFilterPass (params) {
+                window.devMode && console.info('doesFilterPass', this.$options.name, params)
+                return !this.text || this.text.toLowerCase()
+                  .split(' ')
+                  .every((filterWord) => {
+                    return this.valueGetter(params.node).toString().toLowerCase().indexOf(filterWord) >= 0
                   })
-                },
-                handleSelect (item) {
-                  console.log(item)
-                },
-                isFilterActive () {
-                  return this.text !== null && this.text !== undefined && this.text !== ''
-                },
-                doesFilterPass (params) {
-                  window.devMode && console.info('doesFilterPass', this.$options.name, params)
-                  return !this.text || this.text.toLowerCase()
-                    .split(' ')
-                    .every((filterWord) => {
-                      return this.valueGetter(params.node).toString().toLowerCase().indexOf(filterWord) >= 0
-                    })
-                },
-                getModel () {
-                  return {filter: this.text, filterType: 'text', type: 'contains'}
-                },
-                setModel (model) {
-                  this.text = model.filter
-                },
-                afterGuiAttached () {
-                  // console.debug('afterGuiAttached', this.$refs.input)
-                  // this.$refs.input.focus()
-                },
-                onParentModelChanged (model) {
-
+              },
+              getModel () {
+                return {filter: this.text, filterType: 'text', type: 'equals'}
+              },
+              setModel (model) {
+                this.text = model.filter
+              },
+              afterGuiAttached () {
+                // console.debug('afterGuiAttached', this.$refs.input)
+                // this.$refs.input.focus()
+              }
+            }
+          }),
+          width: 120
+        },
+        {
+          headerName: '表名',
+          field: 'TABLE_NAME',
+          tooltipField: 'TABLE_NAME',
+          pinned: 'left',
+          suppressFilter: false,
+          filterFramework: Vue.extend({
+            template: `<el-autocomplete v-model="value" :fetch-suggestions="remoteMethod" placeholder="请输入内容" @select="handleSelect">
+                        </el-autocomplete>`,
+            data () {
+              return {
+                value: '',
+                valueGetter: null
+              }
+            },
+            watch: {
+              'value': function (val, oldVal) {
+                if (val !== oldVal) {
+                  this.params.filterChangedCallback()
                 }
               }
-            }),
-            width: 300
-          },
-          {
-            headerName: '字段名',
-            field: 'COLUMN_NAME',
-            suppressSorting: true,
-            suppressMenu: true,
-            width: 240
-          },
-          {
-            headerName: '字段说明',
-            field: 'COLUMN_COMMENT',
-            suppressSorting: true,
-            suppressMenu: true,
-            width: 300
-          }
-        ]
-      })
+            },
+            created () {
+              this.valueGetter = this.params.valueGetter
+            },
+            methods: {
+              remoteMethod (query, cb) {
+                var vm = this
+                setTimeout(() => {
+                  vm.loadTables(query, cb)
+                }, 200)
+              },
+              loadTables (tableName, cb) {
+                var vm = this
+                vm.$http.get('api/platform/schema/information/tables', {params: {TABLE_NAME_like: tableName}}).then(function (response) {
+                  var tables = []
+                  if (response.body.success) {
+                    response.body.data.items.forEach((table) => {
+                      tables.push({value: table.TABLE_NAME})
+                    })
+                  }
+                  cb && cb(tables)
+                })
+              },
+              handleSelect (item) {
+                // console.log(item)
+              },
+              isFilterActive () {
+                return this.value !== null && this.value !== undefined && this.value !== ''
+              },
+              doesFilterPass (params) {
+                window.devMode && console.info('doesFilterPass', this.$options.name, params)
+                return !this.value || this.value.toLowerCase()
+                  .split(' ')
+                  .every((filterWord) => {
+                    return this.valueGetter(params.node).toString().toLowerCase().indexOf(filterWord) >= 0
+                  })
+              },
+              getModel () {
+                return {filter: this.value, filterType: 'text', type: 'contains'}
+              },
+              setModel (model) {
+                this.text = model.filter
+              },
+              afterGuiAttached () {
+                // console.debug('afterGuiAttached', this.$refs.input)
+                // this.$refs.input.focus()
+              }
+            }
+          }),
+          width: 240
+        },
+        {
+          headerName: '列名',
+          field: 'COLUMN_NAME',
+          tooltipField: 'COLUMN_NAME',
+          pinned: 'left',
+          width: 180
+        },
+        {
+          headerName: '列类型',
+          field: 'COLUMN_TYPE',
+          width: 120
+        },
+        {
+          headerName: '是否为空',
+          field: 'IS_NULLABLE',
+          width: 68
+        },
+        {
+          headerName: '默认值',
+          field: 'COLUMN_DEFAULT',
+          tooltipField: 'COLUMN_DEFAULT',
+          width: 120
+        },
+        {
+          headerName: '描述',
+          field: 'COLUMN_COMMENT',
+          tooltipField: 'COLUMN_COMMENT',
+          width: 300
+        }
+      ]
     },
     mounted () {
       window.devMode && console.info('mounted', this.$options.name, this._uid)

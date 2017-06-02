@@ -2,7 +2,7 @@
 </style>
 
 <template>
-  <el-input :ref="'input'" v-model="text" placeholder="支持模糊过滤"></el-input>
+  <el-input :ref="'input'" v-model="value" placeholder="支持模糊过滤"></el-input>
 </template>
 
 <script type="text/ecmascript-6">
@@ -11,12 +11,12 @@
   export default Vue.extend({
     data () {
       return {
-        text: '',
+        value: '',
         valueGetter: null
       }
     },
     watch: {
-      'text': function (val, oldVal) {
+      'value': function (val, oldVal) {
         var vm = this
         if (val !== oldVal) {
           vm.filterChangedTimer && clearTimeout(vm.filterChangedTimer)
@@ -31,17 +31,17 @@
     },
     methods: {
       isFilterActive () {
-        return this.text !== undefined && this.text !== null && this.text !== ''
+        return this.value !== undefined && this.value !== null && this.value !== ''
       },
       doesFilterPass (params) {
         console && console.info('doesFilterPass', this.$options.name, params)
-        return this.valueGetter(params.node).contains(this.text)
+        return this.valueGetter(params.node).contains(this.value)
       },
       getModel () {
-        return {filter: this.text, filterType: 'text', type: 'contains'}
+        return {filter: this.value, filterType: 'text', type: 'contains'}
       },
       setModel (model) {
-        this.text = model.filter
+        this.value = model.filter
       }
     }
   })

@@ -97,9 +97,6 @@
           checkboxSelection: true,
           pinned: 'left',
           cellStyle: {'text-align': 'center'},
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 24
         },
         {
@@ -108,28 +105,26 @@
           headerComponentFramework: AddHeaderComponenetFramework,
           cellStyle: {'text-align': 'right'},
           cellRendererFramework: IndexRendererFramework,
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 38
         },
         {
           headerName: '账号',
           field: 'f_account',
           pinned: 'left',
-          cellRendererFramework: ViewRendererFramework,
+          suppressFilter: false,
           filterFramework: LikeFilterFramework,
-          suppressSorting: true,
-          suppressMenu: true,
+          cellRendererFramework: ViewRendererFramework,
           width: 100
         },
         {
           headerName: '姓名',
           field: 'f_name',
           pinned: 'left',
+          suppressSorting: false,
+          colId: 'f_name',
+          sortingOrder: ['asc'],
+          suppressFilter: false,
           filterFramework: LikeFilterFramework,
-          suppressSorting: true,
-          suppressMenu: true,
           width: 100
         },
         {
@@ -137,17 +132,11 @@
           field: 'f_created_time',
           cellStyle: {'text-align': 'center'},
           cellRendererFramework: TimestampRendererFramework,
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 140
         },
         {
           headerName: '创建人',
           field: 'f_creator_name',
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 100
         },
         {
@@ -155,9 +144,6 @@
           field: 'f_last_login_time',
           cellStyle: {'text-align': 'center'},
           cellRendererFramework: TimestampRendererFramework,
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 140
         },
         {
@@ -166,9 +152,6 @@
           cellStyle: {'text-align': 'center'},
           cellRendererFramework: DictRendererFramework,
           cellRendererParams: {dict: 'YesNo'},
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 75
         },
         {
@@ -177,17 +160,12 @@
           cellStyle: {'text-align': 'center'},
           cellRendererFramework: DictRendererFramework,
           cellRendererParams: {dict: 'UserStatus'},
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 45
         },
         {
           headerName: '备注',
           field: 'f_remark',
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
+          tooltipField: 'f_remark',
           width: 300
         },
         {
@@ -248,9 +226,6 @@
               }
             }]
           },
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 120
         }
       ]

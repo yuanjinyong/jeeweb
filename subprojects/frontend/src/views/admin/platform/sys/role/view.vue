@@ -95,9 +95,6 @@
           checkboxSelection: true,
           pinned: 'left',
           cellStyle: {'text-align': 'center'},
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 24
         },
         {
@@ -106,27 +103,21 @@
           headerComponentFramework: AddHeaderComponenetFramework,
           cellStyle: {'text-align': 'right'},
           cellRendererFramework: IndexRendererFramework,
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 38
         },
         {
           headerName: '角色名称',
           field: 'f_name',
           pinned: 'left',
+          suppressFilter: false,
           filterFramework: LikeFilterFramework,
           cellRendererFramework: ViewRendererFramework,
-          suppressSorting: true,
-          suppressMenu: true,
           width: 160
         },
         {
           headerName: '角色描述',
           field: 'f_desc',
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
+          tooltipField: 'f_desc',
           width: 300
         },
         {
@@ -135,17 +126,12 @@
           cellStyle: {'text-align': 'center'},
           cellRendererFramework: DictRendererFramework,
           cellRendererParams: {dict: 'YesNo'},
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 75
         },
         {
           headerName: '备注',
           field: 'f_remark',
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
+          tooltipField: 'f_remark',
           width: 300
         },
         {
@@ -175,9 +161,6 @@
               }
             }]
           },
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 80
         }
       ]

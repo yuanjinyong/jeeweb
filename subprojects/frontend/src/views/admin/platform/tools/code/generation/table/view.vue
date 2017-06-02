@@ -102,19 +102,12 @@
           pinned: 'left',
           headerComponentFramework: AddHeaderComponenetFramework,
           cellStyle: {'text-align': 'right'},
-          // cellRendererFramework: IndexRendererFramework,
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 38
         },
         {
           headerName: '数据库名',
           field: 'f_db_name',
           pinned: 'left',
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 120
         },
         {
@@ -122,9 +115,6 @@
           field: 'f_table_name',
           pinned: 'left',
           cellRendererFramework: ViewRendererFramework,
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 180
         },
         {
@@ -133,17 +123,12 @@
           cellStyle: {'text-align': 'center'},
           cellRendererFramework: DictRendererFramework,
           cellRendererParams: {dict: 'YesNo'},
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 60
         },
         {
           headerName: '实体类名',
           field: 'f_entity_class',
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
+          tooltipField: 'f_entity_class',
           width: 400
         },
         {
@@ -165,9 +150,6 @@
               }
             }]
           },
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 60
         }
       ]

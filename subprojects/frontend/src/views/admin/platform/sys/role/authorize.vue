@@ -71,7 +71,7 @@
         }
       },
       labelWidth () {
-        return (this.formOptions.labelWidth ? this.formOptions.labelWidth : 100) + 'px'
+        return (this.formOptions.labelWidth ? this.formOptions.labelWidth : 150) + 'px'
       },
       featureOptions () {
         return this.formOptions.context.featureComponent.featureOptions

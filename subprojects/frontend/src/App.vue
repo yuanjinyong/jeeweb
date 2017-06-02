@@ -113,6 +113,12 @@
     top: 30px;
   }
 
+  .jw-dialog-large {
+    min-width: 1472px;
+    margin-bottom: 30px;
+    top: 30px;
+  }
+
   .jw-dialog-full {
     margin-bottom: 0px;
     top: 0px;
@@ -133,7 +139,7 @@
   }
 
   .jw-sub-dialog {
-    min-width: 350px;
+    min-width: 410px;
     margin-bottom: 20px;
     top: 20px;
   }
@@ -165,18 +171,23 @@
   }
 
   .jw-form .jw-field-col-1 {
-    min-width: 196px;
-    width: 196px;
+    min-width: 205px;
+    width: 205px;
   }
 
   .jw-form .jw-field-col-2 {
-    min-width: 196px;
-    width: 496px;
+    min-width: 205px;
+    width: 564px;
+  }
+
+  .jw-sub-dialog .jw-form .jw-field-col-2 {
+    min-width: 205px;
+    width: 205px;
   }
 
   .jw-form .jw-field-col-3 {
-    min-width: 196px;
-    width: 796px;
+    min-width: 205px;
+    width: 923px;
   }
 
   .el-radio {
@@ -188,17 +199,17 @@
   }
 
   .el-select {
-    min-width: 196px;
-    width: 196px;
+    min-width: 205px;
+    width: 205px;
   }
 
   .el-radio-group {
-    min-width: 196px;
+    min-width: 205px;
     line-height: 36px;
   }
 
   .el-input-number {
-    min-width: 196px;
+    min-width: 205px;
   }
 
   .el-input-number__decrease, .el-input-number__increase {
@@ -206,8 +217,8 @@
   }
 
   .el-date-editor.el-input {
-    min-width: 196px;
-    width: 196px;
+    min-width: 205px;
+    width: 205px;
   }
 
   .el-checkbox {

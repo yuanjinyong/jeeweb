@@ -4,26 +4,27 @@
 
 <template>
   <div class="jw-form">
-    <div class="jw-form-body" :style="{'max-height': 500+'px','overflow-y': 'auto'}">
-      <el-form label-width="100px" ref="menuForm" :inline="true" :model="entity" :rules="rules">
-        <fieldset :disabled="params.operation === 'view'">
+    <div class="jw-form-body" :style="formBodyStyle">
+      <el-form ref="form" :model="entity" :rules="rules" :inline="true" :label-width="labelWidth">
+        <fieldset :disabled="formOptions.operation === 'view'">
           <el-form-item label="父菜单编码" prop="f_parent_id">
-            <el-input v-model="entity.f_parent_id" :disabled="true"></el-input>
+            <el-input class="jw-field-col-1" v-model="entity.f_parent_id" :disabled="true"></el-input>
           </el-form-item>
           <el-form-item label="父菜单名称" prop="f_parent_name">
-            <el-input v-model="entity.f_parent_name" :disabled="true"></el-input>
+            <el-input class="jw-field-col-1" v-model="entity.f_parent_name" :disabled="true"></el-input>
           </el-form-item>
           <el-form-item label="编码" prop="f_id">
-            <el-input v-model="entity.f_id" :disabled="params.operation !== 'add'"></el-input>
+            <el-input class="jw-field-col-1" v-model="entity.f_id" :disabled="formOptions.operation !== 'add'">
+            </el-input>
           </el-form-item>
           <el-form-item label="名称" prop="f_name">
-            <el-input v-model="entity.f_name"></el-input>
+            <el-input class="jw-field-col-1" v-model="entity.f_name"></el-input>
           </el-form-item>
           <el-form-item label="描述" prop="f_desc">
-            <el-input v-model="entity.f_desc" type="textarea" autosize style="width: 496px;"></el-input>
+            <el-input class="jw-field-col-2" v-model="entity.f_desc" type="textarea" autosize></el-input>
           </el-form-item>
           <el-form-item label="类型" prop="f_type">
-            <el-select v-model="entity.f_type" :disabled="params.operation !== 'add'">
+            <el-select class="jw-field-col-1" v-model="entity.f_type" :disabled="formOptions.operation !== 'add'">
               <el-option v-for="type in menuTypes"
                 :key="type.f_item_code"
                 :value="type.f_item_code"
@@ -34,32 +35,33 @@
             </el-select>
           </el-form-item>
           <el-form-item label="排序" prop="f_order">
-            <el-input-number v-model="entity.f_order" :step="5"></el-input-number>
+            <el-input-number class="jw-field-col-1" v-model="entity.f_order" :step="5"></el-input-number>
           </el-form-item>
           <el-form-item label="图标" prop="f_icon">
-            <el-input v-model="entity.f_icon"></el-input>
+            <el-input class="jw-field-col-1" v-model="entity.f_icon"></el-input>
           </el-form-item>
           <el-form-item label="状态" prop="f_status">
-            <el-radio-group v-model="entity.f_status">
+            <el-radio-group class="jw-field-col-1" v-model="entity.f_status">
               <el-radio :label="1">启用</el-radio>
               <el-radio :label="2">禁用</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="适用平台">
-            <div style="width: 496px;">
+            <div class="jw-field-col-2">
               <el-checkbox v-model="entity.f_is_web" :true-label="1" :false-label="2">Web</el-checkbox>
               <el-checkbox v-model="entity.f_is_android" :true-label="1" :false-label="2">Android</el-checkbox>
               <el-checkbox v-model="entity.f_is_ios" :true-label="1" :false-label="2">IOS</el-checkbox>
             </div>
           </el-form-item>
           <el-form-item label="路由路径" prop="f_route_path" v-show="entity.f_type === 2">
-            <el-input v-model="entity.f_route_path" style="width: 496px;"></el-input>
+            <el-input class="jw-field-col-2" v-model="entity.f_route_path"></el-input>
           </el-form-item>
           <el-form-item label="备注" prop="f_remark">
-            <el-input v-model="entity.f_remark" type="textarea" autosize style="width: 496px;"></el-input>
+            <el-input class="jw-field-col-2" v-model="entity.f_remark" type="textarea" autosize></el-input>
           </el-form-item>
-          <div style="margin-bottom: 20px;" v-show="entity.f_type === 2 || entity.f_type === 3">
-            <ag-grid-vue style="width: 596px; height: 200px;" class="ag-fresh jw-grid"
+
+          <div v-show="entity.f_type === 2 || entity.f_type === 3">
+            <ag-grid-vue style="width: 100%; height: 200px;" class="ag-fresh jw-grid"
               :grid-options="urlGridOptions">
             </ag-grid-vue>
           </div>
@@ -69,7 +71,7 @@
 
     <div class="jw-form-footer" style="text-align: right;">
       <el-button @click="onCancelForm('menuForm')">取 消</el-button>
-      <el-button type="primary" @click="onSubmitForm('menuForm')" :disabled="params.operation === 'view'">确 定
+      <el-button type="primary" @click="onSubmitForm('menuForm')" :disabled="formOptions.operation === 'view'">确 定
       </el-button>
     </div>
 
@@ -87,8 +89,10 @@
 
 
 <script type="text/ecmascript-6">
-  import Vue from 'vue'
   import { AgGridVue } from 'ag-grid-vue'
+  import AddHeaderComponenetFramework from 'components/ag-grid/AddHeaderComponenetFramework'
+  import IndexRendererFramework from 'components/ag-grid/IndexRendererFramework'
+  import OperationRendererFramework from 'components/ag-grid/OperationRendererFramework'
   import UrlView from 'views/admin/platform/sys/url/view'
 
   export default {
@@ -98,20 +102,34 @@
       'url-selector': UrlView
     },
     props: {
-      params: {
+      formOptions: {
         type: Object,
         default: function () {
           return {
             operation: 'view',
-            entity: {}
+            title: '查看详情',
+            maxHeight: 500,
+            labelWidth: 100,
+            params: {},
+            context: {
+              featureComponent: {}
+            }
           }
         }
       }
     },
     data () {
       return {
-        url: 'api/platform/sys/menus',
-        urlGridOptions: null,
+        urlGridOptions: this.$grid.buildOptions({
+          context: {
+            featureComponent: this
+          },
+          rowModelType: 'normal',
+          rowData: [],
+          pagination: false,
+          enableFilter: false,
+          floatingFilter: false
+        }),
         showSelectUrlDialog: false,
         menuTypes: [
           {f_item_code: 0, f_item_text: '根'},
@@ -120,7 +138,7 @@
           {f_item_code: 3, f_item_text: '按钮'},
           {f_item_code: 4, f_item_text: '令牌'}
         ],
-        entity: {},
+        entity: {urlList: []},
         rules: {
           f_id: [
             {required: true, message: '请输入菜单编码', trigger: 'blur'},
@@ -133,78 +151,60 @@
         }
       }
     },
-    computed: {},
-    beforeMount () {
+    computed: {
+      formBodyStyle () {
+        return {
+          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : 500) + 'px',
+          'overflow-y': 'auto'
+        }
+      },
+      labelWidth () {
+        return (this.formOptions.labelWidth ? this.formOptions.labelWidth : 150) + 'px'
+      },
+      featureOptions () {
+        return this.formOptions.context.featureComponent.featureOptions
+      }
+    },
+    created () {
       var vm = this
-      vm.urlGridOptions = this.$buildGridOptions({
-        context: {
-          parentComponent: this
+      vm.urlGridOptions.columnDefs = [
+        {
+          headerName: '序号',
+          headerComponentFramework: AddHeaderComponenetFramework,
+          cellStyle: {'text-align': 'right'},
+          cellRendererFramework: IndexRendererFramework,
+          width: 38
         },
-        rowModelType: 'normal',
-        pagination: false,
-        enableFilter: false,
-        floatingFilter: false,
-        enableServerSideFilter: false,
-        enableServerSideSorting: false,
-        suppressContextMenu: true,
-        suppressMenuMainPanel: true,
-        suppressMenuColumnPanel: true,
-        rowData: [],
-        columnDefs: [
-          {
-            headerName: '序号',
-            headerComponentFramework: Vue.extend({
-              template: `<div class="ag-header-component" style="padding: 5px;">
-                              <button type="button" class="btn btn-xs btn-primary" title="增加" @click.prevent="onAdd">
-                                <i class="fa fa-plus"></i>
-                              </button>
-                            </div>`,
-              methods: {
-                onAdd () {
-                  this.params.context.parentComponent.onAddUrl()
-                }
+        {
+          headerName: 'URL',
+          field: 'f_url',
+          width: 535 - 15
+        },
+        {
+          headerName: '提交方式',
+          field: 'f_methods',
+          width: 92
+        },
+        {
+          headerName: '操作',
+          field: '',
+          cellStyle: {'text-align': 'center'},
+          cellRendererFramework: OperationRendererFramework,
+          cellRendererParams: {
+            operations: [{
+              id: 'remove',
+              title: '删除URL',
+              isDisabled: function (entity) {
+                return vm.formOptions.operation === 'view'
+              },
+              onClick (params, entity) {
+                params.context.featureComponent.onRemoveUrl(entity)
               }
-            }),
-            cellStyle: {'text-align': 'right'},
-            cellRenderer: function (params) {
-              return params.rowIndex + 1
-            },
-            width: 38
+            }]
           },
-          {
-            headerName: 'URL',
-            field: 'f_url',
-            width: 400
-          },
-          {
-            headerName: '提交方式',
-            field: 'f_methods',
-            width: 75
-          },
-          {
-            headerName: '操作',
-            field: '',
-            cellRendererFramework: Vue.extend({
-              template: `<div class="btn-group">
-                            <button type="button" class="btn btn-xs btn-danger" @click.prevent="onRemove"title="删除" >
-                              <i class="fa fa-trash"></i>
-                            </button>
-                          </div>`,
-              methods: {
-                onRemove () {
-                  this.params.context.parentComponent.onRemoveUrl(this.params.node.data)
-                }
-              }
-            }),
-            suppressSorting: true,
-            suppressMenu: true,
-            suppressFilter: true,
-            pinned: 'right',
-            cellStyle: {'text-align': 'center'},
-            width: 60
-          }
-        ]
-      })
+          width: 48
+        }
+      ]
     },
     mounted () {
       window.devMode && console.info('mounted', this.$options.name, this._uid)
@@ -219,38 +219,73 @@
       },
       query (params) {
         var vm = this
-        if (vm.params.operation === 'add') {
-          var parentEntity = vm.params.parentEntity
-          vm.entity = {
-            f_id: parentEntity.f_parent_id ? (parentEntity.f_id + '-') : '',
-            f_parent_id: parentEntity.f_id,
-            f_parent_name: parentEntity.f_name,
-            f_parent_path: parentEntity.f_parent_path + parentEntity.f_id + '/',
-            f_type: parentEntity.f_type + 1,
-            f_order: 10,
-            f_status: 1,
-            f_is_web: 1,
-            f_is_android: 1,
-            f_is_ios: 1,
-            urlList: []
-          }
-          if (parentEntity.children && parentEntity.children.length > 0) {
-            var lastChild = parentEntity.children[parentEntity.children.length - 1]
-            vm.entity.f_order = lastChild.f_order + 10
-          }
+        if (vm.formOptions.operation === 'add') {
+          vm.entity = vm._createEntity(vm.formOptions.params)
+          vm.urlGridOptions.api.setRowData(vm.entity.urlList)
         } else {
-          vm.$http.get(vm.url + '/' + vm.params.entity.f_id).then(function (response) {
-            var result = response.body
-            if (result.success) {
-              vm.entity = result.data
-            } else {
-              vm.entity = {urlList: []}
-            }
+          vm.$http.get(vm.featureOptions.url + '/' + vm.formOptions.params.f_id).then((response) => {
+            vm.entity = response.body.success ? response.body.data : {urlList: []}
             vm.urlGridOptions.api.setRowData(vm.entity.urlList)
           })
         }
       },
-      onAddUrl () {
+      onCancelForm (formName) {
+        this._closeForm()
+        this.$emit('cancel')
+      },
+      onSubmitForm (formName) {
+        var vm = this
+        vm.$refs[formName].validate(function (valid) {
+          if (!valid) {
+            return false
+          }
+
+          if (vm.formOptions.operation === 'add') {
+            vm.$http.post(vm.featureOptions.url, vm.entity).then((response) => {
+              vm._submitted(response)
+            })
+          } else {
+            vm.$http.put(vm.featureOptions.url + '/' + vm.formOptions.params.f_id, vm.entity).then((response) => {
+              vm._submitted(response)
+            })
+          }
+
+          return true
+        })
+      },
+      _createEntity (parentEntity) {
+        var order = 10
+        if (parentEntity.children && parentEntity.children.length > 0) {
+          var lastChild = parentEntity.children[parentEntity.children.length - 1]
+          order = lastChild.f_order + order
+        }
+
+        return {
+          f_id: parentEntity.f_parent_id ? (parentEntity.f_id + '-') : '',
+          f_parent_id: parentEntity.f_id,
+          f_parent_name: parentEntity.f_name,
+          f_parent_path: parentEntity.f_parent_path + parentEntity.f_id + '/',
+          f_type: parentEntity.f_type + 1,
+          f_order: order,
+          f_status: 1,
+          f_is_web: 1,
+          f_is_android: 1,
+          f_is_ios: 1,
+          urlList: []
+        }
+      },
+      _submitted (response) {
+        if (response.body.success) {
+          this._closeForm()
+          this.$emit('submit', {type: this.formOptions.operation, data: response.body.data})
+        }
+      },
+      _closeForm () {
+        if (this.formOptions.context.featureComponent.formOptions) {
+          this.formOptions.context.featureComponent.formOptions.isShow = false
+        }
+      },
+      onAdd () {
         this.showSelectUrlDialog = true
       },
       onRemoveUrl (url) {
@@ -291,33 +326,6 @@
 
         vm.$refs.urlSelector.clearSelectedRows()
         vm.urlGridOptions.api.setRowData(vm.entity.urlList)
-      },
-      onCancelForm (formName) {
-        this.$emit('cancel')
-      },
-      onSubmitForm (formName) {
-        var vm = this
-        vm.$refs[formName].validate(function (valid) {
-          if (!valid) {
-            return false
-          }
-
-          if (vm.params.operation === 'add') {
-            vm.$http.post(vm.url, vm.entity).then(function (response) {
-              if (response.body.success) {
-                this.$emit('submit')
-              }
-            })
-          } else {
-            vm.$http.put(vm.url + '/' + vm.params.entity.f_id, vm.entity).then(function (response) {
-              if (response.body.success) {
-                this.$emit('submit')
-              }
-            })
-          }
-
-          return true
-        })
       }
     }
   }

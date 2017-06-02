@@ -36,6 +36,7 @@ const store = new Vuex.Store({
     },
     dicts: {
       'YesNo': {1: '是', 2: '否'},
+      'MenuType': {0: '根', 1: '目录', 2: '页面', 3: '按钮', 4: '令牌'},
       'UserStatus': {1: '正常', 2: '锁定', 3: '注销'},
       'HttpMethods': [
         {

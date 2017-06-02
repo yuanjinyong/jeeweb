@@ -81,9 +81,6 @@
           // headerCheckboxSelection: true,
           pinned: 'left',
           cellStyle: {'text-align': 'center'},
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 24
         },
         {
@@ -91,34 +88,28 @@
           pinned: 'left',
           cellStyle: {'text-align': 'right'},
           cellRendererFramework: IndexRendererFramework,
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 38
         },
         {
           headerName: 'URL',
           field: 'f_url',
           pinned: 'left',
-          suppressMenu: true,
-          cellRendererFramework: ViewRendererFramework,
+          suppressFilter: false,
           filterFramework: LikeFilterFramework,
+          cellRendererFramework: ViewRendererFramework,
           width: 400
         },
         {
           headerName: '提交方式',
           field: 'f_methods',
+          suppressFilter: false,
           filterFramework: DictFilterFramework,
           filterParams: {dict: 'HttpMethods'},
-          suppressMenu: true,
           width: 110
         },
         {
           headerName: '后台处理方法',
           field: 'f_handler_method',
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 1800
         },
         {
@@ -127,9 +118,6 @@
           cellStyle: {'text-align': 'center'},
           cellRendererFramework: DictRendererFramework,
           cellRendererParams: {dict: 'YesNo'},
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 75
         }
       ]

@@ -77,15 +77,13 @@
           headerComponentFramework: AddHeaderComponenetFramework,
           cellStyle: {'text-align': 'right'},
           cellRendererFramework: IndexRendererFramework,
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 38
         },
         {
           headerName: '规则编码',
           field: 'f_code',
           pinned: 'left',
+          suppressFilter: false,
           filterFramework: LikeFilterFramework,
           cellRendererFramework: ViewRendererFramework,
           width: 150
@@ -93,47 +91,35 @@
         {
           headerName: '规则名称',
           field: 'f_name',
+          suppressFilter: false,
           filterFramework: LikeFilterFramework,
           width: 120
         },
         {
           headerName: '菜单编码',
           field: 'f_menu_id',
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 120
         },
         {
           headerName: '菜单名称',
           field: 'f_menu_name',
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 120
         },
         {
           headerName: '菜单排序',
           field: 'f_menu_order',
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 80
         },
         {
           headerName: 'Java包名',
           field: 'f_package_name',
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
+          tooltipField: 'f_package_name',
           width: 300
         },
         {
           headerName: 'API地址',
           field: 'f_request_url',
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
+          tooltipField: 'f_request_url',
           width: 300
         },
         {
@@ -159,9 +145,6 @@
               }
             }]
           },
-          suppressSorting: true,
-          suppressMenu: true,
-          suppressFilter: true,
           width: 80
         }
       ]
