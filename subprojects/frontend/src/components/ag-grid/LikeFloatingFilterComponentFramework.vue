@@ -15,24 +15,14 @@
       }
     },
     methods: {
-      isFilterActive () {
-        return this.value !== undefined && this.value !== null && this.value !== ''
-      },
-      doesFilterPass (params) {
-        console && console.info('doesFilterPass', this.$options.name, params)
-        return this.params.valueGetter(params.node).contains(this.value)
-      },
-      getModel () {
-        return {filter: this.value, filterType: 'text', type: 'contains'}
-      },
-      setModel (model) {
-        this.value = model.filter
+      onParentModelChanged (parentModel) {
+        this.value = parentModel ? parentModel.filter : null
       },
       onChange (val) {
         var vm = this
         vm.filterChangedTimer && clearTimeout(vm.filterChangedTimer)
         vm.filterChangedTimer = setTimeout(function () {
-          vm.params.filterChangedCallback()
+          vm.params.onFloatingFilterChanged({filter: val})
         }, 200)
       }
     }

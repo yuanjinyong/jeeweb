@@ -17,9 +17,8 @@
     "vue-router": "^2.2.0"
   },
   "devDependencies": {
-    "ag-grid": "^9.1.0",
-    "ag-grid-enterprise": "^9.1.0",
-    "ag-grid-vue": "^9.1.0",
+    "ag-grid": "^10.0.0",
+    "ag-grid-vue": "^10.0.0",
     "autoprefixer": "^6.7.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^7.1.1",

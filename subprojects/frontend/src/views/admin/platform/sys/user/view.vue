@@ -24,6 +24,7 @@
 <script type="text/ecmascript-6">
   import { AgGridVue } from 'ag-grid-vue'
   import AddHeaderComponenetFramework from 'components/ag-grid/AddHeaderComponenetFramework'
+  import LikeFloatingFilterComponentFramework from 'components/ag-grid/LikeFloatingFilterComponentFramework'
   import LikeFilterFramework from 'components/ag-grid/LikeFilterFramework'
   import DictRendererFramework from 'components/ag-grid/DictRendererFramework'
   import IndexRendererFramework from 'components/ag-grid/IndexRendererFramework'
@@ -112,6 +113,8 @@
           field: 'f_account',
           pinned: 'left',
           suppressFilter: false,
+          floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
+          floatingFilterComponentParams: {suppressFilterButton: true},
           filterFramework: LikeFilterFramework,
           cellRendererFramework: ViewRendererFramework,
           width: 100
