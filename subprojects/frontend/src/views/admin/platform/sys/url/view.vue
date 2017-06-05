@@ -18,8 +18,10 @@
 <script type="text/ecmascript-6">
   // import Vue from 'vue'
   import { AgGridVue } from 'ag-grid-vue'
-  import LikeFilterFramework from 'components/ag-grid/LikeFilterFramework'
   import DictFilterFramework from 'components/ag-grid/DictFilterFramework'
+  import DictFloatingFilterComponentFramework from 'components/ag-grid/DictFloatingFilterComponentFramework'
+  import LikeFilterFramework from 'components/ag-grid/LikeFilterFramework'
+  import LikeFloatingFilterComponentFramework from 'components/ag-grid/LikeFloatingFilterComponentFramework'
   import IndexRendererFramework from 'components/ag-grid/IndexRendererFramework'
   import ViewRendererFramework from 'components/ag-grid/ViewRendererFramework'
   import DictRendererFramework from 'components/ag-grid/DictRendererFramework'
@@ -53,7 +55,7 @@
         gridOptions: this.$grid.buildOptions({
           paginationAutoPageSize: false,
           paginationPageSize: this.mode === 'selector' ? 10 : 20,
-          infiniteBlockSize: 20,
+          cacheBlockSize: 20,
           context: {
             featureComponent: this,
             params: {
@@ -93,9 +95,11 @@
         {
           headerName: 'URL',
           field: 'f_url',
+          tooltipField: 'f_url',
           pinned: 'left',
           suppressFilter: false,
           filterFramework: LikeFilterFramework,
+          floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
           cellRendererFramework: ViewRendererFramework,
           width: 400
         },
@@ -103,22 +107,27 @@
           headerName: '提交方式',
           field: 'f_methods',
           suppressFilter: false,
+          filterParams: {dict: 'HttpMethods', filterType: 'String'},
           filterFramework: DictFilterFramework,
-          filterParams: {dict: 'HttpMethods'},
+          floatingFilterComponentFramework: DictFloatingFilterComponentFramework,
           width: 110
-        },
-        {
-          headerName: '后台处理方法',
-          field: 'f_handler_method',
-          width: 1800
         },
         {
           headerName: '记录日志',
           field: 'f_is_log',
+          suppressFilter: false,
+          filterFramework: DictFilterFramework,
+          floatingFilterComponentFramework: DictFloatingFilterComponentFramework,
           cellStyle: {'text-align': 'center'},
           cellRendererFramework: DictRendererFramework,
           cellRendererParams: {dict: 'YesNo'},
           width: 75
+        },
+        {
+          headerName: '后台处理方法',
+          field: 'f_handler_method',
+          tooltipField: 'f_handler_method',
+          width: 1800
         }
       ]
     },

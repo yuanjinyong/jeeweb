@@ -23,18 +23,19 @@ var VueGrid = {
     suppressMenuColumnPanel: true,
     suppressCellSelection: true,
     enableColResize: true,
-    headerHeight: 35,
-    rowHeight: 35,
+    headerHeight: 30, // default is 25px
+    floatingFiltersHeight: 32, // default is 20px
+    rowHeight: 30, // default is 25px
     rowSelection: 'multiple',
     rowModelType: 'infinite',
     pagination: true,
     paginationAutoPageSize: true,
     // paginationPageSize: 20,
     paginationFirstPage: 0,
-    paginationOverflowSize: 2,
+    cacheOverflowSize: 2,
     infiniteInitialRowCount: 1,
     // infiniteBlockSize: 20,
-    maxPagesInCache: 2,
+    maxBlocksInCache: 2,
     maxConcurrentDatasourceRequests: 1,
     getRowNodeId: function (item) {
       return item.f_id
@@ -90,24 +91,57 @@ var VueGrid = {
           page.orderBy = page.orderBy.substr(0, page.orderBy.length - 2)
         }
 
+        // console && console.debug('datasource getRows, filterModel', gridParams.filterModel)
         var filters = {}
         for (var key in gridParams.filterModel) {
+          gridParams.context.params.totalCount = 0
+
           var where = gridParams.filterModel[key]
-          if (!where.filter) {
+          if ((where.type === 'in' || where.type === 'notIn') && !(where.filter && where.filter.length > 0)) {
             continue
           }
 
-          gridParams.context.params.totalCount = 0
-          if (where.filterType === 'text' && where.type === 'equals') {
-            filters[key] = where.filter
-          } else if (where.filterType === 'text' && where.type === 'contains') {
-            filters[key + '_like'] = where.filter
-          } else if (where.filterType === 'text' && where.type === 'startsWith') {
-            filters[key + '_rightLike'] = where.filter
-          } else if (where.filterType === 'text' && where.type === 'endsWith') {
-            filters[key + '_leftLike'] = where.filter
+          var filterValue = null
+          if (where.filterType === 'String' && !(where.type === 'in' || where.type === 'notIn')) {
+            filterValue = where.filter ? where.filter.trim() : null
+            if (!filterValue) {
+              continue
+            }
           } else {
-            filters[key] = where.filter ? where.filter : null
+            filterValue = where.filter
+            if (filterValue === undefined || filterValue === null) {
+              continue
+            }
+          }
+
+          if (where.filterType === 'String') {
+            if (where.type === 'like') {
+              filters[key + '_like'] = filterValue
+            } else if (where.type === 'rightLike') {
+              filters[key + '_rightLike'] = filterValue
+            } else if (where.type === 'leftLike') {
+              filters[key + '_leftLike'] = filterValue
+            } else if (where.type === 'in') {
+              if (filterValue.length === 1) {
+                filters[key] = filterValue[0]
+              } else {
+                filters[key + '_in'] = '\'' + filterValue.join('\',\'') + '\''
+              }
+            } else {
+              filters[key] = filterValue
+            }
+          } else if (where.filterType === 'Integer') {
+            if (where.type === 'in') {
+              if (filterValue.length === 1) {
+                filters[key] = filterValue[0]
+              } else {
+                filters[key + '_in'] = filterValue.join(',')
+              }
+            } else {
+              filters[key] = filterValue
+            }
+          } else {
+            filters[key] = where.filter
           }
         }
 
@@ -151,7 +185,8 @@ const plugin = function (Vue) {
   Vue.grid = VueGrid
 }
 
-if (typeof window !== 'undefined' && window.Vue) {
+if (typeof window !== 'undefined' && window.Vue
+) {
   window.Vue.use(plugin)
 }
 

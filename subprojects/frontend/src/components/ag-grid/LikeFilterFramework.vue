@@ -14,6 +14,16 @@
         value: null
       }
     },
+    computed: {
+      filterParams () {
+        return this.params.column.colDef.filterParams
+      }
+    },
+    created () {
+      if (!this.params.column.colDef.filterParams) {
+        this.params.column.colDef.filterParams = {}
+      }
+    },
     methods: {
       isFilterActive () {
         return this.value !== undefined && this.value !== null && this.value !== ''
@@ -23,7 +33,11 @@
         return this.params.valueGetter(params.node).contains(this.value)
       },
       getModel () {
-        return {filter: this.value, filterType: 'text', type: 'contains'}
+        return {
+          filter: this.value,
+          filterType: this.filterParams.filterType ? this.filterParams.filterType : 'String',
+          type: this.filterParams.type ? this.filterParams.type : 'like'
+        }
       },
       setModel (model) {
         this.value = model.filter
@@ -33,7 +47,7 @@
         vm.filterChangedTimer && clearTimeout(vm.filterChangedTimer)
         vm.filterChangedTimer = setTimeout(function () {
           vm.params.filterChangedCallback()
-        }, 200)
+        }, 500)
       }
     }
   })

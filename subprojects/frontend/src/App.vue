@@ -50,11 +50,21 @@
     border-radius: 4px;
   }
 
-  .jw-grid .ag-floating-filter-body input {
+  .jw-grid .jw-floating-filter-cell {
+    padding: 1px;
+  }
+
+  .jw-grid .jw-floating-filter-cell .el-input {
+  }
+
+  .jw-grid .jw-floating-filter-cell .el-select {
+    width: 100%;
+  }
+
+  .jw-grid .jw-floating-filter-cell .el-tag {
     height: 20px;
-    border: 1px solid #d1dbe5;
-    border-top-left-radius: 2px;
-    border-bottom-left-radius: 2px;
+    line-height: 20px;
+    margin: 1px 0 1px 4px;
   }
 
   .jw-grid .ag-floating-filter-button button {
@@ -105,10 +115,6 @@
   .jw-grid .ag-paging-row-summary-panel {
     width: auto;
     margin-right: 20px;
-  }
-
-  .jw-floating-filter {
-    font-size: 12px;
   }
 
   .jw-dialog {
@@ -194,54 +200,54 @@
     width: 923px;
   }
 
-  .el-radio {
+  .jw-form .el-radio {
     color: inherit;
   }
 
-  .el-checkbox {
+  .jw-form .el-checkbox {
     color: inherit;
   }
 
-  .el-select {
+  .jw-form .el-select {
     min-width: 205px;
     width: 205px;
   }
 
-  .el-radio-group {
+  .jw-form .el-radio-group {
     min-width: 205px;
     line-height: 36px;
   }
 
-  .el-input-number {
+  .jw-form .el-input-number {
     min-width: 205px;
   }
 
-  .el-input-number__decrease, .el-input-number__increase {
+  .jw-form .el-input-number__decrease, .el-input-number__increase {
     line-height: 35px;
   }
 
-  .el-date-editor.el-input {
+  .jw-form .el-date-editor.el-input {
     min-width: 205px;
     width: 205px;
   }
 
-  .el-checkbox {
+  .jw-form .el-checkbox {
     line-height: 36px;
   }
 
-  .el-textarea {
+  .jw-form .el-textarea {
     line-height: 36px;
   }
 
-  .el-textarea__inner {
+  .jw-form .el-textarea__inner {
     min-height: 36px;
   }
 
-  .jw-textarea-full-width {
+  .jw-form .jw-textarea-full-width {
     width: 100%;
   }
 
-  .jw-textarea-nowrap .el-textarea__inner {
+  .jw-form .jw-textarea-nowrap .el-textarea__inner {
     white-space: nowrap;
   }
 </style>

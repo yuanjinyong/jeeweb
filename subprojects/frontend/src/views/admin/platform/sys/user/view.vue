@@ -24,8 +24,10 @@
 <script type="text/ecmascript-6">
   import { AgGridVue } from 'ag-grid-vue'
   import AddHeaderComponenetFramework from 'components/ag-grid/AddHeaderComponenetFramework'
-  import LikeFloatingFilterComponentFramework from 'components/ag-grid/LikeFloatingFilterComponentFramework'
+  import DictFilterFramework from 'components/ag-grid/DictFilterFramework'
+  import DictFloatingFilterComponentFramework from 'components/ag-grid/DictFloatingFilterComponentFramework'
   import LikeFilterFramework from 'components/ag-grid/LikeFilterFramework'
+  import LikeFloatingFilterComponentFramework from 'components/ag-grid/LikeFloatingFilterComponentFramework'
   import DictRendererFramework from 'components/ag-grid/DictRendererFramework'
   import IndexRendererFramework from 'components/ag-grid/IndexRendererFramework'
   import OperationRendererFramework from 'components/ag-grid/OperationRendererFramework'
@@ -115,7 +117,6 @@
           suppressFilter: false,
           filterFramework: LikeFilterFramework,
           floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
-          floatingFilterComponentParams: {suppressFilterButton: true},
           cellRendererFramework: ViewRendererFramework,
           width: 100
         },
@@ -128,6 +129,7 @@
           sortingOrder: ['asc'],
           suppressFilter: false,
           filterFramework: LikeFilterFramework,
+          floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
           width: 100
         },
         {
@@ -160,6 +162,10 @@
         {
           headerName: '状态',
           field: 'f_status',
+          suppressFilter: false,
+          filterFramework: DictFilterFramework,
+          filterParams: {type: 'in'},
+          floatingFilterComponentFramework: DictFloatingFilterComponentFramework,
           cellStyle: {'text-align': 'center'},
           cellRendererFramework: DictRendererFramework,
           cellRendererParams: {dict: 'UserStatus'},

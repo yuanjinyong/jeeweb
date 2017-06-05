@@ -20,9 +20,11 @@
 
 
 <script type="text/ecmascript-6">
-  import Vue from 'vue'
   import { AgGridVue } from 'ag-grid-vue'
+  import DictFilterFramework from 'components/ag-grid/DictFilterFramework'
+  import DictFloatingFilterComponentFramework from 'components/ag-grid/DictFloatingFilterComponentFramework'
   import LikeFilterFramework from 'components/ag-grid/LikeFilterFramework'
+  import LikeFloatingFilterComponentFramework from 'components/ag-grid/LikeFloatingFilterComponentFramework'
   import DictRendererFramework from 'components/ag-grid/DictRendererFramework'
   import OperationRendererFramework from 'components/ag-grid/OperationRendererFramework'
   import ViewRendererFramework from 'components/ag-grid/ViewRendererFramework'
@@ -122,6 +124,7 @@
           pinned: 'left',
           suppressFilter: false,
           filterFramework: LikeFilterFramework,
+          floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
           cellRenderer: 'group',
           width: 200
         },
@@ -131,6 +134,7 @@
           pinned: 'left',
           suppressFilter: false,
           filterFramework: LikeFilterFramework,
+          floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
           cellRendererFramework: ViewRendererFramework,
           width: 150
         },
@@ -138,72 +142,13 @@
           headerName: '类型',
           field: 'f_type',
           suppressFilter: false,
+          filterFramework: DictFilterFramework,
+          filterParams: {type: 'in'},
+          floatingFilterComponentFramework: DictFloatingFilterComponentFramework,
           cellStyle: {'text-align': 'center'},
           cellRendererFramework: DictRendererFramework,
           cellRendererParams: {dict: 'MenuType'},
-          filterFramework: Vue.extend({
-            template: `<el-select :ref="'input'" v-model="text" clearable>
-                            <el-option v-for="item in items" :key="item.f_item_code" :label="item.f_item_text" :value="item.f_item_code"></el-option>
-                         </el-select>`,
-            data () {
-              return {
-                items: [
-                  {
-                    f_item_code: 0,
-                    f_item_text: '根'
-                  },
-                  {
-                    f_item_code: 1,
-                    f_item_text: '目录'
-                  },
-                  {
-                    f_item_code: 2,
-                    f_item_text: '页面'
-                  },
-                  {
-                    f_item_code: 3,
-                    f_item_text: '按钮'
-                  },
-                  {
-                    f_item_code: 4,
-                    f_item_text: '令牌'
-                  }
-                ],
-                text: null,
-                valueGetter: null
-              }
-            },
-            watch: {
-              'text': function (val, oldVal) {
-                if (val !== oldVal) {
-                  this.params.filterChangedCallback()
-                }
-              }
-            },
-            created () {
-              this.valueGetter = this.params.valueGetter
-            },
-            methods: {
-              isFilterActive () {
-                return this.text !== undefined && this.text !== null && this.text !== ''
-              },
-              doesFilterPass (params) {
-                window.devMode && console.info('doesFilterPass', params.data.f_id, this.valueGetter(params.node), this.text)
-                return this.valueGetter(params.node) === this.text
-              },
-              getModel () {
-                return {filter: this.text, filterType: 'text', type: 'equals'}
-              },
-              setModel (model) {
-                this.text = model.filter
-              },
-              afterGuiAttached () {
-                // console.debug('afterGuiAttached', this.$refs.input)
-                // this.$refs.input.focus()
-              }
-            }
-          }),
-          width: 54
+          width: 80
         },
         {
           headerName: '排序',
@@ -226,52 +171,13 @@
         {
           headerName: '状态',
           field: 'f_status',
+          suppressFilter: false,
+          filterFramework: DictFilterFramework,
+          floatingFilterComponentFramework: DictFloatingFilterComponentFramework,
           cellStyle: {'text-align': 'center'},
           cellRendererFramework: DictRendererFramework,
           cellRendererParams: {dict: 'YesNo'},
-          suppressFilter: false,
-          filterFramework: Vue.extend({
-            template: `<el-select :ref="'input'" v-model="text" clearable>
-                            <el-option v-for="item in items" :key="item.f_item_code" :label="item.f_item_text" :value="item.f_item_code"></el-option>
-                          </el-select>`,
-            data () {
-              return {
-                items: [{f_item_code: 1, f_item_text: '是'}, {f_item_code: 2, f_item_text: '否'}],
-                text: null,
-                valueGetter: null
-              }
-            },
-            watch: {
-              'text': function (val, oldVal) {
-                if (val !== oldVal) {
-                  this.params.filterChangedCallback()
-                }
-              }
-            },
-            created () {
-              this.valueGetter = this.params.valueGetter
-            },
-            methods: {
-              isFilterActive () {
-                return this.text !== undefined && this.text !== null && this.text !== ''
-              },
-              doesFilterPass (params) {
-                // window.devMode && console.info('doesFilterPass', params, this.valueGetter(params.node), this.text)
-                return this.valueGetter(params.node) === this.text
-              },
-              getModel () {
-                return {filter: this.text, filterType: 'text', type: 'equals'}
-              },
-              setModel (model) {
-                this.text = model.filter
-              },
-              afterGuiAttached () {
-                // console.debug('afterGuiAttached', this.$refs.input)
-                // this.$refs.input.focus()
-              }
-            }
-          }),
-          width: 54
+          width: 64
         },
         {
           headerName: '备注',

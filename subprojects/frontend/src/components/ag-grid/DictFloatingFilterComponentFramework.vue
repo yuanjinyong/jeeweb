@@ -2,10 +2,12 @@
 </style>
 
 <template>
-  <el-select :ref="'input'" v-model="value" clearable :multiple="multiple" @change="onChange">
-    <el-option v-for="item in options" :key="item.f_item_code" :label="item.f_item_text" :value="item.f_item_code">
-    </el-option>
-  </el-select>
+  <div class="jw-floating-filter-cell">
+    <el-select :ref="'input'" v-model="value" size="small" clearable :multiple="multiple" @change="onChange">
+      <el-option v-for="item in options" :key="item.f_item_code" :label="item.f_item_text" :value="item.f_item_code">
+      </el-option>
+    </el-select>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -15,7 +17,6 @@
     data () {
       return {
         options: [],
-        floatingModel: null,
         value: null
       }
     },
@@ -33,6 +34,12 @@
       }
       if (!this.params.column.colDef.filterParams.dict) {
         this.params.column.colDef.filterParams.dict = this.params.column.colDef.cellRendererParams.dict
+      }
+      if (!this.params.column.colDef.floatingFilterComponentParams) {
+        this.params.column.colDef.floatingFilterComponentParams = {}
+      }
+      if (this.params.column.colDef.floatingFilterComponentParams.suppressFilterButton === undefined) {
+        this.params.column.colDef.floatingFilterComponentParams.suppressFilterButton = true
       }
 
       if (this.multiple) {
@@ -53,30 +60,11 @@
       }
     },
     methods: {
-      isFilterActive () {
-        return this.value !== undefined && this.value !== null && this.value !== ''
-      },
-      doesFilterPass (params) {
-        console && console.info('doesFilterPass', this.$options.name, params)
-        return this.params.valueGetter(params.node) === this.value
-      },
-      getModel () {
-        return {
-          filter: this.value,
-          filterType: this.filterParams.filterType ? this.filterParams.filterType : 'Integer',
-          type: this.filterParams.type ? this.filterParams.type : null
-        }
-      },
-      setModel (model) {
-        this.floatingModel = model
-        this.value = model.filter
+      onParentModelChanged (parentModel) {
+        this.value = parentModel ? parentModel.filter : null
       },
       onChange (val) {
-        if (this.floatingModel) {
-          this.floatingModel = null
-        } else {
-          this.params.filterChangedCallback()
-        }
+        this.params.onFloatingFilterChanged({filter: val})
       }
     }
   })

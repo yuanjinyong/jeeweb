@@ -18,6 +18,7 @@
   import { AgGridVue } from 'ag-grid-vue'
   import AddHeaderComponenetFramework from 'components/ag-grid/AddHeaderComponenetFramework'
   import LikeFilterFramework from 'components/ag-grid/LikeFilterFramework'
+  import LikeFloatingFilterComponentFramework from 'components/ag-grid/LikeFloatingFilterComponentFramework'
   import IndexRendererFramework from 'components/ag-grid/IndexRendererFramework'
   import OperationRendererFramework from 'components/ag-grid/OperationRendererFramework'
   import ViewRendererFramework from 'components/ag-grid/ViewRendererFramework'
@@ -85,6 +86,7 @@
           pinned: 'left',
           suppressFilter: false,
           filterFramework: LikeFilterFramework,
+          floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
           cellRendererFramework: ViewRendererFramework,
           width: 150
         },
@@ -93,6 +95,7 @@
           field: 'f_name',
           suppressFilter: false,
           filterFramework: LikeFilterFramework,
+          floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
           width: 120
         },
         {
