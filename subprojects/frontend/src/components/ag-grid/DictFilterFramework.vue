@@ -54,7 +54,11 @@
     },
     methods: {
       isFilterActive () {
-        return this.value !== undefined && this.value !== null && this.value !== ''
+        if (this.multiple) {
+          return this.value !== undefined && this.value !== null && this.value.length > 0
+        } else {
+          return this.value !== undefined && this.value !== null && this.value !== ''
+        }
       },
       doesFilterPass (params) {
         console && console.info('doesFilterPass', this.$options.name, params)

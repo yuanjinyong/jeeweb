@@ -169,7 +169,7 @@
           cellStyle: {'text-align': 'center'},
           cellRendererFramework: DictRendererFramework,
           cellRendererParams: {dict: 'UserStatus'},
-          width: 45
+          width: 88
         },
         {
           headerName: '备注',
