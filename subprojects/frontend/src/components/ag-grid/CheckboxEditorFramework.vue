@@ -3,7 +3,7 @@
 
 <template>
   <el-checkbox :ref="'input'" v-model="value" :true-label="1" :false-label="2" @change="onChange"
-    style="line-height: 31px;">
+    style="line-height: 24px;">
   </el-checkbox>
 </template>
 

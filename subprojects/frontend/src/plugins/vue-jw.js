@@ -1,7 +1,6 @@
 var VueJw = {
   vm: null,
   buildPickerOptionsShortcuts (shortcutIds) {
-    console.warn('buildPickerOptionsShortcuts', this)
     var shortcuts = {
       today: {
         text: '今天',

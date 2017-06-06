@@ -2,7 +2,7 @@
 </style>
 
 <template>
-  <el-select :ref="'input'" v-model="value" :clearable="false" size="small" @change="onChange"
+  <el-select :ref="'input'" v-model="value" size="mini" :clearable="false" @change="onChange"
     style="min-width:10px;width:100%;">
     <el-option v-for="item in options" :key="item.f_item_code" :label="item.f_item_text" :value="item.f_item_code">
       {{item.f_item_text}}
