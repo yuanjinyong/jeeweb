@@ -78,7 +78,7 @@ var VueGrid = {
     },
     datasource: {
       getRows (gridParams) {
-        // console && console.debug('datasource getRows, gridParams', gridParams)
+        // console && console.warn('datasource getRows, gridParams', gridParams)
         var page = {
           pageSize: gridParams.endRow - gridParams.startRow,
           pageNo: gridParams.startRow / (gridParams.endRow - gridParams.startRow)
@@ -91,7 +91,7 @@ var VueGrid = {
           page.orderBy = page.orderBy.substr(0, page.orderBy.length - 2)
         }
 
-        // console && console.debug('datasource getRows, filterModel', gridParams.filterModel)
+        // console && console.warn('datasource getRows, filterModel', gridParams.filterModel)
         var filters = {}
         for (var key in gridParams.filterModel) {
           gridParams.context.params.totalCount = 0
@@ -137,6 +137,13 @@ var VueGrid = {
               } else {
                 filters[key + '_in'] = filterValue.join(',')
               }
+            } else {
+              filters[key] = filterValue
+            }
+          } else if (where.filterType === 'Timestamp') {
+            if (where.type === 'between') {
+              filters[key + '_begin'] = filterValue[0]
+              filters[key + '_end'] = filterValue[1]
             } else {
               filters[key] = filterValue
             }

@@ -31,6 +31,8 @@
   import DictRendererFramework from 'components/ag-grid/DictRendererFramework'
   import IndexRendererFramework from 'components/ag-grid/IndexRendererFramework'
   import OperationRendererFramework from 'components/ag-grid/OperationRendererFramework'
+  import TimestampFilterFramework from 'components/ag-grid/TimestampFilterFramework'
+  import TimestampFloatingFilterComponentFramework from 'components/ag-grid/TimestampFloatingFilterComponentFramework'
   import TimestampRendererFramework from 'components/ag-grid/TimestampRendererFramework'
   import ViewRendererFramework from 'components/ag-grid/ViewRendererFramework'
   import UserForm from './form'
@@ -135,9 +137,12 @@
         {
           headerName: '创建时间',
           field: 'f_created_time',
+          suppressFilter: false,
+          filterFramework: TimestampFilterFramework,
+          floatingFilterComponentFramework: TimestampFloatingFilterComponentFramework,
           cellStyle: {'text-align': 'center'},
           cellRendererFramework: TimestampRendererFramework,
-          width: 140
+          width: 190 // 有filter的为190，没有的为140
         },
         {
           headerName: '创建人',
@@ -163,8 +168,8 @@
           headerName: '状态',
           field: 'f_status',
           suppressFilter: false,
-          filterFramework: DictFilterFramework,
           filterParams: {type: 'in'},
+          filterFramework: DictFilterFramework,
           floatingFilterComponentFramework: DictFloatingFilterComponentFramework,
           cellStyle: {'text-align': 'center'},
           cellRendererFramework: DictRendererFramework,

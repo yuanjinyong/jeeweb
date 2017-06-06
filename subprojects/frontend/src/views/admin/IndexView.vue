@@ -166,7 +166,6 @@
       loadMenus () {
         var vm = this
         vm.loadingMenu = true
-        vm.$jw.permissionList = null // 获取菜单前，先清空上次的权限（按钮、令牌）列表
         vm.$http.get('api/admin/index/menus').then(function (response) {
           vm.loadingMenu = false
           if (response.body.success) {

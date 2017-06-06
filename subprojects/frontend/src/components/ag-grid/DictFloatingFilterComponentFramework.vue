@@ -35,6 +35,7 @@
       if (!this.params.column.colDef.filterParams.dict) {
         this.params.column.colDef.filterParams.dict = this.params.column.colDef.cellRendererParams.dict
       }
+
       if (!this.params.column.colDef.floatingFilterComponentParams) {
         this.params.column.colDef.floatingFilterComponentParams = {}
       }

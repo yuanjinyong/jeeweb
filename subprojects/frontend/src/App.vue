@@ -67,6 +67,10 @@
     margin: 1px 0 1px 4px;
   }
 
+  .jw-grid .jw-floating-filter-cell .el-date-editor--daterange.el-input {
+    width: 100%;
+  }
+
   .jw-grid .ag-floating-filter-button button {
     border: 1px solid #d1dbe5;
     border-left: none;
