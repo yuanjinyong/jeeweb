@@ -1,4 +1,4 @@
-package com.jeeweb.platform.schema.web.api;
+package com.jeeweb.schema.web.api;
 
 import javax.annotation.Resource;
 
@@ -11,10 +11,10 @@ import com.jeeweb.framework.business.web.controller.SuperController;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
-import com.jeeweb.platform.schema.service.InformationSchemaService;
+import com.jeeweb.schema.service.InformationSchemaService;
 
 @RestController
-@RequestMapping(value = "/api/platform/schema/information")
+@RequestMapping(value = "/api/schema/information")
 public class InformationSchemaApi extends SuperController {
     @Resource
     private InformationSchemaService informationSchemaService;

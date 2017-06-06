@@ -9,26 +9,24 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**
- * MyBatis执行sql工具
- * 
  * @author 袁进勇
- *
+ * 
  */
 @Component
-public class JeewebMapper extends SqlMapper {
+public class DefaultSqlMapper extends AbstractSqlMapper {
     @Autowired
-    @Qualifier("jeewebSqlSessionFactory")
+    @Qualifier("defaultSqlSessionFactory")
     private SqlSessionFactory sqlSessionFactory;
 
     @Override
     public void afterPropertiesSet() throws Exception {
         if (sqlSessionFactory == null) {
-            throw new Exception("请先定义Bean jeewebSqlSessionFactory！");
+            throw new Exception("请先定义Bean defaultSqlSessionFactory！");
         }
     }
 
     @Override
-    protected SqlSessionFactory getSqlSessionFactory() {
+    public SqlSessionFactory getSqlSessionFactory() {
         return sqlSessionFactory;
     }
 }

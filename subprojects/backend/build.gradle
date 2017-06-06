@@ -29,19 +29,21 @@ dependencies {
     compile project(":frontend") // 把前台工程依赖进来，这样就会自动的先构建前台的文件打成jar包。
 
     // spring-mvc，支持 Web 应用开发，这里不使用内嵌的Tomcat
-    compile("org.springframework.boot:spring-boot-starter-web")
-    providedCompile("org.springframework.boot:spring-boot-starter-tomcat")
-    providedCompile("org.apache.tomcat:servlet-api:6.0.45")
-    compile("org.springframework.boot:spring-boot-starter-security")
+    compile "org.springframework.boot:spring-boot-starter-web"
+    providedCompile "org.springframework.boot:spring-boot-starter-tomcat"
+    providedCompile "org.apache.tomcat:servlet-api:6.0.45"
+    compile "org.springframework.boot:spring-boot-starter-security"
     // 用于生成spring-configuration-metadata.json文件
-    compile("org.springframework.boot:spring-boot-configuration-processor")
+    compile "org.springframework.boot:spring-boot-configuration-processor"
 
-    // mybatis (数据库持久层)
-    compile("org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1")
+    // atomikos的分布式事务
+    compile "org.springframework.boot:spring-boot-starter-jta-atomikos"
     // druid (数据库连接池)
-    compile "com.alibaba:druid:1.0.26"
+    // compile "com.alibaba:druid:1.0.26"
+    // mybatis (数据库持久层)
+    compile "org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1"
     // MySQL
-    runtime('mysql:mysql-connector-java')
+    runtime "mysql:mysql-connector-java"
 
     // Redis缓存
     compile "redis.clients:jedis:2.4.0"
@@ -52,13 +54,13 @@ dependencies {
     compile "commons-io:commons-io:2.5"
 
     // 添加适用于生产环境的功能，如性能指标和监测等功能
-    runtime("org.springframework.boot:spring-boot-starter-actuator")
+    runtime "org.springframework.boot:spring-boot-starter-actuator"
 
     // testing
-    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile "org.springframework.boot:spring-boot-starter-test"
 
     // spring dev tools
-    dev("org.springframework.boot:spring-boot-devtools")
+    dev "org.springframework.boot:spring-boot-devtools"
 }
 
 

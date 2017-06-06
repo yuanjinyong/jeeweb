@@ -1,36 +1,34 @@
 /**
  * 
  */
-package com.jeeweb.platform.schema.mapper;
+package com.jeeweb.schema.mapper;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import com.jeeweb.framework.business.mapper.SqlMapper;
+import com.jeeweb.framework.business.mapper.AbstractSqlMapper;
 
 /**
- * MyBatis执行sql工具
- * 
  * @author 袁进勇
  *
  */
 @Component
-public class InformationSchemaMapper extends SqlMapper {
+public class SchemaSqlMapper extends AbstractSqlMapper {
     @Autowired
-    @Qualifier("schemabSqlSessionFactory")
+    @Qualifier("schemaSqlSessionFactory")
     private SqlSessionFactory sqlSessionFactory;
 
     @Override
     public void afterPropertiesSet() throws Exception {
         if (sqlSessionFactory == null) {
-            throw new Exception("请先定义Bean schemabSqlSessionFactory！");
+            throw new Exception("请先定义Bean schemaSqlSessionFactory！");
         }
     }
 
     @Override
-    protected SqlSessionFactory getSqlSessionFactory() {
+    public SqlSessionFactory getSqlSessionFactory() {
         return sqlSessionFactory;
     }
 }

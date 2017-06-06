@@ -70,8 +70,8 @@
     </div>
 
     <div class="jw-form-footer" style="text-align: right;">
-      <el-button @click="onCancelForm('menuForm')">取 消</el-button>
-      <el-button type="primary" @click="onSubmitForm('menuForm')" :disabled="formOptions.operation === 'view'">确 定
+      <el-button @click="onCancelForm('form')">取 消</el-button>
+      <el-button type="primary" @click="onSubmitForm('form')" :disabled="formOptions.operation === 'view'">确 定
       </el-button>
     </div>
 

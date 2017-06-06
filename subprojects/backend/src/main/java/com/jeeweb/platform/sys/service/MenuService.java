@@ -30,7 +30,7 @@ public class MenuService extends BaseService<String, MenuEntity> {
     private MenuUrlMapper menuUrlMapper;
 
     @Autowired
-    @Qualifier("jeewebMapper")
+    @Qualifier("defaultSqlMapper")
     private SqlMapper sqlMapper;
 
     @Override

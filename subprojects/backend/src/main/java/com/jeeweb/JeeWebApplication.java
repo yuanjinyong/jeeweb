@@ -15,7 +15,7 @@ import com.jeeweb.framework.core.listener.ApplicationStartupListener;
  *
  */
 @SpringBootApplication(scanBasePackages = { "com.jeeweb.**.web.api.**", "com.jeeweb.**.service.**",
-        "com.jeeweb.**.mapper.**", "com.jeeweb.framework.**", "com.jeeweb.platform.**" })
+        "com.jeeweb.**.mapper.**", "com.jeeweb.framework.**", "com.jeeweb.platform.**", "com.jeeweb.schema.**" })
 public class JeeWebApplication extends SpringBootServletInitializer {
     /*
      * (non-Javadoc)

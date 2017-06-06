@@ -26,7 +26,7 @@
       return {
         featureOptions: {
           name: '数据库列',
-          url: 'api/platform/schema/information/columns'
+          url: 'api/schema/information/columns'
         },
         gridOptions: this.$grid.buildOptions({
           context: {
@@ -68,7 +68,7 @@
           pinned: 'left',
           suppressFilter: false,
           filterParams: {
-            url: 'api/platform/schema/information/schematas',
+            url: 'api/schema/information/schematas',
             codeFiled: 'SCHEMA_NAME',
             textFiled: 'SCHEMA_NAME'
           },

@@ -375,7 +375,7 @@
       },
       _loadTables (tableName, callback) {
         var vm = this
-        vm.$http.get('api/platform/schema/information/tables', {
+        vm.$http.get('api/schema/information/tables', {
           params: {
             TABLE_SCHEMA: vm.entity.f_db_name,
             TABLE_NAME_like: tableName,
@@ -393,7 +393,7 @@
       },
       loadFields (item) {
         var vm = this
-        vm.$http.get('api/platform/schema/information/columns', {
+        vm.$http.get('api/schema/information/columns', {
           params: {
             TABLE_SCHEMA: vm.entity.f_db_name,
             TABLE_NAME: vm.entity.f_table_name,

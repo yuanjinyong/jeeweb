@@ -122,7 +122,7 @@
   }
 
   .jw-dialog {
-    min-width: 650px;
+    min-width: 771px;
     margin-bottom: 30px;
     top: 30px;
   }
