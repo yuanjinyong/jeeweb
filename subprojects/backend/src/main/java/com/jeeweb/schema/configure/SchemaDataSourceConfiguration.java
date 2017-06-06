@@ -31,7 +31,7 @@ public class SchemaDataSourceConfiguration {
 
     @Value("${spring.datasource.schema.minPoolSize:1}")
     private Integer minPoolSize;
-    @Value("${spring.datasource.schema.maxPoolSize:25}")
+    @Value("${spring.datasource.schema.maxPoolSize:5}")
     private Integer maxPoolSize;
     @Value("${spring.datasource.schema.maxLifetime:20000}")
     private Integer maxLifetime;

@@ -30,7 +30,7 @@ public class DefaultDataSourceConfiguration {
     @Value("${spring.datasource.default.password:#{null}}")
     private String password;
 
-    @Value("${spring.datasource.default.minPoolSize:3}")
+    @Value("${spring.datasource.default.minPoolSize:5}")
     private Integer minPoolSize;
     @Value("${spring.datasource.default.maxPoolSize:25}")
     private Integer maxPoolSize;
