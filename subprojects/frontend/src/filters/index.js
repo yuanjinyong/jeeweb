@@ -1,2 +1,2 @@
-import './DictFormatter'
-import './TimestampFormatter'
+import './DictFilter'
+import './TimestampFilter'
