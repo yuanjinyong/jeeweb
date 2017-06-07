@@ -117,10 +117,10 @@ var VueGrid = {
           if (where.filterType === 'String') {
             if (where.type === 'like') {
               filters[key + '_like'] = filterValue
-            } else if (where.type === 'rightLike') {
-              filters[key + '_rightLike'] = filterValue
             } else if (where.type === 'leftLike') {
               filters[key + '_leftLike'] = filterValue
+            } else if (where.type === 'rightLike') {
+              filters[key + '_rightLike'] = filterValue
             } else if (where.type === 'in') {
               if (filterValue.length === 1) {
                 filters[key] = filterValue[0]

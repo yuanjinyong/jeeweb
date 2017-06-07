@@ -61,6 +61,7 @@
               totalCount: 0
             }
           },
+          enableServerSideFilter: false,
           rowModelType: 'normal',
           rowData: [],
           pagination: false,
@@ -132,7 +133,7 @@
           headerName: '名称',
           field: 'f_name',
           pinned: 'left',
-          suppressFilter: false,
+          suppressFilter: true,
           filterFramework: LikeFilterFramework,
           floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
           cellRendererFramework: ViewRendererFramework,
@@ -141,9 +142,15 @@
         {
           headerName: '类型',
           field: 'f_type',
-          suppressFilter: false,
+          suppressFilter: true,
           filterFramework: DictFilterFramework,
-          filterParams: {type: 'in'},
+          filterParams: {
+            type: 'in',
+            doesFilterPass: function (params, value, filterPassParams) {
+              console && console.info('类型 doesFilterPass', filterPassParams.data.f_name, filterPassParams.node)
+              return true
+            }
+          },
           floatingFilterComponentFramework: DictFloatingFilterComponentFramework,
           cellStyle: {'text-align': 'center'},
           cellRendererFramework: DictRendererFramework,

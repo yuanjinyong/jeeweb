@@ -72,9 +72,23 @@
           return this.value !== undefined && this.value !== null && this.value !== ''
         }
       },
-      doesFilterPass (params) {
-        console && console.info('doesFilterPass', this.$options.name, params)
-        return this.params.valueGetter(params.node) === this.value
+      doesFilterPass (filterPassParams) {
+        if (this.filterParams.doesFilterPass) {
+          return this.filterParams.doesFilterPass(this.params, this.value, filterPassParams)
+        } else {
+          if (this.filterParams.type === 'in') {
+            this.params.valueGetter(filterPassParams.node) === this.value
+            if (this.value && this.value.length > 0) {
+              return this.value.indexOf(this.params.valueGetter(filterPassParams.node) + '') > -1
+            }
+          } else if (this.filterParams.type === 'notIn') {
+            return this.value.indexOf(this.params.valueGetter(filterPassParams.node) + '') < 0
+          } else {
+            return this.value === this.params.valueGetter(filterPassParams.node) + ''
+          }
+
+          return true
+        }
       },
       getModel () {
         return {

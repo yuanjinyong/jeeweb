@@ -28,9 +28,19 @@
       isFilterActive () {
         return this.value !== undefined && this.value !== null && this.value !== ''
       },
-      doesFilterPass (params) {
-        console && console.info('doesFilterPass', this.$options.name, params)
-        return this.params.valueGetter(params.node).contains(this.value)
+      doesFilterPass (filterPassParams) {
+        if (this.filterParams.doesFilterPass) {
+          return this.filterParams.doesFilterPass(this.params, this.value, filterPassParams)
+        } else {
+          var cellValue = this.params.valueGetter(filterPassParams.node) + ''
+          if (this.filterParams.type === 'leftLike') {
+            return cellValue.startsWith(this.value)
+          } else if (this.filterParams.type === 'rightLike') {
+            return cellValue.endsWith(this.value)
+          } else {
+            return cellValue.indexOf(this.value) > -1
+          }
+        }
       },
       getModel () {
         return {
