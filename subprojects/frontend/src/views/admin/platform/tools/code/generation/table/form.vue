@@ -144,12 +144,7 @@
           floatingFilter: false
         }),
         entity: {fieldList: []},
-        rules: {
-          f_name: [
-            {required: true, message: '请输入角色名称', trigger: 'blur'},
-            {max: 50, message: '长度在50个字符以内', trigger: 'blur'}
-          ]
-        }
+        rules: {}
       }
     },
     computed: {
@@ -227,14 +222,17 @@
                   f_item_code: 'java.lang.Integer',
                   f_item_text: 'java.lang.Integer'
                 }, {
+                  f_item_code: 'java.math.BigDecimal',
+                  f_item_text: 'java.math.BigDecimal'
+                }, {
+                  f_item_code: 'java.sql.Timestamp',
+                  f_item_text: 'java.sql.Timestamp'
+                }, {
                   f_item_code: 'java.lang.Double',
                   f_item_text: 'java.lang.Double'
                 }, {
                   f_item_code: 'java.lang.Boolean',
                   f_item_text: 'java.lang.Boolean'
-                }, {
-                  f_item_code: 'java.sql.Timestamp',
-                  f_item_text: 'java.sql.Timestamp'
                 }]
               },
               width: 180
@@ -369,7 +367,7 @@
       loadTables (query, callback) {
         var vm = this
         vm.loadTablesTimer && clearTimeout(vm.loadTablesTimer)
-        vm.loadTablesTimer = setTimeout(() => {
+        vm.loadTablesTimer = setTimeout(function () {
           vm._loadTables(query, callback)
         }, 500)
       },
@@ -384,7 +382,7 @@
         }).then(function (response) {
           var tables = []
           if (response.body.success) {
-            response.body.data.items.forEach((table) => {
+            response.body.data.items.forEach(function (table) {
               tables.push({value: table.TABLE_NAME})
             })
           }
@@ -402,7 +400,7 @@
         }).then(function (response) {
           if (response.body.success) {
             vm.entity.fieldList = []
-            response.body.data.items.forEach((column) => {
+            response.body.data.items.forEach(function (column) {
               vm.entity.fieldList.push(vm._buildFieldEntity(column))
             })
           } else {
@@ -412,24 +410,59 @@
         })
       },
       _buildFieldEntity (column) {
+        var cfg = {
+          javaType: {
+            bigint: 'java.lang.Integer',
+            // blob
+            // char
+            date: 'java.sql.Timestamp',
+            datetime: 'java.sql.Timestamp',
+            decimal: 'java.math.BigDecimal',
+            double: 'java.lang.Double',
+            // enum
+            float: 'java.lang.Float',
+            int: 'java.lang.Integer',
+            // longblob
+            longtext: 'java.lang.String',
+            // mediumblob
+            mediumtext: 'java.lang.String',
+            // set
+            smallint: 'java.lang.Integer',
+            text: 'java.lang.String',
+            time: 'java.sql.Timestamp',
+            timestamp: 'java.sql.Timestamp',
+            tinyblob: 'java.lang.Integer',
+            tinyint: 'java.lang.Integer',
+            tinytext: 'java.lang.Integer',
+            varchar: 'java.lang.String'
+          },
+          superClassField: ['f_id', 'f_parent_id', 'f_parent_path'],
+          suppressInsertField: ['f_id'],
+          suppressUpdateField: ['f_id', 'f_creator_id', 'f_created_time'],
+          equalField: ['f_status'],
+          likeField: ['f_name'],
+          inField: ['f_status'],
+          betweenField: ['f_created_time']
+        }
+
         return {
           f_order: column.ORDINAL_POSITION,
           f_column_name: column.COLUMN_NAME,
           f_column_comment: column.COLUMN_COMMENT,
           f_column_type: column.COLUMN_TYPE,
-          f_full_java_type: 'java.lang.String',
+          f_full_java_type: cfg.javaType[column.DATA_TYPE],
           f_is_primary: column.COLUMN_KEY === 'PRI' ? 1 : 2,
-          f_is_super_class_field: 2,
-          f_is_insert: 2,
-          f_is_update: 2,
-          f_is_select: 2,
-          f_is_equal: 2,
-          f_is_like: 2,
+          f_is_super_class_field: cfg.superClassField.indexOf(column.COLUMN_NAME) >= 0 ? 1 : 2,
+          f_is_insert: cfg.suppressInsertField.indexOf(column.COLUMN_NAME) >= 0 ? 2 : 1,
+          f_is_update: cfg.suppressUpdateField.indexOf(column.COLUMN_NAME) >= 0 ? 2 : 1,
+          f_is_select: 1,
+          f_is_equal: cfg.equalField.indexOf(column.COLUMN_NAME) >= 0 ? 1 : 2,
+          f_is_like: cfg.likeField.indexOf(column.COLUMN_NAME) >= 0 ? 1 : 2,
           f_is_left_like: 2,
           f_is_right_like: 2,
-          f_is_in: 2,
+          f_is_in: cfg.inField.indexOf(column.COLUMN_NAME) >= 0 ? 1 : 2,
           f_is_not_in: 2,
-          f_is_between: 2,
+          f_is_between: cfg.betweenField.indexOf(column.COLUMN_NAME) >= 0 ? 1 : 2,
           f_is_search: 2,
           f_is_grid: 2,
           f_is_form: 2
@@ -441,7 +474,7 @@
       },
       _loadSchematas () {
         var vm = this
-        vm.$http.get('api/platform/schema/information/schematas', {params: {orderBy: 'SCHEMA_NAME'}}).then(function (response) {
+        vm.$http.get('api/schema/information/schematas', {params: {orderBy: 'SCHEMA_NAME'}}).then(function (response) {
           vm.schematas = response.body.success ? response.body.data.items : []
         })
       },
@@ -463,6 +496,17 @@
         vm.$refs[formName].validate(function (valid) {
           if (!valid) {
             return false
+          }
+
+          if (vm.formOptions.operation === 'add') {
+            vm.generateRule.tableList.push(vm.entity)
+          } else {
+            for (var i = 0; i < vm.generateRule.tableList.length; i++) {
+              if (vm.generateRule.tableList[i].f_db_name === vm.entity.f_db_name && vm.generateRule.tableList[i].f_table_name === vm.entity.f_table_name) {
+                vm.generateRule.tableList.splice(i, 1, vm.entity)
+                break
+              }
+            }
           }
 
           vm._closeForm()

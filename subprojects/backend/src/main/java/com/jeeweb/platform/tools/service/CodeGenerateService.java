@@ -107,7 +107,7 @@ public class CodeGenerateService extends BaseService<Integer, GenerateRuleEntity
             table.setFieldList(generateRuleFieldMapper
                     .selectEntityListPage(new ParameterMap("f_table_id", table.getF_id()).setOrderBy("f_order")));
             for (GenerateRuleFieldEntity field : table.getFieldList()) {
-                if (field.getF_is_primary()) {
+                if (field.getF_is_primary() == 1) {
                     table.setPrimaryField(field);
                     break;
                 }

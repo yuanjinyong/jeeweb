@@ -155,8 +155,27 @@
       ]
     },
     methods: {
+      onRemove (entity) {
+        var vm = this
+        var featureName = this.featureOptions.name
+        this.$confirm('确定要删除所选的' + featureName + '吗?', '删除' + featureName, {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(function () {
+          var tableList = vm.generateRule.tableList
+          for (var i = 0; i < tableList.length; i++) {
+            var table = tableList[i]
+            if (table.f_db_name === entity.f_db_name && table.f_table_name === entity.f_table_name) {
+              tableList.splice(i, 1)
+              break
+            }
+          }
+          vm.gridOptions.api.setRowData(tableList)
+        })
+      },
       onSubmit (event) {
-        console.debug('onSubmit', event, this.formOptions.params)
+        this.gridOptions.api.setRowData(this.generateRule.tableList)
       }
     }
   }

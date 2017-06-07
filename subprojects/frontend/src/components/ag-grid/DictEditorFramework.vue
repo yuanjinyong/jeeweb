@@ -40,7 +40,6 @@
           this.params.onChange(this.params, selectedValue)
         } else {
           this.params.node.data[this.params.colDef.field] = selectedValue
-          console.debug('fieldList', this.params.context.featureComponent.entity.fieldList)
         }
       },
       getValue () {

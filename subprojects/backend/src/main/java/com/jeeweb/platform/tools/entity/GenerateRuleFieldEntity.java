@@ -12,21 +12,21 @@ public class GenerateRuleFieldEntity extends BaseEntity<Integer> {
     private String f_column_type; // 字段类型
     private String f_full_java_type; // 字段对应Java数据类型的全路径类名
     private String f_java_type; // 字段对应Java数据类型的类名
-    private Boolean f_is_primary; // 是否为主健，1是，2否
-    private Boolean f_is_super_class_field; // 是否为父类字段，1是，2否
-    private Boolean f_is_insert; // 是否为插入字段，1是，2否
-    private Boolean f_is_update; // 是否为更新字段，1是，2否
-    private Boolean f_is_select; // 是否为查询字段，1是，2否
-    private Boolean f_is_equal; // 是否为等于查询条件，1是，2否
-    private Boolean f_is_like; // 是否为左右模糊查询条件，1是，2否
-    private Boolean f_is_left_like; // 是否为左模糊查询条件，1是，2否
-    private Boolean f_is_right_like; // 是否为右模糊查询条件，1是，2否
-    private Boolean f_is_in; // 是否为IN查询条件，1是，2否
-    private Boolean f_is_not_in; // 是否为NOT IN查询条件，1是，2否
-    private Boolean f_is_between; // 是否为BETWEEN查询条件，1是，2否
-    private Boolean f_is_search; // 是否在搜索栏中显示，1是，2否
-    private Boolean f_is_grid; // 是否在Grid表格中显示，1是，2否
-    private Boolean f_is_form; // 是否在Form表单中显示，1是，2否
+    private Integer f_is_primary; // 是否为主健，1是，2否
+    private Integer f_is_super_class_field; // 是否为父类字段，1是，2否
+    private Integer f_is_insert; // 是否为插入字段，1是，2否
+    private Integer f_is_update; // 是否为更新字段，1是，2否
+    private Integer f_is_select; // 是否为查询字段，1是，2否
+    private Integer f_is_equal; // 是否为等于查询条件，1是，2否
+    private Integer f_is_like; // 是否为左右模糊查询条件，1是，2否
+    private Integer f_is_left_like; // 是否为左模糊查询条件，1是，2否
+    private Integer f_is_right_like; // 是否为右模糊查询条件，1是，2否
+    private Integer f_is_in; // 是否为IN查询条件，1是，2否
+    private Integer f_is_not_in; // 是否为NOT IN查询条件，1是，2否
+    private Integer f_is_between; // 是否为BETWEEN查询条件，1是，2否
+    private Integer f_is_search; // 是否在搜索栏中显示，1是，2否
+    private Integer f_is_grid; // 是否在Grid表格中显示，1是，2否
+    private Integer f_is_form; // 是否在Form表单中显示，1是，2否
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private String f_is_nullable;
@@ -87,123 +87,123 @@ public class GenerateRuleFieldEntity extends BaseEntity<Integer> {
         this.f_java_type = f_java_type;
     }
 
-    public Boolean getF_is_primary() {
+    public Integer getF_is_primary() {
         return f_is_primary;
     }
 
-    public void setF_is_primary(Boolean f_is_primary) {
+    public void setF_is_primary(Integer f_is_primary) {
         this.f_is_primary = f_is_primary;
     }
 
-    public Boolean getF_is_super_class_field() {
+    public Integer getF_is_super_class_field() {
         return f_is_super_class_field;
     }
 
-    public void setF_is_super_class_field(Boolean f_is_super_class_field) {
+    public void setF_is_super_class_field(Integer f_is_super_class_field) {
         this.f_is_super_class_field = f_is_super_class_field;
     }
 
-    public Boolean getF_is_insert() {
+    public Integer getF_is_insert() {
         return f_is_insert;
     }
 
-    public void setF_is_insert(Boolean f_is_insert) {
+    public void setF_is_insert(Integer f_is_insert) {
         this.f_is_insert = f_is_insert;
     }
 
-    public Boolean getF_is_update() {
+    public Integer getF_is_update() {
         return f_is_update;
     }
 
-    public void setF_is_update(Boolean f_is_update) {
+    public void setF_is_update(Integer f_is_update) {
         this.f_is_update = f_is_update;
     }
 
-    public Boolean getF_is_select() {
+    public Integer getF_is_select() {
         return f_is_select;
     }
 
-    public void setF_is_select(Boolean f_is_select) {
+    public void setF_is_select(Integer f_is_select) {
         this.f_is_select = f_is_select;
     }
 
-    public Boolean getF_is_equal() {
+    public Integer getF_is_equal() {
         return f_is_equal;
     }
 
-    public void setF_is_equal(Boolean f_is_equal) {
+    public void setF_is_equal(Integer f_is_equal) {
         this.f_is_equal = f_is_equal;
     }
 
-    public Boolean getF_is_like() {
+    public Integer getF_is_like() {
         return f_is_like;
     }
 
-    public void setF_is_like(Boolean f_is_like) {
+    public void setF_is_like(Integer f_is_like) {
         this.f_is_like = f_is_like;
     }
 
-    public Boolean getF_is_left_like() {
+    public Integer getF_is_left_like() {
         return f_is_left_like;
     }
 
-    public void setF_is_left_like(Boolean f_is_left_like) {
+    public void setF_is_left_like(Integer f_is_left_like) {
         this.f_is_left_like = f_is_left_like;
     }
 
-    public Boolean getF_is_right_like() {
+    public Integer getF_is_right_like() {
         return f_is_right_like;
     }
 
-    public void setF_is_right_like(Boolean f_is_right_like) {
+    public void setF_is_right_like(Integer f_is_right_like) {
         this.f_is_right_like = f_is_right_like;
     }
 
-    public Boolean getF_is_in() {
+    public Integer getF_is_in() {
         return f_is_in;
     }
 
-    public void setF_is_in(Boolean f_is_in) {
+    public void setF_is_in(Integer f_is_in) {
         this.f_is_in = f_is_in;
     }
 
-    public Boolean getF_is_not_in() {
+    public Integer getF_is_not_in() {
         return f_is_not_in;
     }
 
-    public void setF_is_not_in(Boolean f_is_not_in) {
+    public void setF_is_not_in(Integer f_is_not_in) {
         this.f_is_not_in = f_is_not_in;
     }
 
-    public Boolean getF_is_between() {
+    public Integer getF_is_between() {
         return f_is_between;
     }
 
-    public void setF_is_between(Boolean f_is_between) {
+    public void setF_is_between(Integer f_is_between) {
         this.f_is_between = f_is_between;
     }
 
-    public Boolean getF_is_search() {
+    public Integer getF_is_search() {
         return f_is_search;
     }
 
-    public void setF_is_search(Boolean f_is_search) {
+    public void setF_is_search(Integer f_is_search) {
         this.f_is_search = f_is_search;
     }
 
-    public Boolean getF_is_grid() {
+    public Integer getF_is_grid() {
         return f_is_grid;
     }
 
-    public void setF_is_grid(Boolean f_is_grid) {
+    public void setF_is_grid(Integer f_is_grid) {
         this.f_is_grid = f_is_grid;
     }
 
-    public Boolean getF_is_form() {
+    public Integer getF_is_form() {
         return f_is_form;
     }
 
-    public void setF_is_form(Boolean f_is_form) {
+    public void setF_is_form(Integer f_is_form) {
         this.f_is_form = f_is_form;
     }
 

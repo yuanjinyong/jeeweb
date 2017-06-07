@@ -2,7 +2,7 @@
 </style>
 
 <template>
-  <div class="ag-header-component" style="padding: 5px;">
+  <div class="ag-header-component" style="padding: 3px 5px;">
     <el-button type="primary" size="mini"
       :title="'增加'+featureOptions.name"
       :disabled="!permission.add"
