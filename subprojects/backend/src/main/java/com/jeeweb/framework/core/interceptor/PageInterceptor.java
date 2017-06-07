@@ -212,11 +212,10 @@ public class PageInterceptor implements Interceptor {
             if (!HelpUtil.isEmpty(orderBy)) {
                 pageSql.append(" \nORDER BY ").append(orderBy);
             }
-            Integer pageSize = params.getPageSize();
-            if (pageSize != null) {
+            if (params.hasPagenation()) {
                 Integer beginRow = params.getBeginRowNo();
-                pageSql.append("\n) AS TMP_TB WHERE ROWNUM <= ").append(beginRow + pageSize).append(") WHERE ROW_ID > ")
-                        .append(beginRow);
+                pageSql.append("\n) AS TMP_TB WHERE ROWNUM <= ").append(beginRow + params.getPageSize())
+                        .append(") WHERE ROW_ID > ").append(beginRow);
             }
         }
 
