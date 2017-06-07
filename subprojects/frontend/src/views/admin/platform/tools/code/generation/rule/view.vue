@@ -160,7 +160,8 @@
     },
     methods: {
       onGenerate (entity) {
-        alert('onGenerate')
+        this.$http.put(this.featureOptions.url + '/' + entity.f_id + '/generate').then(function (response) {
+        })
       }
     }
   }

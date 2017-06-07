@@ -34,9 +34,9 @@
         } else {
           var cellValue = this.params.valueGetter(filterPassParams.node) + ''
           if (this.filterParams.type === 'leftLike') {
-            return cellValue.startsWith(this.value)
-          } else if (this.filterParams.type === 'rightLike') {
             return cellValue.endsWith(this.value)
+          } else if (this.filterParams.type === 'rightLike') {
+            return cellValue.startsWith(this.value)
           } else {
             return cellValue.indexOf(this.value) > -1
           }

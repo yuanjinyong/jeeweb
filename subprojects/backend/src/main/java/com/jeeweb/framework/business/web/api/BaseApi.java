@@ -1,4 +1,4 @@
-package com.jeeweb.framework.business.web.controller;
+package com.jeeweb.framework.business.web.api;
 
 import java.util.List;
 
@@ -8,11 +8,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.jeeweb.framework.business.entity.BaseEntity;
 import com.jeeweb.framework.business.service.BaseService;
+import com.jeeweb.framework.business.web.controller.SuperController;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
 
-public abstract class BaseController<P, E extends BaseEntity<P>> extends SuperController {
+public abstract class BaseApi<P, E extends BaseEntity<P>> extends SuperController {
     protected abstract BaseService<P, E> getService();
 
     protected ResponseResult listEntities() {

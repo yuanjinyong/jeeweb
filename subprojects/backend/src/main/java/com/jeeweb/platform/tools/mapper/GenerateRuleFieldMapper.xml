@@ -9,9 +9,10 @@
         f_column_name,
         f_column_comment,
         f_column_type,
-        f_full_java_type,
+        f_java_type,
         f_is_primary,
         f_is_super_class_field,
+        f_is_override_field,
         f_is_insert,
         f_is_update,
         f_is_select,
@@ -35,9 +36,10 @@
         #{f_column_name},
         #{f_column_comment},
         #{f_column_type},
-        #{f_full_java_type},
+        #{f_java_type},
         #{f_is_primary},
         #{f_is_super_class_field},
+        #{f_is_override_field},
         #{f_is_insert},
         #{f_is_update},
         #{f_is_select},
@@ -61,9 +63,10 @@
             #{item.f_column_name},
             #{item.f_column_comment},
             #{item.f_column_type},
-            #{item.f_full_java_type},
+            #{item.f_java_type},
             #{item.f_is_primary},
             #{item.f_is_super_class_field},
+            #{item.f_is_override_field},
             #{item.f_is_insert},
             #{item.f_is_update},
             #{item.f_is_select},
@@ -89,9 +92,10 @@
         t.f_column_name,
         t.f_column_comment,
         t.f_column_type,
-        t.f_full_java_type,
+        t.f_java_type,
         t.f_is_primary,
         t.f_is_super_class_field,
+        t.f_is_override_field,
         t.f_is_insert,
         t.f_is_update,
         t.f_is_select,
@@ -156,9 +160,10 @@
         <if test="f_column_name != null">f_column_name=#{f_column_name},</if>
         <if test="f_column_comment != null">f_column_comment=#{f_column_comment},</if>
         <if test="f_column_type != null">f_column_type=#{f_column_type},</if>
-        <if test="f_full_java_type != null">f_full_java_type=#{f_full_java_type},</if>
+        <if test="f_java_type != null">f_java_type=#{f_java_type},</if>
         <if test="f_is_primary != null">f_is_primary=#{f_is_primary},</if>
         <if test="f_is_super_class_field != null">f_is_super_class_field=#{f_is_super_class_field},</if>
+        <if test="f_is_override_field != null">f_is_override_field=#{f_is_override_field},</if>
         <if test="f_is_insert != null">f_is_insert=#{f_is_insert},</if>
         <if test="f_is_update != null">f_is_update=#{f_is_update},</if>
         <if test="f_is_select != null">f_is_select=#{f_is_select},</if>

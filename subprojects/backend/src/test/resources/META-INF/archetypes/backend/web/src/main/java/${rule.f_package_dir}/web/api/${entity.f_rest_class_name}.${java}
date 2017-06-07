@@ -1,4 +1,5 @@
-package com.jeeweb.platform.sys.web.api;
+package ${rule.f_package_name}.web.api;
+
 
 import javax.annotation.Resource;
 
@@ -9,21 +10,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.jeeweb.framework.business.service.BaseService;
-import com.jeeweb.framework.business.web.api.BaseApi;
+import ${entity.f_service_base_class};
+import ${entity.f_rest_base_class};
 import com.jeeweb.framework.core.model.ResponseResult;
-import com.jeeweb.platform.sys.entity.UrlEntity;
-import com.jeeweb.platform.sys.service.UrlService;
+import ${entity.f_entity_class};
+import ${entity.f_service_class};
+
 
 @RestController
-@RequestMapping(value = "/api/platform/sys/urls")
-public class UrlApi extends BaseApi<String, UrlEntity> {
+@RequestMapping(value = "${rule.f_request_url}")
+public class ${entity.f_rest_class_name} extends ${entity.f_rest_base_class_name}<${entity.primaryField.f_short_java_type}, ${entity.f_entity_class_name}> {
     @Resource
-    private UrlService urlService;
+    private ${entity.f_service_class_name} ${org.springframework.util.StringUtils.uncapitalize(entity.f_service_class_name)};
 
     @Override
-    protected BaseService<String, UrlEntity> getService() {
-        return urlService;
+    protected ${entity.f_service_base_class_name}<${entity.primaryField.f_short_java_type}, ${entity.f_entity_class_name}> getService() {
+        return ${org.springframework.util.StringUtils.uncapitalize(entity.f_service_class_name)};
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -32,22 +34,22 @@ public class UrlApi extends BaseApi<String, UrlEntity> {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseResult create(@RequestBody UrlEntity entity, UriComponentsBuilder ucBuilder) {
+    public ResponseResult create(@RequestBody ${entity.f_entity_class_name} entity, UriComponentsBuilder ucBuilder) {
         return super.createEntity(entity, ucBuilder);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseResult get(@PathVariable("id") String primaryKey) {
+    public ResponseResult get(@PathVariable("id") ${entity.primaryField.f_short_java_type} primaryKey) {
         return super.getEntity(primaryKey);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseResult update(@PathVariable("id") String primaryKey, @RequestBody UrlEntity entity) {
+    public ResponseResult update(@PathVariable("id") ${entity.primaryField.f_short_java_type} primaryKey, @RequestBody ${entity.f_entity_class_name} entity) {
         return super.updateEntity(primaryKey, entity);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseResult delete(@PathVariable("id") String primaryKey) {
+    public ResponseResult delete(@PathVariable("id") ${entity.primaryField.f_short_java_type} primaryKey) {
         return super.deleteEntity(primaryKey);
     }
 

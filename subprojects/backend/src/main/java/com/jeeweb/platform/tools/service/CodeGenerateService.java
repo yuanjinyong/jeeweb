@@ -19,12 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jeeweb.framework.business.mapper.BaseMapper;
 import com.jeeweb.framework.business.service.BaseService;
-import com.jeeweb.framework.business.web.controller.BaseController;
 import com.jeeweb.framework.core.exception.BusinessException;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
-import com.jeeweb.platform.sys.entity.MenuEntity;
 import com.jeeweb.platform.sys.mapper.MenuMapper;
 import com.jeeweb.platform.tools.entity.GenerateRuleEntity;
 import com.jeeweb.platform.tools.entity.GenerateRuleFieldEntity;
@@ -152,6 +150,7 @@ public class CodeGenerateService extends BaseService<Integer, GenerateRuleEntity
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void generateCode(Integer f_rule_id) {
+
         URL rootPath = this.getClass().getResource("/");
         if (!"file".equals(rootPath.getProtocol())) {
             return;
@@ -160,98 +159,114 @@ public class CodeGenerateService extends BaseService<Integer, GenerateRuleEntity
         File projectDir = new File(rootPath.getFile().substring(1, rootPath.getFile().indexOf("/src/")));
         File archetypesDir = new File(projectDir, "src/test/resources/META-INF/archetypes");
         File tempDir = new File(projectDir.getParentFile(), "t_" + UUID.randomUUID());
+
         GenerateRuleEntity rule = selectEntity(f_rule_id);
-        rule.setF_view_path(rule.getF_request_url().substring(1));
         rule.setF_package_dir(rule.getF_package_name().replaceAll("\\.", "/"));
+        String url = rule.getF_request_url();
+        if (url.matches("^/api/v\\d+/.*$")) {
+            rule.setF_view_dir(url.substring(url.indexOf("/", "/api/v".length()) + 1));
+        } else if (url.matches("^/api/.*$")) {
+            rule.setF_view_dir(url.substring("/api/".length()));
+        } else {
+            rule.setF_view_dir(url);
+        }
 
         try {
             Map<String, Object> tplParams = new HashMap<>();
-            tplParams.put("feature", rule);
+            tplParams.put("rule", rule);
+            tplParams.put("ParameterMap_class", ParameterMap.class.getName());
+            tplParams.put("RowMap_class", RowMap.class.getName());
+
             for (GenerateRuleTableEntity table : rule.getTableList()) {
                 fillEntityInfo(table);
                 tplParams.put("entity", table);
                 if (!RowMap.class.getName().equals(table.getF_entity_class())) {
                     // 先生成Entity
-                    archetypeService.generateArchetype(new File(archetypesDir, "feature/entity"), tempDir, tplParams);
+                    archetypeService.generateArchetype(new File(archetypesDir, "backend/entity"), tempDir, tplParams);
                 }
 
                 // 再生成Mapper
-                tplParams.put("mapper", buildMapperInfo(table));
-                archetypeService.generateArchetype(new File(archetypesDir, "feature/mapper"), tempDir, tplParams);
+                // tplParams.put("mapper", buildMapperInfo(table));
+                archetypeService.generateArchetype(new File(archetypesDir, "backend/mapper"), tempDir, tplParams);
             }
 
             // 最后生成Service、Controller和jsp
             fillEntityInfo(rule.getMainTable());
             tplParams.put("entity", rule.getMainTable());
-            tplParams.put("mapper", buildMapperInfo(rule.getMainTable()));
-            tplParams.put("service", buildServiceInfo(rule));
-            archetypeService.generateArchetype(new File(archetypesDir, "feature/service"), tempDir, tplParams);
-            tplParams.put("web", buildWebInfo(rule));
-            archetypeService.generateArchetype(new File(archetypesDir, "feature/web"), tempDir, tplParams);
+            // tplParams.put("mapper", buildMapperInfo(rule.getMainTable()));
+            // tplParams.put("service", buildServiceInfo(rule));
+            archetypeService.generateArchetype(new File(archetypesDir, "backend/service"), tempDir, tplParams);
+
+            // tplParams.put("web", buildWebInfo(rule));
+            archetypeService.generateArchetype(new File(archetypesDir, "backend/web"), tempDir, tplParams);
 
             FileUtils.copyDirectory(tempDir, projectDir);
         } catch (Exception e) {
             LOG.error("生成代码失败！", e);
-            throw new BusinessException("生成代码失败！", e);
+            throw new BusinessException("生成代码失败！ " + e.getMessage(), e);
         } finally {
             FileDeleteStrategy.FORCE.deleteQuietly(tempDir);
         }
     }
 
     private void fillEntityInfo(GenerateRuleTableEntity table) {
-        table.setF_entity_class_name(getShorClassName(table.getF_entity_class()));
-        table.setF_entity_base_class_name(getShorClassName(table.getF_entity_base_class()));
+        table.setF_entity_class_name(getShortClassName(table.getF_entity_class()));
+        table.setF_entity_base_class_name(getShortClassName(table.getF_entity_base_class()));
+        table.setF_mapper_class_name(getShortClassName(table.getF_mapper_class()));
+        table.setF_mapper_base_class_name(getShortClassName(table.getF_mapper_base_class()));
+        table.setF_service_class_name(getShortClassName(table.getF_service_class()));
+        table.setF_service_base_class_name(getShortClassName(table.getF_service_base_class()));
+        table.setF_rest_class_name(getShortClassName(table.getF_rest_class()));
+        table.setF_rest_base_class_name(getShortClassName(table.getF_rest_base_class()));
+
         GenerateRuleFieldEntity primaryField = table.getPrimaryField();
-        primaryField.setF_java_type(getShorClassName(primaryField.getF_full_java_type()));
+        primaryField.setF_short_java_type(getShortClassName(primaryField.getF_java_type()));
         for (GenerateRuleFieldEntity field : table.getFieldList()) {
-            field.setF_java_type(getShorClassName(field.getF_full_java_type()));
+            field.setF_short_java_type(getShortClassName(field.getF_java_type()));
         }
     }
 
     private Map<String, Object> buildMapperInfo(GenerateRuleTableEntity table) {
         Map<String, Object> mapper = new HashMap<>();
-        mapper.put("f_full_class_name",
-                table.getF_entity_class().replace(".entity.", ".mapper.").replace("Entity", "Mapper"));
-        mapper.put("f_class_name", getShorClassName((String) mapper.get("f_full_class_name")));
-        mapper.put("f_variable_name", HelpUtil.uncapitalize((String) mapper.get("f_class_name")));
-        mapper.put("f_full_base_class_name", BaseMapper.class.getName());
-        mapper.put("f_base_class_name", getShorClassName(BaseMapper.class.getName()));
-        mapper.put("RowMap_class_name", RowMap.class.getName());
+        mapper.put("f_mapper_class", table.getF_mapper_class());
+        mapper.put("f_mapper_class_name", table.getF_mapper_class_name());
+        mapper.put("f_mapper_base_class", table.getF_mapper_base_class());
+        mapper.put("f_mapper_base_class_name", table.getF_mapper_base_class_name());
         return mapper;
     }
 
     private Map<String, Object> buildServiceInfo(GenerateRuleEntity rule) {
+        GenerateRuleTableEntity mainTable = rule.getMainTable();
         Map<String, Object> service = new HashMap<>();
-        service.put("f_full_class_name",
-                rule.getF_package_name() + ".service." + HelpUtil.capitalize(rule.getF_code()) + "Service");
-        service.put("f_class_name", getShorClassName((String) service.get("f_full_class_name")));
-        service.put("f_variable_name", HelpUtil.uncapitalize((String) service.get("f_class_name")));
-        service.put("f_full_base_class_name", BaseService.class.getName());
-        service.put("f_base_class_name", getShorClassName(BaseService.class.getName()));
+        service.put("f_service_class", mainTable.getF_service_class());
+        service.put("f_service_class_name", mainTable.getF_service_class_name());
+        service.put("f_service_base_class", mainTable.getF_service_base_class());
+        service.put("f_service_base_class_name", mainTable.getF_service_base_class_name());
         return service;
     }
 
     private Map<String, Object> buildWebInfo(GenerateRuleEntity rule) {
         Map<String, Object> web = new HashMap<>();
-        web.put("f_full_class_name", rule.getF_package_name() + ".web.controller." + rule.getF_code() + "Controller");
-        web.put("f_class_name", getShorClassName((String) web.get("f_full_class_name")));
-        web.put("f_full_base_class_name", BaseController.class.getName());
-        web.put("f_base_class_name", getShorClassName(BaseController.class.getName()));
-        web.put("f_parent_id", rule.getF_menu_parent_id());
-        MenuEntity menu = menuMapper.selectEntity(rule.getF_menu_parent_id());
-        web.put("f_parent_path", menu.getF_parent_path() + menu.getF_id() + "/");
-
-        String id = HelpUtil.uncapitalize(rule.getF_code());
-        Map<String, Object> jsp = new HashMap<>();
-        web.put("jsp", jsp);
-        jsp.put("id", id);
-        jsp.put("featureId", id + "Feature");
-        jsp.put("gridId", id + "Grid");
+        // web.put("f_full_class_name", rule.getF_package_name() + ".web.controller." + rule.getF_code() +
+        // "Controller");
+        // web.put("f_class_name", getShortClassName((String) web.get("f_full_class_name")));
+        // web.put("f_full_base_class_name", BaseController.class.getName());
+        // web.put("f_base_class_name", getShortClassName(BaseController.class.getName()));
+        // web.put("f_parent_id", rule.getF_menu_parent_id());
+        // MenuEntity menu = menuMapper.selectEntity(rule.getF_menu_parent_id());
+        // web.put("f_parent_path", menu.getF_parent_path() + menu.getF_id() + "/");
+        //
+        // String id = HelpUtil.uncapitalize(rule.getF_code());
+        // Map<String, Object> jsp = new HashMap<>();
+        // web.put("jsp", jsp);
+        // jsp.put("id", id);
+        // jsp.put("featureId", id + "Feature");
+        // jsp.put("gridId", id + "Grid");
 
         return web;
     }
 
-    private String getShorClassName(String fullClassName) {
+    private String getShortClassName(String fullClassName) {
         return fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
     }
 }

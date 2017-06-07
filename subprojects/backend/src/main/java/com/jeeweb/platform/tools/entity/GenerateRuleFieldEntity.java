@@ -10,10 +10,11 @@ public class GenerateRuleFieldEntity extends BaseEntity<Integer> {
     private String f_column_name; // 字段名
     private String f_column_comment; // 字段描述
     private String f_column_type; // 字段类型
-    private String f_full_java_type; // 字段对应Java数据类型的全路径类名
-    private String f_java_type; // 字段对应Java数据类型的类名
+    private String f_java_type; // 字段对应Java数据类型
+    private String f_short_java_type; // 字段对应Java数据类型的类名
     private Integer f_is_primary; // 是否为主健，1是，2否
     private Integer f_is_super_class_field; // 是否为父类字段，1是，2否
+    private Integer f_is_override_field; // 是否为覆写或实现接口字段，1是，2否
     private Integer f_is_insert; // 是否为插入字段，1是，2否
     private Integer f_is_update; // 是否为更新字段，1是，2否
     private Integer f_is_select; // 是否为查询字段，1是，2否
@@ -71,20 +72,20 @@ public class GenerateRuleFieldEntity extends BaseEntity<Integer> {
         this.f_column_comment = f_column_comment;
     }
 
-    public String getF_full_java_type() {
-        return f_full_java_type;
-    }
-
-    public void setF_full_java_type(String f_full_java_type) {
-        this.f_full_java_type = f_full_java_type;
-    }
-
     public String getF_java_type() {
         return f_java_type;
     }
 
     public void setF_java_type(String f_java_type) {
         this.f_java_type = f_java_type;
+    }
+
+    public String getF_short_java_type() {
+        return f_short_java_type;
+    }
+
+    public void setF_short_java_type(String f_short_java_type) {
+        this.f_short_java_type = f_short_java_type;
     }
 
     public Integer getF_is_primary() {
@@ -101,6 +102,14 @@ public class GenerateRuleFieldEntity extends BaseEntity<Integer> {
 
     public void setF_is_super_class_field(Integer f_is_super_class_field) {
         this.f_is_super_class_field = f_is_super_class_field;
+    }
+
+    public Integer getF_is_override_field() {
+        return f_is_override_field;
+    }
+
+    public void setF_is_override_field(Integer f_is_override_field) {
+        this.f_is_override_field = f_is_override_field;
     }
 
     public Integer getF_is_insert() {

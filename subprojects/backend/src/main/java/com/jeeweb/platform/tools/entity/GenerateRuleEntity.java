@@ -15,9 +15,9 @@ public class GenerateRuleEntity extends BaseEntity<Integer> {
     private String f_menu_parent_id; // 父级菜单
     private Integer f_menu_order; // 同一个父级菜单下的排序
     private String f_request_url; // 后台Rest API的URL
-    private String f_view_path; // 前台jsp的路径
     private String f_package_name; // 所属模块的包名
     private String f_package_dir; // 所属模块的包路径
+    private String f_view_dir; // 前台vue的路径
 
     private GenerateRuleTableEntity mainTable;
     private List<GenerateRuleTableEntity> tableList;
@@ -86,12 +86,12 @@ public class GenerateRuleEntity extends BaseEntity<Integer> {
         this.f_request_url = f_url;
     }
 
-    public String getF_view_path() {
-        return f_view_path;
+    public String getF_view_dir() {
+        return f_view_dir;
     }
 
-    public void setF_view_path(String f_view_path) {
-        this.f_view_path = f_view_path;
+    public void setF_view_dir(String f_view_path) {
+        this.f_view_dir = f_view_path;
     }
 
     public String getF_package_name() {

@@ -1,0 +1,25 @@
+package ${rule.f_package_name}.service;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import ${entity.f_mapper_base_class};
+import ${entity.f_service_base_class};
+import ${entity.f_entity_class};
+import ${entity.f_mapper_class};
+
+
+@Service
+@Transactional
+public class ${entity.f_service_class_name} extends ${entity.f_service_base_class_name}<${entity.primaryField.f_short_java_type}, ${entity.f_entity_class_name}> {
+    // private static final Logger LOG = LoggerFactory.getLogger(${entity.f_service_class_name}.class);
+    @Autowired
+    private ${entity.f_mapper_class_name} ${org.springframework.util.StringUtils.uncapitalize(entity.f_mapper_class_name)};
+
+    @Override
+    protected ${entity.f_mapper_base_class_name}<${entity.primaryField.f_short_java_type}, ${entity.f_entity_class_name}> getMapper() {
+        return ${org.springframework.util.StringUtils.uncapitalize(entity.f_mapper_class_name)};
+    }
+}

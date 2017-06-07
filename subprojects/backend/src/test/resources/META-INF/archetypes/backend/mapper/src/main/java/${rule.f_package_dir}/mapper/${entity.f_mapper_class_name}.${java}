@@ -1,0 +1,10 @@
+package ${rule.f_package_name}.mapper;
+
+
+import ${entity.f_mapper_base_class};
+import ${entity.f_entity_class};
+
+
+public interface ${entity.f_mapper_class_name} extends ${entity.f_mapper_base_class_name}<${entity.primaryField.f_short_java_type}, ${entity.f_entity_class_name}> {
+
+}

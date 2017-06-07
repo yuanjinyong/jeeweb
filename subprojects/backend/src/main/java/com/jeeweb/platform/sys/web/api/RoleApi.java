@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.jeeweb.framework.business.service.BaseService;
-import com.jeeweb.framework.business.web.controller.BaseController;
+import com.jeeweb.framework.business.web.api.BaseApi;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.framework.core.model.RowMap;
@@ -25,7 +25,7 @@ import com.jeeweb.platform.sys.service.RoleService;
 
 @RestController
 @RequestMapping(value = "/api/platform/sys/roles")
-public class RoleApi extends BaseController<Integer, RoleEntity> {
+public class RoleApi extends BaseApi<Integer, RoleEntity> {
     @Resource
     private RoleService roleService;
 

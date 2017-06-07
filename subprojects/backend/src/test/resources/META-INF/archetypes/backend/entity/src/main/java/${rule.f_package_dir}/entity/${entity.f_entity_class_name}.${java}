@@ -1,0 +1,77 @@
+package ${rule.f_package_name}.entity;
+<%
+def java.util.List<String> importJavaTypes = new java.util.ArrayList<String>()
+def properties = new StringBuffer()
+def methods = new StringBuffer()
+
+entity.fieldList.eachWithIndex { field, idx ->
+    if (!field.f_java_type.startsWith("java.lang.") && !importJavaTypes.contains(field.f_java_type)) {
+        importJavaTypes.add(field.f_java_type);
+    }
+    if (field.f_is_super_class_field == 2) {
+        properties.append("    private ${field.f_short_java_type} ${field.f_column_name}; // ${field.f_column_comment}\n")
+
+        methods.append("\n")
+        if (field.f_is_override_field == 1) {
+        methods.append("    @Override\n")
+        }
+        methods.append("    public ${field.f_short_java_type} get${field.f_column_name.capitalize()}() {\n")
+        methods.append("        return ${field.f_column_name};\n")
+        methods.append("    }\n")
+        methods.append("\n")
+        if (field.f_is_override_field == 1) {
+        methods.append("    @Override\n")
+        }
+        methods.append("    public void set${field.f_column_name.capitalize()}(${field.f_short_java_type} ${field.f_column_name}) {\n")
+        methods.append("        this.${field.f_column_name} = ${field.f_column_name};\n")
+        methods.append("    }\n")
+    }
+}
+java.util.Collections.sort(importJavaTypes);
+
+def java.util.List<String> importModelTypes = new java.util.ArrayList<String>();
+importModelTypes.add(entity.f_entity_base_class);
+
+def java.util.List<String> interfaceTypes = new java.util.ArrayList<String>();
+if (entity.f_entity_interface != null && entity.f_entity_interface.length() > 0) {
+    def interfaces = entity.f_entity_interface.split(",");
+    for (intf in interfaces) {
+        interfaceTypes.add(intf);
+        importModelTypes.add(intf);
+    }
+}
+
+def imports = new StringBuffer();
+for (importJavaType in importJavaTypes) {
+    imports.append("import ${importJavaType};\n");
+}
+if (importModelTypes.size() > 0) {
+    java.util.Collections.sort(importModelTypes);
+    imports.append("\n");
+    for (importModelType in importModelTypes) {
+        imports.append("import ${importModelType};\n");
+    }
+}
+
+def genericType = entity.primaryField.f_short_java_type;
+if (entity.f_entity_base_class_name == "TreeNodeEntity") {
+    genericType += ", " + entity.f_entity_class_name;
+}
+
+def impl = new StringBuffer();
+if (interfaceTypes.size() > 0) {
+    java.util.Collections.sort(interfaceTypes);
+    def interfaceStr = new StringBuffer();
+    for (interfaceType in interfaceTypes) {
+        interfaceStr.append(", ").append(interfaceType.substring(interfaceType.lastIndexOf('.') + 1));
+    }
+    impl.append(" implements").append(interfaceStr.substring(1));
+}
+%>
+<%=imports %>
+
+public class ${entity.f_entity_class_name} extends ${entity.f_entity_base_class_name}<${genericType}>${impl} {
+    private static final long serialVersionUID = 1L;
+
+<%=properties %><%=methods %>
+}

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.jeeweb.framework.business.service.BaseService;
-import com.jeeweb.framework.business.web.controller.BaseController;
+import com.jeeweb.framework.business.web.api.BaseApi;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.framework.core.utils.TreeUtil;
@@ -21,7 +21,7 @@ import com.jeeweb.platform.sys.service.MenuService;
 
 @RestController
 @RequestMapping(value = "/api/platform/sys/menus")
-public class MenuApi extends BaseController<String, MenuEntity> {
+public class MenuApi extends BaseApi<String, MenuEntity> {
     @Resource
     private MenuService menuService;
     @Resource

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${entity.f_mapper_class}">
+<%
+def insertClause = new StringBuffer()
+def insertValueClause = new StringBuffer()
+def insertValuesClause = new StringBuffer()
+def selectClause = new StringBuffer()
+def fromClause = new StringBuffer("        FROM ${entity.f_table_name} t")
+def whereClause = new StringBuffer("        WHERE 1=1")
+def updateClause = new StringBuffer("        UPDATE ${entity.f_table_name} SET")
+
+entity.fieldList.eachWithIndex { field, idx ->
+    if (field.f_is_select == 1) {
+        if (field.f_column_name == "f_tenant_name") {
+//            selectClause.append(",\n        tn.f_name ${field.f_column_name}")
+//            fromClause.append("\n        LEFT JOIN t_sys_tenant tn ON tn.f_id = t.f_tenant_id")
+        } else if (field.f_column_name == "f_creator_name") {
+//            selectClause.append(",\n        u.f_name ${field.f_column_name}")
+//            fromClause.append("\n        LEFT JOIN t_sys_user u ON u.f_id = t.f_creator_id")
+        } else {
+            selectClause.append(",\n        t.${field.f_column_name}")
+        }
+    }
+    if (field.f_is_insert == 1) {
+        insertClause.append(",\n        ${field.f_column_name}")
+        insertValueClause.append(",\n        #{${field.f_column_name}}")
+        insertValuesClause.append(",\n            #{item.${field.f_column_name}}")
+    }
+    if (field.f_is_update == 1) {
+        updateClause.append("\n        <if test=\"${field.f_column_name} != null\">${field.f_column_name}=#{${field.f_column_name}},</if>")
+    }
+    if (field.f_is_equal == 1) {
+        whereClause.append("\n        <if test=\"${field.f_column_name} != null and ${field.f_column_name} != ''\">AND t.${field.f_column_name} = #{${field.f_column_name}}</if>")
+    }
+    if (field.f_is_like == 1) {
+        if (field.f_column_name == "f_tenant_name") {
+            whereClause.append("\n        <if test=\"${field.f_column_name}_like != null and ${field.f_column_name}_like != ''\">AND tn.f_name LIKE CONCAT('%', #{${field.f_column_name}_like}, '%')</if>")
+        } else if (field.f_column_name == "f_creator_name") {
+            whereClause.append("\n        <if test=\"${field.f_column_name}_like != null and ${field.f_column_name}_like != ''\">AND u.f_name LIKE CONCAT('%', #{${field.f_column_name}_like}, '%')</if>")
+        } else {
+            whereClause.append("\n        <if test=\"${field.f_column_name}_like != null and ${field.f_column_name}_like != ''\">AND t.${field.f_column_name} LIKE CONCAT('%', #{${field.f_column_name}_like}, '%')</if>")
+        }
+    }
+    if (field.f_is_left_like == 1) {
+        if (field.f_column_name == "f_tenant_name") {
+            whereClause.append("\n        <if test=\"${field.f_column_name}_leftLike != null and ${field.f_column_name}_leftLike != ''\">AND tn.f_name LIKE CONCAT('%', #{${field.f_column_name}_leftLike})</if>")
+        } else if (field.f_column_name == "f_creator_name") {
+            whereClause.append("\n        <if test=\"${field.f_column_name}_leftLike != null and ${field.f_column_name}_leftLike != ''\">AND u.f_name LIKE CONCAT('%', #{${field.f_column_name}_leftLike})</if>")
+        } else {
+            whereClause.append("\n        <if test=\"${field.f_column_name}_leftLike != null and ${field.f_column_name}_leftLike != ''\">AND t.${field.f_column_name} LIKE CONCAT('%', #{${field.f_column_name}_leftLike})</if>")
+        }
+    }
+    if (field.f_is_right_like == 1) {
+        if (field.f_column_name == "f_tenant_name") {
+            whereClause.append("\n        <if test=\"${field.f_column_name}_rightLike != null and ${field.f_column_name}_rightLike != ''\">AND tn.f_name LIKE CONCAT(#{${field.f_column_name}_rightLike}, '%')</if>")
+        } else if (field.f_column_name == "f_creator_name") {
+            whereClause.append("\n        <if test=\"${field.f_column_name}_rightLike != null and ${field.f_column_name}_rightLike != ''\">AND u.f_name LIKE CONCAT(#{${field.f_column_name}_rightLike}, '%')</if>")
+        } else {
+            whereClause.append("\n        <if test=\"${field.f_column_name}_rightLike != null and ${field.f_column_name}_rightLike != ''\">AND t.${field.f_column_name} LIKE CONCAT(#{${field.f_column_name}_rightLike}, '%')</if>")
+        }
+    }
+    if (field.f_is_in == 1) {
+        whereClause.append("\n        <if test=\"${field.f_column_name}_in != null and ${field.f_column_name}_in != ''\">AND t.${field.f_column_name} IN (\${${field.f_column_name}_in})</if>")
+    }
+    if (field.f_is_not_in == 1) {
+        whereClause.append("\n        <if test=\"${field.f_column_name}_notIn != null and ${field.f_column_name}_notIn != ''\">AND t.${field.f_column_name} NOT IN (\${${field.f_column_name}_notIn})</if>")
+    }
+    if (field.f_is_between == 1) {
+        whereClause.append("\n        <if test=\"${field.f_column_name}_begin != null and ${field.f_column_name}_begin != ''\">AND t.${field.f_column_name} &gt;= #{${field.f_column_name}_begin}</if>")
+        whereClause.append("\n        <if test=\"${field.f_column_name}_end != null and ${field.f_column_name}_end != ''\">AND t.${field.f_column_name} &lt;= #{${field.f_column_name}_end}</if>")
+    }
+}
+%>
+    <sql id="Insert_Clause">
+        INSERT INTO ${entity.f_table_name}(
+<%=insertClause.substring(2) %>
+        )
+        VALUES
+    </sql>
+    <sql id="Insert_Value_Clause">
+        (
+<%=insertValueClause.substring(2) %>
+        )
+    </sql>
+    <sql id="Insert_Values_Clause">
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+<%=insertValuesClause.substring(2) %>
+            )
+        </foreach>
+    </sql>
+
+    <sql id="Select_Clause">
+        SELECT
+<%=selectClause.substring(2) %>
+    </sql>
+    <sql id="From_Clause">
+<%=fromClause %>
+    </sql>
+    <sql id="Where_Clause">
+<%=whereClause %>
+    </sql>
+
+
+    <!-- select -->
+    <select id="selectEntity" parameterType="${entity.primaryField.f_java_type}" resultType="${entity.f_entity_class}">
+        <include refid="Select_Clause" />
+        <include refid="From_Clause" />
+        WHERE t.${entity.primaryField.f_column_name} = #{${entity.primaryField.f_column_name}}
+    </select>
+    <select id="selectEntityListPage" parameterType="${ParameterMap_class}" resultType="${entity.f_entity_class}">
+        <include refid="Select_Clause" />
+        <include refid="From_Clause" />
+        <include refid="Where_Clause" />
+    </select>
+    <select id="selectMapEntityListPage" parameterType="${ParameterMap_class}" resultType="${RowMap_class}">
+        <include refid="Select_Clause" />
+        <include refid="From_Clause" />
+        <include refid="Where_Clause" />
+    </select>
+
+    <!-- insert -->
+    <insert id="insertEntity" parameterType="${entity.f_entity_class}">
+<%
+if (entity.primaryField.f_java_type == "java.lang.Integer") {
+    println '        <selectKey resultType="java.lang.Integer" keyProperty="' + entity.primaryField.f_column_name + '" order="AFTER">'
+    println '            SELECT @@IDENTITY'
+    print   '        </selectKey>'
+}
+%>
+        <include refid="Insert_Clause" />
+        <include refid="Insert_Value_Clause" />
+    </insert>
+    <insert id="insertEntities" parameterType="java.util.ArrayList">
+        <include refid="Insert_Clause" />
+        <include refid="Insert_Values_Clause" />
+    </insert>
+
+    <!-- update -->
+    <update id="updateEntity" parameterType="${entity.f_entity_class}">
+<%=updateClause %>
+        ${entity.primaryField.f_column_name}=#{${entity.primaryField.f_column_name}}
+        WHERE ${entity.primaryField.f_column_name}=#{${entity.primaryField.f_column_name}}
+    </update>
+
+    <!-- delete -->
+    <select id="isCanDeleteEntity" parameterType="${entity.primaryField.f_java_type}" resultType="java.lang.Integer">
+        SELECT 0 FROM DUAL
+    </select>
+    <delete id="deleteEntity" parameterType="${entity.primaryField.f_java_type}">
+        DELETE FROM ${entity.f_table_name} WHERE ${entity.primaryField.f_column_name}=#{${entity.primaryField.f_column_name}}
+    </delete>
+    <delete id="deleteEntities" parameterType="${ParameterMap_class}">
+        DELETE FROM ${entity.f_table_name} WHERE 1=1
+        <if test="${entity.primaryField.f_column_name}_in != null and ${entity.primaryField.f_column_name}_in != ''">AND ${entity.primaryField.f_column_name} IN(\${${entity.primaryField.f_column_name}_in})</if>
+    </delete>
+
+    <!-- 其他SQL -->
+</mapper>

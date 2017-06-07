@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.jeeweb.framework.business.service.BaseService;
-import com.jeeweb.framework.business.web.controller.BaseController;
+import com.jeeweb.framework.business.web.api.BaseApi;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.platform.tools.entity.GenerateRuleEntity;
 import com.jeeweb.platform.tools.service.CodeGenerateService;
 
 @RestController
-@RequestMapping(value = "/api/platform/tools/code/generate")
-public class CodeGeneratApi extends BaseController<Integer, GenerateRuleEntity> {
+@RequestMapping(value = "/api/platform/tools/code/generate/rules")
+public class CodeGeneratApi extends BaseApi<Integer, GenerateRuleEntity> {
     @Resource
     private CodeGenerateService codeGenerateService;
 
@@ -28,37 +28,37 @@ public class CodeGeneratApi extends BaseController<Integer, GenerateRuleEntity> 
         return codeGenerateService;
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseResult generate(@PathVariable("id") Integer primaryKey) {
-        codeGenerateService.generateCode(primaryKey);
-        return new ResponseResult(new Result(), HttpStatus.OK);
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    @RequestMapping(value = "/rules", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseResult list() {
         return super.listEntities();
     }
 
-    @RequestMapping(value = "/rules", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public ResponseResult create(@RequestBody GenerateRuleEntity entity, UriComponentsBuilder ucBuilder) {
         return super.createEntity(entity, ucBuilder);
     }
 
-    @RequestMapping(value = "/rules/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseResult get(@PathVariable("id") Integer primaryKey) {
         return super.getEntity(primaryKey);
     }
 
-    @RequestMapping(value = "/rules/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseResult update(@PathVariable("id") Integer primaryKey, @RequestBody GenerateRuleEntity entity) {
         return super.updateEntity(primaryKey, entity);
     }
 
-    @RequestMapping(value = "/rules/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseResult delete(@PathVariable("id") Integer primaryKey) {
         return super.deleteEntity(primaryKey);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    @RequestMapping(value = "/{id}/generate", method = RequestMethod.PUT)
+    public ResponseResult generate(@PathVariable("id") Integer primaryKey) {
+        codeGenerateService.generateCode(primaryKey);
+        return new ResponseResult(new Result(), HttpStatus.OK);
     }
 }

@@ -211,7 +211,7 @@
           children: [
             {
               headerName: 'Java数据类型',
-              field: 'f_full_java_type',
+              field: 'f_java_type',
               editable: true,
               cellRendererFramework: DictEditorFramework,
               cellRendererParams: {
@@ -238,16 +238,23 @@
               width: 180
             },
             {
+              headerName: '主键',
+              field: 'f_is_primary',
+              cellStyle: {'text-align': 'center'},
+              cellRendererFramework: CheckboxEditorFramework,
+              width: 40
+            },
+            {
               headerName: '继承',
               headerTooltip: '继承父类的字段',
               field: 'f_is_super_class_field',
               cellStyle: {'text-align': 'center'},
               cellRendererFramework: CheckboxEditorFramework,
               width: 40
-            },
-            {
-              headerName: '主键',
-              field: 'f_is_primary',
+            }, {
+              headerName: '覆写',
+              headerTooltip: '覆写或实现接口的字段',
+              field: 'f_is_override_field',
               cellStyle: {'text-align': 'center'},
               cellRendererFramework: CheckboxEditorFramework,
               width: 40
@@ -437,6 +444,7 @@
             varchar: 'java.lang.String'
           },
           superClassField: ['f_id', 'f_parent_id', 'f_parent_path'],
+          overrideField: ['f_tenant_id', 'f_creator_id', 'f_creator_name', 'f_created_time', 'f_is_preset'],
           suppressInsertField: ['f_id'],
           suppressUpdateField: ['f_id', 'f_creator_id', 'f_created_time'],
           equalField: ['f_status'],
@@ -450,9 +458,10 @@
           f_column_name: column.COLUMN_NAME,
           f_column_comment: column.COLUMN_COMMENT,
           f_column_type: column.COLUMN_TYPE,
-          f_full_java_type: cfg.javaType[column.DATA_TYPE],
+          f_java_type: cfg.javaType[column.DATA_TYPE],
           f_is_primary: column.COLUMN_KEY === 'PRI' ? 1 : 2,
           f_is_super_class_field: cfg.superClassField.indexOf(column.COLUMN_NAME) >= 0 ? 1 : 2,
+          f_is_override_field: cfg.overrideField.indexOf(column.COLUMN_NAME) >= 0 ? 1 : 2,
           f_is_insert: cfg.suppressInsertField.indexOf(column.COLUMN_NAME) >= 0 ? 2 : 1,
           f_is_update: cfg.suppressUpdateField.indexOf(column.COLUMN_NAME) >= 0 ? 2 : 1,
           f_is_select: 1,
@@ -527,7 +536,7 @@
           f_mapper_class: this.generateRule.f_package_name + '.mapper.' + this.generateRule.f_code + 'Mapper',
           f_service_base_class: 'com.jeeweb.framework.business.service.BaseService',
           f_service_class: this.generateRule.f_package_name + '.service.' + this.generateRule.f_code + 'Service',
-          f_rest_base_class: 'com.jeeweb.framework.business.web.controller.BaseController',
+          f_rest_base_class: 'com.jeeweb.framework.business.web.api.BaseApi',
           f_rest_class: this.generateRule.f_package_name + '.web.api.' + this.generateRule.f_code + 'Api',
           fieldList: []
         }

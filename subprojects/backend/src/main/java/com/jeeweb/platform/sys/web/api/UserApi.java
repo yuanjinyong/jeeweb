@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.jeeweb.framework.business.service.BaseService;
-import com.jeeweb.framework.business.web.controller.BaseController;
+import com.jeeweb.framework.business.web.api.BaseApi;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
@@ -26,7 +26,7 @@ import com.jeeweb.platform.sys.service.UserService;
 
 @RestController
 @RequestMapping(value = "/api/platform/sys/users")
-public class UserApi extends BaseController<Integer, UserEntity> {
+public class UserApi extends BaseApi<Integer, UserEntity> {
     @Resource
     private UserService userService;
 
