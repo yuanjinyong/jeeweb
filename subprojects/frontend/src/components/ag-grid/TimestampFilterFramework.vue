@@ -79,7 +79,7 @@
       },
       getModel () {
         var filterValue = null
-        if (this.value.length > 0) {
+        if (this.value && this.value.length > 0) {
           if (this.datePickerOptions.type === 'daterange') {
             filterValue = [this.value[0] ? Vue.moment(this.value[0]).startOf('day').format() : null, this.value[1] ? Vue.moment(this.value[1]).endOf('day').format() : null]
           } else {
@@ -96,8 +96,8 @@
       },
       setModel (model) {
         this.floatingModel = model
-        var filterValue = model.filter
-        if (filterValue.length > 0) {
+        var filterValue = model ? model.filter : null
+        if (filterValue && filterValue.length > 0) {
           this.value = [filterValue[0] ? Vue.moment(filterValue[0]).toDate() : null, filterValue[1] ? Vue.moment(filterValue[1]).toDate() : null]
         } else {
           this.value = filterValue ? Vue.moment(filterValue).toDate() : null

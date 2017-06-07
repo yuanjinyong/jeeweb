@@ -50,7 +50,7 @@
         }
       },
       setModel (model) {
-        this.value = model.filter
+        this.value = model ? model.filter : null
       },
       onChange (val) {
         var vm = this

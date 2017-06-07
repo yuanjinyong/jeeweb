@@ -76,8 +76,8 @@
     },
     methods: {
       onParentModelChanged (parentModel) {
-        var filterValue = parentModel.filter
-        if (filterValue.length > 0) {
+        var filterValue = parentModel ? parentModel.filter : null
+        if (filterValue && filterValue.length > 0) {
           this.value = [filterValue[0] ? Vue.moment(filterValue[0]).toDate() : null, filterValue[1] ? Vue.moment(filterValue[1]).toDate() : null]
         } else {
           this.value = filterValue ? Vue.moment(filterValue).toDate() : null

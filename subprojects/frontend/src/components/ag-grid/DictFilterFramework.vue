@@ -99,7 +99,7 @@
       },
       setModel (model) {
         this.floatingModel = model
-        this.value = model.filter
+        this.value = model ? model.filter : null
       },
       onChange (val) {
         if (this.floatingModel) {
