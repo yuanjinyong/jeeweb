@@ -33,7 +33,7 @@ public class SchemaDataSourceConfiguration {
     private Integer minPoolSize;
     @Value("${spring.datasource.schema.maxPoolSize:5}")
     private Integer maxPoolSize;
-    @Value("${spring.datasource.schema.maxLifetime:20000}")
+    @Value("${spring.datasource.schema.maxLifetime:120}")
     private Integer maxLifetime;
     @Value("${spring.datasource.schema.borrowConnectionTimeout:30}")
     private Integer borrowConnectionTimeout;
@@ -43,6 +43,8 @@ public class SchemaDataSourceConfiguration {
     private Integer maintenanceInterval;
     @Value("${spring.datasource.schema.maxIdleTime:60}")
     private Integer maxIdleTime;
+    @Value("${spring.datasource.default.reapTimeout:120}")
+    private Integer reapTimeout;
     @Value("${spring.datasource.schema.testQuery:SELECT 1}")
     private String testQuery;
 
@@ -64,6 +66,7 @@ public class SchemaDataSourceConfiguration {
         xaDataSource.setLoginTimeout(loginTimeout);
         xaDataSource.setMaintenanceInterval(maintenanceInterval);
         xaDataSource.setMaxIdleTime(maxIdleTime);
+        xaDataSource.setReapTimeout(reapTimeout);
         xaDataSource.setTestQuery(testQuery);
 
         return xaDataSource;

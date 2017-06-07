@@ -34,7 +34,7 @@ public class DefaultDataSourceConfiguration {
     private Integer minPoolSize;
     @Value("${spring.datasource.default.maxPoolSize:25}")
     private Integer maxPoolSize;
-    @Value("${spring.datasource.default.maxLifetime:20000}")
+    @Value("${spring.datasource.default.maxLifetime:120}")
     private Integer maxLifetime;
     @Value("${spring.datasource.default.borrowConnectionTimeout:30}")
     private Integer borrowConnectionTimeout;
@@ -44,6 +44,8 @@ public class DefaultDataSourceConfiguration {
     private Integer maintenanceInterval;
     @Value("${spring.datasource.default.maxIdleTime:60}")
     private Integer maxIdleTime;
+    @Value("${spring.datasource.default.reapTimeout:120}")
+    private Integer reapTimeout;
     @Value("${spring.datasource.default.testQuery:SELECT 1}")
     private String testQuery;
 
@@ -61,11 +63,20 @@ public class DefaultDataSourceConfiguration {
         xaDataSource.setUniqueResourceName(uniqueResourceName);
         xaDataSource.setMinPoolSize(minPoolSize);
         xaDataSource.setMaxPoolSize(maxPoolSize);
+        // 连接最大存活时间，超过这个且没有正在使用的连接将自动销毁，0无限制，1000=1000s。
+        // 对于一些会自动中断连接的数据库如MySQL，可以设置这个参数，在达到这个时间的时候会自动关闭连接，下次数据库调用的时候就会新建
         xaDataSource.setMaxLifetime(maxLifetime);
+        // 获取连接失败重新获等待最大时间，在这个时间内如果有可用连接，将返回
         xaDataSource.setBorrowConnectionTimeout(borrowConnectionTimeout);
+        // Java数据库连接池，最大可等待获取datasouce的时间
         xaDataSource.setLoginTimeout(loginTimeout);
+        // 连接回收时间
         xaDataSource.setMaintenanceInterval(maintenanceInterval);
+        // 最大闲置时间，超过最小连接池连接的连接将将关闭
         xaDataSource.setMaxIdleTime(maxIdleTime);
+        // 最大获取数据时间，如果不设置这个值，Atomikos使用默认的5分钟。
+        // 在处理大批量数据读取的时候，一旦超过这个值，就会抛出类似 Resultset is close的错误
+        xaDataSource.setReapTimeout(reapTimeout);
         xaDataSource.setTestQuery(testQuery);
 
         return xaDataSource;

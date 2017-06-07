@@ -6,13 +6,14 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jeeweb.framework.business.mapper.SqlBuilder;
 import com.jeeweb.framework.business.mapper.SqlMapper;
 import com.jeeweb.framework.core.model.ParameterMap;
 
 @Service
-// @Transactional //这个Service只读取数据库元数据，不做任何修改的操作
+@Transactional(readOnly = true) // 这个Service只读取数据库元数据，不做任何修改的操作
 public class InformationSchemaService {
     @Autowired
     @Qualifier("schemaSqlMapper")
