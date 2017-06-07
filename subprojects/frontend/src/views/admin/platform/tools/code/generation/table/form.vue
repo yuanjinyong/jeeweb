@@ -483,7 +483,7 @@
         if (vm.formOptions.operation === 'add') {
           vm.entity = vm._createEntity()
         } else {
-          vm.entity = vm.formOptions.params
+          vm.entity = vm.$lodash.cloneDeep(vm.formOptions.params)
         }
         vm.gridOptions.api.setRowData(vm.entity.fieldList)
       },

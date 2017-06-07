@@ -5,6 +5,10 @@ import moment from 'moment'
 Object.defineProperty(Vue.prototype, '$moment', {value: moment})
 Vue.moment = moment
 
+import lodash from 'lodash'
+Object.defineProperty(Vue.prototype, '$lodash', {value: lodash})
+Vue.lodash = lodash
+
 import VueCookie from 'vue-cookie'
 Vue.use(VueCookie)
 
