@@ -14,10 +14,17 @@
             <el-input class="jw-field-col-1" v-model="entity.f_name"></el-input>
           </el-form-item>
           <el-form-item label="父级菜单" prop="f_menu_parent_id">
-            <el-input class="jw-field-col-1" v-model="entity.f_menu_parent_id"></el-input>
+            <el-select class="jw-field-col-1" v-model="entity.f_menu_parent_id" @change="onParentMenuChange">
+              <el-option v-for="menu in menuList"
+                :key="menu.f_id"
+                :value="menu.f_id"
+                :label="menu.f_name">
+                {{menu.f_name}}
+              </el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="排序" prop="f_menu_order">
-            <el-input-number class="jw-field-col-1" v-model="entity.f_menu_order" :step="5"></el-input-number>
+          <el-form-item label="菜单路径" prop="f_menu_parent_path">
+            <el-input class="jw-field-col-1" v-model="entity.f_menu_parent_path" disabled></el-input>
           </el-form-item>
           <el-form-item label="菜单编码" prop="f_menu_id">
             <el-input class="jw-field-col-1" v-model="entity.f_menu_id"></el-input>
@@ -27,6 +34,9 @@
           </el-form-item>
           <el-form-item label="菜单描述" prop="f_menu_remark">
             <el-input class="jw-field-col-1" v-model="entity.f_menu_remark"></el-input>
+          </el-form-item>
+          <el-form-item label="排序" prop="f_menu_order">
+            <el-input-number class="jw-field-col-1" v-model="entity.f_menu_order" :step="5"></el-input-number>
           </el-form-item>
           <el-form-item label="URL" prop="f_request_url">
             <el-input class="jw-field-col-2" v-model="entity.f_request_url"></el-input>
@@ -77,6 +87,7 @@
     },
     data () {
       return {
+        menuList: [],
         entity: {},
         rules: {}
       }
@@ -103,7 +114,35 @@
       window.devMode && console.info('activated', this.$options.name, this._uid)
     },
     methods: {
+      onParentMenuChange (val) {
+        var vm = this
+        vm.menuList.forEach(function (menu) {
+          if (menu.f_id === val) {
+            if (!vm.entity.f_menu_id || vm.entity.f_menu_id.indexOf(menu.f_id) !== 0) {
+              vm.entity.f_menu_id = menu.f_id + '-'
+              vm.entity.f_menu_name = vm.entity.f_name ? (vm.entity.f_name + '管理') : null
+              vm.entity.f_menu_remark = vm.entity.f_name ? (vm.entity.f_name + '管理页面') : null
+              vm.entity.f_menu_order = (menu.children && menu.children.length > 0) ? (menu.children[menu.children.length - 1].f_order + 10) : 10
+              vm.entity.f_menu_parent_path = menu.f_parent_path + menu.f_id + '/'
+            }
+            return true // forEach中，返回true为跳出循环
+          }
+        })
+      },
+      _addMenu (menuTree) {
+        var vm = this
+        menuTree.forEach(function (menu) {
+          if (menu.f_type < 2) {
+            vm.menuList.push(menu)
+          }
+          if (menu.children && menu.children.length > 0) {
+            vm._addMenu(menu.children)
+          }
+        })
+      },
       _init () {
+        this.menuList = []
+        this._addMenu(this.$store.state.menuList)
         this.query()
       },
       query (params) {
@@ -142,7 +181,13 @@
         })
       },
       _createEntity () {
-        return {tableList: []}
+        return {
+          f_menu_parent_id: 'XTGL',
+          f_menu_parent_path: '/ROOT/XTGL/',
+          f_request_url: '/api/',
+          f_package_name: 'com.jeeweb.',
+          tableList: []
+        }
       },
       _submitted (response) {
         if (response.body.success) {

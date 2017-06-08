@@ -204,6 +204,11 @@
     width: 923px;
   }
 
+  .jw-sub-dialog .jw-form .jw-field-col-3 {
+    min-width: 205px;
+    width: 205px;
+  }
+
   .jw-form .el-radio {
     color: inherit;
   }
@@ -214,7 +219,6 @@
 
   .jw-form .el-select {
     min-width: 205px;
-    width: 205px;
   }
 
   .jw-form .el-radio-group {

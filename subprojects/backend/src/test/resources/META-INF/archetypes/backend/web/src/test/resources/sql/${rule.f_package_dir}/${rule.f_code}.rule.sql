@@ -1,6 +1,6 @@
 -- ${rule.f_code} ${rule.f_name}
 delete from `t_tool_generate_rule` where `f_code` = '${rule.f_code}';
-insert into `t_tool_generate_rule` (`f_id`, `f_code`, `f_name`, `f_menu_id`, `f_menu_name`, `f_menu_remark`, `f_menu_parent_id`, `f_menu_order`, `f_request_url`, `f_package_name`) values('${rule.f_id}','${rule.f_code}','${rule.f_name}','${rule.f_menu_id}','${rule.f_menu_name}','${rule.f_menu_remark}','${rule.f_menu_parent_id}','${rule.f_menu_order}','${rule.f_request_url}','${rule.f_package_name}');
+insert into `t_tool_generate_rule` (`f_id`, `f_code`, `f_name`, `f_menu_id`, `f_menu_name`, `f_menu_remark`, `f_menu_parent_id`, `f_menu_parent_path`, `f_menu_order`, `f_request_url`, `f_package_name`) values('${rule.f_id}','${rule.f_code}','${rule.f_name}','${rule.f_menu_id}','${rule.f_menu_name}','${rule.f_menu_remark}','${rule.f_menu_parent_id}','${rule.f_menu_parent_path}','${rule.f_menu_order}','${rule.f_request_url}','${rule.f_package_name}');
 <%
 rule.tableList.eachWithIndex { table, idx1 ->
     println ""

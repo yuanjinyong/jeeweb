@@ -10,6 +10,7 @@
         f_menu_name,
         f_menu_remark,
         f_menu_parent_id,
+        f_menu_parent_path,
         f_menu_order,
         f_request_url,
         f_package_name
@@ -24,6 +25,7 @@
         #{f_menu_name},
         #{f_menu_remark},
         #{f_menu_parent_id},
+        #{f_menu_parent_path},
         #{f_menu_order},
         #{f_request_url},
         #{f_package_name}
@@ -38,6 +40,7 @@
             #{item.f_menu_name},
             #{item.f_menu_remark},
             #{item.f_menu_parent_id},
+            #{item.f_menu_parent_path},
             #{item.f_menu_order},
             #{item.f_request_url},
             #{item.f_package_name}
@@ -54,6 +57,7 @@
         t.f_menu_name,
         t.f_menu_remark,
         t.f_menu_parent_id,
+        t.f_menu_parent_path,
         t.f_menu_order,
         t.f_request_url,
         t.f_package_name
@@ -109,6 +113,7 @@
         <if test="f_menu_name != null">f_menu_name=#{f_menu_name},</if>
         <if test="f_menu_remark != null">f_menu_remark=#{f_menu_remark},</if>
         <if test="f_menu_parent_id != null">f_menu_parent_id=#{f_menu_parent_id},</if>
+        <if test="f_menu_parent_path != null">f_menu_parent_path=#{f_menu_parent_path},</if>
         <if test="f_menu_order != null">f_menu_order=#{f_menu_order},</if>
         <if test="f_request_url != null">f_request_url=#{f_request_url},</if>
         <if test="f_package_name != null">f_package_name=#{f_package_name},</if>

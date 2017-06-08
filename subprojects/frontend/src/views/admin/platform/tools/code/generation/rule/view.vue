@@ -109,6 +109,11 @@
           width: 120
         },
         {
+          headerName: '菜单路径',
+          field: 'f_menu_parent_path',
+          width: 240
+        },
+        {
           headerName: '菜单排序',
           field: 'f_menu_order',
           width: 80

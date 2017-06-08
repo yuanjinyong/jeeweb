@@ -126,9 +126,15 @@
           width: 60
         },
         {
-          headerName: '实体类名',
+          headerName: 'Entity类名',
           field: 'f_entity_class',
           tooltipField: 'f_entity_class',
+          width: 400
+        },
+        {
+          headerName: 'API类名',
+          field: 'f_rest_class',
+          tooltipField: 'f_rest_class',
           width: 400
         },
         {

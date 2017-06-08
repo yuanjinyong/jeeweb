@@ -132,6 +132,9 @@
         }, {
           name: 'IPreset',
           fullName: 'com.jeeweb.framework.business.model.IPreset'
+        }, {
+          name: 'ITenant',
+          fullName: 'com.jeeweb.framework.business.model.ITenant'
         }],
         gridOptions: this.$grid.buildOptions({
           context: {
@@ -408,7 +411,8 @@
           if (response.body.success) {
             vm.entity.fieldList = []
             response.body.data.items.forEach(function (column) {
-              vm.entity.fieldList.push(vm._buildFieldEntity(column))
+              var field = vm._buildFieldEntity(column)
+              vm.entity.fieldList.push(field)
             })
           } else {
             vm.entity.fieldList = []
@@ -530,7 +534,7 @@
           f_order: 1,
           f_is_main: 1,
           f_entity_interface: null,
-          f_entity_base_class: this.baseClasses[0],
+          f_entity_base_class: this.baseClasses[0].fullName,
           f_entity_class: this.generateRule.f_package_name + '.entity.' + this.generateRule.f_code + 'Entity',
           f_mapper_base_class: 'com.jeeweb.framework.business.mapper.BaseMapper',
           f_mapper_class: this.generateRule.f_package_name + '.mapper.' + this.generateRule.f_code + 'Mapper',

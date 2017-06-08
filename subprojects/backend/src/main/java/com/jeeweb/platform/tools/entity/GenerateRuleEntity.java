@@ -13,6 +13,7 @@ public class GenerateRuleEntity extends BaseEntity<Integer> {
     private String f_menu_name; // 菜单名称
     private String f_menu_remark; // 菜单描述
     private String f_menu_parent_id; // 父级菜单
+    private String f_menu_parent_path; // 树形结构的路径，以“/”开头、分隔和结尾。
     private Integer f_menu_order; // 同一个父级菜单下的排序
     private String f_request_url; // 后台Rest API的URL
     private String f_package_name; // 所属模块的包名
@@ -66,8 +67,16 @@ public class GenerateRuleEntity extends BaseEntity<Integer> {
         return f_menu_parent_id;
     }
 
-    public void setF_menu_parent_id(String f_parent_menu_id) {
-        this.f_menu_parent_id = f_parent_menu_id;
+    public void setF_menu_parent_id(String f_menu_parent_id) {
+        this.f_menu_parent_id = f_menu_parent_id;
+    }
+
+    public String getF_menu_parent_path() {
+        return f_menu_parent_path;
+    }
+
+    public void setF_menu_parent_path(String f_menu_parent_path) {
+        this.f_menu_parent_path = f_menu_parent_path;
     }
 
     public Integer getF_menu_order() {
