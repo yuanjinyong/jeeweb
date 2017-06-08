@@ -23,7 +23,6 @@ import com.jeeweb.framework.core.exception.BusinessException;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
-import com.jeeweb.platform.sys.mapper.MenuMapper;
 import com.jeeweb.platform.tools.entity.GenerateRuleEntity;
 import com.jeeweb.platform.tools.entity.GenerateRuleFieldEntity;
 import com.jeeweb.platform.tools.entity.GenerateRuleTableEntity;
@@ -42,8 +41,6 @@ public class CodeGenerateService extends BaseService<Integer, GenerateRuleEntity
     private GenerateRuleTableMapper generateRuleTableMapper;
     @Autowired
     private GenerateRuleFieldMapper generateRuleFieldMapper;
-    @Autowired
-    private MenuMapper menuMapper;
     @Autowired
     private ArchetypeService archetypeService;
 
@@ -224,46 +221,6 @@ public class CodeGenerateService extends BaseService<Integer, GenerateRuleEntity
         for (GenerateRuleFieldEntity field : table.getFieldList()) {
             field.setF_short_java_type(getShortClassName(field.getF_java_type()));
         }
-    }
-
-    private Map<String, Object> buildMapperInfo(GenerateRuleTableEntity table) {
-        Map<String, Object> mapper = new HashMap<>();
-        mapper.put("f_mapper_class", table.getF_mapper_class());
-        mapper.put("f_mapper_class_name", table.getF_mapper_class_name());
-        mapper.put("f_mapper_base_class", table.getF_mapper_base_class());
-        mapper.put("f_mapper_base_class_name", table.getF_mapper_base_class_name());
-        return mapper;
-    }
-
-    private Map<String, Object> buildServiceInfo(GenerateRuleEntity rule) {
-        GenerateRuleTableEntity mainTable = rule.getMainTable();
-        Map<String, Object> service = new HashMap<>();
-        service.put("f_service_class", mainTable.getF_service_class());
-        service.put("f_service_class_name", mainTable.getF_service_class_name());
-        service.put("f_service_base_class", mainTable.getF_service_base_class());
-        service.put("f_service_base_class_name", mainTable.getF_service_base_class_name());
-        return service;
-    }
-
-    private Map<String, Object> buildWebInfo(GenerateRuleEntity rule) {
-        Map<String, Object> web = new HashMap<>();
-        // web.put("f_full_class_name", rule.getF_package_name() + ".web.controller." + rule.getF_code() +
-        // "Controller");
-        // web.put("f_class_name", getShortClassName((String) web.get("f_full_class_name")));
-        // web.put("f_full_base_class_name", BaseController.class.getName());
-        // web.put("f_base_class_name", getShortClassName(BaseController.class.getName()));
-        // web.put("f_parent_id", rule.getF_menu_parent_id());
-        // MenuEntity menu = menuMapper.selectEntity(rule.getF_menu_parent_id());
-        // web.put("f_parent_path", menu.getF_parent_path() + menu.getF_id() + "/");
-        //
-        // String id = HelpUtil.uncapitalize(rule.getF_code());
-        // Map<String, Object> jsp = new HashMap<>();
-        // web.put("jsp", jsp);
-        // jsp.put("id", id);
-        // jsp.put("featureId", id + "Feature");
-        // jsp.put("gridId", id + "Grid");
-
-        return web;
     }
 
     private String getShortClassName(String fullClassName) {
