@@ -9,6 +9,7 @@
       :type="datePickerOptions.type"
       :format="datePickerOptions.format"
       :picker-options="datePickerOptions.pickerOptions"
+      :editable="false"
       @change="onChange"
       placeholder="请选择时间范围">
     </el-date-picker>

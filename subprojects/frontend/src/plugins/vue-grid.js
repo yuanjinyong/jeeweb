@@ -24,7 +24,7 @@ var VueGrid = {
     suppressCellSelection: true,
     enableColResize: true,
     headerHeight: 30, // default is 25px
-    floatingFiltersHeight: 32, // default is 20px
+    floatingFiltersHeight: 30, // default is 20px
     rowHeight: 30, // default is 25px
     rowSelection: 'multiple',
     rowModelType: 'infinite',

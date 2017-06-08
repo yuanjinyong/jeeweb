@@ -51,7 +51,7 @@
   }
 
   .jw-grid .jw-floating-filter-cell {
-    padding: 1px;
+    padding: 0px 1px;
   }
 
   .jw-grid .jw-floating-filter-cell .el-input {
