@@ -116,7 +116,7 @@
     methods: {
       onParentMenuChange (val) {
         var vm = this
-        vm.menuList.forEach(function (menu) {
+        vm.menuList.forEach((menu) => {
           if (menu.f_id === val) {
             if (!vm.entity.f_menu_id || vm.entity.f_menu_id.indexOf(menu.f_id) !== 0) {
               vm.entity.f_menu_id = menu.f_id + '-'

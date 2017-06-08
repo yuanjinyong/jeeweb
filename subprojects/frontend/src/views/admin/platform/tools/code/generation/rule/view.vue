@@ -84,6 +84,7 @@
           headerName: '规则编码',
           field: 'f_code',
           pinned: 'left',
+          suppressSorting: false,
           suppressFilter: false,
           filterFramework: LikeFilterFramework,
           floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
@@ -93,6 +94,7 @@
         {
           headerName: '规则名称',
           field: 'f_name',
+          suppressSorting: false,
           suppressFilter: false,
           filterFramework: LikeFilterFramework,
           floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
@@ -111,12 +113,14 @@
         {
           headerName: '菜单路径',
           field: 'f_menu_parent_path',
+          suppressSorting: false,
           width: 240
         },
         {
           headerName: '菜单排序',
           field: 'f_menu_order',
-          width: 80
+          suppressSorting: false,
+          width: 82
         },
         {
           headerName: 'Java包名',

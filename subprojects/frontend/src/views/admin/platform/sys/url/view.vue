@@ -97,6 +97,7 @@
           field: 'f_url',
           tooltipField: 'f_url',
           pinned: 'left',
+          suppressSorting: false,
           suppressFilter: false,
           filterFramework: LikeFilterFramework,
           floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
@@ -106,6 +107,7 @@
         {
           headerName: '提交方式',
           field: 'f_methods',
+          suppressSorting: false,
           suppressFilter: false,
           filterParams: {dict: 'HttpMethods', filterType: 'String'},
           filterFramework: DictFilterFramework,

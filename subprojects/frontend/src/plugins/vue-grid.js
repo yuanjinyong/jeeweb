@@ -172,6 +172,7 @@ var VueGrid = {
       }
     },
     defaultColDef: {
+      unSortIcon: true,
       suppressSorting: true,
       suppressMenu: true,
       suppressFilter: true

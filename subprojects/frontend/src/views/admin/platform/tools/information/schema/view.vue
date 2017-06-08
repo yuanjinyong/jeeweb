@@ -66,6 +66,7 @@
           field: 'TABLE_SCHEMA',
           tooltipField: 'TABLE_SCHEMA',
           pinned: 'left',
+          suppressSorting: false,
           suppressFilter: false,
           filterParams: {
             url: 'api/schema/information/schematas',
@@ -81,6 +82,7 @@
           field: 'TABLE_NAME',
           tooltipField: 'TABLE_NAME',
           pinned: 'left',
+          suppressSorting: false,
           suppressFilter: false,
           filterFramework: LikeFilterFramework,
           floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
@@ -89,6 +91,7 @@
         {
           headerName: '列名',
           field: 'COLUMN_NAME',
+          suppressSorting: false,
           tooltipField: 'COLUMN_NAME',
           pinned: 'left',
           width: 180

@@ -116,6 +116,7 @@
           headerName: '账号',
           field: 'f_account',
           pinned: 'left',
+          suppressSorting: false,
           suppressFilter: false,
           filterFramework: LikeFilterFramework,
           floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
@@ -127,8 +128,6 @@
           field: 'f_name',
           pinned: 'left',
           suppressSorting: false,
-          colId: 'f_name',
-          sortingOrder: ['asc'],
           suppressFilter: false,
           filterFramework: LikeFilterFramework,
           floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
@@ -137,6 +136,7 @@
         {
           headerName: '创建时间',
           field: 'f_created_time',
+          suppressSorting: false,
           suppressFilter: false,
           filterFramework: TimestampFilterFramework,
           floatingFilterComponentFramework: TimestampFloatingFilterComponentFramework,
@@ -152,6 +152,7 @@
         {
           headerName: '最近登录时间',
           field: 'f_last_login_time',
+          suppressSorting: false,
           cellStyle: {'text-align': 'center'},
           cellRendererFramework: TimestampRendererFramework,
           width: 140

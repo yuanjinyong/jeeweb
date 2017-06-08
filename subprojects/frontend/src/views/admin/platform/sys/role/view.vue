@@ -110,6 +110,7 @@
           headerName: '角色名称',
           field: 'f_name',
           pinned: 'left',
+          suppressSorting: false,
           suppressFilter: false,
           filterFramework: LikeFilterFramework,
           floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
