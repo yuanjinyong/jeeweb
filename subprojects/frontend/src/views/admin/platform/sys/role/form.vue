@@ -26,7 +26,7 @@
       </el-form>
     </div>
 
-    <div class="jw-form-footer" style="text-align: right;">
+    <div class="jw-form-footer">
       <el-button @click="onCancelForm('form')">取 消</el-button>
       <el-button type="primary" @click="onSubmitForm('form')" :disabled="formOptions.operation === 'view'">确 定
       </el-button>

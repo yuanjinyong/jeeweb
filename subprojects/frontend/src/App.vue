@@ -32,6 +32,11 @@
     background-color: #fff;
   }
 
+  .jw-grid {
+    width: 100%;
+    height: 100%;
+  }
+
   .jw-grid .ag-root {
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -170,6 +175,7 @@
   .jw-form .jw-form-footer {
     padding: 20px;
     background-color: #f1f1f1;
+    text-align: right;
   }
 
   .jw-form .el-form-item {
@@ -257,6 +263,11 @@
 
   .jw-form .jw-textarea-nowrap .el-textarea__inner {
     white-space: nowrap;
+  }
+
+  .jw-form .el-form-item__error {
+    background: #fff;
+    z-index: 9999999;
   }
 </style>
 

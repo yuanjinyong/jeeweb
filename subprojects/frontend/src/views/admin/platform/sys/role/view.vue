@@ -1,20 +1,16 @@
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
-
 <template>
   <div :style="contentStyle">
-    <ag-grid-vue style="width: 100%; height: 100%;" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid-vue>
+    <ag-grid-vue class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid-vue>
 
     <el-dialog v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false" :modal="true"
-      :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
+               :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
       <role-form :form-options="formOptions" v-if="formOptions.isShow"></role-form>
     </el-dialog>
 
     <el-dialog v-model="authorizeFormOptions.isShow" :title="authorizeFormOptions.title" :close-on-click-modal="false"
-      :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
+               :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
       <role-authorize-form :form-options="authorizeFormOptions"
-        v-if="authorizeFormOptions.isShow">
+                           v-if="authorizeFormOptions.isShow">
       </role-authorize-form>
     </el-dialog>
   </div>
@@ -22,7 +18,7 @@
 
 
 <script type="text/ecmascript-6">
-  import { AgGridVue } from 'ag-grid-vue'
+  import {AgGridVue} from 'ag-grid-vue'
   import AddHeaderComponenetFramework from 'components/ag-grid/AddHeaderComponenetFramework'
   import LikeFilterFramework from 'components/ag-grid/LikeFilterFramework'
   import LikeFloatingFilterComponentFramework from 'components/ag-grid/LikeFloatingFilterComponentFramework'
