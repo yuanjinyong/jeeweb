@@ -3,14 +3,13 @@
 
 <template>
   <el-button-group>
-    <el-button v-for="(operation, index) in params.operations" size="mini"
-      :key="operation.id"
-      :type="operation.type ? operation.type : (operations[operation.id] ? operations[operation.id].type : null)"
-      :title="operation.title ? operation.title : (operations[operation.id].title + featureOptions.name)"
-      :disabled="(operation.permission && !permission[operation.permission]) || (operation.isDisabled && operation.isDisabled(entity))"
-      @click.prevent="onClick(operation)">
-      <i :class="operation.icon ? operation.icon : operations[operation.id].icon"></i>
-      {{operation.text ? (' ' + operation.text) :''}}
+    <el-button v-for="(operation, index) in operations" :key="operation.id"
+               size="mini"
+               :type="operation.type"
+               :title="operation.title"
+               :disabled="!hasPermission(operation) || isDisabled(operation)"
+               @click.prevent="onClick(operation)">
+      <i :class="operation.icon"></i>{{operation.text ? (' ' + operation.text) : ''}}
     </el-button>
   </el-button-group>
 </template>
@@ -21,7 +20,8 @@
   export default Vue.extend({
     data () {
       return {
-        operations: {
+        operations: [],
+        defaultOperations: {
           add: {
             title: '增加',
             type: 'primary',
@@ -48,59 +48,71 @@
       }
     },
     computed: {
-      featureOptions () {
-        return this.params.context.featureComponent.featureOptions
+      featureComponent () {
+        return this.params.context.featureComponent
       },
-      permission () {
+      permissions () {
         return this.params.context.featureComponent.permission
       },
       entity () {
-        return this.params.node.data ? this.params.node.data : {}
+        return this.params.node && this.params.node.data ? this.params.node.data : {}
       }
     },
+    created () {
+      this.operations = []
+      this.params.operations.forEach((operation) => {
+        let defaultOperation = this.defaultOperations[operation.id] || {title: ''}
+        this.operations.push(Vue.lodash.merge({}, defaultOperation, {title: defaultOperation.title + this.featureComponent.featureOptions.name}, operation))
+      })
+    },
     methods: {
+      hasPermission (operation) {
+        if (operation.permission && this.permissions) {
+          return this.permissions[operation.permission]
+        }
+        return true
+      },
+      isDisabled (operation) {
+        if (operation.isDisabled) {
+          return operation.isDisabled(this.params, this.entity)
+        }
+        return false
+      },
       onClick (operation) {
         if (operation.onClick) {
           operation.onClick(this.params, this.entity)
           return
         }
 
-        if (operation.id === 'view') {
-          if (this.params.context.featureComponent.onView) {
-            this.params.context.featureComponent.onView(this.entity)
-          } else if (this.params.context.featureComponent.formOptions) {
-            this.params.context.featureComponent.formOptions.operation = 'view'
-            this.params.context.featureComponent.formOptions.title = '查看' + this.params.context.featureComponent.featureOptions.name
-            this.params.context.featureComponent.formOptions.params = this.entity
-            this.params.context.featureComponent.formOptions.isShow = true
-          }
-        } else if (operation.id === 'edit') {
-          if (this.params.context.featureComponent.onEdit) {
-            this.params.context.featureComponent.onEdit(this.entity)
-          } else if (this.params.context.featureComponent.formOptions) {
-            this.params.context.featureComponent.formOptions.operation = 'edit'
-            this.params.context.featureComponent.formOptions.title = '修改' + this.params.context.featureComponent.featureOptions.name
-            this.params.context.featureComponent.formOptions.params = this.entity
-            this.params.context.featureComponent.formOptions.isShow = true
-          }
-        } else if (operation.id === 'remove') {
-          if (this.params.context.featureComponent.onRemove) {
-            this.params.context.featureComponent.onRemove(this.entity)
-          } else if (this.params.context.featureComponent.gridOptions) {
-            var featureName = this.params.context.featureComponent.featureOptions.name
-            this.$confirm('确定要删除所选的' + featureName + '吗?', '删除' + featureName, {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-              this.$http.delete(this.params.context.featureComponent.featureOptions.url + '/' + this.entity.f_id).then((response) => {
-                if (response.body.success && this.params.context.featureComponent.gridOptions) {
-                  this.params.context.featureComponent.gridOptions.context.params.totalCount = 0
-                  this.params.context.featureComponent.gridOptions.api.setDatasource(this.params.context.featureComponent.gridOptions.datasource)
-                }
-              })
+        if (operation.id !== 'remove') {
+          if (this.featureComponent.formOptions) {
+            Vue.lodash.merge(this.featureComponent.formOptions, {
+              isShow: true,
+              operation: operation.id,
+              title: operation.title,
+              params: this.entity
             })
           }
+          return
+        }
+
+        if (this.featureComponent.gridOptions) {
+          let featureName = this.featureComponent.featureOptions.name
+          this.$confirm('确定要删除所选的' + featureName + '吗?', '删除' + featureName, {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            let url = this.featureComponent.gridOptions.context.url ? this.featureComponent.gridOptions.context.url : this.featureComponent.featureOptions.url
+            this.$http.delete(url + '/' + this.entity.f_id).then((response) => {
+              if (response.body.success) {
+                this.featureComponent.gridOptions.context.params.totalCount = 0
+                this.featureComponent.gridOptions.api.setDatasource(this.featureComponent.gridOptions.datasource)
+              }
+            })
+          }).catch((e) => {
+            // console && console.error(e)
+          })
         }
       }
     }

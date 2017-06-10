@@ -4,17 +4,17 @@
 
 <template>
   <div :style="contentStyle">
-    <ag-grid-vue style="width: 100%; height: 100%;" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid-vue>
+    <ag-grid-vue class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid-vue>
 
     <el-dialog v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false" :modal="true"
-      :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
+               :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
       <user-form :form-options="formOptions" v-if="formOptions.isShow"></user-form>
     </el-dialog>
 
     <el-dialog v-model="authorizeFormOptions.isShow" :title="authorizeFormOptions.title" :close-on-click-modal="false"
-      :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
+               :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
       <user-authorize-form :form-options="authorizeFormOptions"
-        v-if="authorizeFormOptions.isShow">
+                           v-if="authorizeFormOptions.isShow">
       </user-authorize-form>
     </el-dialog>
   </div>
@@ -22,7 +22,7 @@
 
 
 <script type="text/ecmascript-6">
-  import { AgGridVue } from 'ag-grid-vue'
+  import {AgGridVue} from 'ag-grid-vue'
   import AddHeaderComponenetFramework from 'components/ag-grid/AddHeaderComponenetFramework'
   import DictFilterFramework from 'components/ag-grid/DictFilterFramework'
   import DictFloatingFilterComponentFramework from 'components/ag-grid/DictFloatingFilterComponentFramework'
@@ -196,7 +196,7 @@
               type: 'warning',
               icon: 'fa fa-key',
               permission: 'authorize',
-              isDisabled: function (entity) {
+              isDisabled: function (params, entity) {
                 return entity.f_status === 3
               },
               onClick (params, entity) {
@@ -205,14 +205,14 @@
             }, {
               id: 'edit',
               permission: 'edit',
-              isDisabled: function (entity) {
+              isDisabled: function (params, entity) {
                 return entity.f_status === 3
               }
             }, {
               id: 'remove',
               title: '注销' + this.featureOptions.name,
               permission: 'remove',
-              isDisabled: function (entity) {
+              isDisabled: function (params, entity) {
                 return entity.f_status === 3 || entity.f_is_preset === 1
               }
             }, {
@@ -221,7 +221,7 @@
               type: 'success',
               icon: 'fa fa-unlock',
               permission: 'unlock',
-              isDisabled: function (entity) {
+              isDisabled: function (params, entity) {
                 return entity.f_status !== 2
               },
               onClick (params, entity) {
@@ -233,7 +233,7 @@
               type: 'warning',
               icon: 'fa fa-cog',
               permission: 'resetPassword',
-              isDisabled: function (entity) {
+              isDisabled: function (params, entity) {
                 return entity.f_status === 3 || entity.f_is_preset === 1
               },
               onClick (params, entity) {
@@ -268,6 +268,8 @@
               vm._refreshGrid()
             }
           })
+        }).catch((e) => {
+          // console && console.error(e)
         })
       },
       onResetPassword (entity) {
@@ -277,11 +279,13 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          vm.$http.delete(vm.featureOptions.url + '/' + entity.f_id + '/reset/password').then((response) => {
+          vm.$http.post(vm.featureOptions.url + '/' + entity.f_id + '/reset/password').then((response) => {
             if (response.body.success) {
               vm._refreshGrid()
             }
           })
+        }).catch((e) => {
+          // console && console.error(e)
         })
       },
       _refreshGrid () {

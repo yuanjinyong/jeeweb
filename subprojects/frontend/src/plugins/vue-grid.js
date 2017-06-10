@@ -1,14 +1,13 @@
 /**
  * Install plugin.
  */
-import $ from 'jquery'
 import Vue from 'vue'
 
 var VueGrid = {
   defaultOptions: {
     debug: false,
     context: {
-      featureComponent: {},
+      featureComponent: {featureOptions: {name: ''}},
       params: {
         orderBy: null,
         totalCount: 0
@@ -24,7 +23,7 @@ var VueGrid = {
     suppressCellSelection: true,
     enableColResize: true,
     headerHeight: 30, // default is 25px
-    floatingFiltersHeight: 30, // default is 20px
+    floatingFiltersHeight: 32, // default is 20px
     rowHeight: 30, // default is 25px
     rowSelection: 'multiple',
     rowModelType: 'infinite',
@@ -180,7 +179,7 @@ var VueGrid = {
     columnDefs: []
   },
   buildOptions: function (gridOptions) {
-    return $.extend({}, this.defaultOptions, gridOptions)
+    return Vue.lodash.merge({}, this.defaultOptions, gridOptions)
   }
 }
 

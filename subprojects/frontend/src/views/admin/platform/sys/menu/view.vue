@@ -4,15 +4,15 @@
 
 <template>
   <div :style="contentStyle">
-    <ag-grid-vue style="width: 100%; height: 100%;" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid-vue>
+    <ag-grid-vue class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid-vue>
 
     <el-dialog v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false" :modal="true"
-      :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
+               :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
       <menu-form :form-options="formOptions" @submit="onSaved" v-if="formOptions.isShow"></menu-form>
     </el-dialog>
 
     <el-dialog v-model="sqlFormOptions.isShow" :title="sqlFormOptions.title" :close-on-click-modal="false" :modal="true"
-      :size="'large'" :top="'30px'" :custom-class="'jw-dialog'">
+               :size="'large'" :top="'30px'" :custom-class="'jw-dialog'">
       <sql-form :form-options="sqlFormOptions" v-if="sqlFormOptions.isShow"></sql-form>
     </el-dialog>
   </div>
@@ -20,7 +20,7 @@
 
 
 <script type="text/ecmascript-6">
-  import { AgGridVue } from 'ag-grid-vue'
+  import {AgGridVue} from 'ag-grid-vue'
   import DictFilterFramework from 'components/ag-grid/DictFilterFramework'
   import DictFloatingFilterComponentFramework from 'components/ag-grid/DictFloatingFilterComponentFramework'
   import LikeFilterFramework from 'components/ag-grid/LikeFilterFramework'
@@ -205,20 +205,21 @@
               type: 'primary',
               icon: 'fa fa-plus',
               permission: 'add',
-              isDisabled: function (entity) {
+              isDisabled: function (params, entity) {
                 return entity.f_type > 2
-              },
-              onClick (params, entity) {
-                params.context.featureComponent.onAdd(entity)
               }
             }, {
               id: 'edit',
               permission: 'edit'
             }, {
               id: 'remove',
+              title: '删除菜单及其子菜单',
               permission: 'remove',
-              isDisabled: function (entity) {
+              isDisabled: function (params, entity) {
                 return !entity.f_parent_id
+              },
+              onClick (params, entity) {
+                params.context.featureComponent.onRemove(entity)
               }
             }, {
               id: 'sql',
@@ -254,12 +255,6 @@
             this.gridOptions.api.setRowData([])
           }
         })
-      },
-      onAdd (entity) {
-        this.formOptions.operation = 'add'
-        this.formOptions.params = entity
-        this.formOptions.title = '增加菜单'
-        this.formOptions.isShow = true
       },
       onRemove (entity) {
         var vm = this

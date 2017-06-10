@@ -4,18 +4,22 @@
 
 <template>
   <div :style="contentStyle">
-    <ag-grid-vue style="width: 100%; height: 100%;" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid-vue>
+    <ag-grid-vue class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid-vue>
 
     <el-dialog v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false" :modal="true"
-      :size="'large'" :top="'30px'" :custom-class="'jw-dialog jw-dialog-large'">
+               :size="'large'" :top="'30px'" :custom-class="'jw-dialog jw-dialog-large'">
       <generation-rule-form :form-options="formOptions" v-if="formOptions.isShow"></generation-rule-form>
+    </el-dialog>
+
+    <el-dialog v-model="generating" :title="'代码生成中……'" :show-close="false">
+      <loading></loading>
     </el-dialog>
   </div>
 </template>
 
 
 <script type="text/ecmascript-6">
-  import { AgGridVue } from 'ag-grid-vue'
+  import {AgGridVue} from 'ag-grid-vue'
   import AddHeaderComponenetFramework from 'components/ag-grid/AddHeaderComponenetFramework'
   import LikeFilterFramework from 'components/ag-grid/LikeFilterFramework'
   import LikeFloatingFilterComponentFramework from 'components/ag-grid/LikeFloatingFilterComponentFramework'
@@ -53,7 +57,8 @@
               totalCount: 0
             }
           }
-        })
+        }),
+        generating: false
       }
     },
     computed: {
@@ -169,7 +174,9 @@
     },
     methods: {
       onGenerate (entity) {
-        this.$http.put(this.featureOptions.url + '/' + entity.f_id + '/generate').then(function (response) {
+        this.generating = true
+        this.$http.put(this.featureOptions.url + '/' + entity.f_id + '/generate').then((response) => {
+          this.generating = false
         })
       }
     }

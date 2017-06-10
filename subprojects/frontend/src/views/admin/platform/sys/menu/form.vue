@@ -26,10 +26,10 @@
           <el-form-item label="类型" prop="f_type">
             <el-select class="jw-field-col-1" v-model="entity.f_type" :disabled="formOptions.operation !== 'add'">
               <el-option v-for="type in menuTypes"
-                :key="type.f_item_code"
-                :value="type.f_item_code"
-                :label="type.f_item_text"
-                :disabled="type.f_item_code === 0">
+                         :key="type.f_item_code"
+                         :value="type.f_item_code"
+                         :label="type.f_item_text"
+                         :disabled="type.f_item_code === 0">
                 {{type.f_item_text}}
               </el-option>
             </el-select>
@@ -62,7 +62,7 @@
 
           <div v-show="entity.f_type === 2 || entity.f_type === 3">
             <ag-grid-vue style="width: 100%; height: 200px;" class="ag-fresh jw-grid"
-              :grid-options="urlGridOptions">
+                         :grid-options="urlGridOptions">
             </ag-grid-vue>
           </div>
         </fieldset>
@@ -76,10 +76,10 @@
     </div>
 
     <el-dialog title="选择授权的URL" v-model="showSelectUrlDialog"
-      :close-on-click-modal="false" :modal="false" :size="'large'" :top="'20px'"
-      :custom-class="'jw-dialog jw-sub-dialog'">
+               :close-on-click-modal="false" :modal="false" :size="'large'" :top="'20px'"
+               :custom-class="'jw-dialog jw-sub-dialog'">
       <url-selector ref="urlSelector" :mode="'selector'"></url-selector>
-      <div slot="footer" class="dialog-footer">
+      <div slot="footer">
         <el-button @click="showSelectUrlDialog = false">取 消</el-button>
         <el-button type="primary" @click="onSelected">选 择</el-button>
       </div>
@@ -89,7 +89,7 @@
 
 
 <script type="text/ecmascript-6">
-  import { AgGridVue } from 'ag-grid-vue'
+  import {AgGridVue} from 'ag-grid-vue'
   import AddHeaderComponenetFramework from 'components/ag-grid/AddHeaderComponenetFramework'
   import IndexRendererFramework from 'components/ag-grid/IndexRendererFramework'
   import OperationRendererFramework from 'components/ag-grid/OperationRendererFramework'
@@ -171,6 +171,13 @@
         {
           headerName: '序号',
           headerComponentFramework: AddHeaderComponenetFramework,
+          headerComponentParams: {
+            operation: {
+              onClick (params, entity) {
+                vm.onAdd()
+              }
+            }
+          },
           cellStyle: {'text-align': 'right'},
           cellRendererFramework: IndexRendererFramework,
           width: 38

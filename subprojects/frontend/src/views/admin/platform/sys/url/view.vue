@@ -4,11 +4,11 @@
 
 <template>
   <div :style="contentStyle">
-    <ag-grid-vue style="width: 100%; height: 100%;" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid-vue>
+    <ag-grid-vue class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid-vue>
 
     <el-dialog v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false"
-      :modal="mode !== 'selector'" :size="'small'" :top="mode !== 'selector' ? '30px': '20px'"
-      :custom-class="mode !== 'selector' ? 'jw-dialog' : 'jw-dialog jw-sub-dialog'">
+               :modal="mode !== 'selector'" :size="'small'" :top="mode !== 'selector' ? '30px': '20px'"
+               :custom-class="mode !== 'selector' ? 'jw-dialog' : 'jw-dialog jw-sub-dialog'">
       <url-form :form-options="formOptions" v-if="formOptions.isShow"></url-form>
     </el-dialog>
   </div>
@@ -17,7 +17,7 @@
 
 <script type="text/ecmascript-6">
   // import Vue from 'vue'
-  import { AgGridVue } from 'ag-grid-vue'
+  import {AgGridVue} from 'ag-grid-vue'
   import DictFilterFramework from 'components/ag-grid/DictFilterFramework'
   import DictFloatingFilterComponentFramework from 'components/ag-grid/DictFloatingFilterComponentFramework'
   import LikeFilterFramework from 'components/ag-grid/LikeFilterFramework'
@@ -69,7 +69,7 @@
     computed: {
       contentStyle () {
         if (this.mode === 'selector') {
-          return {'padding': '0px', 'height': (this.$store.state.layout.body.height - 111) + 'px'}
+          return {'padding': '20px', 'height': '457px'}
         } else {
           return {'padding': '20px', 'height': this.$store.state.layout.body.height + 'px'}
         }
@@ -102,7 +102,7 @@
           filterFramework: LikeFilterFramework,
           floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
           cellRendererFramework: ViewRendererFramework,
-          width: 400
+          width: 300
         },
         {
           headerName: '提交方式',

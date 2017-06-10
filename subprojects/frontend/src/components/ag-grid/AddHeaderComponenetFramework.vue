@@ -3,11 +3,12 @@
 
 <template>
   <div class="ag-header-component" style="padding: 3px 5px;">
-    <el-button type="primary" size="mini"
-      :title="'增加'+featureOptions.name"
-      :disabled="!permission.add"
-      @click.prevent="onClick">
-      <i class="fa fa-plus"></i>
+    <el-button size="mini"
+               :type="operation.type"
+               :title="operation.title"
+               :disabled="!hasPermission(operation) || isDisabled(operation)"
+               @click.prevent="onClick(operation)">
+      <i :class="operation.icon"></i>
     </el-button>
   </div>
 </template>
@@ -16,22 +17,58 @@
   import Vue from 'vue'
 
   export default Vue.extend({
-    computed: {
-      featureOptions () {
-        return this.params.context.featureComponent.featureOptions
-      },
-      permission () {
-        return this.params.context.featureComponent.permission || {add: true}
+    data () {
+      return {
+        operation: {},
+        defaultOperation: {
+          id: 'add',
+          title: '增加',
+          type: 'primary',
+          icon: 'fa fa-plus',
+          permission: 'add'
+        }
       }
     },
+    computed: {
+      featureComponent () {
+        return this.params.context.featureComponent
+      },
+      permissions () {
+        return this.params.context.featureComponent.permission
+      },
+      entity () {
+        return this.params.node && this.params.node.data ? this.params.node.data : {}
+      }
+    },
+    created () {
+      this.operation = Vue.lodash.merge({}, this.defaultOperation, {title: this.defaultOperation.title + this.featureComponent.featureOptions.name}, this.params.operation)
+    },
     methods: {
-      onClick () {
-        if (this.params.context.featureComponent.onAdd) {
-          this.params.context.featureComponent.onAdd()
-        } else if (this.params.context.featureComponent.formOptions) {
-          this.params.context.featureComponent.formOptions.operation = 'add'
-          this.params.context.featureComponent.formOptions.title = '增加' + this.params.context.featureComponent.featureOptions.name
-          this.params.context.featureComponent.formOptions.isShow = true
+      hasPermission (operation) {
+        if (operation.permission && this.permissions) {
+          return this.permissions[operation.permission]
+        }
+        return true
+      },
+      isDisabled (operation) {
+        if (operation.isDisabled) {
+          return operation.isDisabled(this.params, this.entity)
+        }
+        return false
+      },
+      onClick (operation) {
+        if (operation.onClick) {
+          operation.onClick(this.params, this.entity)
+          return
+        }
+
+        if (this.featureComponent.formOptions) {
+          Vue.lodash.merge(this.featureComponent.formOptions, {
+            isShow: true,
+            operation: operation.id,
+            title: operation.title,
+            params: this.entity
+          })
         }
       }
     }

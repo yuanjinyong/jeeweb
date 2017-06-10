@@ -4,11 +4,11 @@
 
 <template>
   <div>
-    <ag-grid-vue style="width: 100%; height: 100%;" class="ag-fresh jw-grid" :grid-options="gridOptions">
+    <ag-grid-vue class="ag-fresh jw-grid" :grid-options="gridOptions">
     </ag-grid-vue>
 
     <el-dialog v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false" :modal="false"
-      :size="'full'" :custom-class="'jw-dialog jw-dialog-full'">
+               :size="'full'" :custom-class="'jw-dialog jw-dialog-full'">
       <generation-rule-table-form
         :form-options="formOptions"
         :generate-rule="generateRule"
@@ -21,7 +21,7 @@
 
 
 <script type="text/ecmascript-6">
-  import { AgGridVue } from 'ag-grid-vue'
+  import {AgGridVue} from 'ag-grid-vue'
   import AddHeaderComponenetFramework from 'components/ag-grid/AddHeaderComponenetFramework'
   import DictRendererFramework from 'components/ag-grid/DictRendererFramework'
   import OperationRendererFramework from 'components/ag-grid/OperationRendererFramework'
@@ -101,6 +101,14 @@
           field: 'f_order',
           pinned: 'left',
           headerComponentFramework: AddHeaderComponenetFramework,
+          headerComponentParams: {
+            operation: {
+              permission: '',
+              isDisabled (params, entity) {
+                return vm.operation === 'view'
+              }
+            }
+          },
           cellStyle: {'text-align': 'right'},
           width: 38
         },
@@ -146,12 +154,12 @@
           cellRendererParams: {
             operations: [{
               id: 'edit',
-              isDisabled: function (entity) {
+              isDisabled: function (params, entity) {
                 return vm.operation === 'view'
               }
             }, {
               id: 'remove',
-              isDisabled: function (entity) {
+              isDisabled: function (params, entity) {
                 return vm.operation === 'view'
               }
             }]

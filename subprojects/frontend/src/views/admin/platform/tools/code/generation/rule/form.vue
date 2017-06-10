@@ -16,9 +16,9 @@
           <el-form-item label="父级菜单" prop="f_menu_parent_id">
             <el-select class="jw-field-col-1" v-model="entity.f_menu_parent_id" @change="onParentMenuChange">
               <el-option v-for="menu in menuList"
-                :key="menu.f_id"
-                :value="menu.f_id"
-                :label="menu.f_name">
+                         :key="menu.f_id"
+                         :value="menu.f_id"
+                         :label="menu.f_name">
                 {{menu.f_name}}
               </el-option>
             </el-select>
@@ -44,10 +44,9 @@
           <el-form-item label="模块包名" prop="f_package_name">
             <el-input class="jw-field-col-2" v-model="entity.f_package_name"></el-input>
           </el-form-item>
-
-          <generation-rule-table style="height: 302px;" :operation="formOptions.operation" :generate-rule="entity">
-          </generation-rule-table>
         </fieldset>
+        <generation-rule-table style="height: 302px;" :operation="formOptions.operation" :generate-rule="entity">
+        </generation-rule-table>
       </el-form>
     </div>
 

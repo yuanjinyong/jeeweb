@@ -148,6 +148,11 @@
     background-color: #f1f1f1;
   }
 
+  .jw-dialog .el-dialog__footer {
+    padding: 20px;
+    background-color: #f1f1f1;
+  }
+
   .jw-dialog .el-dialog__body {
     padding: 0px;
     color: #48576a;

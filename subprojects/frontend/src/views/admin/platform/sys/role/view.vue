@@ -155,7 +155,7 @@
             }, {
               id: 'remove',
               permission: 'remove',
-              isDisabled: function (entity) {
+              isDisabled: function (params, entity) {
                 return entity.f_is_preset === 1
               }
             }]
