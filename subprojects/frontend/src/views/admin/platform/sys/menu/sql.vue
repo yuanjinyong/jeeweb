@@ -9,7 +9,7 @@
         <fieldset>
           <el-form-item prop="sql">
             <el-input v-model="entity.sql" type="textarea" class="jw-textarea-full-width jw-textarea-nowrap"
-              :autosize="{minRows: 4, maxRows: 18}">
+                      :autosize="{minRows: 4, maxRows: 18}">
             </el-input>
           </el-form-item>
         </fieldset>
@@ -51,7 +51,7 @@
     computed: {
       formBodyStyle () {
         return {
-          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : 500) + 'px',
+          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : this.$store.state.layout.dialog.height) + 'px',
           'overflow-y': 'auto'
         }
       },

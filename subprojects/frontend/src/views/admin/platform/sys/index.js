@@ -1,7 +1,14 @@
-import Menu from './menu/view'
-import Role from './role/view'
-import Url from './url/view'
-import User from './user/view'
+export * from './menu'
+import {MenuView} from './menu'
+
+export * from './role'
+import {RoleView} from './role'
+
+export * from './url'
+import {UrlView} from './url'
+
+export * from './user'
+import {UserView} from './user'
 
 export default [
   {
@@ -12,18 +19,18 @@ export default [
   },
   {
     path: 'menu',
-    component: Menu
+    component: MenuView
   },
   {
     path: 'role',
-    component: Role
+    component: RoleView
   },
   {
     path: 'url',
-    component: Url
+    component: UrlView
   },
   {
     path: 'user',
-    component: User
+    component: UserView
   }
 ]

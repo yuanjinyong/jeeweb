@@ -8,14 +8,14 @@
       <el-form ref="form" :model="entity" :rules="rules" :inline="true" :label-width="labelWidth">
         <fieldset :disabled="formOptions.operation === 'view'">
           <el-tree ref="menuTree"
-            show-checkbox
-            node-key="f_id"
-            :props="treeOptions"
-            :check-strictly="true"
-            :default-expanded-keys="expandedMenuIds"
-            :default-checked-keys="checkedMenuIds"
-            :data="menus"
-            @check-change="onCheckChange">
+                   show-checkbox
+                   node-key="f_id"
+                   :props="treeOptions"
+                   :check-strictly="true"
+                   :default-expanded-keys="expandedMenuIds"
+                   :default-checked-keys="checkedMenuIds"
+                   :data="menus"
+                   @check-change="onCheckChange">
           </el-tree>
         </fieldset>
       </el-form>
@@ -66,7 +66,7 @@
     computed: {
       formBodyStyle () {
         return {
-          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : 500) + 'px',
+          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : this.$store.state.layout.dialog.height) + 'px',
           'overflow-y': 'auto'
         }
       },

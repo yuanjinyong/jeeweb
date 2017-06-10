@@ -1,5 +1,8 @@
-import CodeGeneration from './code/generation/rule/view'
-import InformationSchema from './information/schema/view'
+export * from './code/generation'
+import {GenerationRuleView} from './code/generation'
+
+export * from './information'
+import {InformationSchemaView} from './information'
 
 export default [
   {
@@ -10,10 +13,10 @@ export default [
   },
   {
     path: 'code/generation',
-    component: CodeGeneration
+    component: GenerationRuleView
   },
   {
     path: 'information/schema',
-    component: InformationSchema
+    component: InformationSchemaView
   }
 ]

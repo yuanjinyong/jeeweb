@@ -45,8 +45,8 @@
             <el-input class="jw-field-col-2" v-model="entity.f_package_name"></el-input>
           </el-form-item>
         </fieldset>
-        <generation-rule-table style="height: 302px;" :operation="formOptions.operation" :generate-rule="entity">
-        </generation-rule-table>
+        <generation-rule-table-view style="height: 302px;" :operation="formOptions.operation" :generate-rule="entity">
+        </generation-rule-table-view>
       </el-form>
     </div>
 
@@ -60,12 +60,12 @@
 
 
 <script type="text/ecmascript-6">
-  import GenerationRuleTable from '../table/view'
+  import GenerationRuleTableView from '../table/view'
 
   export default {
     name: 'generationRuleForm',
     components: {
-      GenerationRuleTable
+      GenerationRuleTableView
     },
     props: {
       formOptions: {
@@ -87,6 +87,7 @@
     data () {
       return {
         menuList: [],
+        url: 'api/platform/tools/code/generate/rules',
         entity: {},
         rules: {}
       }
@@ -94,7 +95,7 @@
     computed: {
       formBodyStyle () {
         return {
-          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : 500) + 'px',
+          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : this.$store.state.layout.dialog.height) + 'px',
           'overflow-y': 'auto'
         }
       },

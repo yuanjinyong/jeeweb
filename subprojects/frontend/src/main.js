@@ -21,6 +21,9 @@ Vue.use(ElementUI)
 
 import VueCfg from './assets/js/vue-cfg'
 
+import {AgGridVue} from 'ag-grid-vue'
+Vue.component('ag-grid', AgGridVue) // 注册全局组件
+
 import 'ag-grid/dist/styles/ag-grid.css'
 // import 'ag-grid/dist/styles/theme-blue.css'
 // import 'ag-grid/dist/styles/theme-bootstrap.css'
@@ -44,6 +47,18 @@ window.devMode && console && console.debug('调试模式开启')
 Vue.use(VueCfg)
 Vue.use(VueGrid)
 Vue.use(VueJw)
+
+// Vue.mixin({
+//   created () {
+//     console.log('created', this.$options.name, this._uid)
+//   },
+//   mounted () {
+//     console.log('mounted', this.$options.name, this._uid)
+//   },
+//   activated () {
+//     console.log('activated', this.$options.name, this._uid)
+//   }
+// })
 
 /* eslint-disable no-new */
 new Vue({

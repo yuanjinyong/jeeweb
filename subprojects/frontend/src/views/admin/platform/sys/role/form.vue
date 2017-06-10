@@ -57,6 +57,7 @@
     },
     data () {
       return {
+        url: 'api/platform/sys/roles',
         entity: {},
         rules: {
           f_name: [
@@ -69,7 +70,7 @@
     computed: {
       formBodyStyle () {
         return {
-          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : 500) + 'px',
+          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : this.$store.state.layout.dialog.height) + 'px',
           'overflow-y': 'auto'
         }
       },

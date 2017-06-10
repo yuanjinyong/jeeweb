@@ -8,14 +8,15 @@
       <el-form ref="form" :model="entity" :rules="rules" :inline="true" :label-width="labelWidth">
         <fieldset :disabled="formOptions.operation === 'view'">
           <el-form-item label="账号" prop="f_account">
-            <el-input class="jw-field-col-1" v-model="entity.f_account" :disabled="formOptions.operation !== 'add'"></el-input>
+            <el-input class="jw-field-col-1" v-model="entity.f_account"
+                      :disabled="formOptions.operation !== 'add'"></el-input>
           </el-form-item>
           <el-form-item label="姓名" prop="f_name">
             <el-input class="jw-field-col-1" v-model="entity.f_name"></el-input>
           </el-form-item>
           <el-form-item label="角色">
             <el-select class="jw-field-col-2" v-model="entity.roleIdList" placeholder="请选择角色" multiple
-              :disabled="formOptions.subOperation === 'change'">
+                       :disabled="formOptions.subOperation === 'change'">
               <el-option v-for="role in roleList" :key="role.f_id" :value="role.f_id" :label="role.f_name">
                 <div style="float: left;">{{role.f_name}}</div>
                 <div style="float: right;padding-right:30px;">{{role.f_desc}}</div>
@@ -99,6 +100,7 @@
     data () {
       return {
         roleList: [],
+        url: 'api/platform/sys/users',
         entity: {roleIdList: []},
         rules: {
           f_account: [
@@ -115,7 +117,7 @@
     computed: {
       formBodyStyle () {
         return {
-          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : 500) + 'px',
+          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : this.$store.state.layout.dialog.height) + 'px',
           'overflow-y': 'auto'
         }
       },

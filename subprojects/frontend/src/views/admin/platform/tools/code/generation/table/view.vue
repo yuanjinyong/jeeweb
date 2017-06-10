@@ -4,8 +4,7 @@
 
 <template>
   <div>
-    <ag-grid-vue class="ag-fresh jw-grid" :grid-options="gridOptions">
-    </ag-grid-vue>
+    <ag-grid class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
     <el-dialog v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false" :modal="false"
                :size="'full'" :custom-class="'jw-dialog jw-dialog-full'">
@@ -21,17 +20,18 @@
 
 
 <script type="text/ecmascript-6">
-  import {AgGridVue} from 'ag-grid-vue'
-  import AddHeaderComponenetFramework from 'components/ag-grid/AddHeaderComponenetFramework'
-  import DictRendererFramework from 'components/ag-grid/DictRendererFramework'
-  import OperationRendererFramework from 'components/ag-grid/OperationRendererFramework'
-  import ViewRendererFramework from 'components/ag-grid/ViewRendererFramework'
+  import {
+    AddHeaderComponenetFramework,
+    DictRendererFramework,
+    OperationRendererFramework,
+    ViewRendererFramework
+  } from 'components/ag-grid'
   import GenerationRuleTableForm from './form'
+  //  import {GenerationRuleTableForm} from 'views'
 
   export default {
-    name: 'generateRuleTable',
+    name: 'generationRuleTableView',
     components: {
-      'ag-grid-vue': AgGridVue,
       GenerationRuleTableForm
     },
     props: {

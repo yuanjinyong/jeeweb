@@ -7,7 +7,20 @@ const store = new Vuex.Store({
   state: {
     devMode: process.env.NODE_ENV === 'development',
     mock: false,
-    layout: {window: {width: 0, height: 0}, middle: {width: 0, height: 0}, body: {width: 0, height: 0}},
+    layout: {
+      window: {
+        width: 0, height: 0
+      },
+      middle: {
+        width: 0, height: 0
+      },
+      body: {
+        width: 0, height: 0
+      },
+      dialog: {
+        width: 0, height: 0
+      }
+    },
     menuHome: {
       f_id: 'AdminHome',
       f_name: '首页',

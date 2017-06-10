@@ -65,6 +65,12 @@ Vue.http.interceptors.push(function (request, next) {
           confirmButtonText: '关闭',
           type: 'error'
         })
+      } else if (response.status === 403) {
+        vm.errorMessage = response.body.message || '无访问 [' + response.url + '] 的权限，请联系系统管理人员！'
+        Vue.prototype.$alert(vm.errorMessage, '错误', {
+          confirmButtonText: '关闭',
+          type: 'error'
+        })
       } else if (response.status === 404) {
         vm.errorMessage = '访问 [' + response.url + '] 失败，请联系系统技术支持人员！'
         Vue.prototype.$alert(vm.errorMessage, '错误', {

@@ -2,22 +2,54 @@
 </style>
 
 <template>
-  <a @click.prevent="onView" style="cursor: pointer;">{{ this.params.value }}</a>
+  <a @click.prevent="onClick(operation)" :title="operation.title" style="cursor: pointer;">{{ render() }}</a>
 </template>
 
 <script type="text/ecmascript-6">
   import Vue from 'vue'
 
   export default Vue.extend({
+    data () {
+      return {
+        operation: {},
+        defaultOperation: {
+          id: 'view',
+          title: '查看'
+        }
+      }
+    },
+    computed: {
+      featureComponent () {
+        return this.params.context.featureComponent
+      },
+      entity () {
+        return this.params.node && this.params.node.data ? this.params.node.data : {}
+      }
+    },
+    created () {
+      this.operation = Vue.lodash.merge({}, this.defaultOperation, {title: this.defaultOperation.title + this.featureComponent.featureOptions.name}, this.params.operation)
+    },
     methods: {
-      onView () {
-        if (this.params.context.featureComponent.onView) {
-          this.params.context.featureComponent.onView(this.params.node.data)
-        } else if (this.params.context.featureComponent.formOptions) {
-          this.params.context.featureComponent.formOptions.operation = 'view'
-          this.params.context.featureComponent.formOptions.title = '查看' + this.params.context.featureComponent.featureOptions.name
-          this.params.context.featureComponent.formOptions.params = this.params.node.data
-          this.params.context.featureComponent.formOptions.isShow = true
+      render () {
+        if (this.operation.render) {
+          return this.operation.render(this.params, this.entity)
+        } else {
+          return this.params.value
+        }
+      },
+      onClick (operation) {
+        if (operation.onClick) {
+          operation.onClick(this.params, this.entity)
+          return
+        }
+
+        if (this.featureComponent.formOptions) {
+          Vue.lodash.merge(this.featureComponent.formOptions, {
+            isShow: true,
+            operation: operation.id,
+            title: operation.title,
+            params: this.entity
+          })
         }
       }
     }

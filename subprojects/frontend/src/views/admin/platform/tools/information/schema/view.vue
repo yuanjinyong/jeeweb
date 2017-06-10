@@ -4,24 +4,22 @@
 
 <template>
   <div :style="contentStyle">
-    <ag-grid-vue class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid-vue>
+    <ag-grid class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
   </div>
 </template>
 
 
 <script type="text/ecmascript-6">
-  import {AgGridVue} from 'ag-grid-vue'
-  import DictFilterFramework from 'components/ag-grid/DictFilterFramework'
-  import DictFloatingFilterComponentFramework from 'components/ag-grid/DictFloatingFilterComponentFramework'
-  import LikeFilterFramework from 'components/ag-grid/LikeFilterFramework'
-  import LikeFloatingFilterComponentFramework from 'components/ag-grid/LikeFloatingFilterComponentFramework'
-  import IndexRendererFramework from 'components/ag-grid/IndexRendererFramework'
+  import {
+    DictFilterFramework,
+    DictFloatingFilterComponentFramework,
+    LikeFilterFramework,
+    LikeFloatingFilterComponentFramework,
+    IndexRendererFramework
+  } from 'components/ag-grid'
 
   export default {
-    name: 'informationSchema',
-    components: {
-      'ag-grid-vue': AgGridVue
-    },
+    name: 'informationSchemaView',
     data () {
       return {
         featureOptions: {

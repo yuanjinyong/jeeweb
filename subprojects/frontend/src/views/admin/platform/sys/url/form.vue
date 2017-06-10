@@ -81,6 +81,7 @@
     },
     data () {
       return {
+        url: 'api/platform/sys/urls',
         entity: {},
         rules: {}
       }
@@ -88,7 +89,7 @@
     computed: {
       formBodyStyle () {
         return {
-          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : 500) + 'px',
+          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : this.$store.state.layout.dialog.height) + 'px',
           'overflow-y': 'auto'
         }
       },

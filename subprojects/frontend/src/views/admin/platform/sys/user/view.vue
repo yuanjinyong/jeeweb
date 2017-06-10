@@ -4,7 +4,7 @@
 
 <template>
   <div :style="contentStyle">
-    <ag-grid-vue class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid-vue>
+    <ag-grid class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
     <el-dialog v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false" :modal="true"
                :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
@@ -13,8 +13,7 @@
 
     <el-dialog v-model="authorizeFormOptions.isShow" :title="authorizeFormOptions.title" :close-on-click-modal="false"
                :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
-      <user-authorize-form :form-options="authorizeFormOptions"
-                           v-if="authorizeFormOptions.isShow">
+      <user-authorize-form :form-options="authorizeFormOptions" v-if="authorizeFormOptions.isShow">
       </user-authorize-form>
     </el-dialog>
   </div>
@@ -22,26 +21,27 @@
 
 
 <script type="text/ecmascript-6">
-  import {AgGridVue} from 'ag-grid-vue'
-  import AddHeaderComponenetFramework from 'components/ag-grid/AddHeaderComponenetFramework'
-  import DictFilterFramework from 'components/ag-grid/DictFilterFramework'
-  import DictFloatingFilterComponentFramework from 'components/ag-grid/DictFloatingFilterComponentFramework'
-  import LikeFilterFramework from 'components/ag-grid/LikeFilterFramework'
-  import LikeFloatingFilterComponentFramework from 'components/ag-grid/LikeFloatingFilterComponentFramework'
-  import DictRendererFramework from 'components/ag-grid/DictRendererFramework'
-  import IndexRendererFramework from 'components/ag-grid/IndexRendererFramework'
-  import OperationRendererFramework from 'components/ag-grid/OperationRendererFramework'
-  import TimestampFilterFramework from 'components/ag-grid/TimestampFilterFramework'
-  import TimestampFloatingFilterComponentFramework from 'components/ag-grid/TimestampFloatingFilterComponentFramework'
-  import TimestampRendererFramework from 'components/ag-grid/TimestampRendererFramework'
-  import ViewRendererFramework from 'components/ag-grid/ViewRendererFramework'
+  import {
+    AddHeaderComponenetFramework,
+    DictFilterFramework,
+    DictFloatingFilterComponentFramework,
+    DictRendererFramework,
+    LikeFilterFramework,
+    LikeFloatingFilterComponentFramework,
+    IndexRendererFramework,
+    OperationRendererFramework,
+    TimestampFilterFramework,
+    TimestampFloatingFilterComponentFramework,
+    TimestampRendererFramework,
+    ViewRendererFramework
+  } from 'components/ag-grid'
   import UserForm from './form'
   import UserAuthorizeForm from './authorize'
+  //  import {UserForm, UserAuthorizeForm} from 'views'
 
   export default {
-    name: 'user',
+    name: 'userView',
     components: {
-      'ag-grid-vue': AgGridVue,
       UserForm,
       UserAuthorizeForm
     },

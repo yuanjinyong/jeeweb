@@ -4,7 +4,7 @@
 
 <template>
   <div :style="contentStyle">
-    <ag-grid-vue class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid-vue>
+    <ag-grid class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
     <el-dialog v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false"
                :modal="mode !== 'selector'" :size="'small'" :top="mode !== 'selector' ? '30px': '20px'"
@@ -16,21 +16,21 @@
 
 
 <script type="text/ecmascript-6">
-  // import Vue from 'vue'
-  import {AgGridVue} from 'ag-grid-vue'
-  import DictFilterFramework from 'components/ag-grid/DictFilterFramework'
-  import DictFloatingFilterComponentFramework from 'components/ag-grid/DictFloatingFilterComponentFramework'
-  import LikeFilterFramework from 'components/ag-grid/LikeFilterFramework'
-  import LikeFloatingFilterComponentFramework from 'components/ag-grid/LikeFloatingFilterComponentFramework'
-  import IndexRendererFramework from 'components/ag-grid/IndexRendererFramework'
-  import ViewRendererFramework from 'components/ag-grid/ViewRendererFramework'
-  import DictRendererFramework from 'components/ag-grid/DictRendererFramework'
+  import {
+    DictFilterFramework,
+    DictFloatingFilterComponentFramework,
+    DictRendererFramework,
+    LikeFilterFramework,
+    LikeFloatingFilterComponentFramework,
+    IndexRendererFramework,
+    ViewRendererFramework
+  } from 'components/ag-grid'
   import UrlForm from './form'
+  //  import {UrlForm} from 'views'
 
   export default {
-    name: 'url',
+    name: 'urlView',
     components: {
-      'ag-grid-vue': AgGridVue,
       UrlForm
     },
     props: {

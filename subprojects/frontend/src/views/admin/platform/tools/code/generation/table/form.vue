@@ -10,16 +10,16 @@
           <el-form-item label="数据库名" prop="f_db_name">
             <el-select class="jw-field-col-1" v-model="entity.f_db_name">
               <el-option v-for="item in schematas"
-                :key="item.SCHEMA_NAME"
-                :value="item.SCHEMA_NAME"
-                :label="item.SCHEMA_NAME">
+                         :key="item.SCHEMA_NAME"
+                         :value="item.SCHEMA_NAME"
+                         :label="item.SCHEMA_NAME">
                 {{item.SCHEMA_NAME}}
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="数据库表名" prop="f_table_name">
             <el-autocomplete class="jw-field-col-1" v-model="entity.f_table_name" icon="search"
-              :fetch-suggestions="loadTables" @select="loadFields">
+                             :fetch-suggestions="loadTables" @select="loadFields">
             </el-autocomplete>
           </el-form-item>
           <el-form-item label="排序" prop="f_order">
@@ -34,9 +34,9 @@
           <el-form-item label="父类" prop="f_entity_base_class">
             <el-select class="jw-field-col-1" v-model="entity.f_entity_base_class">
               <el-option v-for="baseClass in baseClasses"
-                :key="baseClass.fullName"
-                :value="baseClass.fullName"
-                :label="baseClass.name">
+                         :key="baseClass.fullName"
+                         :value="baseClass.fullName"
+                         :label="baseClass.name">
                 {{baseClass.fullName}}
               </el-option>
             </el-select>
@@ -44,16 +44,16 @@
           <el-form-item label="接口" prop="f_entity_interfaces">
             <el-select class="jw-field-col-3" v-model="f_entity_interfaces" multiple>
               <el-option v-for="interface in interfaces"
-                :key="interface.fullName"
-                :value="interface.fullName"
-                :label="interface.name">
+                         :key="interface.fullName"
+                         :value="interface.fullName"
+                         :label="interface.name">
                 {{interface.fullName}}
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="Entity" prop="f_entity_class">
             <el-input class="jw-field-col-2" v-model="entity.f_entity_class"
-              placeholder="Map类型请填写“com.jeeweb.framework.core.model.RowMap”。">
+                      placeholder="Map类型请填写“com.jeeweb.framework.core.model.RowMap”。">
             </el-input>
           </el-form-item>
           <el-form-item label="Mapper" prop="f_mapper_class">
@@ -82,12 +82,12 @@
 
 
 <script type="text/ecmascript-6">
-  import { AgGridVue } from 'ag-grid-vue'
+  import {AgGridVue} from 'ag-grid-vue'
   import CheckboxEditorFramework from 'components/ag-grid/CheckboxEditorFramework'
   import DictEditorFramework from 'components/ag-grid/DictEditorFramework'
 
   export default {
-    name: 'generateRuleTableForm',
+    name: 'generationRuleTableForm',
     components: {
       'ag-grid-vue': AgGridVue
     },
@@ -168,7 +168,7 @@
       },
       formBodyStyle () {
         return {
-          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : 500) + 'px',
+          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : this.$store.state.layout.dialog.height) + 'px',
           'overflow-y': 'auto'
         }
       },

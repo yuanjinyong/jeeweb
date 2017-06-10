@@ -4,7 +4,7 @@
 
 <template>
   <div :style="contentStyle">
-    <ag-grid-vue class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid-vue>
+    <ag-grid class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
     <el-dialog v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false" :modal="true"
                :size="'large'" :top="'30px'" :custom-class="'jw-dialog jw-dialog-large'">
@@ -19,19 +19,20 @@
 
 
 <script type="text/ecmascript-6">
-  import {AgGridVue} from 'ag-grid-vue'
-  import AddHeaderComponenetFramework from 'components/ag-grid/AddHeaderComponenetFramework'
-  import LikeFilterFramework from 'components/ag-grid/LikeFilterFramework'
-  import LikeFloatingFilterComponentFramework from 'components/ag-grid/LikeFloatingFilterComponentFramework'
-  import IndexRendererFramework from 'components/ag-grid/IndexRendererFramework'
-  import OperationRendererFramework from 'components/ag-grid/OperationRendererFramework'
-  import ViewRendererFramework from 'components/ag-grid/ViewRendererFramework'
+  import {
+    AddHeaderComponenetFramework,
+    LikeFilterFramework,
+    LikeFloatingFilterComponentFramework,
+    IndexRendererFramework,
+    OperationRendererFramework,
+    ViewRendererFramework
+  } from 'components/ag-grid'
   import GenerationRuleForm from './form'
+  //  import {GenerationRuleForm} from 'views'
 
   export default {
-    name: 'generationRule',
+    name: 'generationRuleView',
     components: {
-      'ag-grid-vue': AgGridVue,
       GenerationRuleForm
     },
     data () {

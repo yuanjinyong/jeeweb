@@ -1,6 +1,8 @@
 import IndexView from './IndexView'
 import HomeView from './HomeView'
 import LoginView from './LoginView'
+
+export * from './platform'
 import platform from './platform'
 
 export default [

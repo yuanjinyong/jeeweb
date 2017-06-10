@@ -31,7 +31,7 @@
               </div>
               <el-col style="float: left;position: absolute;" :span="18">
                 <jw-side-menu style="z-index: 999999;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;"
-                  :menu-list="menuList" @select="onSelectMenu" v-show="showSideMenu"></jw-side-menu>
+                              :menu-list="menuList" @select="onSelectMenu" v-show="showSideMenu"></jw-side-menu>
               </el-col>
             </el-row>
 
@@ -45,36 +45,34 @@
           <div v-else>
             <el-row v-if="menuSize.width > 0">
               <div style="float: left;"
-                :style="{'width': menuSize.width + 'px', 'height': menuSize.height + 'px'}">
+                   :style="{'width': menuSize.width + 'px', 'height': menuSize.height + 'px'}">
                 <div id="menuHead" class="jw-menu-head" style="border-right: 1px solid #ccc;">
                   系统菜单 <i class="fa fa-bars pull-right" aria-hidden="true" style="cursor: pointer;"
-                  @click="onShowPopMenu"></i>
+                          @click="onShowPopMenu"></i>
                 </div>
 
                 <div>
                   <jw-side-menu style="overflow:auto;border-right: 1px solid #ccc;"
-                    :style="{'width': menuSize.width + 'px', 'height': menuSize.height + 'px'}"
-                    :default-active="tabsManager.activeName" :menu-list="menuList"
-                    @select="onSelectMenu"></jw-side-menu>
+                                :style="{'width': menuSize.width + 'px', 'height': menuSize.height + 'px'}"
+                                :default-active="tabsManager.activeName" :menu-list="menuList"
+                                @select="onSelectMenu"></jw-side-menu>
                 </div>
               </div>
 
               <div :style="{'margin-left': menuSize.width + 'px'}">
                 <div :style="{'width': bodySize.width + 'px'}">
                   <el-tabs type="card" class="jw-card-tabs" v-model="tabsManager.activeName"
-                    @tab-remove="onCloseTab" @tab-click="onClickTab">
+                           @tab-remove="onCloseTab" @tab-click="onClickTab">
                     <el-tab-pane v-for="(item, index) in tabsManager.tabs"
-                      :closable="item.params.f_closable !== false"
-                      :label="item.params.f_name"
-                      :name="item.params.f_id"
-                      :key="item.params.f_id">
+                                 :closable="item.params.f_closable !== false"
+                                 :label="item.params.f_name"
+                                 :name="item.params.f_id"
+                                 :key="item.params.f_id">
                     </el-tab-pane>
                   </el-tabs>
                   <div style="overflow:auto; margin-top: -15px;"
-                    :style="{'width': bodySize.width + 'px', 'height': bodySize.height + 'px'}">
-                    <keep-alive>
-                      <router-view></router-view>
-                    </keep-alive>
+                       :style="{'width': bodySize.width + 'px', 'height': bodySize.height + 'px'}">
+                    <router-view></router-view>
                   </div>
                 </div>
               </div>
@@ -232,7 +230,8 @@
           vm.$store.commit('updateLayout', {
             window: {width: vm.windowSize.width, height: vm.windowSize.height},
             middle: {width: vm.middleSize.width, height: vm.middleSize.height},
-            body: {width: vm.bodySize.width, height: vm.bodySize.height}
+            body: {width: vm.bodySize.width, height: vm.bodySize.height},
+            dialog: {width: vm.bodySize.width, height: vm.bodySize.height - 40}
           })
 
           vm.resizeTimer = null

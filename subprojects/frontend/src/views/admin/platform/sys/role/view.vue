@@ -1,6 +1,6 @@
 <template>
   <div :style="contentStyle">
-    <ag-grid-vue class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid-vue>
+    <ag-grid class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
     <el-dialog v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false" :modal="true"
                :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
@@ -9,8 +9,7 @@
 
     <el-dialog v-model="authorizeFormOptions.isShow" :title="authorizeFormOptions.title" :close-on-click-modal="false"
                :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
-      <role-authorize-form :form-options="authorizeFormOptions"
-                           v-if="authorizeFormOptions.isShow">
+      <role-authorize-form :form-options="authorizeFormOptions" v-if="authorizeFormOptions.isShow">
       </role-authorize-form>
     </el-dialog>
   </div>
@@ -18,23 +17,24 @@
 
 
 <script type="text/ecmascript-6">
-  import {AgGridVue} from 'ag-grid-vue'
-  import AddHeaderComponenetFramework from 'components/ag-grid/AddHeaderComponenetFramework'
-  import LikeFilterFramework from 'components/ag-grid/LikeFilterFramework'
-  import LikeFloatingFilterComponentFramework from 'components/ag-grid/LikeFloatingFilterComponentFramework'
-  import IndexRendererFramework from 'components/ag-grid/IndexRendererFramework'
-  import ViewRendererFramework from 'components/ag-grid/ViewRendererFramework'
-  import DictRendererFramework from 'components/ag-grid/DictRendererFramework'
-  import OperationRendererFramework from 'components/ag-grid/OperationRendererFramework'
+  import {
+    AddHeaderComponenetFramework,
+    DictRendererFramework,
+    LikeFilterFramework,
+    LikeFloatingFilterComponentFramework,
+    IndexRendererFramework,
+    OperationRendererFramework,
+    ViewRendererFramework
+  } from 'components/ag-grid'
   import RoleForm from './form'
   import RoleAuthorizeForm from './authorize'
+  //  import {RoleForm, RoleAuthorizeForm} from 'views'
 
   export default {
-    name: 'role',
+    name: 'roleView',
     components: {
-      'ag-grid-vue': AgGridVue,
-      RoleForm,
-      RoleAuthorizeForm
+      'role-form': RoleForm,
+      'RoleAuthorizeForm': RoleAuthorizeForm
     },
     data () {
       return {

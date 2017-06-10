@@ -4,7 +4,7 @@
 
 <template>
   <div :style="contentStyle">
-    <ag-grid-vue class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid-vue>
+    <ag-grid class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
     <el-dialog v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false" :modal="true"
                :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
@@ -13,30 +13,31 @@
 
     <el-dialog v-model="sqlFormOptions.isShow" :title="sqlFormOptions.title" :close-on-click-modal="false" :modal="true"
                :size="'large'" :top="'30px'" :custom-class="'jw-dialog'">
-      <sql-form :form-options="sqlFormOptions" v-if="sqlFormOptions.isShow"></sql-form>
+      <menu-sql-form :form-options="sqlFormOptions" v-if="sqlFormOptions.isShow"></menu-sql-form>
     </el-dialog>
   </div>
 </template>
 
 
 <script type="text/ecmascript-6">
-  import {AgGridVue} from 'ag-grid-vue'
-  import DictFilterFramework from 'components/ag-grid/DictFilterFramework'
-  import DictFloatingFilterComponentFramework from 'components/ag-grid/DictFloatingFilterComponentFramework'
-  import LikeFilterFramework from 'components/ag-grid/LikeFilterFramework'
-  import LikeFloatingFilterComponentFramework from 'components/ag-grid/LikeFloatingFilterComponentFramework'
-  import DictRendererFramework from 'components/ag-grid/DictRendererFramework'
-  import OperationRendererFramework from 'components/ag-grid/OperationRendererFramework'
-  import ViewRendererFramework from 'components/ag-grid/ViewRendererFramework'
+  import {
+    DictFilterFramework,
+    DictFloatingFilterComponentFramework,
+    DictRendererFramework,
+    LikeFilterFramework,
+    LikeFloatingFilterComponentFramework,
+    OperationRendererFramework,
+    ViewRendererFramework
+  } from 'components/ag-grid'
   import MenuForm from './form'
-  import SqlForm from './sql'
+  import MenuSqlForm from './sql'
+  //  import {MenuForm, MenuSqlForm} from 'views'
 
   export default {
-    name: 'menu',
+    name: 'menuView',
     components: {
-      'ag-grid-vue': AgGridVue,
       MenuForm,
-      SqlForm
+      MenuSqlForm
     },
     data () {
       return {

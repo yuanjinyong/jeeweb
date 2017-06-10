@@ -60,16 +60,14 @@
             <el-input class="jw-field-col-2" v-model="entity.f_remark" type="textarea" autosize></el-input>
           </el-form-item>
 
-          <div v-show="entity.f_type === 2 || entity.f_type === 3">
-            <ag-grid-vue style="width: 100%; height: 200px;" class="ag-fresh jw-grid"
-                         :grid-options="urlGridOptions">
-            </ag-grid-vue>
+          <div style="height: 200px;" v-show="entity.f_type === 2 || entity.f_type === 3">
+            <ag-grid class="ag-fresh jw-grid" :grid-options="urlGridOptions"></ag-grid>
           </div>
         </fieldset>
       </el-form>
     </div>
 
-    <div class="jw-form-footer" style="text-align: right;">
+    <div class="jw-form-footer">
       <el-button @click="onCancelForm('form')">取 消</el-button>
       <el-button type="primary" @click="onSubmitForm('form')" :disabled="formOptions.operation === 'view'">确 定
       </el-button>
@@ -78,7 +76,7 @@
     <el-dialog title="选择授权的URL" v-model="showSelectUrlDialog"
                :close-on-click-modal="false" :modal="false" :size="'large'" :top="'20px'"
                :custom-class="'jw-dialog jw-sub-dialog'">
-      <url-selector ref="urlSelector" :mode="'selector'"></url-selector>
+      <url-view ref="urlSelector" :mode="'selector'"></url-view>
       <div slot="footer">
         <el-button @click="showSelectUrlDialog = false">取 消</el-button>
         <el-button type="primary" @click="onSelected">选 择</el-button>
@@ -89,17 +87,17 @@
 
 
 <script type="text/ecmascript-6">
-  import {AgGridVue} from 'ag-grid-vue'
-  import AddHeaderComponenetFramework from 'components/ag-grid/AddHeaderComponenetFramework'
-  import IndexRendererFramework from 'components/ag-grid/IndexRendererFramework'
-  import OperationRendererFramework from 'components/ag-grid/OperationRendererFramework'
-  import UrlView from 'views/admin/platform/sys/url/view'
+  import {
+    AddHeaderComponenetFramework,
+    IndexRendererFramework,
+    OperationRendererFramework
+  } from 'components/ag-grid'
+  import {UrlView} from 'views'
 
   export default {
     name: 'menuForm',
     components: {
-      'ag-grid-vue': AgGridVue,
-      'url-selector': UrlView
+      UrlView
     },
     props: {
       formOptions: {
@@ -138,6 +136,7 @@
           {f_item_code: 3, f_item_text: '按钮'},
           {f_item_code: 4, f_item_text: '令牌'}
         ],
+        url: 'api/platform/sys/menus',
         entity: {urlList: []},
         rules: {
           f_id: [
@@ -154,7 +153,7 @@
     computed: {
       formBodyStyle () {
         return {
-          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : 500) + 'px',
+          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : this.$store.state.layout.dialog.height) + 'px',
           'overflow-y': 'auto'
         }
       },
