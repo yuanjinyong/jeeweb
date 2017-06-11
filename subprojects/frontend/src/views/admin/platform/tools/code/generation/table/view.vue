@@ -6,8 +6,8 @@
   <div>
     <ag-grid class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
-    <el-dialog v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false" :modal="false"
-               :size="'full'" :custom-class="'jw-dialog jw-dialog-full'">
+    <el-dialog v-draggable v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false"
+               :modal="false" :size="'full'" :custom-class="'jw-dialog jw-dialog-full'">
       <generation-rule-table-form
         :form-options="formOptions"
         :generate-rule="generateRule"

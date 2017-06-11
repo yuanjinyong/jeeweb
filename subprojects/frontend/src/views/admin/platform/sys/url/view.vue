@@ -6,7 +6,7 @@
   <div :style="contentStyle">
     <ag-grid class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
-    <el-dialog v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false"
+    <el-dialog v-draggable v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false"
                :modal="mode !== 'selector'" :size="'small'" :top="mode !== 'selector' ? '30px': '20px'"
                :custom-class="mode !== 'selector' ? 'jw-dialog' : 'jw-dialog jw-sub-dialog'">
       <url-form :form-options="formOptions" v-if="formOptions.isShow"></url-form>

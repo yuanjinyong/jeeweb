@@ -128,7 +128,7 @@
 
   .jw-dialog {
     min-width: 771px;
-    margin-bottom: 30px;
+    margin-bottom: 0px;
     top: 30px;
   }
 

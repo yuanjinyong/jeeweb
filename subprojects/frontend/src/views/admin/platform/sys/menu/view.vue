@@ -6,13 +6,13 @@
   <div :style="contentStyle">
     <ag-grid class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
-    <el-dialog v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false" :modal="true"
-               :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
+    <el-dialog v-draggable v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false"
+               :modal="true" :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
       <menu-form :form-options="formOptions" @submit="onSaved" v-if="formOptions.isShow"></menu-form>
     </el-dialog>
 
-    <el-dialog v-model="sqlFormOptions.isShow" :title="sqlFormOptions.title" :close-on-click-modal="false" :modal="true"
-               :size="'large'" :top="'30px'" :custom-class="'jw-dialog'">
+    <el-dialog v-draggable v-model="sqlFormOptions.isShow" :title="sqlFormOptions.title" :close-on-click-modal="false"
+               :modal="true" :size="'large'" :top="'30px'" :custom-class="'jw-dialog'">
       <menu-sql-form :form-options="sqlFormOptions" v-if="sqlFormOptions.isShow"></menu-sql-form>
     </el-dialog>
   </div>

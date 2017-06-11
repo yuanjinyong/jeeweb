@@ -2,13 +2,13 @@
   <div :style="contentStyle">
     <ag-grid class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
-    <el-dialog v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false" :modal="true"
-               :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
+    <el-dialog v-draggable v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false"
+               :modal="true" :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
       <role-form :form-options="formOptions" v-if="formOptions.isShow"></role-form>
     </el-dialog>
 
-    <el-dialog v-model="authorizeFormOptions.isShow" :title="authorizeFormOptions.title" :close-on-click-modal="false"
-               :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
+    <el-dialog v-draggable v-model="authorizeFormOptions.isShow" :title="authorizeFormOptions.title"
+               :close-on-click-modal="false" :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
       <role-authorize-form :form-options="authorizeFormOptions" v-if="authorizeFormOptions.isShow">
       </role-authorize-form>
     </el-dialog>
