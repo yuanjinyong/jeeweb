@@ -4,8 +4,9 @@
 
 <template>
   <div :style="contentStyle">
-    <ag-grid class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
+    <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
+    <url-detail ref="detail" :detail-options="detailOptions"></url-detail>
     <el-dialog v-draggable v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false"
                :modal="mode !== 'selector'" :size="'small'" :top="mode !== 'selector' ? '30px': '20px'"
                :custom-class="mode !== 'selector' ? 'jw-dialog' : 'jw-dialog jw-sub-dialog'">
@@ -25,12 +26,14 @@
     IndexRendererFramework,
     ViewRendererFramework
   } from 'components/ag-grid'
+  import UrlDetail from './detail'
   import UrlForm from './form'
   //  import {UrlForm} from 'views'
 
   export default {
     name: 'urlView',
     components: {
+      UrlDetail,
       UrlForm
     },
     props: {
@@ -52,12 +55,26 @@
             featureComponent: this
           }
         },
+        detailOptions: {
+          maxFormHeight: this.mode === 'selector' ? 535 : null,
+          context: {
+            featureComponent: this,
+            getGridComponent (options) {
+              return options.context.featureComponent.$refs['grid']
+            }
+          }
+        },
         gridOptions: this.$grid.buildOptions({
           paginationAutoPageSize: false,
           paginationPageSize: this.mode === 'selector' ? 10 : 20,
           cacheBlockSize: 20,
           context: {
+            name: 'URL',
+            url: 'api/platform/sys/urls',
             featureComponent: this,
+            getDetailComponent (params) {
+              return params.context.featureComponent.$refs['detail']
+            },
             params: {
               orderBy: 'f_url,f_methods',
               totalCount: 0

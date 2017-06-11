@@ -54,7 +54,15 @@
         },
         gridOptions: this.$grid.buildOptions({
           context: {
+            name: '角色',
+            url: 'api/platform/sys/roles',
             featureComponent: this,
+            getPermissions (params, operation) {
+              return params.context.featureComponent.permission
+            },
+            getDetailComponent (params, operation) {
+              return params.context.featureComponent.$refs['detail']
+            },
             params: {
               orderBy: 'f_is_preset,f_name',
               totalCount: 0

@@ -1,6 +1,3 @@
-<style scoped>
-</style>
-
 <template>
   <el-button-group>
     <el-button v-for="(operation, index) in operations" :key="operation.id"
@@ -14,7 +11,7 @@
   </el-button-group>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import Vue from 'vue'
 
   export default Vue.extend({
@@ -48,12 +45,6 @@
       }
     },
     computed: {
-      featureComponent () {
-        return this.params.context.featureComponent
-      },
-      permissions () {
-        return this.params.context.featureComponent.permission
-      },
       entity () {
         return this.params.node && this.params.node.data ? this.params.node.data : {}
       }
@@ -62,13 +53,17 @@
       this.operations = []
       this.params.operations.forEach((operation) => {
         let defaultOperation = this.defaultOperations[operation.id] || {title: ''}
-        this.operations.push(Vue.lodash.merge({}, defaultOperation, {title: defaultOperation.title + this.featureComponent.featureOptions.name}, operation))
+        this.operations.push(Vue.lodash.merge({}, defaultOperation, {title: defaultOperation.title + this.params.context.name}, operation))
       })
     },
     methods: {
       hasPermission (operation) {
-        if (operation.permission && this.permissions) {
-          return this.permissions[operation.permission]
+        if (operation.permission) {
+          if (this.params.context.getPermissions) {
+            return this.params.context.getPermissions.call(this, this.params, operation)[operation.permission]
+          } else {
+            return false
+          }
         }
         return true
       },
@@ -80,40 +75,40 @@
       },
       onClick (operation) {
         if (operation.onClick) {
-          operation.onClick.call(this.featureComponent, this.params, this.entity)
+          operation.onClick.call(this, this.params, this.entity)
           return
         }
 
         if (operation.id !== 'remove') {
-          if (this.featureComponent.formOptions) {
-            Vue.lodash.merge(this.featureComponent.formOptions, {
-              isShow: true,
+          let detailComponent = this.params.context.getDetailComponent && this.params.context.getDetailComponent.call(this, this.params, operation)
+          if (detailComponent) {
+            detailComponent.open({
               operation: operation.id,
               title: operation.title,
               params: this.entity
             })
+            return
           }
+
           return
         }
 
-        if (this.featureComponent.gridOptions) {
-          let featureName = this.featureComponent.featureOptions.name
-          this.$confirm('确定要删除所选的' + featureName + '吗?', '删除' + featureName, {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            let url = this.featureComponent.gridOptions.context.url ? this.featureComponent.gridOptions.context.url : this.featureComponent.featureOptions.url
-            this.$http.delete(url + '/' + this.entity.f_id).then((response) => {
-              if (response.body.success) {
-                this.featureComponent.gridOptions.context.params.totalCount = 0
-                this.featureComponent.gridOptions.api.setDatasource(this.featureComponent.gridOptions.datasource)
-              }
-            })
-          }).catch((e) => {
-            // console && console.error(e)
+        let featureName = this.params.context.name || '记录'
+        this.$confirm('确定要删除所选的' + featureName + '吗?', '删除' + featureName, {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.delete(this.params.context.url + '/' + this.entity.f_id).then((response) => {
+            if (response.body.success) {
+              console.log('params', this.params)
+              this.params.context.params.totalCount = 0
+              this.params.api.setDatasource(this.params.node.gridOptionsWrapper.gridOptions.datasource)
+            }
           })
-        }
+        }).catch((e) => {
+          // console && console.error(e)
+        })
       }
     }
   })

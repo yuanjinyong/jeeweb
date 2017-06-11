@@ -7,7 +7,11 @@ var VueGrid = {
   defaultOptions: {
     debug: false,
     context: {
-      featureComponent: {featureOptions: {name: ''}},
+      name: '',
+      url: null,
+      getDetailComponent: null,
+      getFeatureComponent: null,
+      getPermissions: null,
       params: {
         orderBy: null,
         totalCount: 0
@@ -76,26 +80,26 @@ var VueGrid = {
       }
     },
     datasource: {
-      getRows (gridParams) {
-        // console && console.warn('datasource getRows, gridParams', gridParams)
+      getRows (params) {
+        // console && console.warn('datasource getRows, params', params)
         var page = {
-          pageSize: gridParams.endRow - gridParams.startRow,
-          pageNo: gridParams.startRow / (gridParams.endRow - gridParams.startRow)
+          pageSize: params.endRow - params.startRow,
+          pageNo: params.startRow / (params.endRow - params.startRow)
         }
-        if (gridParams.sortModel && gridParams.sortModel.length > 0) {
+        if (params.sortModel && params.sortModel.length > 0) {
           page.orderBy = ''
-          gridParams.sortModel.forEach(function (order, idx, orders) {
+          params.sortModel.forEach(function (order, idx, orders) {
             page.orderBy += page.orderBy + order.colId + ' ' + order.sort + ', '
           })
           page.orderBy = page.orderBy.substr(0, page.orderBy.length - 2)
         }
 
-        // console && console.warn('datasource getRows, filterModel', gridParams.filterModel)
+        // console && console.warn('datasource getRows, filterModel', params.filterModel)
         var filters = {}
-        for (var key in gridParams.filterModel) {
-          gridParams.context.params.totalCount = 0
+        for (var key in params.filterModel) {
+          params.context.params.totalCount = 0
 
-          var where = gridParams.filterModel[key]
+          var where = params.filterModel[key]
           if ((where.type === 'in' || where.type === 'notIn') && !(where.filter && where.filter.length > 0)) {
             continue
           }
@@ -151,19 +155,19 @@ var VueGrid = {
           }
         }
 
-        if (gridParams.context.featureComponent.featureOptions.url) {
-          Vue.http.get(gridParams.context.featureComponent.featureOptions.url, {params: Object.assign({}, gridParams.context.params, page, filters)}).then(function (response) {
+        if (params.context.url) {
+          Vue.http.get(params.context.url, {params: Object.assign({}, params.context.params, page, filters)}).then(function (response) {
             if (response.body.success) {
-              gridParams.context.params.totalCount = response.body.data.totalCount
-              gridParams.successCallback(response.body.data.items, response.body.data.totalCount)
+              params.context.params.totalCount = response.body.data.totalCount
+              params.successCallback(response.body.data.items, response.body.data.totalCount)
             } else {
-              gridParams.failCallback()
+              params.failCallback()
             }
           })
         } else {
-          gridParams.context.params.totalCount = 0
-          gridParams.successCallback([], 0)
-          Vue.prototype.$alert('请指定加载数据的URL地址！', '错误', {
+          params.context.params.totalCount = 0
+          params.successCallback([], 0)
+          Vue.prototype.$alert('请通过gridOptions.context.url配置项设置加载数据的URL地址！', '错误', {
             confirmButtonText: '关闭',
             type: 'error'
           })

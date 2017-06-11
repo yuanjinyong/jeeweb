@@ -1,6 +1,3 @@
-<style scoped>
-</style>
-
 <template>
   <div class="ag-header-component" style="padding: 3px 5px;">
     <el-button size="mini"
@@ -13,7 +10,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import Vue from 'vue'
 
   export default Vue.extend({
@@ -30,23 +27,21 @@
       }
     },
     computed: {
-      featureComponent () {
-        return this.params.context.featureComponent
-      },
-      permissions () {
-        return this.params.context.featureComponent.permission
-      },
       entity () {
         return this.params.node && this.params.node.data ? this.params.node.data : {}
       }
     },
     created () {
-      this.operation = Vue.lodash.merge({}, this.defaultOperation, {title: this.defaultOperation.title + this.featureComponent.featureOptions.name}, this.params.operation)
+      this.operation = Vue.lodash.merge({}, this.defaultOperation, {title: this.defaultOperation.title + this.params.context.name}, this.params.operation)
     },
     methods: {
       hasPermission (operation) {
-        if (operation.permission && this.permissions) {
-          return this.permissions[operation.permission]
+        if (operation.permission) {
+          if (this.params.context.getPermissions) {
+            return this.params.context.getPermissions.call(this, this.params, operation)[operation.permission]
+          } else {
+            return false
+          }
         }
         return true
       },
@@ -58,17 +53,18 @@
       },
       onClick (operation) {
         if (operation.onClick) {
-          operation.onClick.call(this.featureComponent, this.params, this.entity)
+          operation.onClick.call(this, this.params, this.entity)
           return
         }
 
-        if (this.featureComponent.formOptions) {
-          Vue.lodash.merge(this.featureComponent.formOptions, {
-            isShow: true,
+        let detailComponent = this.params.context.getDetailComponent && this.params.context.getDetailComponent.call(this, this.params, operation)
+        if (detailComponent) {
+          detailComponent.open({
             operation: operation.id,
             title: operation.title,
             params: this.entity
           })
+          return
         }
       }
     }
