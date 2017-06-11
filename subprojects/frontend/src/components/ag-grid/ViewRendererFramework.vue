@@ -39,7 +39,7 @@
       },
       onClick (operation) {
         if (operation.onClick) {
-          operation.onClick(this.params, this.entity)
+          operation.onClick.call(this.featureComponent, this.params, this.entity)
           return
         }
 

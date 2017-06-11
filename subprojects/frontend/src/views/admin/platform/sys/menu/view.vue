@@ -88,20 +88,6 @@
           context: {
             featureComponent: this
           }
-        },
-        url: 'api/platform/sys/menus',
-        showFormDialog: false,
-        formDialogTitle: '查看菜单',
-        formParams: {
-          operation: 'view',
-          entity: {}
-        },
-        sqlDialog: {
-          shown: false,
-          title: 'SQL脚本',
-          params: {
-            entity: {}
-          }
         }
       }
     },
@@ -249,7 +235,7 @@
       },
       _query () {
         var vm = this
-        vm.$http.get(vm.url, {params: {orderBy: 'f_parent_path,f_order'}}).then(function (response) {
+        vm.$http.get(vm.featureOptions.url, {params: {orderBy: 'f_parent_path,f_order'}}).then(function (response) {
           if (response.body.success) {
             this.gridOptions.api.setRowData(response.body.data)
           } else {
