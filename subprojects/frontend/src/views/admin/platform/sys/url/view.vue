@@ -1,22 +1,13 @@
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
-
 <template>
   <div :style="contentStyle">
     <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
     <url-detail ref="detail" :detail-options="detailOptions"></url-detail>
-    <el-dialog v-draggable v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false"
-               :modal="mode !== 'selector'" :size="'small'" :top="mode !== 'selector' ? '30px': '20px'"
-               :custom-class="mode !== 'selector' ? 'jw-dialog' : 'jw-dialog jw-sub-dialog'">
-      <url-form :form-options="formOptions" v-if="formOptions.isShow"></url-form>
-    </el-dialog>
   </div>
 </template>
 
 
-<script type="text/ecmascript-6">
+<script>
   import {
     DictFilterFramework,
     DictFloatingFilterComponentFramework,
@@ -27,36 +18,22 @@
     ViewRendererFramework
   } from 'components/ag-grid'
   import UrlDetail from './detail'
-  import UrlForm from './form'
-  //  import {UrlForm} from 'views'
+  //  import {UrlDetail} from 'views'
 
   export default {
     name: 'urlView',
     components: {
-      UrlDetail,
-      UrlForm
+      UrlDetail
     },
     props: {
       mode: {type: String, default: ''}
     },
     data () {
       return {
-        featureOptions: {
-          name: 'URL',
-          url: 'api/platform/sys/urls'
-        },
-        formOptions: {
-          isShow: false,
-          operation: 'view',
-          title: '查看URL',
-          maxHeight: this.mode === 'selector' ? 400 : 500,
-          params: {},
-          context: {
-            featureComponent: this
-          }
-        },
         detailOptions: {
-          maxFormHeight: this.mode === 'selector' ? 535 : null,
+          size: this.mode === 'selector' ? 'mini' : null,
+          modal: this.mode !== 'selector',
+          maxHeight: this.mode === 'selector' ? 535 : null,
           context: {
             featureComponent: this,
             getGridComponent (options) {
@@ -65,9 +42,6 @@
           }
         },
         gridOptions: this.$grid.buildOptions({
-          paginationAutoPageSize: false,
-          paginationPageSize: this.mode === 'selector' ? 10 : 20,
-          cacheBlockSize: 20,
           context: {
             name: 'URL',
             url: 'api/platform/sys/urls',

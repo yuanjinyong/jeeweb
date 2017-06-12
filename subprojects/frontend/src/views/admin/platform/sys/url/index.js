@@ -1,2 +1,2 @@
 export {default as UrlView} from './view'
-export {default as UrlForm} from './form'
+export {default as UrlDetail} from './detail'

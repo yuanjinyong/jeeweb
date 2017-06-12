@@ -101,9 +101,8 @@
         }).then(() => {
           this.$http.delete(this.params.context.url + '/' + this.entity.f_id).then((response) => {
             if (response.body.success) {
-              console.log('params', this.params)
               this.params.context.params.totalCount = 0
-              this.params.api.setDatasource(this.params.node.gridOptionsWrapper.gridOptions.datasource)
+              this.params.api.setDatasource(this.params.api.gridOptionsWrapper.gridOptions.datasource)
             }
           })
         }).catch((e) => {

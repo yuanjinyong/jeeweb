@@ -33,17 +33,18 @@ var VueGrid = {
     rowModelType: 'infinite',
     pagination: true,
     paginationAutoPageSize: true,
-    // paginationPageSize: 20,
+    paginationPageSize: 20,
     paginationFirstPage: 0,
     cacheOverflowSize: 2,
     infiniteInitialRowCount: 1,
-    // infiniteBlockSize: 20,
+    infiniteBlockSize: 10,
+    cacheBlockSize: 20,
     maxBlocksInCache: 2,
     maxConcurrentDatasourceRequests: 1,
-    getRowNodeId: function (item) {
+    getRowNodeId (item) {
       return item.f_id
     },
-    localeTextFunc: function (key, defaultValue) {
+    localeTextFunc (key, defaultValue) {
       var localeTextMap = {
         // 公共
         loadingOoo: '加载中……',

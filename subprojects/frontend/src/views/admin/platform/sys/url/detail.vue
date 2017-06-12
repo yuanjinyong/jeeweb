@@ -1,11 +1,11 @@
 <template>
-  <el-dialog v-model="visible" :title="options.title" :modal="options.mode"
+  <el-dialog v-model="visible" :title="options.title" :modal="options.modal"
              :close-on-click-modal="options.closeOnClickModal" :custom-class="'jw-dialog jw-dialog-' + options.size">
     <div class="jw-form" v-if="visible">
       <div class="jw-form-body" style="overflow-y: auto;" :style="{'max-height': maxFormHeight + 'px'}">
         <el-form ref="form" :model="entity" :rules="rules" :inline="options.inline"
                  :label-width="options.labelWidth+'px'">
-          <fieldset :disabled="options.operation === 'view1'">
+          <fieldset :disabled="options.operation === 'view'">
             <el-form-item label="URL" prop="f_url">
               <el-input class="jw-field-col-2" v-model="entity.f_url"></el-input>
             </el-form-item>
@@ -82,7 +82,7 @@
           },
           operation: 'view', // 可选值：add、edit、view、audit
           title: '查看详情',
-          mode: true, // 是否为模态对话框
+          modal: true, // 是否为模态对话框
           closeOnClickModal: false, // 点击遮罩层是否关闭对话框
           size: 'small', // 可选值：mini（1列）、small（2列）、normal（3列）、large（4列）、full（全屏）
           inline: true,

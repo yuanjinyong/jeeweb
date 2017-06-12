@@ -1,3 +1,3 @@
 export {default as RoleView} from './view'
-export {default as RoleForm} from './form'
-export {default as RoleAuthorizeForm} from './authorize'
+export {default as RoleDetail} from './detail'
+export {default as RoleAuthorizeDetail} from './authorize'

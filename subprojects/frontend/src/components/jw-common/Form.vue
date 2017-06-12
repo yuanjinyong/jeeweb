@@ -6,22 +6,16 @@
         <el-form ref="form" :model="entity" :rules="rules" :inline="options.inline"
                  :label-width="options.labelWidth+'px'">
           <fieldset :disabled="options.operation === 'view'">
-            <el-tree ref="menuTree"
-                     show-checkbox
-                     node-key="f_id"
-                     :props="treeOptions"
-                     :check-strictly="true"
-                     :default-expanded-keys="expandedMenuIds"
-                     :default-checked-keys="checkedMenuIds"
-                     :data="menus"
-                     @check-change="onCheckChange">
-            </el-tree>
+            <slot name="fieldset"></slot>
           </fieldset>
         </el-form>
       </div>
+
+      <slot name="other"></slot>
     </div>
 
     <div slot="footer" class="dialog-footer jw-dialog-footer">
+      <slot name="button"></slot>
       <el-button @click="onCancel">取 消</el-button>
       <el-button type="primary" @click="onSubmit" :disabled="options.operation === 'view'">确 定</el-button>
     </div>
@@ -30,10 +24,22 @@
 
 
 <script>
+  import Vue from 'vue'
+
   export default {
-    name: 'roleAuthorizeDetail',
+    name: 'jwForm',
     props: {
-      detailOptions: {
+      formOptions: {
+        type: Object,
+        default () {
+          return {}
+        }
+      },
+      entity: {
+        type: Object,
+        required: true
+      },
+      rules: {
         type: Object,
         default () {
           return {}
@@ -43,10 +49,12 @@
     data () {
       return {
         visible: false,
+        bus: new Vue(),
+        titles: {add: '新增', edit: '修改', view: '查看', audit: '审核'},
         options: {
           context: {
-            name: '角色',
-            url: 'api/platform/sys/roles',
+            name: '',
+            url: null,
             getGridComponent: null,
             getFeatureComponent: null,
             getPermissions: null
@@ -59,17 +67,10 @@
           inline: true,
           labelWidth: 150, // 单位px
           maxHeight: null,
-          params: {}
-        },
-        titles: {add: '新增', edit: '修改', view: '查看', audit: '审核'},
-        entity: {},
-        rules: {},
-        menus: [],
-        expandedMenuIds: [],
-        checkedMenuIds: [],
-        treeOptions: {
-          children: 'children',
-          label: 'f_name'
+          params: {},
+          createEntity: null,
+          loadRemoteEntity: null,
+          loadLocalEntity: null
         }
       }
     },
@@ -107,63 +108,32 @@
         this.$emit('closed')
       },
       open (options) { // 供外部调用的接口
-        this.$lodash.merge(this.options, {title: this.titles[options.operation]}, this.detailOptions, options)
+        this.$lodash.merge(this.options, {title: this.titles[options.operation]}, this.formOptions, options)
         this._loadEntity()
         this.visible = true
       },
       _loadEntity () {
-        this.$http.get(this.options.context.url + '/' + this.options.params.f_id + '/menus').then((response) => {
-          this.menus = response.body.success ? response.body.data : []
-          this._updateCheckedNode(this.menus)
-        })
-      },
-      _updateCheckedNode (menus) {
-        menus.forEach((menu) => {
-          if (menu.f_menu_id) {
-            // this.$refs.menuTree.setChecked(menu, true, false)
-            this.checkedMenuIds.push(menu.f_menu_id)
-          }
-          if (menu.f_type < 2) {
-            this.expandedMenuIds.push(menu.f_id)
-          }
-          if (menu.children && menu.children.length > 0) {
-            this._updateCheckedNode(menu.children)
-          }
-        })
-      },
-      _getParent (treeNodes, child) {
-        var parent = null
-        treeNodes.every((node) => {
-          var parentPath = node.f_parent_path + node.f_id + '/'
-          if (node.f_id === child.f_parent_id) {
-            parent = node
-            return false
-          }
-          if (child.f_parent_path.substr(0, parentPath.length) === parentPath) {
-            parent = this._getParent(node.children, child)
-            return false
-          }
-          return true
-        })
-
-        return parent
-      },
-      onCheckChange (data, checked, indeterminate) {
-        if (checked) {
-          // this.$refs.menuTree.setChecked(data, checked, true) // 勾选所有的子节点
-          data.f_menu_id = data.f_id
-
-          var menu = this._getParent(this.menus, data)
-          if (menu && !menu.f_menu_id) {
-            menu.f_menu_id = menu.f_id
-            this.$refs.menuTree.setChecked(menu, checked, false) // 勾选父节点
+        if (this.options.operation === 'add') {
+          if (this.options.createEntity) {
+            this.bus.$emit('loaded-entity', this.options.createEntity.call(this, this.options))
+          } else {
+            this.bus.$emit('loaded-entity', {})
           }
         } else {
-          data.f_menu_id = null
-          if (data.children && data.children.length) {
-            data.children.forEach((menu) => {
-              this.$refs.menuTree.setChecked(menu, checked, true) // 不勾选所有的子节点
-            })
+          if (this.options.context.url) {
+            if (this.options.loadRemoteEntity) {
+              this.bus.$emit('loaded-entity', this.options.loadRemoteEntity.call(this, this.options))
+            } else {
+              this.$http.get(this.options.context.url + '/' + this.options.params.f_id).then((response) => {
+                this.bus.$emit('loaded-entity', response.body.success ? response.body.data : {})
+              })
+            }
+          } else {
+            if (this.options.loadLocalEntity) {
+              this.bus.$emit('loaded-entity', this.options.loadLocalEntity.call(this, this.options))
+            } else {
+              this.bus.$emit('loaded-entity', this.$lodash.cloneDeep(this.options.params))
+            }
           }
         }
       },
@@ -177,10 +147,21 @@
             return false
           }
 
-          let selectedMenuIds = this.$refs.menuTree.getCheckedKeys()
-          this.$http.post(this.options.context.url + '/' + this.options.params.f_id + '/menus', {f_menu_ids: selectedMenuIds.join(',')}, {emulateJSON: true}).then((response) => {
-            this._submitted(response.body)
-          })
+          if (this.options.operation === 'add') {
+            this.$http.post(this.options.context.url, this.entity).then((response) => {
+              this._submitted(response.body)
+            })
+          } else if (this.options.operation === 'edit') {
+            this.$http.put(this.options.context.url + '/' + this.options.params.f_id, this.entity).then((response) => {
+              this._submitted(response.body)
+            })
+          } else if (this.options.operation === 'audit') {
+            this.$http.put(this.options.context.url + '/' + this.options.params.f_id + '/audit', this.entity).then((response) => {
+              this._submitted(response.body)
+            })
+          } else {
+            this.$emit('submit', {type: this.options.operation, data: this.entity})
+          }
 
           return true
         })

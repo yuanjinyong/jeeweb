@@ -1,22 +1,15 @@
 <template>
   <div :style="contentStyle">
-    <ag-grid class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
+    <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
-    <el-dialog v-draggable v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false"
-               :modal="true" :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
-      <role-form :form-options="formOptions" v-if="formOptions.isShow"></role-form>
-    </el-dialog>
+    <role-detail ref="detail" :detail-options="detailOptions"></role-detail>
 
-    <el-dialog v-draggable v-model="authorizeFormOptions.isShow" :title="authorizeFormOptions.title"
-               :close-on-click-modal="false" :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
-      <role-authorize-form :form-options="authorizeFormOptions" v-if="authorizeFormOptions.isShow">
-      </role-authorize-form>
-    </el-dialog>
+    <role-authorize-detail ref="authorize" :detail-options="authorizeOptions"></role-authorize-detail>
   </div>
 </template>
 
 
-<script type="text/ecmascript-6">
+<script>
   import {
     AddHeaderComponenetFramework,
     DictRendererFramework,
@@ -26,30 +19,33 @@
     OperationRendererFramework,
     ViewRendererFramework
   } from 'components/ag-grid'
-  import RoleForm from './form'
-  import RoleAuthorizeForm from './authorize'
-  //  import {RoleForm, RoleAuthorizeForm} from 'views'
+  import RoleDetail from './detail'
+  import RoleAuthorizeDetail from './authorize'
+  //  import {RoleDetail, RoleAuthorizeDetail} from 'views'
 
   export default {
     name: 'roleView',
     components: {
-      'role-form': RoleForm,
-      'RoleAuthorizeForm': RoleAuthorizeForm
+      RoleDetail,
+      RoleAuthorizeDetail
     },
     data () {
       return {
-        featureOptions: {
-          name: '角色',
-          url: 'api/platform/sys/roles'
-        },
-        formOptions: {
-          isShow: false,
-          operation: 'view',
-          title: '查看详情',
-          maxHeight: this.mode === 'selector' ? 400 : 500,
-          params: {},
+        authorizeOptions: {
           context: {
-            featureComponent: this
+            featureComponent: this,
+            getGridComponent (options) {
+              return options.context.featureComponent.$refs['grid']
+            }
+          }
+        },
+        detailOptions: {
+          maxHeight: this.mode === 'selector' ? 535 : null,
+          context: {
+            featureComponent: this,
+            getGridComponent (options) {
+              return options.context.featureComponent.$refs['grid']
+            }
           }
         },
         gridOptions: this.$grid.buildOptions({
@@ -68,16 +64,7 @@
               totalCount: 0
             }
           }
-        }),
-        authorizeFormOptions: {
-          isShow: false,
-          operation: 'edit',
-          title: '修改授权',
-          params: {},
-          context: {
-            featureComponent: this
-          }
-        }
+        })
       }
     },
     computed: {
@@ -155,7 +142,11 @@
               icon: 'fa fa-key',
               permission: 'authorize',
               onClick (params, entity) {
-                params.context.featureComponent.onAuthorize(entity)
+                params.context.featureComponent.$refs['authorize'].open({
+                  operation: 'authorize',
+                  title: '授权可以操作的功能',
+                  params: entity
+                })
               }
             }, {
               id: 'edit',
@@ -163,7 +154,7 @@
             }, {
               id: 'remove',
               permission: 'remove',
-              isDisabled: function (params, entity) {
+              isDisabled (params, entity) {
                 return entity.f_is_preset === 1
               }
             }]
@@ -171,18 +162,6 @@
           width: 80
         }
       ]
-    },
-    mounted () {
-      window.devMode && console.info('mounted', this.$options.name, this._uid)
-    },
-    activated () {
-      window.devMode && console.info('activated', this.$options.name, this._uid)
-    },
-    methods: {
-      onAuthorize (entity) {
-        this.authorizeFormOptions.params = entity
-        this.authorizeFormOptions.isShow = true
-      }
     }
   }
 </script>
