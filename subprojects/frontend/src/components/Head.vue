@@ -30,52 +30,44 @@
       </el-col>
     </el-row>
 
-    <el-dialog v-model="userFormDialog.shown" :title="userFormDialog.title" :close-on-click-modal="false"
-      :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
-      <user-form :params="userFormDialog.params"
-        @cancel="userFormDialog.shown = false"
-        @submit="userFormDialog.shown = false"
-        v-if="userFormDialog.shown">
-      </user-form>
-    </el-dialog>
-
-    <el-dialog v-model="changePasswordDialog.shown" :title="changePasswordDialog.title" :close-on-click-modal="false"
-      :size="'tiny'" :top="'30px'" :custom-class="'jw-dialog'">
-      <change-password-form :params="changePasswordDialog.params"
-        @cancel="changePasswordDialog.shown = false"
-        @submit="onPasswordChanged"
-        v-if="changePasswordDialog.shown">
-      </change-password-form>
-    </el-dialog>
+    <user-detail ref="userDetail" :detail-options="userDetailOptions" v-if="showUserDetail"></user-detail>
+    <change-password-form ref="changePassword" :detail-options="changePasswordOptions"></change-password-form>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import UserForm from 'views/admin/platform/sys/user/form'
+  import UserDetail from 'views/admin/platform/sys/user/detail'
   import ChangePasswordForm from 'views/admin/platform/sys/user/password'
 
   export default {
     name: 'jw-head',
     components: {
-      UserForm,
+      UserDetail,
       ChangePasswordForm
     },
     data () {
       return {
-        userFormDialog: {
-          shown: false,
+        showUserDetail: false,
+        userDetailOptions: {
           title: '修改个人信息',
-          params: {
-            operation: 'edit',
-            subOperation: 'change',
-            entity: {}
+          operation: 'edit',
+          subOperation: 'change',
+          context: {
+            featureComponent: this
+          },
+          closed () {
+            this.options.context.featureComponent.showUserDetail = false
           }
         },
-        changePasswordDialog: {
-          shown: false,
+        changePasswordOptions: {
+          size: 'mini',
           title: '修改密码',
-          params: {
-            entity: {}
+          operation: 'edit',
+          context: {
+            featureComponent: this
+          },
+          submitted (result) {
+            this.options.context.featureComponent.onPasswordChanged(result)
           }
         }
       }
@@ -98,11 +90,11 @@
         }
       },
       onChangePassword () {
-        this.changePasswordDialog.shown = true
-        this.changePasswordDialog.params.entity = this.curUser
+        this.$refs['changePassword'].open({
+          params: this.curUser
+        })
       },
       onPasswordChanged () {
-        this.changePasswordDialog.shown = false
         this.$confirm('密码修改成功，现在重新登录吗?', '修改密码', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -115,18 +107,21 @@
         })
       },
       onShowUserInfo () {
-        this.userFormDialog.shown = true
-        this.userFormDialog.params.entity = this.curUser
+        this.showUserDetail = true
+        this.$nextTick(() => {
+          this.$refs['userDetail'].open({
+            params: this.curUser
+          })
+        })
       },
       onLogout () {
-        var vm = this
-        vm.$http.post('api/logout', {}, {showSuccessMessage: false}).then(function (response) {
-          vm.result = response.body
-          if (vm.result.success) {
-            vm.$store.commit('logout')
-            vm.$router.push({path: '/'})
+        this.$http.post('api/logout', {}, {showSuccessMessage: false}).then((response) => {
+          this.result = response.body
+          if (this.result.success) {
+            this.$store.commit('logout')
+            this.$router.push({path: '/'})
           } else {
-            console && console.error(vm.result.message)
+            console && console.error(this.result.message)
           }
         })
       }

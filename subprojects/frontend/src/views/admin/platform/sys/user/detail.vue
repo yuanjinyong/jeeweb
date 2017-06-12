@@ -100,7 +100,7 @@
         }
       }
     },
-    created () {
+    mounted () {
       this._loadRoleList()
     },
     methods: {

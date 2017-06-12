@@ -71,7 +71,10 @@
           createEntity: null,
           loadRemoteEntity: null,
           loadLocalEntity: null,
-          submitEntity: null
+          submitEntity: null,
+          submitted: null,
+          cancelled: null,
+          closed: null
         }
       }
     },
@@ -107,6 +110,9 @@
       close () { // 供外部调用的接口
         this.visible = false
         this.$emit('closed')
+        if (this.options.closed) {
+          this.options.closed.call(this)
+        }
       },
       open (options) { // 供外部调用的接口
         this.$lodash.merge(this.options, {title: this.titles[options.operation]}, this.formOptions, options)
@@ -140,7 +146,10 @@
       },
       onCancel () {
         this.close()
-        this.$emit('canceled')
+        this.$emit('cancelled')
+        if (this.options.cancelled) {
+          this.options.cancelled.call(this)
+        }
       },
       onSubmit () {
         this.$refs['form'].validate((valid) => {
@@ -182,6 +191,9 @@
 
           this.close()
           this.$emit('submitted', {type: this.options.operation, data: result.data})
+          if (this.options.submitted) {
+            this.options.submitted.call(this, {type: this.options.operation, data: result.data})
+          }
         }
       }
     }
