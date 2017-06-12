@@ -117,6 +117,7 @@
         }
       },
       open (options) { // 供外部调用的接口
+        this.options.params = {}
         this.$lodash.merge(this.options, {title: this.titles[options.operation]}, this.formOptions, options)
         this._loadEntity()
         this.visible = true

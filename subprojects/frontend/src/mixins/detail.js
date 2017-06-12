@@ -28,6 +28,7 @@ export default {
       this.$refs['form'].close()
     },
     open (options) { // 供外部调用的接口
+      this.options.params = {}
       this.$lodash.merge(this.options, this.detailOptions, options)
       this.$refs['form'].open(this.options)
     }

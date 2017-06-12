@@ -120,9 +120,7 @@
             let children = parentEntity.children
             let order = 10
             if (children && children.length > 0) {
-              let lastChild = children[children.length - 1]
-              console.log('lastChild', parentEntity, children, lastChild, lastChild.f_parent_path, lastChild.f_name, lastChild.f_order)
-              order = lastChild.f_order + order
+              order = children[children.length - 1].f_order + order
             }
 
             let entity = {
