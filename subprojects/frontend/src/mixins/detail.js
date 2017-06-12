@@ -17,7 +17,7 @@ export default {
   },
   mounted () {
     this.$refs['form'].bus.$on('loaded-entity', (entity) => {
-      this.entity = entity
+      this.entity = entity || {}
     })
   },
   beforeDestroy () {

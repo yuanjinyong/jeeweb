@@ -70,7 +70,8 @@
           params: {},
           createEntity: null,
           loadRemoteEntity: null,
-          loadLocalEntity: null
+          loadLocalEntity: null,
+          submitEntity: null
         }
       }
     },
@@ -147,17 +148,22 @@
             return false
           }
 
+          if (this.options.submitEntity) {
+            this.options.submitEntity.call(this, this.options)
+            return
+          }
+
           if (this.options.operation === 'add') {
             this.$http.post(this.options.context.url, this.entity).then((response) => {
-              this._submitted(response.body)
+              this.submitted(response.body)
             })
           } else if (this.options.operation === 'edit') {
             this.$http.put(this.options.context.url + '/' + this.options.params.f_id, this.entity).then((response) => {
-              this._submitted(response.body)
+              this.submitted(response.body)
             })
           } else if (this.options.operation === 'audit') {
             this.$http.put(this.options.context.url + '/' + this.options.params.f_id + '/audit', this.entity).then((response) => {
-              this._submitted(response.body)
+              this.submitted(response.body)
             })
           } else {
             this.$emit('submit', {type: this.options.operation, data: this.entity})
@@ -166,7 +172,7 @@
           return true
         })
       },
-      _submitted (result) {
+      submitted (result) {
         if (result.success) {
           let gridComponent = this.options.context.getGridComponent && this.options.context.getGridComponent.call(this, this.options)
           if (gridComponent) {

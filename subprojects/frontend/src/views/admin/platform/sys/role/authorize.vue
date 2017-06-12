@@ -1,140 +1,87 @@
 <template>
-  <el-dialog v-model="visible" :title="options.title" :modal="options.modal"
-             :close-on-click-modal="options.closeOnClickModal" :custom-class="'jw-dialog jw-dialog-' + options.size">
-    <div class="jw-form" v-if="visible">
-      <div class="jw-form-body" style="overflow-y: auto;" :style="{'max-height': maxFormHeight + 'px'}">
-        <el-form ref="form" :model="entity" :rules="rules" :inline="options.inline"
-                 :label-width="options.labelWidth+'px'">
-          <fieldset :disabled="options.operation === 'view'">
-            <el-tree ref="menuTree"
-                     show-checkbox
-                     node-key="f_id"
-                     :props="treeOptions"
-                     :check-strictly="true"
-                     :default-expanded-keys="expandedMenuIds"
-                     :default-checked-keys="checkedMenuIds"
-                     :data="menus"
-                     @check-change="onCheckChange">
-            </el-tree>
-          </fieldset>
-        </el-form>
-      </div>
-    </div>
-
-    <div slot="footer" class="dialog-footer jw-dialog-footer">
-      <el-button @click="onCancel">取 消</el-button>
-      <el-button type="primary" @click="onSubmit" :disabled="options.operation === 'view'">确 定</el-button>
-    </div>
-  </el-dialog>
+  <jw-form ref="form" :form-options="options" :entity="entity">
+    <template slot="fieldset">
+      <el-tree ref="menuTree"
+               show-checkbox
+               node-key="f_id"
+               :props="treeOptions.props"
+               :check-strictly="true"
+               :default-expanded-keys="treeOptions.expandedMenuIds"
+               :default-checked-keys="treeOptions.checkedMenuIds"
+               :data="treeOptions.nodes"
+               @check-change="onCheckChange">
+      </el-tree>
+    </template>
+  </jw-form>
 </template>
 
 
 <script>
+  import {DetailMixin} from 'mixins'
+
   export default {
     name: 'roleAuthorizeDetail',
-    props: {
-      detailOptions: {
-        type: Object,
-        default () {
-          return {}
-        }
-      }
-    },
+    mixins: [DetailMixin],
     data () {
       return {
-        visible: false,
+        treeOptions: {
+          menus: [],
+          expandedMenuIds: [],
+          checkedMenuIds: [],
+          props: {
+            children: 'children',
+            label: 'f_name'
+          }
+        },
         options: {
           context: {
             name: '角色',
             url: 'api/platform/sys/roles',
-            getGridComponent: null,
-            getFeatureComponent: null,
-            getPermissions: null
+            detailComponent: this
           },
-          operation: 'view', // 可选值：add、edit、view、audit
-          title: '查看详情',
-          modal: true, // 是否为模态对话框
-          closeOnClickModal: false, // 点击遮罩层是否关闭对话框
-          size: 'small', // 可选值：mini（1列）、small（2列）、normal（3列）、large（4列）、full（全屏）
-          inline: true,
-          labelWidth: 150, // 单位px
-          maxHeight: null,
-          params: {}
+          loadRemoteEntity (options) {
+            return options.context.detailComponent._loadEntity()
+          },
+          submitEntity (options) {
+            options.context.detailComponent._submitEntity()
+          }
         },
-        titles: {add: '新增', edit: '修改', view: '查看', audit: '审核'},
-        entity: {},
-        rules: {},
-        menus: [],
-        expandedMenuIds: [],
-        checkedMenuIds: [],
-        treeOptions: {
-          children: 'children',
-          label: 'f_name'
-        }
-      }
-    },
-    computed: {
-      maxFormHeight () {
-        return this.options.maxHeight ? (this.options.maxHeight - 135) : (this.$store.state.layout.window.height - 60)
-      }
-    },
-    mounted () {
-      let dialog = this.$el.firstChild
-      let dialogHeader = dialog.firstChild
-      dialogHeader.style.cursor = 'move'
-      dialogHeader.onmousedown = function (mouseDownEvent) {
-        mouseDownEvent.preventDefault()
-
-        let minLeft = -dialog.clientWidth / 2 + 40
-        let offset = {left: mouseDownEvent.clientX - dialog.offsetLeft, top: mouseDownEvent.clientY - dialog.offsetTop}
-
-        document.onmousemove = function (mouseMoveEvent) {
-          let left = mouseMoveEvent.clientX - offset.left
-          let top = mouseMoveEvent.clientY - offset.top
-          dialog.style.left = (left < minLeft) ? minLeft : left + 'px'
-          dialog.style.top = (top < 0 ? 0 : top) + 'px'
-        }
-
-        document.onmouseup = function () {
-          document.onmousemove = null
-          document.onmousedown = null
-        }
+        entity: {}
       }
     },
     methods: {
-      close () { // 供外部调用的接口
-        this.visible = false
-        this.$emit('closed')
-      },
-      open (options) { // 供外部调用的接口
-        this.$lodash.merge(this.options, {title: this.titles[options.operation]}, this.detailOptions, options)
-        this._loadEntity()
-        this.visible = true
+      _submitEntity () {
+        let selectedMenuIds = this.$refs['menuTree'].getCheckedKeys()
+        this.$http.post(this.options.context.url + '/' + this.options.params.f_id + '/menus', {f_menu_ids: selectedMenuIds.join(',')}, {emulateJSON: true}).then((response) => {
+          if (response.body.success) {
+            this.$refs['form'].submitted(response.body)
+          }
+        })
       },
       _loadEntity () {
         this.$http.get(this.options.context.url + '/' + this.options.params.f_id + '/menus').then((response) => {
-          this.menus = response.body.success ? response.body.data : []
-          this._updateCheckedNode(this.menus)
+          this.treeOptions.nodes = response.body.success ? response.body.data : []
+          this._updateCheckedNode(this.treeOptions.nodes)
+          this.entity = {f_menu_ids: this.treeOptions.checkedMenuIds.join(',')}
         })
       },
-      _updateCheckedNode (menus) {
-        menus.forEach((menu) => {
-          if (menu.f_menu_id) {
-            // this.$refs.menuTree.setChecked(menu, true, false)
-            this.checkedMenuIds.push(menu.f_menu_id)
+      _updateCheckedNode (nodes) {
+        nodes.forEach((node) => {
+          if (node.f_menu_id) {
+            this.treeOptions.checkedMenuIds.push(node.f_menu_id)
           }
-          if (menu.f_type < 2) {
-            this.expandedMenuIds.push(menu.f_id)
+          if (node.f_type < 2) {
+            this.treeOptions.expandedMenuIds.push(node.f_id)
           }
-          if (menu.children && menu.children.length > 0) {
-            this._updateCheckedNode(menu.children)
+          if (node.children && node.children.length > 0) {
+            this._updateCheckedNode(node.children)
           }
         })
       },
       _getParent (treeNodes, child) {
-        var parent = null
+        let parent = null
         treeNodes.every((node) => {
-          var parentPath = node.f_parent_path + node.f_id + '/'
+          let parentPath = node.f_parent_path + node.f_id + '/'
           if (node.f_id === child.f_parent_id) {
             parent = node
             return false
@@ -150,51 +97,20 @@
       },
       onCheckChange (data, checked, indeterminate) {
         if (checked) {
-          // this.$refs.menuTree.setChecked(data, checked, true) // 勾选所有的子节点
           data.f_menu_id = data.f_id
 
-          var menu = this._getParent(this.menus, data)
-          if (menu && !menu.f_menu_id) {
-            menu.f_menu_id = menu.f_id
-            this.$refs.menuTree.setChecked(menu, checked, false) // 勾选父节点
+          let node = this._getParent(this.treeOptions.nodes, data)
+          if (node && !node.f_menu_id) {
+            node.f_menu_id = node.f_id
+            this.$refs['menuTree'].setChecked(node, checked, false) // 勾选父节点
           }
         } else {
           data.f_menu_id = null
           if (data.children && data.children.length) {
-            data.children.forEach((menu) => {
-              this.$refs.menuTree.setChecked(menu, checked, true) // 不勾选所有的子节点
+            data.children.forEach((node) => {
+              this.$refs['menuTree'].setChecked(node, checked, true) // 不勾选所有的子节点
             })
           }
-        }
-      },
-      onCancel () {
-        this.close()
-        this.$emit('canceled')
-      },
-      onSubmit () {
-        this.$refs['form'].validate((valid) => {
-          if (!valid) {
-            return false
-          }
-
-          let selectedMenuIds = this.$refs.menuTree.getCheckedKeys()
-          this.$http.post(this.options.context.url + '/' + this.options.params.f_id + '/menus', {f_menu_ids: selectedMenuIds.join(',')}, {emulateJSON: true}).then((response) => {
-            this._submitted(response.body)
-          })
-
-          return true
-        })
-      },
-      _submitted (result) {
-        if (result.success) {
-          let gridComponent = this.options.context.getGridComponent && this.options.context.getGridComponent.call(this, this.options)
-          if (gridComponent) {
-            gridComponent.gridOptions.context.params.totalCount = 0
-            gridComponent.gridOptions.api.setDatasource(gridComponent.gridOptions.datasource)
-          }
-
-          this.close()
-          this.$emit('submitted', {type: this.options.operation, data: result.data})
         }
       }
     }

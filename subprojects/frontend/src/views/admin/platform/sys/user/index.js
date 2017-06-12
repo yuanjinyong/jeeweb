@@ -1,4 +1,4 @@
 export {default as UserView} from './view'
-export {default as UserForm} from './form'
-export {default as UserAuthorizeForm} from './authorize'
-export {default as ChangePasswordForm} from './authorize'
+export {default as UserDetail} from './detail'
+export {default as UserAuthorizeDetail} from './authorize'
+export {default as ChangePasswordForm} from './password'

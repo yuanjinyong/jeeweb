@@ -1,50 +1,40 @@
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
-
 <template>
-  <div class="jw-form">
-    <div class="jw-form-body" style="max-height: 500px;overflow-y: auto;">
-      <el-form label-width="100px" ref="form" :model="entity" :rules="rules">
-        <fieldset>
-          <el-form-item label="旧密码" prop="oldPassword">
-            <el-input type="password" v-model="entity.oldPassword"></el-input>
-          </el-form-item>
-          <el-form-item label="新密码" prop="newPassword">
-            <el-input type="password" v-model="entity.newPassword"></el-input>
-          </el-form-item>
-          <el-form-item label="确认新密码" prop="newPassword2">
-            <el-input type="password" v-model="entity.newPassword2"></el-input>
-          </el-form-item>
-        </fieldset>
-      </el-form>
-    </div>
-
-    <div class="jw-form-footer" style="text-align: right;">
-      <el-button @click="onCancelForm('form')">取 消</el-button>
-      <el-button type="primary" @click="onSubmitForm('form')">确 定</el-button>
-    </div>
-  </div>
+  <jw-form ref="form" :form-options="options" :entity="entity" :rules="rules">
+    <template slot="fieldset">
+      <el-form-item label="旧密码" prop="oldPassword">
+        <el-input type="password" v-model="entity.oldPassword"></el-input>
+      </el-form-item>
+      <el-form-item label="新密码" prop="newPassword">
+        <el-input type="password" v-model="entity.newPassword"></el-input>
+      </el-form-item>
+      <el-form-item label="确认新密码" prop="newPassword2">
+        <el-input type="password" v-model="entity.newPassword2"></el-input>
+      </el-form-item>
+    </template>
+  </jw-form>
 </template>
 
 
-<script type="text/ecmascript-6">
+<script>
+  import {DetailMixin} from 'mixins'
+
   export default {
     name: 'changePasswordForm',
-    props: {
-      params: {
-        type: Object,
-        default: function () {
-          return {
-            operation: 'edit',
-            entity: {}
-          }
-        }
-      }
-    },
+    mixins: [DetailMixin],
     data () {
       return {
-        url: 'api/admin/index/change/password',
+        options: {
+          context: {
+            name: '用户密码',
+            url: 'api/admin/index/change/password'
+          },
+          loadRemoteEntity (options) {
+            return {oldPassword: null, newPassword: null, newPassword2: null}
+          },
+          submitEntity (options) {
+            options.context.detailComponent._submitEntity()
+          }
+        },
         entity: {oldPassword: null, newPassword: null, newPassword2: null},
         rules: {
           oldPassword: [
@@ -84,23 +74,11 @@
       }
     },
     methods: {
-      onCancelForm (formName) {
-        this.$emit('cancel')
-      },
-      onSubmitForm (formName) {
-        var vm = this
-        vm.$refs[formName].validate(function (valid) {
-          if (!valid) {
-            return false
+      _submitEntity () {
+        this.$http.post(this.options.context.url, this.entity, {emulateJSON: true}).then((response) => {
+          if (response.body.success) {
+            this.$refs['form'].submitted(response.body)
           }
-
-          vm.$http.post(vm.url, vm.entity, {emulateJSON: true}).then(function (response) {
-            if (response.body.success) {
-              this.$emit('submit')
-            }
-          })
-
-          return true
         })
       }
     }

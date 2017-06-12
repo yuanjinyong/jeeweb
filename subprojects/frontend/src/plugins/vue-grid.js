@@ -37,7 +37,6 @@ var VueGrid = {
     paginationFirstPage: 0,
     cacheOverflowSize: 2,
     infiniteInitialRowCount: 1,
-    infiniteBlockSize: 10,
     cacheBlockSize: 20,
     maxBlocksInCache: 2,
     maxConcurrentDatasourceRequests: 1,

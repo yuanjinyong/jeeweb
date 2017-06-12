@@ -3,7 +3,6 @@
     <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
     <role-detail ref="detail" :detail-options="detailOptions"></role-detail>
-
     <role-authorize-detail ref="authorize" :detail-options="authorizeOptions"></role-authorize-detail>
   </div>
 </template>

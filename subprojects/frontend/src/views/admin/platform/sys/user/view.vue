@@ -6,16 +6,8 @@
   <div :style="contentStyle">
     <ag-grid class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
-    <el-dialog v-draggable v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false"
-               :modal="true" :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
-      <user-form :form-options="formOptions" v-if="formOptions.isShow"></user-form>
-    </el-dialog>
-
-    <el-dialog v-draggable v-model="authorizeFormOptions.isShow" :title="authorizeFormOptions.title"
-               :close-on-click-modal="false" :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
-      <user-authorize-form :form-options="authorizeFormOptions" v-if="authorizeFormOptions.isShow">
-      </user-authorize-form>
-    </el-dialog>
+    <user-detail ref="detail" :detail-options="detailOptions"></user-detail>
+    <user-authorize-detail ref="authorize" :detail-options="authorizeOptions"></user-authorize-detail>
   </div>
 </template>
 
@@ -35,29 +27,33 @@
     TimestampRendererFramework,
     ViewRendererFramework
   } from 'components/ag-grid'
-  import UserForm from './form'
-  import UserAuthorizeForm from './authorize'
-  //  import {UserForm, UserAuthorizeForm} from 'views'
+  import UserDetail from './detail'
+  import UserAuthorizeDetail from './authorize'
+  //  import {UserDetail, UserAuthorizeDetail} from 'views'
 
   export default {
     name: 'userView',
     components: {
-      UserForm,
-      UserAuthorizeForm
+      UserDetail,
+      UserAuthorizeDetail
     },
     data () {
       return {
-        featureOptions: {
-          name: '用户',
-          url: 'api/platform/sys/users'
-        },
-        formOptions: {
-          isShow: false,
-          operation: 'view',
-          title: '查看详情',
-          params: {},
+        authorizeOptions: {
           context: {
-            featureComponent: this
+            featureComponent: this,
+            getGridComponent (options) {
+              return options.context.featureComponent.$refs['grid']
+            }
+          }
+        },
+        detailOptions: {
+          maxHeight: this.mode === 'selector' ? 535 : null,
+          context: {
+            featureComponent: this,
+            getGridComponent (options) {
+              return options.context.featureComponent.$refs['grid']
+            }
           }
         },
         gridOptions: this.$grid.buildOptions({
@@ -76,16 +72,7 @@
               totalCount: 0
             }
           }
-        }),
-        authorizeFormOptions: {
-          isShow: false,
-          operation: 'edit',
-          title: '修改授权',
-          params: {},
-          context: {
-            featureComponent: this
-          }
-        }
+        })
       }
     },
     computed: {
@@ -204,32 +191,36 @@
               type: 'warning',
               icon: 'fa fa-key',
               permission: 'authorize',
-              isDisabled: function (params, entity) {
+              isDisabled (params, entity) {
                 return entity.f_status === 3
               },
               onClick (params, entity) {
-                params.context.featureComponent.onAuthorize(entity)
+                params.context.featureComponent.$refs['authorize'].open({
+                  operation: 'authorize',
+                  title: '授权可以操作的功能',
+                  params: entity
+                })
               }
             }, {
               id: 'edit',
               permission: 'edit',
-              isDisabled: function (params, entity) {
+              isDisabled (params, entity) {
                 return entity.f_status === 3
               }
             }, {
               id: 'remove',
-              title: '注销' + this.featureOptions.name,
+              title: '注销用户',
               permission: 'remove',
-              isDisabled: function (params, entity) {
+              isDisabled (params, entity) {
                 return entity.f_status === 3 || entity.f_is_preset === 1
               }
             }, {
               id: 'unlock',
-              title: '解锁' + this.featureOptions.name,
+              title: '解锁用户',
               type: 'success',
               icon: 'fa fa-unlock',
               permission: 'unlock',
-              isDisabled: function (params, entity) {
+              isDisabled (params, entity) {
                 return entity.f_status !== 2
               },
               onClick (params, entity) {
@@ -241,7 +232,7 @@
               type: 'warning',
               icon: 'fa fa-cog',
               permission: 'resetPassword',
-              isDisabled: function (params, entity) {
+              isDisabled (params, entity) {
                 return entity.f_status === 3 || entity.f_is_preset === 1
               },
               onClick (params, entity) {
@@ -253,27 +244,16 @@
         }
       ]
     },
-    mounted () {
-      window.devMode && console.info('mounted', this.$options.name, this._uid)
-    },
-    activated () {
-      window.devMode && console.info('activated', this.$options.name, this._uid)
-    },
     methods: {
-      onAuthorize (entity) {
-        this.authorizeFormOptions.params = entity
-        this.authorizeFormOptions.isShow = true
-      },
       onUnlock (entity) {
-        var vm = this
-        vm.$confirm('确定要解锁所选的用户吗?', '解锁用户', {
+        this.$confirm('确定要解锁所选的用户吗?', '解锁用户', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          vm.$http.post(vm.featureOptions.url + '/' + entity.f_id + '/unlock').then((response) => {
+          this.$http.post(this.gridOptions.context.url + '/' + entity.f_id + '/unlock').then((response) => {
             if (response.body.success) {
-              vm._refreshGrid()
+              this._refreshGrid()
             }
           })
         }).catch((e) => {
@@ -281,15 +261,14 @@
         })
       },
       onResetPassword (entity) {
-        var vm = this
-        vm.$confirm('确定要重置所选用户的密码吗?', '重置用户密码', {
+        this.$confirm('确定要重置所选用户的密码吗?', '重置用户密码', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          vm.$http.post(vm.featureOptions.url + '/' + entity.f_id + '/reset/password').then((response) => {
+          this.$http.post(this.gridOptions.context.url + '/' + entity.f_id + '/reset/password').then((response) => {
             if (response.body.success) {
-              vm._refreshGrid()
+              this._refreshGrid()
             }
           })
         }).catch((e) => {
