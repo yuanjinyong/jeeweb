@@ -1,7 +1,3 @@
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
-
 <template>
   <div :style="contentStyle">
     <ag-grid class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
@@ -9,7 +5,7 @@
 </template>
 
 
-<script type="text/ecmascript-6">
+<script>
   import {
     DictFilterFramework,
     DictFloatingFilterComponentFramework,
@@ -22,12 +18,10 @@
     name: 'informationSchemaView',
     data () {
       return {
-        featureOptions: {
-          name: '数据库列',
-          url: 'api/schema/information/columns'
-        },
         gridOptions: this.$grid.buildOptions({
           context: {
+            name: '数据库列',
+            url: 'api/schema/information/columns',
             featureComponent: this,
             params: {
               orderBy: 'TABLE_SCHEMA,TABLE_NAME,ORDINAL_POSITION',

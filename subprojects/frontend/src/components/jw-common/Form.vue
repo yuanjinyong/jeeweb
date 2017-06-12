@@ -8,6 +8,8 @@
           <fieldset :disabled="options.operation === 'view'">
             <slot name="fieldset"></slot>
           </fieldset>
+
+          <slot></slot>
         </el-form>
       </div>
 
@@ -193,7 +195,7 @@
       submitted (result) {
         if (result.success) {
           let gridComponent = this.options.context.getGridComponent && this.options.context.getGridComponent.call(this, this.options)
-          if (gridComponent) {
+          if (gridComponent && gridComponent.gridOptions.rowModelType === 'infinite') {
             gridComponent.gridOptions.context.params.totalCount = 0
             gridComponent.gridOptions.api.setDatasource(gridComponent.gridOptions.datasource)
           }

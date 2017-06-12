@@ -4,21 +4,18 @@
 
 <template>
   <div :style="contentStyle">
-    <ag-grid class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
+    <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
-    <el-dialog v-draggable v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false"
-               :modal="true" :size="'large'" :top="'30px'" :custom-class="'jw-dialog jw-dialog-large'">
-      <generation-rule-form :form-options="formOptions" v-if="formOptions.isShow"></generation-rule-form>
-    </el-dialog>
+    <generation-rule-detail ref="detail" :detail-options="detailOptions"></generation-rule-detail>
 
-    <el-dialog v-draggable v-model="generating" :title="'代码生成中……'" :show-close="false">
+    <el-dialog v-model="generating" :title="'代码生成中……'" :show-close="false">
       <loading></loading>
     </el-dialog>
   </div>
 </template>
 
 
-<script type="text/ecmascript-6">
+<script>
   import {
     AddHeaderComponenetFramework,
     LikeFilterFramework,
@@ -27,32 +24,36 @@
     OperationRendererFramework,
     ViewRendererFramework
   } from 'components/ag-grid'
-  import GenerationRuleForm from './form'
-  //  import {GenerationRuleForm} from 'views'
+  import GenerationRuleDetail from './detail'
+  //  import {GenerationRuleDetail} from 'views'
 
   export default {
     name: 'generationRuleView',
     components: {
-      GenerationRuleForm
+      GenerationRuleDetail
     },
     data () {
       return {
-        featureOptions: {
-          name: '生成规则',
-          url: 'api/platform/tools/code/generate/rules'
-        },
-        formOptions: {
-          isShow: false,
-          operation: 'view',
-          title: '查看详情',
-          params: {},
+        detailOptions: {
           context: {
-            featureComponent: this
-          }
+            featureComponent: this,
+            getGridComponent (options) {
+              return options.context.featureComponent.$refs['grid']
+            }
+          },
+          size: 'large'
         },
         gridOptions: this.$grid.buildOptions({
           context: {
+            name: '代码生成规则',
+            url: 'api/platform/tools/code/generate/rules',
             featureComponent: this,
+            getPermissions (params, operation) {
+              return params.context.featureComponent.permission
+            },
+            getDetailComponent (params) {
+              return params.context.featureComponent.$refs['detail']
+            },
             params: {
               orderBy: 'f_menu_parent_id,f_menu_order',
               totalCount: 0
@@ -167,16 +168,12 @@
         }
       ]
     },
-    mounted () {
-      window.devMode && console.info('mounted', this.$options.name, this._uid)
-    },
-    activated () {
-      window.devMode && console.info('activated', this.$options.name, this._uid)
-    },
     methods: {
       onGenerate (entity) {
         this.generating = true
-        this.$http.put(this.featureOptions.url + '/' + entity.f_id + '/generate').then((response) => {
+        this.$http.put(this.gridOptions.context.url + '/' + entity.f_id + '/generate').then(() => {
+          this.generating = false
+        }).catch(() => {
           this.generating = false
         })
       }

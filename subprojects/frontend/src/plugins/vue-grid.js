@@ -183,7 +183,11 @@ var VueGrid = {
     columnDefs: []
   },
   buildOptions: function (gridOptions) {
-    return Vue.lodash.merge({}, this.defaultOptions, gridOptions)
+    let options = Vue.lodash.merge({}, this.defaultOptions, gridOptions)
+    if (options.rowModelType !== 'infinite') {
+      options.datasource = null
+    }
+    return options
   }
 }
 

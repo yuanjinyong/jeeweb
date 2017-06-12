@@ -1,6 +1,6 @@
 <template>
   <div :style="contentStyle">
-    <ag-grid class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
+    <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
     <menu-detail ref="detail" :detail-options="detailOptions"></menu-detail>
     <menu-sql-detail ref="sql" :detail-options="sqlOptions"></menu-sql-detail>
@@ -44,6 +44,9 @@
             getGridComponent (options) {
               return options.context.featureComponent.$refs['grid']
             }
+          },
+          submitted (result) {
+            this.options.context.featureComponent._loadMenuList()
           }
         },
         gridOptions: this.$grid.buildOptions({
@@ -230,25 +233,17 @@
         })
       },
       onRemove (entity) {
-        var vm = this
-        vm.$confirm('确定要删除所选的菜单及其子菜单吗?', '删除菜单', {
+        this.$confirm('确定要删除所选的菜单及其子菜单吗?', '删除菜单', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(function () {
-          vm.$http.delete(vm.featureOptions.url + '/' + entity.f_id).then(function (response) {
+          this.$http.delete(this.featureOptions.url + '/' + entity.f_id).then((response) => {
             if (response.body.success) {
-              vm._query()
+              this._loadMenuList()
             }
           })
         })
-      },
-      onSql (entity) {
-        this.sqlFormOptions.params = entity
-        this.sqlFormOptions.isShow = true
-      },
-      onSaved () {
-        this._query()
       }
     }
   }
