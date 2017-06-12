@@ -129,7 +129,7 @@
   .jw-dialog {
     min-width: 771px;
     margin-bottom: 0px;
-    top: 30px;
+    top: 20px;
   }
 
   .jw-dialog-large {
@@ -174,7 +174,7 @@
   }
 
   .jw-form .jw-form-body {
-    padding: 30px 20px;
+    padding: 20px 20px;
   }
 
   .jw-form .jw-form-footer {

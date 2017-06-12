@@ -1,25 +1,14 @@
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
-
 <template>
   <div :style="contentStyle">
     <ag-grid class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
-    <el-dialog v-draggable v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false"
-               :modal="true" :size="'small'" :top="'30px'" :custom-class="'jw-dialog'">
-      <menu-form :form-options="formOptions" @submit="onSaved" v-if="formOptions.isShow"></menu-form>
-    </el-dialog>
-
-    <el-dialog v-draggable v-model="sqlFormOptions.isShow" :title="sqlFormOptions.title" :close-on-click-modal="false"
-               :modal="true" :size="'large'" :top="'30px'" :custom-class="'jw-dialog'">
-      <menu-sql-form :form-options="sqlFormOptions" v-if="sqlFormOptions.isShow"></menu-sql-form>
-    </el-dialog>
+    <menu-detail ref="detail" :detail-options="detailOptions"></menu-detail>
+    <menu-sql-detail ref="sql" :detail-options="sqlOptions"></menu-sql-detail>
   </div>
 </template>
 
 
-<script type="text/ecmascript-6">
+<script>
   import {
     DictFilterFramework,
     DictFloatingFilterComponentFramework,
@@ -29,34 +18,45 @@
     OperationRendererFramework,
     ViewRendererFramework
   } from 'components/ag-grid'
-  import MenuForm from './form'
-  import MenuSqlForm from './sql'
-  //  import {MenuForm, MenuSqlForm} from 'views'
+  import MenuDetail from './detail'
+  import MenuSqlDetail from './sql'
+  //  import {MenuDetail, MenuSqlDetail} from 'views'
 
   export default {
     name: 'menuView',
     components: {
-      MenuForm,
-      MenuSqlForm
+      MenuDetail,
+      MenuSqlDetail
     },
     data () {
       return {
-        featureOptions: {
-          name: '菜单',
-          url: 'api/platform/sys/menus'
-        },
-        formOptions: {
-          isShow: false,
-          operation: 'view',
-          title: '查看详情',
-          params: {},
+        sqlOptions: {
           context: {
-            featureComponent: this
+            featureComponent: this,
+            getGridComponent (options) {
+              return options.context.featureComponent.$refs['grid']
+            }
+          }
+        },
+        detailOptions: {
+          context: {
+            featureComponent: this,
+            getGridComponent (options) {
+              return options.context.featureComponent.$refs['grid']
+            }
           }
         },
         gridOptions: this.$grid.buildOptions({
           context: {
+            name: '菜单',
+            url: 'api/platform/sys/menus',
             featureComponent: this,
+            getPermissions (params, operation) {
+              return params.context.featureComponent.permission
+            },
+            getDetailComponent (params, operation) {
+              return params.context.featureComponent.$refs['detail']
+            },
             params: {
               orderBy: 'f_is_preset,f_name',
               totalCount: 0
@@ -79,16 +79,7 @@
               return null
             }
           }
-        }),
-        sqlFormOptions: {
-          isShow: false,
-          operation: 'view',
-          title: 'SQL脚本',
-          params: {},
-          context: {
-            featureComponent: this
-          }
-        }
+        })
       }
     },
     computed: {
@@ -133,7 +124,7 @@
           filterFramework: DictFilterFramework,
           filterParams: {
             type: 'in',
-            doesFilterPass: function (params, value, filterPassParams) {
+            doesFilterPass (params, value, filterPassParams) {
               console && console.info('类型 doesFilterPass', filterPassParams.data.f_name, filterPassParams.node)
               return true
             }
@@ -192,7 +183,7 @@
               type: 'primary',
               icon: 'fa fa-plus',
               permission: 'add',
-              isDisabled: function (params, entity) {
+              isDisabled (params, entity) {
                 return entity.f_type > 2
               }
             }, {
@@ -202,7 +193,7 @@
               id: 'remove',
               title: '删除菜单及其子菜单',
               permission: 'remove',
-              isDisabled: function (params, entity) {
+              isDisabled (params, entity) {
                 return !entity.f_parent_id
               },
               onClick (params, entity) {
@@ -214,28 +205,23 @@
               icon: 'fa fa-file-code-o',
               permission: 'sql',
               onClick (params, entity) {
-                params.context.featureComponent.onSql(entity)
+                params.context.featureComponent.$refs['sql'].open({
+                  operation: 'sql',
+                  title: 'SQL脚本',
+                  params: entity
+                })
               }
             }]
           },
           width: 96
         }
       ]
-    },
-    mounted () {
-      window.devMode && console.info('mounted', this.$options.name, this._uid)
-      this._init()
-    },
-    activated () {
-      window.devMode && console.info('activated', this.$options.name, this._uid)
+
+      this._loadMenuList()
     },
     methods: {
-      _init () {
-        this._query()
-      },
-      _query () {
-        var vm = this
-        vm.$http.get(vm.featureOptions.url, {params: {orderBy: 'f_parent_path,f_order'}}).then(function (response) {
+      _loadMenuList () {
+        this.$http.get(this.gridOptions.context.url, {params: {orderBy: 'f_parent_path,f_order'}}).then((response) => {
           if (response.body.success) {
             this.gridOptions.api.setRowData(response.body.data)
           } else {

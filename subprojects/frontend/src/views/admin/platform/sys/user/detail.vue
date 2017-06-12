@@ -77,14 +77,14 @@
             name: '用户',
             url: 'api/platform/sys/users'
           },
-          createEntity (options) {
-            return {
+          createEntity (options, cb) {
+            cb({
               f_department_id: 0,
               f_is_can_login: 1,
               f_is_preset: 2,
               f_status: 1,
               roleIdList: []
-            }
+            })
           }
         },
         entity: {roleIdList: []},

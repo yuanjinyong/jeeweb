@@ -1,106 +1,69 @@
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
-
 <template>
-  <div class="jw-form">
-    <div class="jw-form-body" :style="formBodyStyle">
-      <el-form ref="form" :model="entity">
-        <fieldset>
-          <el-form-item prop="sql">
-            <el-input v-model="entity.sql" type="textarea" class="jw-textarea-full-width jw-textarea-nowrap"
-                      :autosize="{minRows: 4, maxRows: 18}">
-            </el-input>
-          </el-form-item>
-        </fieldset>
-      </el-form>
-    </div>
-
-    <div class="jw-form-footer" style="text-align: right;">
-      <el-button type="primary" @click="onCancelForm('form')">关 闭</el-button>
-    </div>
-  </div>
+  <jw-form ref="form" :form-options="options" :entity="entity">
+    <template slot="fieldset">
+      <el-form-item prop="sql">
+        <el-input v-model="entity.sql" type="textarea" class="jw-textarea-full-width jw-textarea-nowrap"
+                  :autosize="{minRows: 4, maxRows: 18}">
+        </el-input>
+      </el-form-item>
+    </template>
+  </jw-form>
 </template>
 
 
-<script type="text/ecmascript-6">
+<script>
+  import {DetailMixin} from 'mixins'
+
   export default {
-    name: 'menuSqlForm',
-    props: {
-      formOptions: {
-        type: Object,
-        default: function () {
-          return {
-            operation: 'view',
-            title: 'SQL脚本',
-            maxHeight: 500,
-            labelWidth: 100,
-            params: {},
-            context: {
-              featureComponent: {}
-            }
-          }
-        }
-      }
-    },
+    name: 'menuSqlDetail',
+    mixins: [DetailMixin],
     data () {
       return {
+        options: {
+          context: {
+            name: '菜单SQL',
+            url: 'api/platform/sys/menus',
+            detailComponent: this
+          },
+          loadRemoteEntity (options, cb) {
+            options.context.detailComponent._loadEntity(cb)
+          }
+        },
         entity: {sql: null}
       }
     },
-    computed: {
-      formBodyStyle () {
-        return {
-          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : this.$store.state.layout.dialog.height) + 'px',
-          'overflow-y': 'auto'
-        }
-      },
-      labelWidth () {
-        return (this.formOptions.labelWidth ? this.formOptions.labelWidth : 150) + 'px'
-      },
-      featureOptions () {
-        return this.formOptions.context.featureComponent.featureOptions
-      }
-    },
-    mounted () {
-      window.devMode && console.info('mounted', this.$options.name, this._uid)
-      this._init()
-    },
     methods: {
-      _init () {
-        this.query()
-      },
-      query (params) {
-        var vm = this
-        vm.$http.get(vm.featureOptions.url + '/' + vm.formOptions.params.f_id + '/sql').then(function (response) {
-          var data = response.body.success ? response.body.data : {}
-          var menuStr = '/*Data for the table `t_sys_menu` */\n'
-          menuStr += vm._appendMenus(data.menuList)
+      _loadEntity (cb) {
+        this.$http.get(this.options.context.url + '/' + this.options.params.f_id + '/sql').then((response) => {
+          let data = response.body.success ? response.body.data : {}
+          let menuStr = '/*Data for the table `t_sys_menu` */\n'
+          menuStr += this._appendMenus(data.menuList)
 
-          var menuUrlStr = '/*Data for the table `t_sys_menu_url` */\n'
+          let menuUrlStr = '/*Data for the table `t_sys_menu_url` */\n'
           if (data.menuUrlList && data.menuUrlList.length > 0) {
             data.menuUrlList.forEach((menuUrl) => {
               menuUrlStr += 'insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values (\'' + menuUrl.f_menu_id + '\',\'' + menuUrl.f_url_id + '\');\n'
             })
           }
 
-          var roleMenuStr = '/*Data for the table `t_sys_role_menu` */\n'
+          let roleMenuStr = '/*Data for the table `t_sys_role_menu` */\n'
           if (data.roleMenuList && data.roleMenuList.length > 0) {
             data.roleMenuList.forEach((roleMenu) => {
               roleMenuStr += 'insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (' + roleMenu.f_role_id + ',\'' + roleMenu.f_menu_id + '\');\n'
             })
           }
 
-          var sql = '-- ' + vm.formOptions.params.f_id + ' ' + vm.formOptions.params.f_name + '\n'
+          let sql = '-- ' + this.options.params.f_id + ' ' + this.options.params.f_name + '\n'
           sql += menuStr + '\n'
           sql += menuUrlStr + '\n'
           sql += roleMenuStr + '\n'
 
-          vm.entity.sql = sql
+          // this.entity.sql = sql
+          cb({sql: sql})
         })
       },
       _appendMenus (menus) {
-        var menuStr = ''
+        let menuStr = ''
         if (menus && menus.length > 0) {
           menus.forEach((menu) => {
             menuStr += 'insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values '
@@ -125,15 +88,6 @@
         }
 
         return menuStr
-      },
-      onCancelForm (formName) {
-        this._closeForm()
-        this.$emit('cancel')
-      },
-      _closeForm () {
-        if (this.formOptions.context.featureComponent.sqlFormOptions) {
-          this.formOptions.context.featureComponent.sqlFormOptions.isShow = false
-        }
       }
     }
   }

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="visible" :title="options.title" :modal="options.modal"
+  <el-dialog v-model="visible" :title="options.title" :modal="options.modal" :top="'20px'"
              :close-on-click-modal="options.closeOnClickModal" :custom-class="'jw-dialog jw-dialog-' + options.size">
     <div class="jw-form" v-if="visible">
       <div class="jw-form-body" style="overflow-y: auto;" :style="{'max-height': maxFormHeight + 'px'}">
@@ -15,9 +15,11 @@
     </div>
 
     <div slot="footer" class="dialog-footer jw-dialog-footer">
-      <slot name="button"></slot>
-      <el-button @click="onCancel">取 消</el-button>
-      <el-button type="primary" @click="onSubmit" :disabled="options.operation === 'view'">确 定</el-button>
+      <slot name="buttons"></slot>
+      <slot name="defaultButtons">
+        <el-button @click="onCancel">取 消</el-button>
+        <el-button type="primary" @click="onSubmit" :disabled="options.operation === 'view'">确 定</el-button>
+      </slot>
     </div>
   </el-dialog>
 </template>
@@ -80,7 +82,7 @@
     },
     computed: {
       maxFormHeight () {
-        return this.options.maxHeight ? (this.options.maxHeight - 135) : (this.$store.state.layout.window.height - 60)
+        return this.options.maxHeight ? (this.options.maxHeight - 135) : (this.$store.state.layout.window.height - 180)
       }
     },
     mounted () {
@@ -122,14 +124,18 @@
       _loadEntity () {
         if (this.options.operation === 'add') {
           if (this.options.createEntity) {
-            this.bus.$emit('loaded-entity', this.options.createEntity.call(this, this.options))
+            this.options.createEntity.call(this, this.options, (entity) => {
+              this.bus.$emit('loaded-entity', entity)
+            })
           } else {
             this.bus.$emit('loaded-entity', {})
           }
         } else {
           if (this.options.context.url) {
             if (this.options.loadRemoteEntity) {
-              this.bus.$emit('loaded-entity', this.options.loadRemoteEntity.call(this, this.options))
+              this.options.loadRemoteEntity.call(this, this.options, (entity) => {
+                this.bus.$emit('loaded-entity', entity)
+              })
             } else {
               this.$http.get(this.options.context.url + '/' + this.options.params.f_id).then((response) => {
                 this.bus.$emit('loaded-entity', response.body.success ? response.body.data : {})
@@ -137,7 +143,9 @@
             }
           } else {
             if (this.options.loadLocalEntity) {
-              this.bus.$emit('loaded-entity', this.options.loadLocalEntity.call(this, this.options))
+              this.options.loadLocalEntity.call(this, this.options, (entity) => {
+                this.bus.$emit('loaded-entity', entity)
+              })
             } else {
               this.bus.$emit('loaded-entity', this.$lodash.cloneDeep(this.options.params))
             }

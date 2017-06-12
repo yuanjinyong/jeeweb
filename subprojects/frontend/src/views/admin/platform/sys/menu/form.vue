@@ -7,62 +7,7 @@
     <div class="jw-form-body" :style="formBodyStyle">
       <el-form ref="form" :model="entity" :rules="rules" :inline="true" :label-width="labelWidth">
         <fieldset :disabled="formOptions.operation === 'view'">
-          <el-form-item label="父菜单编码" prop="f_parent_id">
-            <el-input class="jw-field-col-1" v-model="entity.f_parent_id" :disabled="true"></el-input>
-          </el-form-item>
-          <el-form-item label="父菜单名称" prop="f_parent_name">
-            <el-input class="jw-field-col-1" v-model="entity.f_parent_name" :disabled="true"></el-input>
-          </el-form-item>
-          <el-form-item label="编码" prop="f_id">
-            <el-input class="jw-field-col-1" v-model="entity.f_id" :disabled="formOptions.operation !== 'add'">
-            </el-input>
-          </el-form-item>
-          <el-form-item label="名称" prop="f_name">
-            <el-input class="jw-field-col-1" v-model="entity.f_name"></el-input>
-          </el-form-item>
-          <el-form-item label="描述" prop="f_desc">
-            <el-input class="jw-field-col-2" v-model="entity.f_desc" type="textarea" autosize></el-input>
-          </el-form-item>
-          <el-form-item label="类型" prop="f_type">
-            <el-select class="jw-field-col-1" v-model="entity.f_type" :disabled="formOptions.operation !== 'add'">
-              <el-option v-for="type in menuTypes"
-                         :key="type.f_item_code"
-                         :value="type.f_item_code"
-                         :label="type.f_item_text"
-                         :disabled="type.f_item_code === 0">
-                {{type.f_item_text}}
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="排序" prop="f_order">
-            <el-input-number class="jw-field-col-1" v-model="entity.f_order" :step="5"></el-input-number>
-          </el-form-item>
-          <el-form-item label="图标" prop="f_icon">
-            <el-input class="jw-field-col-1" v-model="entity.f_icon"></el-input>
-          </el-form-item>
-          <el-form-item label="状态" prop="f_status">
-            <el-radio-group class="jw-field-col-1" v-model="entity.f_status">
-              <el-radio :label="1">启用</el-radio>
-              <el-radio :label="2">禁用</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="适用平台">
-            <div class="jw-field-col-2">
-              <el-checkbox v-model="entity.f_is_web" :true-label="1" :false-label="2">Web</el-checkbox>
-              <el-checkbox v-model="entity.f_is_android" :true-label="1" :false-label="2">Android</el-checkbox>
-              <el-checkbox v-model="entity.f_is_ios" :true-label="1" :false-label="2">IOS</el-checkbox>
-            </div>
-          </el-form-item>
-          <el-form-item label="路由路径" prop="f_route_path" v-show="entity.f_type === 2">
-            <el-input class="jw-field-col-2" v-model="entity.f_route_path"></el-input>
-          </el-form-item>
-          <el-form-item label="备注" prop="f_remark">
-            <el-input class="jw-field-col-2" v-model="entity.f_remark" type="textarea" autosize></el-input>
-          </el-form-item>
 
-          <div style="height: 200px;" v-show="entity.f_type === 2 || entity.f_type === 3">
-            <ag-grid class="ag-fresh jw-grid" :grid-options="urlGridOptions"></ag-grid>
-          </div>
         </fieldset>
       </el-form>
     </div>

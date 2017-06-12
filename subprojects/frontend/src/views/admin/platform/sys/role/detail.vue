@@ -34,8 +34,8 @@
             name: '角色',
             url: 'api/platform/sys/roles'
           },
-          createEntity (options) {
-            return {f_is_preset: 2}
+          createEntity (options, cb) {
+            cb({f_is_preset: 2})
           }
         },
         entity: {},

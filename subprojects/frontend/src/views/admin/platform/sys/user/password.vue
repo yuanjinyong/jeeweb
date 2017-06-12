@@ -28,8 +28,8 @@
             name: '用户密码',
             url: 'api/admin/index/change/password'
           },
-          loadRemoteEntity (options) {
-            return {oldPassword: null, newPassword: null, newPassword2: null}
+          loadRemoteEntity (options, cb) {
+            cb({oldPassword: null, newPassword: null, newPassword2: null})
           },
           submitEntity (options) {
             options.context.detailComponent._submitEntity()

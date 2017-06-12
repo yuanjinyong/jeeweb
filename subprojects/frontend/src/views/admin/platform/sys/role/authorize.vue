@@ -39,8 +39,8 @@
             url: 'api/platform/sys/roles',
             detailComponent: this
           },
-          loadRemoteEntity (options) {
-            return options.context.detailComponent._loadEntity()
+          loadRemoteEntity (options, cb) {
+            options.context.detailComponent._loadEntity(cb)
           },
           submitEntity (options) {
             options.context.detailComponent._submitEntity()
@@ -58,11 +58,12 @@
           }
         })
       },
-      _loadEntity () {
+      _loadEntity (cb) {
         this.$http.get(this.options.context.url + '/' + this.options.params.f_id + '/menus').then((response) => {
           this.treeOptions.nodes = response.body.success ? response.body.data : []
           this._updateCheckedNode(this.treeOptions.nodes)
-          this.entity = {f_menu_ids: this.treeOptions.checkedMenuIds.join(',')}
+          // this.entity = {f_menu_ids: this.treeOptions.checkedMenuIds.join(',')}
+          cb({f_menu_ids: this.treeOptions.checkedMenuIds.join(',')})
         })
       },
       _updateCheckedNode (nodes) {
