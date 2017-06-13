@@ -97,17 +97,16 @@
         ],
         showSelectUrlDialog: false,
         urlGridOptions: this.$grid.buildOptions({
+          rowModelType: 'normal',
+          rowData: [],
+          pagination: false,
+          enableFilter: false,
           context: {
             featureComponent: this,
             getPermissions (params, operation) {
               return {add: true, remove: true}
             }
-          },
-          rowModelType: 'normal',
-          rowData: [],
-          pagination: false,
-          enableFilter: false,
-          floatingFilter: false
+          }
         }),
         options: {
           context: {
@@ -136,17 +135,18 @@
               f_is_ios: 1,
               urlList: []
             }
+
             cb(entity)
             let vm = options.context.detailComponent
             vm.$nextTick(() => {
-              vm.urlGridOptions.api.setRowData(entity.urlList)
+              vm.urlGridOptions.api.setRowData(entity.urlList || [])
             })
           },
           loadRemoteEntity (options, cb) {
             this.$http.get(options.context.url + '/' + options.params.f_id).then((response) => {
               let entity = response.body.success ? response.body.data : {urlList: []}
               cb(entity)
-              options.context.detailComponent.urlGridOptions.api.setRowData(entity.urlList)
+              options.context.detailComponent.urlGridOptions.api.setRowData(entity.urlList || [])
             })
           }
         },

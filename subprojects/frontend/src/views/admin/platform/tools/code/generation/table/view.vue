@@ -1,38 +1,26 @@
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
-
 <template>
   <div>
-    <ag-grid class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
+    <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
-    <el-dialog v-draggable v-model="formOptions.isShow" :title="formOptions.title" :close-on-click-modal="false"
-               :modal="false" :size="'full'" :custom-class="'jw-dialog jw-dialog-full'">
-      <generation-rule-table-form
-        :form-options="formOptions"
-        :generate-rule="generateRule"
-        @submit="onSubmit"
-        v-if="formOptions.isShow">
-      </generation-rule-table-form>
-    </el-dialog>
+    <generation-rule-table-detail ref="detail" :detail-options="detailOptions"></generation-rule-table-detail>
   </div>
 </template>
 
 
-<script type="text/ecmascript-6">
+<script>
   import {
     AddHeaderComponenetFramework,
     DictRendererFramework,
     OperationRendererFramework,
     ViewRendererFramework
   } from 'components/ag-grid'
-  import GenerationRuleTableForm from './form'
-  //  import {GenerationRuleTableForm} from 'views'
+  import GenerationRuleTableDetail from './detail'
+  //  import {GenerationRuleTableDetail} from 'views'
 
   export default {
     name: 'generationRuleTableView',
     components: {
-      GenerationRuleTableForm
+      GenerationRuleTableDetail
     },
     props: {
       operation: {
@@ -50,36 +38,54 @@
     },
     data () {
       return {
-        featureOptions: {
-          name: '生成规则数据库表',
-          url: null,
-          permission: {
-            add: true,
-            edit: true,
-            remove: true
-          }
-        },
-        formOptions: {
-          isShow: false,
-          operation: 'view',
-          title: '查看详情',
-          params: {},
+        detailOptions: {
+          size: 'full',
+          modal: false,
+          draggable: false,
           context: {
-            featureComponent: this
+            featureComponent: this,
+            getGridComponent (options) {
+              return options.context.featureComponent.$refs['grid']
+            }
+          },
+          submitted (result) {
+            let entity = result.data
+            let vm = this.options.context.featureComponent
+            if (result.operation === 'add') {
+              vm.generateRule.tableList.push(entity)
+            } else {
+              for (let i = 0; i < vm.generateRule.tableList.length; i++) {
+                if (vm.generateRule.tableList[i].f_db_name === entity.f_db_name &&
+                  vm.generateRule.tableList[i].f_table_name === entity.f_table_name) {
+                  vm.generateRule.tableList.splice(i, 1, entity)
+                  break
+                }
+              }
+            }
+
+            vm.gridOptions.api.setRowData(vm.generateRule.tableList)
           }
         },
         gridOptions: this.$grid.buildOptions({
-          context: {
-            featureComponent: this
-          },
           rowModelType: 'normal',
           rowData: [],
           pagination: false,
           enableFilter: false,
-          floatingFilter: false,
-          suppressContextMenu: true,
-          suppressMenuMainPanel: true,
-          suppressMenuColumnPanel: true
+          context: {
+            name: '生成规则数据库表',
+            url: null,
+            featureComponent: this,
+            getPermissions (params, operation) {
+              return {
+                add: true,
+                edit: true,
+                remove: true
+              }
+            },
+            getDetailComponent (params) {
+              return params.context.featureComponent.$refs['detail']
+            }
+          }
         })
       }
     },
@@ -90,11 +96,10 @@
     },
     watch: {
       generateRule: function (val, oldVal) {
-        this.gridOptions.api.setRowData(val.tableList)
+        this.gridOptions.api.setRowData(val.tableList || [])
       }
     },
     created () {
-      var vm = this
       this.gridOptions.columnDefs = [
         {
           headerName: '#',
@@ -105,7 +110,7 @@
             operation: {
               permission: '',
               isDisabled (params, entity) {
-                return vm.operation === 'view'
+                return params.context.featureComponent.operation === 'view'
               }
             }
           },
@@ -154,13 +159,16 @@
           cellRendererParams: {
             operations: [{
               id: 'edit',
-              isDisabled: function (params, entity) {
-                return vm.operation === 'view'
+              isDisabled (params, entity) {
+                return params.context.featureComponent.operation === 'view'
               }
             }, {
               id: 'remove',
-              isDisabled: function (params, entity) {
-                return vm.operation === 'view'
+              isDisabled (params, entity) {
+                return params.context.featureComponent.operation === 'view'
+              },
+              onClick (params, entity) {
+                params.context.featureComponent.onRemove(entity)
               }
             }]
           },
@@ -170,26 +178,22 @@
     },
     methods: {
       onRemove (entity) {
-        var vm = this
-        var featureName = this.featureOptions.name
+        let featureName = this.gridOptions.context.name
         this.$confirm('确定要删除所选的' + featureName + '吗?', '删除' + featureName, {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(function () {
-          var tableList = vm.generateRule.tableList
-          for (var i = 0; i < tableList.length; i++) {
-            var table = tableList[i]
+        }).then(() => {
+          let tableList = this.generateRule.tableList
+          for (let i = 0; i < tableList.length; i++) {
+            let table = tableList[i]
             if (table.f_db_name === entity.f_db_name && table.f_table_name === entity.f_table_name) {
               tableList.splice(i, 1)
               break
             }
           }
-          vm.gridOptions.api.setRowData(tableList)
+          this.gridOptions.api.setRowData(tableList)
         })
-      },
-      onSubmit (event) {
-        this.gridOptions.api.setRowData(this.generateRule.tableList)
       }
     }
   }

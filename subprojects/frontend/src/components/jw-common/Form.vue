@@ -1,6 +1,8 @@
 <template>
-  <el-dialog v-model="visible" :title="options.title" :modal="options.modal" :top="'20px'"
-             :close-on-click-modal="options.closeOnClickModal" :custom-class="'jw-dialog jw-dialog-' + options.size">
+  <el-dialog v-model="visible" :title="options.title"
+             :modal="options.modal" :close-on-click-modal="options.closeOnClickModal"
+             :size="options.elDialogSize[options.size]" :top="'20px'"
+             :custom-class="'jw-dialog jw-dialog-' + options.size">
     <div class="jw-form" v-if="visible">
       <div class="jw-form-body" style="overflow-y: auto;" :style="{'max-height': maxFormHeight + 'px'}">
         <el-form ref="form" :model="entity" :rules="rules" :inline="options.inline"
@@ -65,9 +67,11 @@
           },
           operation: 'view', // 可选值：add、edit、view、audit
           title: '查看详情',
+          draggable: true, // 是否可以拖动
           modal: true, // 是否为模态对话框
           closeOnClickModal: false, // 点击遮罩层是否关闭对话框
-          size: 'small', // 可选值：mini（1列）、small（2列）、normal（3列）、large（4列）、full（全屏）
+          size: 'small', // 可选值：mini（phones 1列）、small（tablets 2列）、middle（desktops 3列）、large（ larger desktops 4列）、full（全屏）
+          elDialogSize: {mini: 'tiny', small: 'small', middle: 'small', large: 'large', full: 'full'},
           inline: true,
           labelWidth: 150, // 单位px
           maxHeight: null,
@@ -88,41 +92,39 @@
       }
     },
     mounted () {
-      let dialog = this.$el.firstChild
-      let dialogHeader = dialog.firstChild
-      dialogHeader.style.cursor = 'move'
-      dialogHeader.onmousedown = function (mouseDownEvent) {
-        mouseDownEvent.preventDefault()
-
-        let minLeft = -dialog.clientWidth / 2 + 40
-        let offset = {left: mouseDownEvent.clientX - dialog.offsetLeft, top: mouseDownEvent.clientY - dialog.offsetTop}
-
-        document.onmousemove = function (mouseMoveEvent) {
-          let left = mouseMoveEvent.clientX - offset.left
-          let top = mouseMoveEvent.clientY - offset.top
-          dialog.style.left = (left < minLeft) ? minLeft : left + 'px'
-          dialog.style.top = (top < 0 ? 0 : top) + 'px'
-        }
-
-        document.onmouseup = function () {
-          document.onmousemove = null
-          document.onmousedown = null
-        }
-      }
     },
     methods: {
-      close () { // 供外部调用的接口
-        this.visible = false
-        this.$emit('closed')
-        if (this.options.closed) {
-          this.options.closed.call(this)
+      _addDraggable () {
+        if (!this.options.draggable || this.canDraggable) {
+          return
         }
-      },
-      open (options) { // 供外部调用的接口
-        this.options.params = {}
-        this.$lodash.merge(this.options, {title: this.titles[options.operation]}, this.formOptions, options)
-        this._loadEntity()
-        this.visible = true
+
+        let dialog = this.$el.firstChild
+        let dialogHeader = dialog.firstChild
+        dialogHeader.style.cursor = 'move'
+        dialogHeader.onmousedown = function (mouseDownEvent) {
+          mouseDownEvent.preventDefault()
+
+          let minLeft = -dialog.clientWidth / 2 + 40
+          let offset = {
+            left: mouseDownEvent.clientX - dialog.offsetLeft,
+            top: mouseDownEvent.clientY - dialog.offsetTop
+          }
+
+          document.onmousemove = function (mouseMoveEvent) {
+            let left = mouseMoveEvent.clientX - offset.left
+            let top = mouseMoveEvent.clientY - offset.top
+            dialog.style.left = (left < minLeft) ? minLeft : left + 'px'
+            dialog.style.top = (top < 0 ? 0 : top) + 'px'
+          }
+
+          document.onmouseup = function () {
+            document.onmousemove = null
+            document.onmousedown = null
+          }
+        }
+
+        this.canDraggable = true
       },
       _loadEntity () {
         if (this.options.operation === 'add') {
@@ -155,6 +157,20 @@
           }
         }
       },
+      close () { // 供外部调用的接口
+        this.visible = false
+        this.$emit('closed')
+        if (this.options.closed) {
+          this.options.closed.call(this)
+        }
+      },
+      open (options) { // 供外部调用的接口
+        this.options.params = {}
+        this.$lodash.merge(this.options, {title: this.titles[options.operation]}, this.formOptions, options)
+        this._loadEntity()
+        this._addDraggable()
+        this.visible = true
+      },
       onCancel () {
         this.close()
         this.$emit('cancelled')
@@ -169,30 +185,37 @@
           }
 
           if (this.options.submitEntity) {
-            this.options.submitEntity.call(this, this.options)
-            return
+            this.options.submitEntity.call(this, this.options, (entity) => {
+              this._submitted({success: true, data: entity})
+            })
+            return true
+          }
+
+          if (!this.options.context.url) {
+            this._submitted({success: true, data: this.entity})
+            return true
           }
 
           if (this.options.operation === 'add') {
             this.$http.post(this.options.context.url, this.entity).then((response) => {
-              this.submitted(response.body)
+              this._submitted(response.body)
             })
           } else if (this.options.operation === 'edit') {
             this.$http.put(this.options.context.url + '/' + this.options.params.f_id, this.entity).then((response) => {
-              this.submitted(response.body)
+              this._submitted(response.body)
             })
           } else if (this.options.operation === 'audit') {
             this.$http.put(this.options.context.url + '/' + this.options.params.f_id + '/audit', this.entity).then((response) => {
-              this.submitted(response.body)
+              this._submitted(response.body)
             })
           } else {
-            this.$emit('submit', {type: this.options.operation, data: this.entity})
+            this._submitted({success: true, data: this.entity})
           }
 
           return true
         })
       },
-      submitted (result) {
+      _submitted (result) {
         if (result.success) {
           let gridComponent = this.options.context.getGridComponent && this.options.context.getGridComponent.call(this, this.options)
           if (gridComponent && gridComponent.gridOptions.rowModelType === 'infinite') {
@@ -203,7 +226,7 @@
           this.close()
           this.$emit('submitted', {type: this.options.operation, data: result.data})
           if (this.options.submitted) {
-            this.options.submitted.call(this, {type: this.options.operation, data: result.data})
+            this.options.submitted.call(this, {operation: this.options.operation, data: result.data})
           }
         }
       }

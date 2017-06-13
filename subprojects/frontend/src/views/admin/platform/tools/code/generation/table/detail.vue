@@ -1,112 +1,78 @@
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
-
 <template>
-  <div class="jw-form">
-    <div class="jw-form-body" :style="formBodyStyle">
-      <el-form ref="form" :model="entity" :rules="rules" :inline="true" :label-width="labelWidth">
-        <fieldset :disabled="formOptions.operation === 'view'">
-          <el-form-item label="数据库名" prop="f_db_name">
-            <el-select class="jw-field-col-1" v-model="entity.f_db_name">
-              <el-option v-for="item in schematas"
-                         :key="item.SCHEMA_NAME"
-                         :value="item.SCHEMA_NAME"
-                         :label="item.SCHEMA_NAME">
-                {{item.SCHEMA_NAME}}
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="数据库表名" prop="f_table_name">
-            <el-autocomplete class="jw-field-col-1" v-model="entity.f_table_name" icon="search"
-                             :fetch-suggestions="loadTables" @select="loadFields">
-            </el-autocomplete>
-          </el-form-item>
-          <el-form-item label="排序" prop="f_order">
-            <el-input-number class="jw-field-col-1" v-model="entity.f_order" :step="1"></el-input-number>
-          </el-form-item>
-          <el-form-item label="主表" prop="f_is_main">
-            <el-radio-group class="jw-field-col-1" v-model="entity.f_is_main">
-              <el-radio :label="1">是</el-radio>
-              <el-radio :label="2">否</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="父类" prop="f_entity_base_class">
-            <el-select class="jw-field-col-1" v-model="entity.f_entity_base_class">
-              <el-option v-for="baseClass in baseClasses"
-                         :key="baseClass.fullName"
-                         :value="baseClass.fullName"
-                         :label="baseClass.name">
-                {{baseClass.fullName}}
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="接口" prop="f_entity_interfaces">
-            <el-select class="jw-field-col-3" v-model="f_entity_interfaces" multiple>
-              <el-option v-for="interface in interfaces"
-                         :key="interface.fullName"
-                         :value="interface.fullName"
-                         :label="interface.name">
-                {{interface.fullName}}
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="Entity" prop="f_entity_class">
-            <el-input class="jw-field-col-2" v-model="entity.f_entity_class"
-                      placeholder="Map类型请填写“com.jeeweb.framework.core.model.RowMap”。">
-            </el-input>
-          </el-form-item>
-          <el-form-item label="Mapper" prop="f_mapper_class">
-            <el-input class="jw-field-col-2" v-model="entity.f_mapper_class"></el-input>
-          </el-form-item>
-          <el-form-item label="Service" prop="f_service_class">
-            <el-input class="jw-field-col-2" v-model="entity.f_service_class"></el-input>
-          </el-form-item>
-          <el-form-item label="Api" prop="f_rest_class">
-            <el-input class="jw-field-col-2" v-model="entity.f_rest_class"></el-input>
-          </el-form-item>
+  <jw-form ref="form" :form-options="options" :entity="entity" :rules="rules">
+    <template slot="fieldset">
+      <el-form-item label="数据库名" prop="f_db_name">
+        <el-select class="jw-field-col-1" v-model="entity.f_db_name">
+          <el-option v-for="item in schematas" :key="item.SCHEMA_NAME" :value="item.SCHEMA_NAME"
+                     :label="item.SCHEMA_NAME">
+            {{item.SCHEMA_NAME}}
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="数据库表名" prop="f_table_name">
+        <el-autocomplete class="jw-field-col-1" v-model="entity.f_table_name" icon="search"
+                         :fetch-suggestions="loadTables" @select="loadFields">
+        </el-autocomplete>
+      </el-form-item>
+      <el-form-item label="排序" prop="f_order">
+        <el-input-number class="jw-field-col-1" v-model="entity.f_order" :step="1"></el-input-number>
+      </el-form-item>
+      <el-form-item label="主表" prop="f_is_main">
+        <el-radio-group class="jw-field-col-1" v-model="entity.f_is_main">
+          <el-radio :label="1">是</el-radio>
+          <el-radio :label="2">否</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="父类" prop="f_entity_base_class">
+        <el-select class="jw-field-col-1" v-model="entity.f_entity_base_class">
+          <el-option v-for="baseClass in baseClasses" :key="baseClass.fullName" :value="baseClass.fullName"
+                     :label="baseClass.name">
+            {{baseClass.fullName}}
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="接口" prop="f_entity_interfaces">
+        <el-select class="jw-field-col-3" v-model="f_entity_interfaces" multiple>
+          <el-option v-for="interface in interfaces" :key="interface.fullName" :value="interface.fullName"
+                     :label="interface.name">
+            {{interface.fullName}}
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="Entity" prop="f_entity_class">
+        <el-input class="jw-field-col-2" v-model="entity.f_entity_class"
+                  placeholder="Map类型请填写“com.jeeweb.framework.core.model.RowMap”。">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="Mapper" prop="f_mapper_class">
+        <el-input class="jw-field-col-2" v-model="entity.f_mapper_class"></el-input>
+      </el-form-item>
+      <el-form-item label="Service" prop="f_service_class">
+        <el-input class="jw-field-col-2" v-model="entity.f_service_class"></el-input>
+      </el-form-item>
+      <el-form-item label="Api" prop="f_rest_class">
+        <el-input class="jw-field-col-2" v-model="entity.f_rest_class"></el-input>
+      </el-form-item>
 
-          <ag-grid-vue style="width: 100%; height: 256px;" class="ag-fresh jw-grid" :grid-options="gridOptions">
-          </ag-grid-vue>
-        </fieldset>
-      </el-form>
-    </div>
-
-    <div class="jw-form-footer" style="text-align: right;">
-      <el-button @click="onCancelForm('form')">取 消</el-button>
-      <el-button type="primary" @click="onSubmitForm('form')" :disabled="formOptions.operation === 'view'">确 定
-      </el-button>
-    </div>
-  </div>
+      <div style="height: 256px;">
+        <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
+      </div>
+    </template>
+  </jw-form>
 </template>
 
 
-<script type="text/ecmascript-6">
-  import {AgGridVue} from 'ag-grid-vue'
-  import CheckboxEditorFramework from 'components/ag-grid/CheckboxEditorFramework'
-  import DictEditorFramework from 'components/ag-grid/DictEditorFramework'
+<script>
+  import {DetailMixin} from 'mixins'
+  import {
+    CheckboxEditorFramework,
+    DictEditorFramework
+  } from 'components/ag-grid'
 
   export default {
-    name: 'generationRuleTableForm',
-    components: {
-      'ag-grid-vue': AgGridVue
-    },
+    name: 'generationRuleTableDetail',
+    mixins: [DetailMixin],
     props: {
-      formOptions: {
-        type: Object,
-        default: function () {
-          return {
-            operation: 'view',
-            title: '查看详情',
-            maxHeight: 400,
-            labelWidth: 100,
-            params: {},
-            context: {
-              featureComponent: {}
-            }
-          }
-        }
-      },
       generateRule: {
         type: Object,
         default: function () {
@@ -137,46 +103,75 @@
           fullName: 'com.jeeweb.framework.business.model.ITenant'
         }],
         gridOptions: this.$grid.buildOptions({
-          context: {
-            featureComponent: this
-          },
           rowModelType: 'normal',
           rowData: [],
           pagination: false,
           enableFilter: false,
-          floatingFilter: false
+          // floatingFilter: false,
+          context: {
+            name: '生成规则字段配置',
+            url: null,
+            featureComponent: this
+          }
         }),
+        options: {
+          context: {
+            name: '生成规则数据库表',
+            url: null,
+            detailComponent: this
+          },
+          createEntity (options, cb) {
+            let vm = options.context.detailComponent
+            let entity = {
+              f_db_name: 'zhuku_master',
+              f_table_name: null,
+              f_order: 1,
+              f_is_main: 1,
+              f_entity_interface: null,
+              f_entity_base_class: vm.baseClasses[0].fullName,
+              f_entity_class: vm.generateRule.f_package_name + '.entity.' + vm.generateRule.f_code + 'Entity',
+              f_mapper_base_class: 'com.jeeweb.framework.business.mapper.BaseMapper',
+              f_mapper_class: vm.generateRule.f_package_name + '.mapper.' + vm.generateRule.f_code + 'Mapper',
+              f_service_base_class: 'com.jeeweb.framework.business.service.BaseService',
+              f_service_class: vm.generateRule.f_package_name + '.service.' + vm.generateRule.f_code + 'Service',
+              f_rest_base_class: 'com.jeeweb.framework.business.web.api.BaseApi',
+              f_rest_class: vm.generateRule.f_package_name + '.web.api.' + vm.generateRule.f_code + 'Api',
+              fieldList: []
+            }
+
+            cb(entity)
+            vm.$nextTick(() => {
+              vm.gridOptions.api.setRowData(entity.fieldList || [])
+            })
+          },
+          loadLocalEntity (options, cb) {
+            let vm = options.context.detailComponent
+            let entity = vm.$lodash.cloneDeep(options.params)
+            cb(entity)
+            vm.$nextTick(() => {
+              vm.gridOptions.api.setRowData(entity.fieldList || [])
+            })
+          }
+        },
         entity: {fieldList: []},
         rules: {}
       }
     },
     computed: {
       f_entity_interfaces: {
-        get: function () {
+        get () {
           if (this.entity.f_entity_interface) {
             return this.entity.f_entity_interface.split(',')
           }
           return []
         },
-        set: function (v) {
+        set (v) {
           if (v && v.length > 0) {
             this.entity.f_entity_interface = v.join(',')
           } else {
             this.entity.f_entity_interface = null
           }
         }
-      },
-      formBodyStyle () {
-        return {
-          'max-height': (this.formOptions.maxHeight ? this.formOptions.maxHeight : this.$store.state.layout.dialog.height) + 'px',
-          'overflow-y': 'auto'
-        }
-      },
-      labelWidth () {
-        return (this.formOptions.labelWidth ? this.formOptions.labelWidth : 150) + 'px'
-      },
-      featureOptions () {
-        return this.formOptions.context.featureComponent.featureOptions
       }
     },
     created () {
@@ -367,32 +362,26 @@
       ]
     },
     mounted () {
-      window.devMode && console.info('mounted', this.$options.name, this._uid)
-      this._init()
-    },
-    activated () {
-      window.devMode && console.info('activated', this.$options.name, this._uid)
+      this._loadSchematas()
     },
     methods: {
       loadTables (query, callback) {
-        var vm = this
-        vm.loadTablesTimer && clearTimeout(vm.loadTablesTimer)
-        vm.loadTablesTimer = setTimeout(function () {
-          vm._loadTables(query, callback)
+        this.loadTablesTimer && clearTimeout(this.loadTablesTimer)
+        this.loadTablesTimer = setTimeout(() => {
+          this._loadTables(query, callback)
         }, 500)
       },
       _loadTables (tableName, callback) {
-        var vm = this
-        vm.$http.get('api/schema/information/tables', {
+        this.$http.get('api/schema/information/tables', {
           params: {
-            TABLE_SCHEMA: vm.entity.f_db_name,
+            TABLE_SCHEMA: this.entity.f_db_name,
             TABLE_NAME_like: tableName,
             orderBy: 'TABLE_NAME'
           }
-        }).then(function (response) {
-          var tables = []
+        }).then((response) => {
+          let tables = []
           if (response.body.success) {
-            response.body.data.items.forEach(function (table) {
+            response.body.data.items.forEach((table) => {
               tables.push({value: table.TABLE_NAME})
             })
           }
@@ -400,24 +389,23 @@
         })
       },
       loadFields (item) {
-        var vm = this
-        vm.$http.get('api/schema/information/columns', {
+        this.$http.get('api/schema/information/columns', {
           params: {
-            TABLE_SCHEMA: vm.entity.f_db_name,
-            TABLE_NAME: vm.entity.f_table_name,
+            TABLE_SCHEMA: this.entity.f_db_name,
+            TABLE_NAME: this.entity.f_table_name,
             orderBy: 'ORDINAL_POSITION'
           }
-        }).then(function (response) {
+        }).then((response) => {
           if (response.body.success) {
-            vm.entity.fieldList = []
-            response.body.data.items.forEach(function (column) {
-              var field = vm._buildFieldEntity(column)
-              vm.entity.fieldList.push(field)
+            this.entity.fieldList = []
+            response.body.data.items.forEach((column) => {
+              let field = this._buildFieldEntity(column)
+              this.entity.fieldList.push(field)
             })
           } else {
-            vm.entity.fieldList = []
+            this.entity.fieldList = []
           }
-          vm.gridOptions.api.setRowData(vm.entity.fieldList)
+          this.gridOptions.api.setRowData(this.entity.fieldList)
         })
       },
       _buildFieldEntity (column) {
@@ -481,74 +469,10 @@
           f_is_form: 2
         }
       },
-      _init () {
-        this._loadSchematas()
-        this.query()
-      },
       _loadSchematas () {
-        var vm = this
-        vm.$http.get('api/schema/information/schematas', {params: {orderBy: 'SCHEMA_NAME'}}).then(function (response) {
-          vm.schematas = response.body.success ? response.body.data.items : []
+        this.$http.get('api/schema/information/schematas', {params: {orderBy: 'SCHEMA_NAME'}}).then((response) => {
+          this.schematas = response.body.success ? response.body.data.items : []
         })
-      },
-      query (params) {
-        var vm = this
-        if (vm.formOptions.operation === 'add') {
-          vm.entity = vm._createEntity()
-        } else {
-          vm.entity = vm.$lodash.cloneDeep(vm.formOptions.params)
-        }
-        vm.gridOptions.api.setRowData(vm.entity.fieldList)
-      },
-      onCancelForm (formName) {
-        this._closeForm()
-        this.$emit('cancel')
-      },
-      onSubmitForm (formName) {
-        var vm = this
-        vm.$refs[formName].validate(function (valid) {
-          if (!valid) {
-            return false
-          }
-
-          if (vm.formOptions.operation === 'add') {
-            vm.generateRule.tableList.push(vm.entity)
-          } else {
-            for (var i = 0; i < vm.generateRule.tableList.length; i++) {
-              if (vm.generateRule.tableList[i].f_db_name === vm.entity.f_db_name && vm.generateRule.tableList[i].f_table_name === vm.entity.f_table_name) {
-                vm.generateRule.tableList.splice(i, 1, vm.entity)
-                break
-              }
-            }
-          }
-
-          vm._closeForm()
-          vm.$emit('submit', {type: vm.formOptions.operation, data: vm.entity})
-          return true
-        })
-      },
-      _createEntity () {
-        return {
-          f_db_name: 'zhuku_master',
-          f_table_name: null,
-          f_order: 1,
-          f_is_main: 1,
-          f_entity_interface: null,
-          f_entity_base_class: this.baseClasses[0].fullName,
-          f_entity_class: this.generateRule.f_package_name + '.entity.' + this.generateRule.f_code + 'Entity',
-          f_mapper_base_class: 'com.jeeweb.framework.business.mapper.BaseMapper',
-          f_mapper_class: this.generateRule.f_package_name + '.mapper.' + this.generateRule.f_code + 'Mapper',
-          f_service_base_class: 'com.jeeweb.framework.business.service.BaseService',
-          f_service_class: this.generateRule.f_package_name + '.service.' + this.generateRule.f_code + 'Service',
-          f_rest_base_class: 'com.jeeweb.framework.business.web.api.BaseApi',
-          f_rest_class: this.generateRule.f_package_name + '.web.api.' + this.generateRule.f_code + 'Api',
-          fieldList: []
-        }
-      },
-      _closeForm () {
-        if (this.formOptions.context.featureComponent.formOptions) {
-          this.formOptions.context.featureComponent.formOptions.isShow = false
-        }
       }
     }
   }

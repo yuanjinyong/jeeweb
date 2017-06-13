@@ -42,19 +42,19 @@
           loadRemoteEntity (options, cb) {
             options.context.detailComponent._loadEntity(cb)
           },
-          submitEntity (options) {
-            options.context.detailComponent._submitEntity()
+          submitEntity (options, cb) {
+            options.context.detailComponent._submitEntity(cb)
           }
         },
         entity: {}
       }
     },
     methods: {
-      _submitEntity () {
+      _submitEntity (cb) {
         let selectedMenuIds = this.$refs['menuTree'].getCheckedKeys()
         this.$http.post(this.options.context.url + '/' + this.options.params.f_id + '/menus', {f_menu_ids: selectedMenuIds.join(',')}, {emulateJSON: true}).then((response) => {
           if (response.body.success) {
-            this.$refs['form'].submitted(response.body)
+            cb(response.body.data)
           }
         })
       },

@@ -35,13 +35,13 @@
     data () {
       return {
         detailOptions: {
+          size: 'large',
           context: {
             featureComponent: this,
             getGridComponent (options) {
               return options.context.featureComponent.$refs['grid']
             }
-          },
-          size: 'large'
+          }
         },
         gridOptions: this.$grid.buildOptions({
           context: {

@@ -1,2 +1,2 @@
 export {default as GenerationRuleTableView} from './view'
-export {default as GenerationRuleTableForm} from './form'
+export {default as GenerationRuleTableDetail} from './detail'
