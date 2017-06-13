@@ -44,7 +44,7 @@ import './components'
 import App from './App'
 
 window.devMode = process.env.NODE_ENV === 'development'
-window.devMode && console && console.debug('调试模式开启')
+window.devMode && console && console.warn('调试模式开启')
 
 Vue.use(VueCfg)
 Vue.use(VueGrid)
