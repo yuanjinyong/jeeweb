@@ -51,29 +51,56 @@ public abstract class BaseService<P, E> {
 
     public void deleteEntity(P primaryKey) {
         E entity = getMapper().selectEntity(primaryKey);
-        validateDeleteEntity(entity);
 
+        validateDeleteEntity(entity);
         if (getMapper().isCanDeleteEntity(primaryKey) > 0) {
             throw new BusinessException("存在关联数据，不能删除！");
         }
 
-        getMapper().deleteEntity(primaryKey);
-    }
+        beforeDeleteEntity(entity);
 
-    public void deleteEntities(ParameterMap params) {
-        getMapper().deleteEntities(params);
+        getMapper().deleteEntity(primaryKey);
+
+        afterDeleteEntity(entity);
     }
 
     protected void validateDeleteEntity(E entity) {
+        checkTreeRootNode(entity);
         checkPreset(entity);
+    }
+
+    protected void beforeDeleteEntity(E entity) {
+    }
+
+    protected void afterDeleteEntity(E entity) {
+    }
+
+    public void deleteEntities(ParameterMap params) {
+        validateDeleteEntities(params);
+        beforeDeleteEntities(params);
+
+        getMapper().deleteEntities(params);
+
+        afterDeleteEntities(params);
+    }
+
+    protected void validateDeleteEntities(ParameterMap params) {
+    }
+
+    protected void beforeDeleteEntities(ParameterMap params) {
+    }
+
+    protected void afterDeleteEntities(ParameterMap params) {
     }
 
     protected void fillCreator(E entity) {
         if (entity instanceof ICreator) {
             UserEntity user = SecurityUtil.getCurUser();
             ICreator creator = (ICreator) entity;
-            creator.setF_creator_id(user.getF_id());
-            creator.setF_creator_name(user.getF_name());
+            if (user != null) {
+                creator.setF_creator_id(user.getF_id());
+                creator.setF_creator_name(user.getF_name());
+            }
             creator.setF_created_time(HelpUtil.getNowTime());
         }
     }
@@ -82,6 +109,16 @@ public abstract class BaseService<P, E> {
         if (entity instanceof IPreset) {
             IPreset preset = (IPreset) entity;
             preset.setF_is_preset(IPreset.NO); // 系统预置数据是不能通过程序来修改的，这里能够写入的数据都不是系统预置的。
+        }
+    }
+
+    protected void checkTreeRootNode(E entity) {
+        if (entity instanceof TreeNodeEntity) {
+            @SuppressWarnings("rawtypes")
+            TreeNodeEntity treeNode = (TreeNodeEntity) entity;
+            if (treeNode.getF_parent_id() == null) {
+                throw new BusinessException("系统预置的根节点不能删除！");
+            }
         }
     }
 
