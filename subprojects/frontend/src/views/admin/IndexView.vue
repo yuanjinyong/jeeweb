@@ -123,20 +123,12 @@
 </template>
 
 
-<script type="text/ecmascript-6">
-  //  import $ from 'jquery'
-
+<script>
   export default {
     name: 'adminIndex',
     data () {
       return {
-        windowSize: {width: 0, height: 0},
-        middleSize: {width: 0, height: 0},
-        menuSize: {width: 260, height: 0},
-        bodySize: {width: 0, height: 0},
-        showTopMenu: false,
         showSideMenu: false,
-        showPopMenu: false,
         resizeTimer: null,
         tabsManager: {
           activeName: 'AdminHome',
@@ -158,20 +150,13 @@
       }
     },
     created () {
-      window.devMode && console && console.info('created', this.$options.name, this._uid)
-
       this.loadUser()
     },
     mounted () {
-      window.devMode && console.info('mounted', this.$options.name, this._uid)
-
       window.addEventListener('resize', this.onResize)
       this.$nextTick(() => {
         this.onResize()
       })
-    },
-    activated () {
-      window.devMode && console.info('activated', this.$options.name, this._uid)
     },
     beforeDestroy () {
       window.removeEventListener('resize', this.onResize)
@@ -254,30 +239,11 @@
           clearTimeout(vm.resizeTimer)
         }
 
-//        vm.windowSize.width = window.innerWidth
-//        vm.windowSize.height = window.innerHeight
-//        vm.showTopMenu = vm.windowSize.width < 768
-
         vm.resizeTimer = setTimeout(() => {
-//          vm.middleSize.width = vm.windowSize.width
-//          vm.middleSize.height = vm.windowSize.height - $('#middleContainer').offset().top - $('#footContainer').outerHeight() - 2
-//          vm.middleSize.height = window.innerHeight - document.getElementById('headContainer').clientHeight - document.getElementById('footContainer').clientHeight - 2
-//          vm.menuSize.height = vm.middleSize.height - $('#sideMenuHeader').outerHeight()
-//          vm.bodySize.width = vm.middleSize.width - vm.menuSize.width
-//          vm.bodySize.height = vm.middleSize.height - $('#sideMenuHeader').outerHeight()
-//
-//          vm.$store.commit('updateLayout', {
-//            window: {width: vm.windowSize.width, height: vm.windowSize.height},
-//            middle: {width: vm.middleSize.width, height: vm.middleSize.height},
-//            body: {width: vm.bodySize.width, height: vm.bodySize.height},
-//            dialog: {width: vm.bodySize.width, height: vm.bodySize.height - 40}
-//          })
-
           let top = document.getElementById('layoutTop')
           let bottom = document.getElementById('layoutBottom')
           let sideMenu = document.getElementById('sideMenu')
           let topMenu = document.getElementById('topMenu')
-          console.warn('top', top, 'bottom', bottom, 'sideMenu', sideMenu, 'topMenu', topMenu)
           if (!top) {
             return
           }
@@ -291,7 +257,7 @@
           let sideMenuBodyHeight = middleHeight - sideMenuHeaderHeight
           let topMenuHeaderHeight = topMenu ? topMenu.firstChild.clientHeight : 0
 
-          let layout = {
+          vm.$store.commit('updateLayout', {
             window: {
               width: window.innerWidth, height: window.innerHeight
             },
@@ -329,9 +295,7 @@
                 width: rightWidth, height: sideMenuBodyHeight
               }
             }
-          }
-          console.warn('layout', layout)
-          vm.$store.commit('updateLayout', layout)
+          })
           vm.resizeTimer = null
         }, 50)
       },
@@ -339,10 +303,6 @@
         this.showSideMenu = !this.showSideMenu
       },
       onSwitchSideMenu () {
-        // this.showSideMenu = !this.showSideMenu
-      },
-      onShowPopMenu () {
-        this.showPopMenu = !this.showPopMenu
       },
       onSelectMenu (index, indexPath, route) {
         this.showSideMenu = false
