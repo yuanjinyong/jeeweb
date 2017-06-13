@@ -16,6 +16,7 @@
 
 
 <script>
+  import {ViewlMixin} from 'mixins'
   import {
     AddHeaderComponenetFramework,
     LikeFilterFramework,
@@ -29,11 +30,13 @@
 
   export default {
     name: 'generationRuleView',
+    mixins: [ViewlMixin],
     components: {
       GenerationRuleDetail
     },
     data () {
       return {
+        generating: false,
         detailOptions: {
           size: 'large',
           context: {
@@ -55,12 +58,10 @@
               return params.context.featureComponent.$refs['detail']
             },
             params: {
-              orderBy: 'f_menu_parent_id,f_menu_order',
-              totalCount: 0
+              orderBy: 'f_menu_parent_id,f_menu_order'
             }
           }
-        }),
-        generating: false
+        })
       }
     },
     computed: {
@@ -71,9 +72,6 @@
           edit: this.hasPermission('KFGJ-DMSC-XG'),
           remove: this.hasPermission('KFGJ-DMSC-SC')
         }
-      },
-      contentStyle () {
-        return {'padding': '20px', 'height': (this.$store.state.layout.body.height) + 'px'}
       }
     },
     created () {

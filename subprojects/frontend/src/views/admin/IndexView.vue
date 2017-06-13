@@ -1,96 +1,130 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .jw-menu-head {
+  .jw-menu-header {
     padding: 10px 20px;
     font-size: 24px;
     background-color: #eef1f6;
     border-bottom: 1px solid #ccc;
   }
 
-  .jw-card-tabs {
+  .jw-top-menu-header {
+
+  }
+
+  .jw-side-menu-header {
+    border-right: 1px solid #ccc;
+  }
+
+  .jw-menu-switch {
+    font-size: 24px;
+    padding: 5px;
+  }
+
+  .jw-side-menu-body {
+    overflow: auto;
+    border-right: 1px solid #ccc;
+  }
+
+  .jw-view-tab-header {
     padding-top: 13px;
+  }
+
+  .jw-view-tab-body {
+    overflow: auto;
+    margin-top: -15px;
   }
 </style>
 
 
 <template>
-  <div class="jw-admin-index">
-    <!-- 顶部 -->
-    <jw-head id="headContainer"></jw-head>
+  <div>
+    <div v-if="layout.window.width < 768">
+      <!-- 顶部 -->
+      <jw-head id="layoutTop"></jw-head>
 
+      <!-- 中部 -->
+      <div id="layoutMiddle" :style="{'width':layout.middle.width+'px', 'height':layout.middle.height+'px'}">
+        <loading v-if="loadingUser"></loading>
+        <div>
+          <el-row id="topMenu">
+            <div class="jw-menu-header jw-top-menu-header">
+              <el-button class="jw-menu-switch" type="text" @click="onShowSideMenu">
+                <i class="fa fa-bars" aria-hidden="true"></i>
+              </el-button>
+            </div>
+            <el-col style="float: left;position: absolute;" :span="8">
+              <jw-side-menu style="z-index: 999999;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;"
+                            :menu-list="menuList" @select="onSelectMenu" v-show="showSideMenu"></jw-side-menu>
+            </el-col>
+          </el-row>
 
-    <!-- 中部 -->
-    <div id="middleContainer" :style="{'min-height': middleSize.height + 'px'}">
-      <loading v-if="loadingUser"></loading>
-      <div v-else>
-        <div v-show="curUser">
-          <div v-if="showTopMenu">
-            <el-row>
-              <div class="jw-menu-head">
-                <i class="fa fa-bars" aria-hidden="true" style="cursor: pointer;" @click="onShowSideMenu"></i>
-              </div>
-              <el-col style="float: left;position: absolute;" :span="18">
-                <jw-side-menu style="z-index: 999999;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;"
-                              :menu-list="menuList" @select="onSelectMenu" v-show="showSideMenu"></jw-side-menu>
-              </el-col>
-            </el-row>
-
-            <el-row>
-              <el-col :span="24">
-                <router-view></router-view>
-              </el-col>
-            </el-row>
-          </div>
-
-          <div v-else>
-            <el-row v-if="menuSize.width > 0">
-              <div style="float: left;"
-                   :style="{'width': menuSize.width + 'px', 'height': menuSize.height + 'px'}">
-                <div id="menuHead" class="jw-menu-head" style="border-right: 1px solid #ccc;">
-                  系统菜单 <i class="fa fa-bars pull-right" aria-hidden="true" style="cursor: pointer;"
-                          @click="onShowPopMenu"></i>
-                </div>
-
-                <div>
-                  <jw-side-menu style="overflow:auto;border-right: 1px solid #ccc;"
-                                :style="{'width': menuSize.width + 'px', 'height': menuSize.height + 'px'}"
-                                :default-active="tabsManager.activeName" :menu-list="menuList"
-                                @select="onSelectMenu"></jw-side-menu>
-                </div>
-              </div>
-
-              <div :style="{'margin-left': menuSize.width + 'px'}">
-                <div :style="{'width': bodySize.width + 'px'}">
-                  <el-tabs type="card" class="jw-card-tabs" v-model="tabsManager.activeName"
-                           @tab-remove="onCloseTab" @tab-click="onClickTab">
-                    <el-tab-pane v-for="(item, index) in tabsManager.tabs"
-                                 :closable="item.params.f_closable !== false"
-                                 :label="item.params.f_name"
-                                 :name="item.params.f_id"
-                                 :key="item.params.f_id">
-                    </el-tab-pane>
-                  </el-tabs>
-                  <div style="overflow:auto; margin-top: -15px;"
-                       :style="{'width': bodySize.width + 'px', 'height': bodySize.height + 'px'}">
-                    <router-view></router-view>
-                  </div>
-                </div>
-              </div>
-            </el-row>
-          </div>
+          <el-row>
+            <el-col :span="24" style="overflow-x: auto;">
+              <router-view></router-view>
+            </el-col>
+          </el-row>
         </div>
       </div>
+
+      <!-- 底部 -->
+      <jw-foot id="layoutBottom" v-show="false"></jw-foot>
     </div>
 
 
-    <!-- 底部 -->
-    <jw-foot id="footContainer"></jw-foot>
+    <div v-else>
+      <!-- 顶部 -->
+      <jw-head id="layoutTop"></jw-head>
+
+      <!-- 中部 -->
+      <div id="layoutMiddle" :style="{'width':layout.middle.width+'px', 'height':layout.middle.height+'px'}">
+        <loading v-if="loadingUser"></loading>
+        <!-- 左部 -->
+        <div id="layoutLeft" style="float: left;"
+             :style="{'width':layout.left.width+'px', 'height':layout.left.height+'px'}">
+          <div id="sideMenu" class="jw-side-menu">
+            <div class="jw-menu-header jw-side-menu-header">
+              系统菜单
+              <el-button class="jw-menu-switch pull-right" type="text" @click="onSwitchSideMenu">
+                <i class="fa fa-bars" aria-hidden="true"></i>
+              </el-button>
+            </div>
+            <jw-side-menu class="jw-side-menu-body"
+                          :style="{'width':layout.sideMenu.body.width+'px', 'height':layout.sideMenu.body.height+'px'}"
+                          :default-active="tabsManager.activeName" :menu-list="menuList"
+                          @select="onSelectMenu"></jw-side-menu>
+          </div>
+        </div>
+
+        <!-- 右部 -->
+        <div id="layoutRight"
+             :style="{'width':layout.right.width+'px', 'height':layout.right.height+'px', 'margin-left':layout.left.width+'px'}">
+          <div id="viewTab" class="jw-view-tab">
+            <el-tabs type="card" class="jw-card-tabs jw-view-tab-header" v-model="tabsManager.activeName"
+                     @tab-remove="onCloseTab" @tab-click="onClickTab">
+              <el-tab-pane v-for="(item, index) in tabsManager.tabs"
+                           :closable="item.params.f_closable !== false"
+                           :label="item.params.f_name"
+                           :name="item.params.f_id"
+                           :key="item.params.f_id">
+              </el-tab-pane>
+            </el-tabs>
+            <div class="jw-view-tab-body"
+                 :style="{'width':layout.viewTab.body.width+'px', 'height':layout.viewTab.body.height+'px'}">
+              <router-view></router-view>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 底部 -->
+      <jw-foot id="layoutBottom"></jw-foot>
+    </div>
   </div>
 </template>
 
 
 <script type="text/ecmascript-6">
-  import $ from 'jquery'
+  //  import $ from 'jquery'
 
   export default {
     name: 'adminIndex',
@@ -113,6 +147,9 @@
       }
     },
     computed: {
+      layout () {
+        return this.$store.state.layout
+      },
       curUser () {
         return this.$store.state.user
       },
@@ -129,7 +166,9 @@
       window.devMode && console.info('mounted', this.$options.name, this._uid)
 
       window.addEventListener('resize', this.onResize)
-      this.onResize()
+      this.$nextTick(() => {
+        this.onResize()
+      })
     },
     activated () {
       window.devMode && console.info('activated', this.$options.name, this._uid)
@@ -215,30 +254,92 @@
           clearTimeout(vm.resizeTimer)
         }
 
-        vm.windowSize.width = window.innerWidth
-        vm.windowSize.height = window.innerHeight
-        vm.showTopMenu = vm.windowSize.width < 768
+//        vm.windowSize.width = window.innerWidth
+//        vm.windowSize.height = window.innerHeight
+//        vm.showTopMenu = vm.windowSize.width < 768
 
-        vm.resizeTimer = setTimeout(function () {
-          vm.middleSize.width = vm.windowSize.width
-          vm.middleSize.height = vm.windowSize.height - $('#middleContainer').offset().top - $('#footContainer').outerHeight() - 2
-          vm.middleSize.height = window.innerHeight - document.getElementById('headContainer').clientHeight - document.getElementById('footContainer').clientHeight - 2
-          vm.menuSize.height = vm.middleSize.height - $('#menuHead').outerHeight()
-          vm.bodySize.width = vm.middleSize.width - vm.menuSize.width
-          vm.bodySize.height = vm.middleSize.height - $('#menuHead').outerHeight()
+        vm.resizeTimer = setTimeout(() => {
+//          vm.middleSize.width = vm.windowSize.width
+//          vm.middleSize.height = vm.windowSize.height - $('#middleContainer').offset().top - $('#footContainer').outerHeight() - 2
+//          vm.middleSize.height = window.innerHeight - document.getElementById('headContainer').clientHeight - document.getElementById('footContainer').clientHeight - 2
+//          vm.menuSize.height = vm.middleSize.height - $('#sideMenuHeader').outerHeight()
+//          vm.bodySize.width = vm.middleSize.width - vm.menuSize.width
+//          vm.bodySize.height = vm.middleSize.height - $('#sideMenuHeader').outerHeight()
+//
+//          vm.$store.commit('updateLayout', {
+//            window: {width: vm.windowSize.width, height: vm.windowSize.height},
+//            middle: {width: vm.middleSize.width, height: vm.middleSize.height},
+//            body: {width: vm.bodySize.width, height: vm.bodySize.height},
+//            dialog: {width: vm.bodySize.width, height: vm.bodySize.height - 40}
+//          })
 
-          vm.$store.commit('updateLayout', {
-            window: {width: vm.windowSize.width, height: vm.windowSize.height},
-            middle: {width: vm.middleSize.width, height: vm.middleSize.height},
-            body: {width: vm.bodySize.width, height: vm.bodySize.height},
-            dialog: {width: vm.bodySize.width, height: vm.bodySize.height - 40}
-          })
+          let top = document.getElementById('layoutTop')
+          let bottom = document.getElementById('layoutBottom')
+          let sideMenu = document.getElementById('sideMenu')
+          let topMenu = document.getElementById('topMenu')
+          console.warn('top', top, 'bottom', bottom, 'sideMenu', sideMenu, 'topMenu', topMenu)
+          if (!top) {
+            return
+          }
 
+          let topHeight = top.clientHeight
+          let bottomHeight = bottom.clientHeight
+          let middleHeight = window.innerHeight - topHeight - bottomHeight
+          let leftWidth = 260
+          let rightWidth = window.innerWidth - leftWidth
+          let sideMenuHeaderHeight = sideMenu ? sideMenu.firstChild.clientHeight : 0
+          let sideMenuBodyHeight = middleHeight - sideMenuHeaderHeight
+          let topMenuHeaderHeight = topMenu ? topMenu.firstChild.clientHeight : 0
+
+          let layout = {
+            window: {
+              width: window.innerWidth, height: window.innerHeight
+            },
+            top: {
+              width: window.innerWidth, height: topHeight
+            },
+            middle: {
+              width: window.innerWidth, height: middleHeight
+            },
+            left: {
+              width: leftWidth, height: middleHeight
+            },
+            right: {
+              width: rightWidth, height: middleHeight
+            },
+            bottom: {
+              width: window.innerWidth, height: bottomHeight
+            },
+            topMenu: {
+              width: window.innerWidth, height: topMenuHeaderHeight
+            },
+            sideMenu: {
+              header: {
+                width: leftWidth, height: sideMenuHeaderHeight
+              },
+              body: {
+                width: leftWidth, height: sideMenuBodyHeight
+              }
+            },
+            viewTab: {
+              header: {
+                width: rightWidth, height: sideMenuHeaderHeight
+              },
+              body: {
+                width: rightWidth, height: sideMenuBodyHeight
+              }
+            }
+          }
+          console.warn('layout', layout)
+          vm.$store.commit('updateLayout', layout)
           vm.resizeTimer = null
         }, 50)
       },
       onShowSideMenu () {
         this.showSideMenu = !this.showSideMenu
+      },
+      onSwitchSideMenu () {
+        // this.showSideMenu = !this.showSideMenu
       },
       onShowPopMenu () {
         this.showPopMenu = !this.showPopMenu

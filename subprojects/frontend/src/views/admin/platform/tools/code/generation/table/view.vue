@@ -8,6 +8,7 @@
 
 
 <script>
+  import {ViewlMixin} from 'mixins'
   import {
     AddHeaderComponenetFramework,
     DictRendererFramework,
@@ -19,6 +20,7 @@
 
   export default {
     name: 'generationRuleTableView',
+    mixins: [ViewlMixin],
     components: {
       GenerationRuleTableDetail
     },
@@ -87,11 +89,6 @@
             }
           }
         })
-      }
-    },
-    computed: {
-      contentStyle () {
-        return {'padding': '20px', 'height': (this.$store.state.layout.body.height) + 'px'}
       }
     },
     watch: {

@@ -12,7 +12,9 @@ export default {
   },
   data () {
     return {
-      entity: {}
+      options: {},
+      entity: {},
+      rules: {}
     }
   },
   mounted () {

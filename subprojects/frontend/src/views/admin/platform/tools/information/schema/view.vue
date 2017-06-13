@@ -1,11 +1,12 @@
 <template>
   <div :style="contentStyle">
-    <ag-grid class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
+    <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
   </div>
 </template>
 
 
 <script>
+  import {ViewlMixin} from 'mixins'
   import {
     DictFilterFramework,
     DictFloatingFilterComponentFramework,
@@ -16,6 +17,7 @@
 
   export default {
     name: 'informationSchemaView',
+    mixins: [ViewlMixin],
     data () {
       return {
         gridOptions: this.$grid.buildOptions({
@@ -24,16 +26,10 @@
             url: 'api/schema/information/columns',
             featureComponent: this,
             params: {
-              orderBy: 'TABLE_SCHEMA,TABLE_NAME,ORDINAL_POSITION',
-              totalCount: 0
+              orderBy: 'TABLE_SCHEMA,TABLE_NAME,ORDINAL_POSITION'
             }
           }
         })
-      }
-    },
-    computed: {
-      contentStyle () {
-        return {'padding': '20px', 'height': (this.$store.state.layout.body.height) + 'px'}
       }
     },
     created () {
@@ -41,8 +37,8 @@
         {
           headerName: '',
           pinned: 'left',
-          checkboxSelection: true,
-          // headerCheckboxSelection: true,
+          hide: this.mode !== 'selector',
+          checkboxSelection: this.mode === 'selector',
           cellStyle: {'text-align': 'center'},
           width: 24
         },

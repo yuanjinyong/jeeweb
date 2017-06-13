@@ -1,8 +1,7 @@
 <template>
-  <el-dialog v-model="visible" :title="options.title" :modal="options.modal"
+  <el-dialog v-model="visible" :title="options.title" :top="options.top + 'px'" :modal="options.modal"
              :close-on-click-modal="options.closeOnClickModal" :modal-append-to-body="options.modalAppendToBody"
-             :size="options.elDialogSize[options.size]" :top="'30px'"
-             :custom-class="'jw-dialog jw-dialog-' + options.size">
+             :size="options.elDialogSize[options.size]" :custom-class="'jw-dialog jw-dialog-' + options.size">
     <div class="jw-form" v-if="visible">
       <div class="jw-form-body" style="overflow-y: auto;" :style="{'max-height': maxFormHeight + 'px'}">
         <el-form ref="form" :model="entity" :rules="rules" :inline="options.inline"
@@ -71,6 +70,7 @@
           modal: true, // 是否为模态对话框
           closeOnClickModal: false, // 点击遮罩层是否关闭对话框
           modalAppendToBody: true, // 遮罩层是否插入至 body 元素上，若为 false，则遮罩层会插入至 Dialog 的父元素上
+          top: 75, //
           size: 'small', // 可选值：mini（phones 1列）、small（tablets 2列）、middle（desktops 3列）、large（ larger desktops 4列）、full（全屏）
           elDialogSize: {mini: 'tiny', small: 'small', middle: 'small', large: 'large', full: 'full'},
           inline: true,
@@ -89,7 +89,7 @@
     },
     computed: {
       maxFormHeight () {
-        return this.options.maxHeight ? (this.options.maxHeight - 135) : (this.$store.state.layout.window.height - 200)
+        return this.options.maxHeight ? (this.options.maxHeight - 59 - 76) : (this.$store.state.layout.window.height - this.options.top - 59 - 76 - 35)
       }
     },
     methods: {

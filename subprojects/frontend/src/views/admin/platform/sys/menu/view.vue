@@ -9,6 +9,7 @@
 
 
 <script>
+  import {ViewlMixin} from 'mixins'
   import {
     DictFilterFramework,
     DictFloatingFilterComponentFramework,
@@ -24,6 +25,7 @@
 
   export default {
     name: 'menuView',
+    mixins: [ViewlMixin],
     components: {
       MenuDetail,
       MenuSqlDetail
@@ -50,21 +52,6 @@
           }
         },
         gridOptions: this.$grid.buildOptions({
-          context: {
-            name: '菜单',
-            url: 'api/platform/sys/menus',
-            featureComponent: this,
-            getPermissions (params, operation) {
-              return params.context.featureComponent.permission
-            },
-            getDetailComponent (params, operation) {
-              return params.context.featureComponent.$refs['detail']
-            },
-            params: {
-              orderBy: 'f_is_preset,f_name',
-              totalCount: 0
-            }
-          },
           enableServerSideFilter: false,
           rowModelType: 'normal',
           rowData: [],
@@ -81,6 +68,20 @@
             } else {
               return null
             }
+          },
+          context: {
+            name: '菜单',
+            url: 'api/platform/sys/menus',
+            featureComponent: this,
+            getPermissions (params, operation) {
+              return params.context.featureComponent.permission
+            },
+            getDetailComponent (params, operation) {
+              return params.context.featureComponent.$refs['detail']
+            },
+            params: {
+              orderBy: 'f_is_preset,f_name'
+            }
           }
         })
       }
@@ -93,9 +94,6 @@
           edit: this.hasPermission('KFGJ-CDGL-XG'),
           remove: this.hasPermission('KFGJ-CDGL-SC')
         }
-      },
-      contentStyle () {
-        return {'padding': '20px', 'height': (this.$store.state.layout.body.height) + 'px'}
       }
     },
     created () {
@@ -177,6 +175,7 @@
           headerName: '操作',
           field: '',
           pinned: 'right',
+          hide: this.mode === 'selector',
           cellStyle: {'text-align': 'center'},
           cellRendererFramework: OperationRendererFramework,
           cellRendererParams: {

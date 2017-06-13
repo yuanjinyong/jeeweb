@@ -29,7 +29,7 @@ var VueGrid = {
     headerHeight: 30, // default is 25px
     floatingFiltersHeight: 32, // default is 20px
     rowHeight: 30, // default is 25px
-    rowSelection: 'multiple',
+    rowSelection: 'single', // single, multiple
     rowModelType: 'infinite',
     pagination: true,
     paginationAutoPageSize: true,

@@ -7,6 +7,10 @@
     overflow: auto;
   }
 
+  .pull-right {
+    float: right !important;
+  }
+
   .jw-menu-item-text {
     font-size: 18px;
   }
@@ -64,6 +68,7 @@
 
   .jw-grid .jw-floating-filter-cell .el-select {
     width: 100%;
+    min-width: 20px;
   }
 
   .jw-grid .jw-floating-filter-cell .el-tag {
@@ -127,20 +132,33 @@
   }
 
   .jw-dialog {
+    margin-bottom: 0px;
+  }
+
+  .jw-dialog.jw-dialog-mini {
     min-width: 771px;
     margin-bottom: 0px;
-    top: 20px;
   }
 
-  .jw-dialog-large {
+  .jw-dialog.jw-dialog-small {
+    min-width: 771px;
+  }
+
+  .jw-dialog.jw-dialog-middle {
+    min-width: 771px;
+  }
+
+  .jw-dialog.jw-dialog-large {
     min-width: 1472px;
-    margin-bottom: 30px;
-    top: 30px;
   }
 
-  .jw-dialog-full {
-    margin-bottom: 0px;
+  .jw-dialog.jw-dialog-full {
     top: 0px;
+  }
+
+  .jw-sub-dialog {
+    min-width: 410px;
+    width: 90%;
   }
 
   .jw-dialog .el-dialog__header {
@@ -160,12 +178,6 @@
 
   .jw-dialog.el-dialog--tiny {
     min-width: 0px;
-  }
-
-  .jw-sub-dialog {
-    min-width: 410px;
-    margin-bottom: 20px;
-    top: 20px;
   }
 
   .jw-form {
@@ -195,29 +207,37 @@
     line-height: 20px;
   }
 
+  .jw-form .jw-field-col-1, .jw-form .jw-field-col-2, .jw-form .jw-field-col-3, .jw-form .jw-field-col-4 {
+    min-width: 200px;
+  }
+
+  .jw-dialog-mini .jw-form .jw-field-col-1, .jw-dialog-mini .jw-form .jw-field-col-2, .jw-dialog-mini .jw-form .jw-field-col-3, .jw-dialog-mini .jw-form .jw-field-col-4 {
+    width: 200px;
+  }
+
   .jw-form .jw-field-col-1 {
-    min-width: 205px;
-    width: 205px;
+    min-width: 200px;
+    width: 200px;
   }
 
   .jw-form .jw-field-col-2 {
-    min-width: 205px;
-    width: 564px;
+    min-width: 200px;
+    width: 554px;
   }
 
   .jw-sub-dialog .jw-form .jw-field-col-2 {
-    min-width: 205px;
-    width: 205px;
+    min-width: 200px;
+    width: 200px;
   }
 
   .jw-form .jw-field-col-3 {
-    min-width: 205px;
-    width: 923px;
+    min-width: 200px;
+    width: 908px;
   }
 
   .jw-sub-dialog .jw-form .jw-field-col-3 {
-    min-width: 205px;
-    width: 205px;
+    min-width: 200px;
+    width: 200px;
   }
 
   .jw-form .el-radio {
@@ -229,16 +249,16 @@
   }
 
   .jw-form .el-select {
-    min-width: 205px;
+    min-width: 200px;
   }
 
   .jw-form .el-radio-group {
-    min-width: 205px;
+    min-width: 200px;
     line-height: 36px;
   }
 
   .jw-form .el-input-number {
-    min-width: 205px;
+    min-width: 200px;
   }
 
   .jw-form .el-input-number__decrease, .el-input-number__increase {
@@ -246,8 +266,8 @@
   }
 
   .jw-form .el-date-editor.el-input {
-    min-width: 205px;
-    width: 205px;
+    min-width: 200px;
+    width: 200px;
   }
 
   .jw-form .el-checkbox {

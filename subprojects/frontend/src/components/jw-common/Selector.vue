@@ -1,7 +1,7 @@
 <template>
-  <el-dialog v-model="visible" :title="options.title" :modal="options.modal"
+  <el-dialog v-model="visible" :title="options.title" :top="'30px'" :modal="options.modal"
              :close-on-click-modal="options.closeOnClickModal" :modal-append-to-body="options.modalAppendToBody"
-             :size="options.elDialogSize[options.size]" :top="'30px'" :custom-class="'jw-dialog jw-dialog-selector'">
+             :size="options.elDialogSize[options.size]" :custom-class="'jw-dialog jw-dialog-selector'">
     <div class="jw-selector" style="overflow-y: auto;" :style="{'max-height': maxFormHeight + 'px'}" v-if="visible">
       <slot></slot>
     </div>
@@ -56,7 +56,7 @@
     },
     computed: {
       maxFormHeight () {
-        return this.options.maxHeight ? (this.options.maxHeight - 135) : (this.$store.state.layout.window.height - 260)
+        return this.options.maxHeight ? (this.options.maxHeight - 59 - 76) : (this.$store.state.layout.window.height - 75 - 30 - 59 - 76 - 30 - 35)
       }
     },
     methods: {
@@ -100,8 +100,9 @@
         }
       },
       open (options) { // 供外部调用的接口
+        this.options.title = '请选择' + this.options.context.name
         this.options.params = {}
-        this.$lodash.merge(this.options, {title: '请选择' + this.options.context.name}, this.selectorOptions, options)
+        this.$lodash.merge(this.options, this.selectorOptions, options)
         this._addDraggable()
         this.visible = true
       },

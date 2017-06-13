@@ -1,10 +1,6 @@
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
-
 <template>
   <div :style="contentStyle">
-    <ag-grid class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
+    <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
     <user-detail ref="detail" :detail-options="detailOptions"></user-detail>
     <user-authorize-detail ref="authorize" :detail-options="authorizeOptions"></user-authorize-detail>
@@ -12,7 +8,8 @@
 </template>
 
 
-<script type="text/ecmascript-6">
+<script>
+  import {ViewlMixin} from 'mixins'
   import {
     AddHeaderComponenetFramework,
     DictFilterFramework,
@@ -33,6 +30,7 @@
 
   export default {
     name: 'userView',
+    mixins: [ViewlMixin],
     components: {
       UserDetail,
       UserAuthorizeDetail
@@ -48,7 +46,6 @@
           }
         },
         detailOptions: {
-          maxHeight: this.mode === 'selector' ? 535 : null,
           context: {
             featureComponent: this,
             getGridComponent (options) {
@@ -68,8 +65,7 @@
               return params.context.featureComponent.$refs['detail']
             },
             params: {
-              orderBy: 'f_is_preset,f_account',
-              totalCount: 0
+              orderBy: 'f_is_preset,f_account'
             }
           }
         })
@@ -85,24 +81,22 @@
           edit: this.hasPermission('XTGL-YHGL-XG'),
           remove: this.hasPermission('XTGL-YHGL-SC')
         }
-      },
-      contentStyle () {
-        return {'padding': '20px', 'height': (this.$store.state.layout.body.height) + 'px'}
       }
     },
     created () {
       this.gridOptions.columnDefs = [
         {
           headerName: '',
-          checkboxSelection: true,
           pinned: 'left',
+          hide: this.mode !== 'selector',
+          checkboxSelection: this.mode === 'selector',
           cellStyle: {'text-align': 'center'},
           width: 24
         },
         {
           headerName: '#',
           pinned: 'left',
-          headerComponentFramework: AddHeaderComponenetFramework,
+          headerComponentFramework: this.mode !== 'selector' ? AddHeaderComponenetFramework : null,
           cellStyle: {'text-align': 'right'},
           cellRendererFramework: IndexRendererFramework,
           width: 38
@@ -182,6 +176,7 @@
           headerName: '操作',
           field: '',
           pinned: 'right',
+          hide: this.mode === 'selector',
           cellStyle: {'text-align': 'center'},
           cellRendererFramework: OperationRendererFramework,
           cellRendererParams: {

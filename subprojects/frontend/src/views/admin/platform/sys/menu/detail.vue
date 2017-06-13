@@ -57,7 +57,7 @@
 
     <template slot="other">
       <jw-selector ref="selector" :selector-options="selectorOptions">
-        <url-view ref="urlView" :mode="'selector'"></url-view>
+        <url-view ref="urlView" :mode="'selector'" :multiple="true"></url-view>
       </jw-selector>
     </template>
   </jw-form>

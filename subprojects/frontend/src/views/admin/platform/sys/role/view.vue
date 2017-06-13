@@ -9,6 +9,7 @@
 
 
 <script>
+  import {ViewlMixin} from 'mixins'
   import {
     AddHeaderComponenetFramework,
     DictRendererFramework,
@@ -24,6 +25,7 @@
 
   export default {
     name: 'roleView',
+    mixins: [ViewlMixin],
     components: {
       RoleDetail,
       RoleAuthorizeDetail
@@ -39,7 +41,6 @@
           }
         },
         detailOptions: {
-          maxHeight: this.mode === 'selector' ? 535 : null,
           context: {
             featureComponent: this,
             getGridComponent (options) {
@@ -59,8 +60,7 @@
               return params.context.featureComponent.$refs['detail']
             },
             params: {
-              orderBy: 'f_is_preset,f_name',
-              totalCount: 0
+              orderBy: 'f_is_preset,f_name'
             }
           }
         })
@@ -74,24 +74,22 @@
           edit: this.hasPermission('XTGL-JSGL-XG'),
           remove: this.hasPermission('XTGL-JSGL-SC')
         }
-      },
-      contentStyle () {
-        return {'padding': '20px', 'height': (this.$store.state.layout.body.height) + 'px'}
       }
     },
     created () {
       this.gridOptions.columnDefs = [
         {
           headerName: '',
-          checkboxSelection: true,
           pinned: 'left',
+          hide: this.mode !== 'selector',
+          checkboxSelection: this.mode === 'selector',
           cellStyle: {'text-align': 'center'},
           width: 24
         },
         {
           headerName: '#',
           pinned: 'left',
-          headerComponentFramework: AddHeaderComponenetFramework,
+          headerComponentFramework: this.mode !== 'selector' ? AddHeaderComponenetFramework : null,
           cellStyle: {'text-align': 'right'},
           cellRendererFramework: IndexRendererFramework,
           width: 38
@@ -131,6 +129,7 @@
           headerName: '操作',
           field: '',
           pinned: 'right',
+          hide: this.mode === 'selector',
           cellStyle: {'text-align': 'center'},
           cellRendererFramework: OperationRendererFramework,
           cellRendererParams: {

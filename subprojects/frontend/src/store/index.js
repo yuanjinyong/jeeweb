@@ -9,16 +9,41 @@ const store = new Vuex.Store({
     mock: false,
     layout: {
       window: {
-        width: 0, height: 0
+        width: window.innerWidth, height: window.innerHeight
+      },
+      top: {
+        width: window.innerWidth, height: 0
       },
       middle: {
+        width: window.innerWidth, height: 0
+      },
+      left: {
+        width: 260, height: 0
+      },
+      right: {
         width: 0, height: 0
       },
-      body: {
-        width: 0, height: 0
+      bottom: {
+        width: window.innerWidth, height: 0
       },
-      dialog: {
-        width: 0, height: 0
+      topMenu: {
+        width: window.innerWidth, height: 0
+      },
+      sideMenu: {
+        header: {
+          width: 0, height: 0
+        },
+        body: {
+          width: 0, height: 0
+        }
+      },
+      viewTab: {
+        header: {
+          width: 0, height: 0
+        },
+        body: {
+          width: 0, height: 0
+        }
       }
     },
     menuHome: {

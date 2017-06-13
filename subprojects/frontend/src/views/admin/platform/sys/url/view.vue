@@ -8,6 +8,7 @@
 
 
 <script>
+  import {ViewlMixin} from 'mixins'
   import {
     DictFilterFramework,
     DictFloatingFilterComponentFramework,
@@ -22,18 +23,13 @@
 
   export default {
     name: 'urlView',
+    mixins: [ViewlMixin],
     components: {
       UrlDetail
-    },
-    props: {
-      mode: {type: String, default: ''}
     },
     data () {
       return {
         detailOptions: {
-          size: this.mode === 'selector' ? 'mini' : null,
-          modal: this.mode !== 'selector',
-          maxHeight: this.mode === 'selector' ? 535 : null,
           context: {
             featureComponent: this,
             getGridComponent (options) {
@@ -50,29 +46,19 @@
               return params.context.featureComponent.$refs['detail']
             },
             params: {
-              orderBy: 'f_url,f_methods',
-              totalCount: 0
+              orderBy: 'f_url,f_methods'
             }
           }
         })
-      }
-    },
-    computed: {
-      contentStyle () {
-        if (this.mode === 'selector') {
-          return {'padding': '20px', 'height': '457px'}
-        } else {
-          return {'padding': '20px', 'height': this.$store.state.layout.body.height + 'px'}
-        }
       }
     },
     created () {
       this.gridOptions.columnDefs = [
         {
           headerName: '',
-          checkboxSelection: true,
-          // headerCheckboxSelection: true,
           pinned: 'left',
+          hide: this.mode !== 'selector',
+          checkboxSelection: this.mode === 'selector',
           cellStyle: {'text-align': 'center'},
           width: 24
         },
@@ -123,23 +109,6 @@
           width: 1800
         }
       ]
-    },
-    mounted () {
-      window.devMode && console && console.info('mounted', this.$options.name, this._uid)
-      this._init()
-    },
-    activated () {
-      window.devMode && console && console.info('activated', this.$options.name, this._uid)
-    },
-    methods: {
-      _init () {
-      },
-      getSelectedRows () {
-        return this.gridOptions.api.getSelectedRows()
-      },
-      clearSelectedRows () {
-        return this.gridOptions.api.deselectAll()
-      }
     }
   }
 </script>
