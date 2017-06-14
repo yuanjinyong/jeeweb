@@ -47,7 +47,7 @@
       },
       isDisabled (operation) {
         if (operation.isDisabled) {
-          return operation.isDisabled(this.params, this.entity)
+          return operation.isDisabled.call(this, this.params, this.entity)
         }
         return false
       },

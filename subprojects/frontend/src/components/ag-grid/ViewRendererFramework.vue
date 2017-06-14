@@ -26,7 +26,7 @@
     methods: {
       render () {
         if (this.operation.render) {
-          return this.operation.render(this.params, this.entity)
+          return this.operation.render.call(this, this.params, this.entity)
         } else {
           return this.params.value
         }
