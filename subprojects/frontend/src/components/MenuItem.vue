@@ -1,8 +1,3 @@
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
-
-
 <template>
   <el-menu-item :index="menu.f_id" :route="{path: menu.f_route_path, params: menu}">
     <div class="jw-menu-item-text">
@@ -12,7 +7,7 @@
 </template>
 
 
-<script type="text/ecmascript-6">
+<script>
   export default {
     name: 'jw-menu-item',
     props: {

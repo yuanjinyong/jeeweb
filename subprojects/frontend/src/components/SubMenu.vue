@@ -1,8 +1,3 @@
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
-
-
 <template>
   <el-submenu :index="menu.f_id">
     <div slot="title" class="jw-menu-item-text">
@@ -16,7 +11,7 @@
 </template>
 
 
-<script type="text/ecmascript-6">
+<script>
   export default {
     name: 'jw-submenu',
     props: {

@@ -1,10 +1,14 @@
 <style>
   body {
     font-size: 14px;
-    background: #fff;
+    background-color: #39f;
     margin: 0px;
     padding: 0px;
     overflow: auto;
+  }
+
+  #app {
+    background-color: #fff;
   }
 
   .pull-right {

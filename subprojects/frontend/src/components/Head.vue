@@ -35,7 +35,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import UserDetail from 'views/admin/platform/sys/user/detail'
   import ChangePasswordForm from 'views/admin/platform/sys/user/password'
 

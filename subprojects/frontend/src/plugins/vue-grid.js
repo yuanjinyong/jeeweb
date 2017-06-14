@@ -32,12 +32,12 @@ var VueGrid = {
     rowSelection: 'single', // single, multiple
     rowModelType: 'infinite',
     pagination: true,
-    paginationAutoPageSize: true,
-    paginationPageSize: 20,
+    paginationAutoPageSize: true, // 是否启用自动每页条数
+    paginationPageSize: 10, // 不启用自动每页条数时使用该值作为初始每页条数
     paginationFirstPage: 0,
     cacheOverflowSize: 2,
     infiniteInitialRowCount: 1,
-    cacheBlockSize: 20,
+    cacheBlockSize: 30, // 启动自动每页条数时，一次向后台请求的条目数（即发给后台的每页条数）
     maxBlocksInCache: 2,
     maxConcurrentDatasourceRequests: 1,
     getRowNodeId (item) {

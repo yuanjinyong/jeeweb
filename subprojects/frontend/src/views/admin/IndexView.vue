@@ -48,13 +48,13 @@
         <div>
           <el-row id="topMenu">
             <div class="jw-menu-header jw-top-menu-header">
-              <el-button class="jw-menu-switch" type="text" @click="onShowSideMenu">
+              <el-button class="jw-menu-switch" type="text" @click="onshowMenu">
                 <i class="fa fa-bars" aria-hidden="true"></i>
               </el-button>
             </div>
             <el-col style="float: left;position: absolute;" :span="8">
-              <jw-side-menu style="z-index: 999999;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;"
-                            :menu-list="menuList" @select="onSelectMenu" v-show="showSideMenu"></jw-side-menu>
+              <jw-menu style="z-index: 999999;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;"
+                       :menu-list="menuList" @select="onSelectMenu" v-show="showMenu"></jw-menu>
             </el-col>
           </el-row>
 
@@ -88,10 +88,10 @@
                 <i class="fa fa-bars" aria-hidden="true"></i>
               </el-button>
             </div>
-            <jw-side-menu class="jw-side-menu-body"
-                          :style="{'width':layout.sideMenu.body.width+'px', 'height':layout.sideMenu.body.height+'px'}"
-                          :default-active="tabsManager.activeName" :menu-list="menuList"
-                          @select="onSelectMenu"></jw-side-menu>
+            <jw-menu class="jw-side-menu-body"
+                     :style="{'width':layout.sideMenu.body.width+'px', 'height':layout.sideMenu.body.height+'px'}"
+                     :default-active="tabsManager.activeName" :menu-list="menuList"
+                     @select="onSelectMenu"></jw-menu>
           </div>
         </div>
 
@@ -128,7 +128,7 @@
     name: 'adminIndex',
     data () {
       return {
-        showSideMenu: false,
+        showMenu: false,
         resizeTimer: null,
         tabsManager: {
           activeName: 'AdminHome',
@@ -250,7 +250,7 @@
 
           let topHeight = top.clientHeight
           let bottomHeight = bottom.clientHeight
-          let middleHeight = window.innerHeight - topHeight - bottomHeight
+          let middleHeight = window.innerHeight - topHeight - bottomHeight - 1
           let leftWidth = 260
           let rightWidth = window.innerWidth - leftWidth
           let sideMenuHeaderHeight = sideMenu ? sideMenu.firstChild.clientHeight : 0
@@ -299,13 +299,13 @@
           vm.resizeTimer = null
         }, 50)
       },
-      onShowSideMenu () {
-        this.showSideMenu = !this.showSideMenu
+      onshowMenu () {
+        this.showMenu = !this.showMenu
       },
       onSwitchSideMenu () {
       },
       onSelectMenu (index, indexPath, route) {
-        this.showSideMenu = false
+        this.showMenu = false
 
         var tabExists = true
         for (var i in this.tabsManager.tabs) {

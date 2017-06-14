@@ -14,11 +14,11 @@ Vue.component(Loading.name, Loading)
 import LoginForm from './LoginForm'
 Vue.component(LoginForm.name, LoginForm)
 
+import Menu from './Menu'
+Vue.component(Menu.name, Menu)
+
 import MenuItem from './MenuItem'
 Vue.component(MenuItem.name, MenuItem)
-
-import SideMenu from './SideMenu'
-Vue.component(SideMenu.name, SideMenu)
 
 import SubMenu from './SubMenu'
 Vue.component(SubMenu.name, SubMenu)

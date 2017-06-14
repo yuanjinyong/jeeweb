@@ -1,8 +1,3 @@
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
-
-
 <template>
   <el-menu :default-active="defaultActive" :router="router" @select="onSelectMenu">
     <template v-for="(menu, index) in menuList">
@@ -13,9 +8,9 @@
 </template>
 
 
-<script type="text/ecmascript-6">
+<script>
   export default {
-    name: 'jw-side-menu',
+    name: 'jw-menu',
     props: {
       router: {
         type: Boolean,
@@ -31,11 +26,6 @@
           return []
         }
       }
-    },
-    data () {
-      return {}
-    },
-    computed: {
     },
     methods: {
       onSelectMenu (index, indexPath, menuItem) {
