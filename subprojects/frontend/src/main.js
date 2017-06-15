@@ -16,8 +16,11 @@ import 'font-awesome-loader'
 import 'bootstrap-loader'
 
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-default/index.css'
 Vue.use(ElementUI)
+import 'element-ui/lib/theme-default/index.css'
+// import 'element-ui/lib/theme-defaut/base.css' // fade/zoom 等
+import CollapseTransition from 'element-ui/lib/transitions/collapse-transition' // collapse 展开折叠
+Vue.component(CollapseTransition.name, CollapseTransition)
 
 import VueCfg from './assets/js/vue-cfg'
 

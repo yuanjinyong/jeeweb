@@ -171,6 +171,7 @@ public class CodeGenerateService extends BaseService<Integer, GenerateRuleEntity
         try {
             Map<String, Object> tplParams = new HashMap<>();
             tplParams.put("rule", rule);
+            tplParams.put("ResponseResult_class", ResponseResult.class.getName());
             tplParams.put("ParameterMap_class", ParameterMap.class.getName());
             tplParams.put("RowMap_class", RowMap.class.getName());
 
@@ -224,6 +225,6 @@ public class CodeGenerateService extends BaseService<Integer, GenerateRuleEntity
     }
 
     private String getShortClassName(String fullClassName) {
-        return fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
+        return HelpUtil.isEmpty(fullClassName) ? "" : fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
     }
 }

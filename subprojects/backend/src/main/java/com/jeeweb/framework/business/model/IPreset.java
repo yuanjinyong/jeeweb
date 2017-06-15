@@ -17,6 +17,4 @@ public interface IPreset {
     Integer getF_is_preset();
 
     void setF_is_preset(Integer f_is_preset);
-    
-    Boolean isPreset();
 }

@@ -24,11 +24,10 @@ export default {
       }
     },
     contentStyle () {
-      let height = this.$store.state.layout.viewTab.body.height
       if (this.mode === 'selector') {
-        height = this.$store.state.layout.window.height - 75 - 30 - 59 - 76 - 30 - 35
+        return {'padding': '20px', 'height': '100%'}
       }
-      return {'padding': '20px', 'height': height + 'px'}
+      return {'padding': '20px', 'height': this.$store.state.layout.viewTab.body.height + 'px'}
     }
   },
   created () {

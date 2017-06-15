@@ -2,7 +2,8 @@
   <div>
     <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
-    <generation-rule-table-detail ref="detail" :detail-options="detailOptions"></generation-rule-table-detail>
+    <generation-rule-table-detail ref="detail" :detail-options="detailOptions" :generate-rule="generateRule">
+    </generation-rule-table-detail>
   </div>
 </template>
 

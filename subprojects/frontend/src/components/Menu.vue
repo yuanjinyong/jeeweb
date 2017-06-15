@@ -1,5 +1,5 @@
 <template>
-  <el-menu :default-active="defaultActive" :router="router" @select="onSelectMenu">
+  <el-menu :default-active="defaultActive" :router="router" @select="onSelectMenu" theme="dark">
     <template v-for="(menu, index) in menuList">
       <jw-submenu :menu="menu" v-if="menu.f_type === 1"></jw-submenu>
       <jw-menu-item :menu="menu" v-else-if="menu.f_type === 2"></jw-menu-item>

@@ -49,8 +49,7 @@
       <el-form-item label="备注" prop="f_remark">
         <el-input class="jw-field-col-2" v-model="entity.f_remark" type="textarea" autosize></el-input>
       </el-form-item>
-
-      <div style="height: 200px;" v-show="entity.f_type === 2 || entity.f_type === 3">
+      <div class="jw-form-item" style="height: 200px;" v-show="entity.f_type === 2 || entity.f_type === 3">
         <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
       </div>
     </template>

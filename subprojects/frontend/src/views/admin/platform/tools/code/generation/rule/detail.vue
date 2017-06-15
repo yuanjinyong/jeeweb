@@ -39,7 +39,8 @@
         <el-input class="jw-field-col-2" v-model="entity.f_package_name"></el-input>
       </el-form-item>
     </template>
-    <generation-rule-table-view style="height: 302px;" :operation="options.operation" :generate-rule="entity">
+    <generation-rule-table-view class="jw-form-item" style="height: 500px;" :operation="options.operation"
+                                :generate-rule="entity">
     </generation-rule-table-view>
   </jw-form>
 </template>

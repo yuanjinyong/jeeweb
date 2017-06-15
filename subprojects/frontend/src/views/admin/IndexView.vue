@@ -1,10 +1,28 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .jw-menu {
+    color: #bfcbd9;
+    background-color: #324157;
+  }
+
+  .jw-top-menu {
+
+  }
+
+  .jw-side-menu {
+
+  }
+
+  .jw-menu-switch {
+    font-size: 24px;
+    padding: 5px;
+    color: #bfcbd9;
+  }
+
   .jw-menu-header {
     padding: 10px 20px;
     font-size: 24px;
-    background-color: #eef1f6;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #5d5d5d;
   }
 
   .jw-top-menu-header {
@@ -12,17 +30,19 @@
   }
 
   .jw-side-menu-header {
-    border-right: 1px solid #ccc;
   }
 
-  .jw-menu-switch {
-    font-size: 24px;
-    padding: 5px;
+  .jw-menu-body {
+  }
+
+  .jw-top-menu-body {
+    border-radius: 0;
+    z-index: 999999;
   }
 
   .jw-side-menu-body {
     overflow: auto;
-    border-right: 1px solid #ccc;
+    border-radius: 0;
   }
 
   .jw-view-tab-header {
@@ -37,7 +57,7 @@
 
 
 <template>
-  <div>
+  <div style="height: 100%;" :style="{'background-color':layout.window.width < 768 ? '#fff' : '#324157'}">
     <div v-if="layout.window.width < 768">
       <!-- 顶部 -->
       <jw-head id="layoutTop"></jw-head>
@@ -46,23 +66,23 @@
       <div id="layoutMiddle" :style="{'width':layout.middle.width+'px', 'height':layout.middle.height+'px'}">
         <loading v-if="loadingUser"></loading>
         <div>
-          <el-row id="topMenu">
+          <el-row id="topMenu" class="jw-menu jw-top-menu">
             <div class="jw-menu-header jw-top-menu-header">
               <el-button class="jw-menu-switch" type="text" @click="onshowMenu">
                 <i class="fa fa-bars" aria-hidden="true"></i>
               </el-button>
             </div>
-            <el-col style="float: left;position: absolute;" :span="8">
-              <jw-menu style="z-index: 999999;border-right: 1px solid #ccc;border-bottom: 1px solid #ccc;"
-                       :menu-list="menuList" @select="onSelectMenu" v-show="showMenu"></jw-menu>
+            <el-col style="float: left;position: absolute;" :span="16">
+              <jw-menu class="jw-menu-body jw-top-menu-body" :menu-list="menuList" @select="onSelectMenu"
+                       v-show="showMenu">
+              </jw-menu>
             </el-col>
           </el-row>
 
-          <el-row>
-            <el-col :span="24" style="overflow-x: auto;">
-              <router-view></router-view>
-            </el-col>
-          </el-row>
+          <div style="background-color: #fff;overflow: auto;"
+               :style="{'width':layout.right.width+'px', 'height':layout.right.height+'px'}">
+            <router-view></router-view>
+          </div>
         </div>
       </div>
 
@@ -81,22 +101,22 @@
         <!-- 左部 -->
         <div id="layoutLeft" style="float: left;"
              :style="{'width':layout.left.width+'px', 'height':layout.left.height+'px'}">
-          <div id="sideMenu" class="jw-side-menu">
+          <div id="sideMenu" class="jw-menu jw-side-menu">
             <div class="jw-menu-header jw-side-menu-header">
               系统菜单
               <el-button class="jw-menu-switch pull-right" type="text" @click="onSwitchSideMenu">
                 <i class="fa fa-bars" aria-hidden="true"></i>
               </el-button>
             </div>
-            <jw-menu class="jw-side-menu-body"
+            <jw-menu class="jw-menu-body jw-side-menu-body"
                      :style="{'width':layout.sideMenu.body.width+'px', 'height':layout.sideMenu.body.height+'px'}"
-                     :default-active="tabsManager.activeName" :menu-list="menuList"
-                     @select="onSelectMenu"></jw-menu>
+                     :default-active="tabsManager.activeName" :menu-list="menuList" @select="onSelectMenu">
+            </jw-menu>
           </div>
         </div>
 
         <!-- 右部 -->
-        <div id="layoutRight"
+        <div id="layoutRight" style="background-color: #fff;"
              :style="{'width':layout.right.width+'px', 'height':layout.right.height+'px', 'margin-left':layout.left.width+'px'}">
           <div id="viewTab" class="jw-view-tab">
             <el-tabs type="card" class="jw-card-tabs jw-view-tab-header" v-model="tabsManager.activeName"
@@ -251,11 +271,13 @@
           let topHeight = top.clientHeight
           let bottomHeight = bottom.clientHeight
           let middleHeight = window.innerHeight - topHeight - bottomHeight - 1
-          let leftWidth = 260
-          let rightWidth = window.innerWidth - leftWidth
-          let sideMenuHeaderHeight = sideMenu ? sideMenu.firstChild.clientHeight : 0
-          let sideMenuBodyHeight = middleHeight - sideMenuHeaderHeight
           let topMenuHeaderHeight = topMenu ? topMenu.firstChild.clientHeight : 0
+          let leftWidth = window.innerWidth < 768 ? 0 : 260
+          let leftHeight = middleHeight - topMenuHeaderHeight
+          let sideMenuHeaderHeight = sideMenu ? sideMenu.firstChild.clientHeight : 0
+          let sideMenuBodyHeight = leftHeight - sideMenuHeaderHeight
+          let rightWidth = window.innerWidth - leftWidth
+          let rightHeight = middleHeight - topMenuHeaderHeight
 
           vm.$store.commit('updateLayout', {
             window: {
@@ -268,10 +290,10 @@
               width: window.innerWidth, height: middleHeight
             },
             left: {
-              width: leftWidth, height: middleHeight
+              width: leftWidth, height: leftHeight
             },
             right: {
-              width: rightWidth, height: middleHeight
+              width: rightWidth, height: rightHeight
             },
             bottom: {
               width: window.innerWidth, height: bottomHeight

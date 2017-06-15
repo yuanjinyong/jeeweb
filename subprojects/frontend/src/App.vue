@@ -1,14 +1,15 @@
 <style>
   body {
     font-size: 14px;
-    background-color: #39f;
+    background-color: #fff;
     margin: 0px;
     padding: 0px;
     overflow: auto;
+    height: 100%;
   }
 
   #app {
-    background-color: #fff;
+    height: 100%;
   }
 
   .pull-right {
@@ -45,17 +46,25 @@
     height: 100%;
   }
 
+  .jw-grid .ag-header {
+    background: #f5f7f9;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .jw-grid .ag-body {
+    background-color: #fff;
+  }
+
+  .jw-grid .ag-row-odd {
+    background-color: #f6f8ff;
+  }
+
   .jw-grid .ag-root {
     border: 1px solid #ddd;
     border-radius: 4px;
     -moz-user-select: text;
     -webkit-user-select: text;
     -ms-user-select: text;
-  }
-
-  .jw-grid .ag-header {
-    background: #f1f1f1;
-    border-bottom: 1px solid #ddd;
   }
 
   .jw-grid .ag-menu {
@@ -139,30 +148,48 @@
     margin-bottom: 0px;
   }
 
+  .jw-dialog .jw-dialog-body {
+    overflow-y: auto;
+  }
+
   .jw-dialog.jw-dialog-mini {
-    min-width: 771px;
-    margin-bottom: 0px;
+    width: auto;
+  }
+
+  .jw-dialog.jw-dialog-mini .jw-form, .jw-dialog-selector .jw-dialog.jw-dialog-mini .jw-form {
+    width: 390px; /*36 + 354*/
   }
 
   .jw-dialog.jw-dialog-small {
-    min-width: 771px;
+    width: auto;
+  }
+
+  .jw-dialog.jw-dialog-small .jw-form, .jw-dialog-selector .jw-dialog.jw-dialog-small .jw-form {
+    width: 744px;
   }
 
   .jw-dialog.jw-dialog-middle {
-    min-width: 771px;
+    width: auto;
+  }
+
+  .jw-dialog.jw-dialog-middle .jw-form .jw-form, .jw-dialog-selector .jw-dialog.jw-dialog-middle .jw-form {
+    width: 1098px;
   }
 
   .jw-dialog.jw-dialog-large {
-    min-width: 1472px;
+    width: auto;
+  }
+
+  .jw-dialog.jw-dialog-large .jw-form, .jw-form .jw-form, .jw-dialog-selector .jw-dialog.jw-dialog-large .jw-form {
+    width: 1452px;
   }
 
   .jw-dialog.jw-dialog-full {
     top: 0px;
   }
 
-  .jw-sub-dialog {
-    min-width: 410px;
-    width: 90%;
+  .jw-dialog.jw-sub-dialog {
+    width: auto;
   }
 
   .jw-dialog .el-dialog__header {
@@ -180,17 +207,13 @@
     color: #48576a;
   }
 
-  .jw-dialog.el-dialog--tiny {
-    min-width: 0px;
-  }
-
   .jw-form {
     margin: 0px;
     padding: 0px;
   }
 
   .jw-form .jw-form-body {
-    padding: 20px 20px;
+    padding: 20px 20px 10px 20px;
   }
 
   .jw-form .jw-form-footer {
@@ -199,8 +222,16 @@
     text-align: right;
   }
 
+  .jw-form label {
+    margin-bottom: 0px;
+  }
+
   .jw-form .el-form-item {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+  }
+
+  .jw-form .jw-form-item {
+    margin-bottom: 10px;
   }
 
   .el-form--inline .el-form-item {

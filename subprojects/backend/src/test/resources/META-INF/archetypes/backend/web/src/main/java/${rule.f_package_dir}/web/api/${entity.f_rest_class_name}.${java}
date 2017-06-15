@@ -12,7 +12,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import ${entity.f_service_base_class};
 import ${entity.f_rest_base_class};
-import com.jeeweb.framework.core.model.ResponseResult;
+import ${ResponseResult_class};
 import ${entity.f_entity_class};
 import ${entity.f_service_class};
 
@@ -53,8 +53,8 @@ public class ${entity.f_rest_class_name} extends ${entity.f_rest_base_class_name
         return super.deleteEntity(primaryKey);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE)
-    public ResponseResult delete() {
-        return super.deleteEntities();
-    }
+    // @RequestMapping(method = RequestMethod.DELETE)
+    // public ResponseResult delete() {
+    //     return super.deleteEntities();
+    // }
 }

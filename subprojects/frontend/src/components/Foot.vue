@@ -2,7 +2,7 @@
 </style>
 
 <template>
-  <el-row style="background-color: #39f;">
+  <el-row style="background-color: #324157;color: #bfcbd9;">
     <el-col :span="24" style="padding: 5px 20px;">
       <div style="text-align: center;">
         <div style="display: inline-block; margin-bottom: 0; line-height: 22px; height: 22px;">

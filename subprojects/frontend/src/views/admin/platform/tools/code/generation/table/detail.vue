@@ -18,7 +18,7 @@
         <el-input-number class="jw-field-col-1" v-model="entity.f_order" :step="1"></el-input-number>
       </el-form-item>
       <el-form-item label="主表" prop="f_is_main">
-        <el-radio-group class="jw-field-col-1" v-model="entity.f_is_main">
+        <el-radio-group class="jw-field-col-1" v-model="entity.f_is_main" @change="onIsMainChange">
           <el-radio :label="1">是</el-radio>
           <el-radio :label="2">否</el-radio>
         </el-radio-group>
@@ -54,7 +54,7 @@
         <el-input class="jw-field-col-2" v-model="entity.f_rest_class"></el-input>
       </el-form-item>
 
-      <div style="height: 256px;">
+      <div class="jw-form-item" style="height: 449px;">
         <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
       </div>
     </template>
@@ -107,7 +107,6 @@
           rowData: [],
           pagination: false,
           enableFilter: false,
-          // floatingFilter: false,
           context: {
             name: '生成规则字段配置',
             url: null,
@@ -473,6 +472,19 @@
         this.$http.get('api/schema/information/schematas', {params: {orderBy: 'SCHEMA_NAME'}}).then((response) => {
           this.schematas = response.body.success ? response.body.data.items : []
         })
+      },
+      onIsMainChange () {
+        if (this.entity.f_is_main === 2) {
+          this.entity.f_service_base_class = null
+          this.entity.f_service_class = null
+          this.entity.f_rest_base_class = null
+          this.entity.f_rest_class = null
+        } else {
+          this.entity.f_service_base_class = 'com.jeeweb.framework.business.service.BaseService'
+          this.entity.f_service_class = this.generateRule.f_package_name + '.service.' + this.generateRule.f_code + 'Service'
+          this.entity.f_rest_base_class = 'com.jeeweb.framework.business.web.api.BaseApi'
+          this.entity.f_rest_class = this.generateRule.f_package_name + '.web.api.' + this.generateRule.f_code + 'Api'
+        }
       }
     }
   }

@@ -2,20 +2,24 @@
   <el-dialog v-model="visible" :title="options.title" :top="options.top + 'px'" :modal="options.modal"
              :close-on-click-modal="options.closeOnClickModal" :modal-append-to-body="options.modalAppendToBody"
              :size="options.elDialogSize[options.size]" :custom-class="'jw-dialog jw-dialog-' + options.size">
-    <div class="jw-form" v-if="visible">
-      <div class="jw-form-body" style="overflow-y: auto;" :style="{'max-height': maxFormHeight + 'px'}">
-        <el-form ref="form" :model="entity" :rules="rules" :inline="options.inline"
-                 :label-width="options.labelWidth+'px'">
-          <fieldset :disabled="options.operation === 'view'">
-            <slot name="fieldset"></slot>
-          </fieldset>
+    <el-collapse-transition>
+      <div class="jw-dialog-body" :style="{'max-height': maxBodyHeight + 'px'}" v-if="visible">
+        <div class="jw-form">
+          <div class="jw-form-body">
+            <el-form ref="form" :model="entity" :rules="rules" :inline="options.inline"
+                     :label-width="options.labelWidth+'px'">
+              <fieldset :disabled="options.operation === 'view'">
+                <slot name="fieldset"></slot>
+              </fieldset>
 
-          <slot></slot>
-        </el-form>
+              <slot></slot>
+            </el-form>
+          </div>
+
+          <slot name="other"></slot>
+        </div>
       </div>
-
-      <slot name="other"></slot>
-    </div>
+    </el-collapse-transition>
 
     <div slot="footer" class="dialog-footer jw-dialog-footer">
       <slot name="buttons"></slot>
@@ -88,7 +92,7 @@
       }
     },
     computed: {
-      maxFormHeight () {
+      maxBodyHeight () {
         return this.options.maxHeight ? (this.options.maxHeight - 59 - 76) : (this.$store.state.layout.window.height - this.options.top - 59 - 76 - 35)
       }
     },

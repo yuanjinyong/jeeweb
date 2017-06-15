@@ -2,9 +2,13 @@
   <el-dialog v-model="visible" :title="options.title" :top="'30px'" :modal="options.modal"
              :close-on-click-modal="options.closeOnClickModal" :modal-append-to-body="options.modalAppendToBody"
              :size="options.elDialogSize[options.size]" :custom-class="'jw-dialog jw-dialog-selector'">
-    <div class="jw-selector" style="overflow-y: auto;" :style="{'max-height': maxFormHeight + 'px'}" v-if="visible">
-      <slot></slot>
-    </div>
+    <el-collapse-transition>
+      <div class="jw-dialog-body" v-if="visible">
+        <div class="jw-selector" :style="{'height': options.height + 'px', 'max-height': maxBodyHeight + 'px'}">
+          <slot></slot>
+        </div>
+      </div>
+    </el-collapse-transition>
 
     <div slot="footer" class="dialog-footer jw-dialog-footer">
       <slot name="buttons"></slot>
@@ -46,7 +50,7 @@
           modalAppendToBody: true, // 遮罩层是否插入至 body 元素上，若为 false，则遮罩层会插入至 Dialog 的父元素上
           size: 'large', // 可选值：mini（phones 1列）、small（tablets 2列）、middle（desktops 3列）、large（ larger desktops 4列）、full（全屏）
           elDialogSize: {mini: 'tiny', small: 'small', middle: 'small', large: 'large', full: 'full'},
-          maxHeight: null,
+          height: 457, // 默认10行的高度
           params: {},
           selected: null,
           cancelled: null,
@@ -55,8 +59,8 @@
       }
     },
     computed: {
-      maxFormHeight () {
-        return this.options.maxHeight ? (this.options.maxHeight - 59 - 76) : (this.$store.state.layout.window.height - 75 - 30 - 59 - 76 - 30 - 35)
+      maxBodyHeight () {
+        return this.$store.state.layout.window.height - 75 - 30 - 59 - 76 - 30 - 35
       }
     },
     methods: {
@@ -100,7 +104,9 @@
         }
       },
       open (options) { // 供外部调用的接口
-        this.options.title = '请选择' + this.options.context.name
+        if (this.selectorOptions.context && this.selectorOptions.context.name) {
+          this.options.title = '请选择' + this.selectorOptions.context.name
+        }
         this.options.params = {}
         this.$lodash.merge(this.options, this.selectorOptions, options)
         this._addDraggable()
