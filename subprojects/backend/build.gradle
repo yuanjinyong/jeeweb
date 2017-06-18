@@ -43,7 +43,7 @@ dependencies {
     // mybatis (数据库持久层)
     compile "org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1"
     // MySQL
-    runtime "mysql:mysql-connector-java"
+    compile "mysql:mysql-connector-java"
 
     // Redis缓存
     compile "redis.clients:jedis:2.4.0"
