@@ -81,6 +81,8 @@
           labelWidth: 150, // 单位px
           maxHeight: null,
           params: {},
+          beforeOpen: null,
+          opened: null,
           createEntity: null,
           loadRemoteEntity: null,
           loadLocalEntity: null,
@@ -97,6 +99,32 @@
       }
     },
     methods: {
+      close () { // 供外部调用的接口
+        this.visible = false
+        this.$emit('closed')
+        if (this.options.closed) {
+          this.options.closed.call(this)
+        }
+      },
+      open (options) { // 供外部调用的接口
+        this.options.params = {}
+        this.$lodash.merge(this.options, {title: this.titles[options.operation]}, this.formOptions, options)
+        if (this.options.beforeOpen) {
+          this.options.beforeOpen.call(this, this.options, () => {
+            this._open()
+          })
+        } else {
+          this._open()
+        }
+      },
+      _open () {
+        this._loadEntity()
+        this._addDraggable()
+        this.visible = true
+        if (this.options.opened) {
+          this.options.opened.call(this, this.options)
+        }
+      },
       _addDraggable () {
         if (!this.options.draggable || this.canDraggable) {
           return
@@ -159,20 +187,6 @@
             }
           }
         }
-      },
-      close () { // 供外部调用的接口
-        this.visible = false
-        this.$emit('closed')
-        if (this.options.closed) {
-          this.options.closed.call(this)
-        }
-      },
-      open (options) { // 供外部调用的接口
-        this.options.params = {}
-        this.$lodash.merge(this.options, {title: this.titles[options.operation]}, this.formOptions, options)
-        this._loadEntity()
-        this._addDraggable()
-        this.visible = true
       },
       onCancel () {
         this.close()

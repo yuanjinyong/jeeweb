@@ -144,8 +144,16 @@
 
 
 <script>
+  import Vue from 'vue'
+
   export default {
     name: 'adminIndex',
+    beforeRouteEnter (to, from, next) {
+      Vue.http.get('api/platform/data/dicts').then((response) => {
+        Vue.store.commit('setDicts', response.body.data)
+        next()
+      })
+    },
     data () {
       return {
         showMenu: false,

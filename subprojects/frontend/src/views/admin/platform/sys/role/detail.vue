@@ -25,7 +25,7 @@
   import {DetailMixin} from 'mixins'
 
   export default {
-    name: 'urlDetail',
+    name: 'roleDetail',
     mixins: [DetailMixin],
     data () {
       return {

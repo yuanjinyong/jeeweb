@@ -2,8 +2,8 @@
   <div :style="contentStyle">
     <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
-    <role-detail ref="detail" :detail-options="detailOptions"></role-detail>
-    <role-authorize-detail ref="authorize" :detail-options="authorizeOptions"></role-authorize-detail>
+    <dict-detail ref="detail" :detail-options="detailOptions"></dict-detail>
+    <dict-sql-detail ref="sql" :detail-options="sqlOptions"></dict-sql-detail>
   </div>
 </template>
 
@@ -19,20 +19,20 @@
     OperationRendererFramework,
     ViewRendererFramework
   } from 'components/ag-grid'
-  import RoleDetail from './detail'
-  import RoleAuthorizeDetail from './authorize'
-  //  import {RoleDetail, RoleAuthorizeDetail} from 'views'
+  import DictDetail from './detail'
+  import DictSqlDetail from './sql'
+  //  import {DictDetail, DictSqlDetail} from 'views'
 
   export default {
-    name: 'roleView',
+    name: 'dictView',
     mixins: [ViewlMixin],
     components: {
-      RoleDetail,
-      RoleAuthorizeDetail
+      DictDetail,
+      DictSqlDetail
     },
     data () {
       return {
-        authorizeOptions: {
+        sqlOptions: {
           context: {
             featureComponent: this,
             getGridComponent (options) {
@@ -50,8 +50,8 @@
         },
         gridOptions: this.$grid.buildOptions({
           context: {
-            name: '角色',
-            url: 'api/platform/sys/roles',
+            name: '字典组',
+            url: 'api/platform/sys/dicts',
             featureComponent: this,
             getPermissions (params, operation) {
               return params.context.featureComponent.permission
@@ -60,7 +60,7 @@
               return params.context.featureComponent.$refs['detail']
             },
             params: {
-              orderBy: 'f_is_preset,f_name'
+              orderBy: 'f_code'
             }
           }
         })
@@ -69,10 +69,10 @@
     computed: {
       permission () {
         return {
-          authorize: this.hasPermission('XTGL-JSGL-SQ'),
-          add: this.hasPermission('XTGL-JSGL-ZJ'),
-          edit: this.hasPermission('XTGL-JSGL-XG'),
-          remove: this.hasPermission('XTGL-JSGL-SC')
+          sql: this.hasPermission('XTGL-ZDGL-DCSQL'),
+          add: this.hasPermission('XTGL-ZDGL-ZJ'),
+          edit: this.hasPermission('XTGL-ZDGL-XG'),
+          remove: this.hasPermission('XTGL-ZDGL-SC')
         }
       }
     },
@@ -95,8 +95,8 @@
           width: 38
         },
         {
-          headerName: '角色名称',
-          field: 'f_name',
+          headerName: '编码',
+          field: 'f_code',
           pinned: 'left',
           suppressSorting: false,
           suppressFilter: false,
@@ -106,10 +106,51 @@
           width: 160
         },
         {
-          headerName: '角色描述',
-          field: 'f_desc',
-          tooltipField: 'f_desc',
-          width: 300
+          headerName: '名称',
+          field: 'f_name',
+          tooltipField: 'f_name',
+          pinned: 'left',
+          suppressSorting: false,
+          suppressFilter: false,
+          filterFramework: LikeFilterFramework,
+          floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
+          width: 200
+        },
+        {
+          headerName: '数据库名',
+          field: 'f_db_name',
+          tooltipField: 'f_db_name',
+          width: 150
+        },
+        {
+          headerName: '数据表名',
+          field: 'f_table_name',
+          tooltipField: 'f_table_name',
+          width: 200
+        },
+        {
+          headerName: '字典项编码字段',
+          field: 'f_code_column',
+          tooltipField: 'f_code_column',
+          width: 120
+        },
+        {
+          headerName: '字典项名称字段',
+          field: 'f_name_column',
+          tooltipField: 'f_name_column',
+          width: 120
+        },
+        {
+          headerName: '字典项排序字段',
+          field: 'f_order_column',
+          tooltipField: 'f_order_column',
+          width: 120
+        },
+        {
+          headerName: '查询Where条件',
+          field: 'f_where_clause',
+          tooltipField: 'f_where_clause',
+          width: 200
         },
         {
           headerName: '是否预置',
@@ -134,19 +175,6 @@
           cellRendererFramework: OperationRendererFramework,
           cellRendererParams: {
             operations: [{
-              id: 'authorize',
-              title: '授权可以操作的功能',
-              type: 'warning',
-              icon: 'fa fa-key',
-              permission: 'authorize',
-              onClick (params, entity) {
-                params.context.featureComponent.$refs['authorize'].open({
-                  operation: 'authorize',
-                  title: '授权可以操作的功能',
-                  params: entity
-                })
-              }
-            }, {
               id: 'edit',
               permission: 'edit'
             }, {
@@ -154,6 +182,18 @@
               permission: 'remove',
               isDisabled (params, entity) {
                 return entity.f_is_preset === 1
+              }
+            }, {
+              id: 'sql',
+              title: 'SQL脚本',
+              icon: 'fa fa-file-code-o',
+              permission: 'sql',
+              onClick (params, entity) {
+                params.context.featureComponent.$refs['sql'].open({
+                  operation: 'sql',
+                  title: 'SQL脚本',
+                  params: entity
+                })
               }
             }]
           },

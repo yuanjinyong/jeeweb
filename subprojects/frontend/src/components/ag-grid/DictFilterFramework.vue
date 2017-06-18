@@ -43,6 +43,9 @@
         var items = this.filterParams.dict
         if (typeof (this.filterParams.dict) === 'string') {
           items = Vue.store.state.dicts[this.filterParams.dict]
+          if (!items) {
+            console && console.error('请先配置字典', this.filterParams.dict)
+          }
         }
         if (typeof (items.length) !== 'undefined') {
           this.options = items

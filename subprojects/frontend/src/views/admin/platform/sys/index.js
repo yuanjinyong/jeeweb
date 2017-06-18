@@ -1,3 +1,6 @@
+export * from './dict'
+import {DictView} from './dict'
+
 export * from './menu'
 import {MenuView} from './menu'
 
@@ -16,6 +19,10 @@ export default [
     component: {
       template: '<router-view></router-view>'
     }
+  },
+  {
+    path: 'dict',
+    component: DictView
   },
   {
     path: 'menu',

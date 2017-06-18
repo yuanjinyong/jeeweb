@@ -37,11 +37,6 @@ public class RoleEntity extends BaseEntity<Integer> implements IPreset {
         this.f_is_preset = f_is_preset;
     }
 
-    @Override
-    public Boolean isPreset() {
-        return this.f_is_preset == IPreset.YES;
-    }
-
     public String getF_remark() {
         return f_remark;
     }

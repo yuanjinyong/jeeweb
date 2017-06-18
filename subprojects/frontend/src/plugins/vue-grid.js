@@ -17,6 +17,7 @@ var VueGrid = {
         totalCount: 0
       }
     },
+    animateRows: true,
     enableFilter: true,
     floatingFilter: true,
     enableServerSideFilter: true,

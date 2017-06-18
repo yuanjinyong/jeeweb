@@ -72,33 +72,7 @@ const store = new Vuex.Store({
         }
       })
     },
-    dicts: {
-      'YesNo': {1: '是', 2: '否'},
-      'MenuType': {0: '根', 1: '目录', 2: '页面', 3: '按钮', 4: '令牌'},
-      'UserStatus': {1: '正常', 2: '锁定', 3: '注销'},
-      'HttpMethods': [
-        {
-          f_item_code: '[]',
-          f_item_text: '[]'
-        },
-        {
-          f_item_code: '[DELETE]',
-          f_item_text: '[DELETE]'
-        },
-        {
-          f_item_code: '[GET]',
-          f_item_text: '[GET]'
-        },
-        {
-          f_item_code: '[POST]',
-          f_item_text: '[POST]'
-        },
-        {
-          f_item_code: '[PUT]',
-          f_item_text: '[PUT]'
-        }
-      ]
-    }
+    dicts: {}
   },
   mutations: {
     setMock (state, payload) {
@@ -114,6 +88,9 @@ const store = new Vuex.Store({
       state.menuList = payload.menuList
       state.permissionList = []
       state._addPermission(state.menuList, state.permissionList)
+    },
+    setDicts (state, payload) {
+      state.dicts = payload
     },
     backupRoute (state, payload) {
       state.originalRoute = payload

@@ -133,7 +133,7 @@
           field: 'f_is_main',
           cellStyle: {'text-align': 'center'},
           cellRendererFramework: DictRendererFramework,
-          cellRendererParams: {dict: 'YesNo'},
+          cellRendererParams: {dict: 'YesNo2'},
           width: 60
         },
         {

@@ -5,8 +5,10 @@
     var items = dict
     if (typeof (dict) === 'string') {
       items = Vue.store.state.dicts[dict]
+      if (!items) {
+        console && console.error('请先配置字典', dict)
+      }
     }
-
     if (typeof (items) === 'object') {
       if (typeof (items.length) !== 'undefined') {
         for (var i = 0; i < items.length; i++) {

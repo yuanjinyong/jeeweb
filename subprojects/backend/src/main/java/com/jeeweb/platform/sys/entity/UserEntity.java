@@ -167,11 +167,6 @@ public class UserEntity extends BaseEntity<Integer> implements ICreator, IPreset
         this.f_is_preset = f_is_preset;
     }
 
-    @Override
-    public Boolean isPreset() {
-        return this.f_is_preset == IPreset.YES;
-    }
-
     public Integer getF_status() {
         return f_status;
     }

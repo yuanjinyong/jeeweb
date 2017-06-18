@@ -99,7 +99,7 @@
           floatingFilterComponentFramework: DictFloatingFilterComponentFramework,
           cellStyle: {'text-align': 'center'},
           cellRendererFramework: DictRendererFramework,
-          cellRendererParams: {dict: 'YesNo'},
+          cellRendererParams: {dict: 'YesNo2'},
           width: 75
         },
         {

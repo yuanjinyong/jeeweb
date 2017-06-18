@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.jeeweb.framework.business.entity.TreeNodeEntity;
 import com.jeeweb.framework.business.mapper.BaseMapper;
 import com.jeeweb.framework.business.model.ICreator;
 import com.jeeweb.framework.business.model.IPreset;
@@ -125,7 +126,7 @@ public abstract class BaseService<P, E> {
     protected void checkPreset(E entity) {
         if (entity instanceof IPreset) {
             IPreset preset = (IPreset) entity;
-            if (preset.isPreset()) {
+            if (preset.getF_is_preset() == IPreset.YES) {
                 throw new BusinessException("系统预置数据，不能删除！");
             }
         }

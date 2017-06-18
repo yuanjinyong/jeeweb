@@ -52,6 +52,8 @@
           elDialogSize: {mini: 'tiny', small: 'small', middle: 'small', large: 'large', full: 'full'},
           height: 457, // 默认10行的高度
           params: {},
+          beforeOpen: null,
+          opened: null,
           selected: null,
           cancelled: null,
           closed: null
@@ -64,6 +66,34 @@
       }
     },
     methods: {
+      close () { // 供外部调用的接口
+        this.visible = false
+        this.$emit('closed')
+        if (this.options.closed) {
+          this.options.closed.call(this)
+        }
+      },
+      open (options) { // 供外部调用的接口
+        if (this.selectorOptions.context && this.selectorOptions.context.name) {
+          this.options.title = '请选择' + this.selectorOptions.context.name
+        }
+        this.options.params = {}
+        this.$lodash.merge(this.options, this.selectorOptions, options)
+        if (this.options.beforeOpen) {
+          this.options.beforeOpen.call(this, this.options, () => {
+            this._open()
+          })
+        } else {
+          this._open()
+        }
+      },
+      _open () {
+        this._addDraggable()
+        this.visible = true
+        if (this.options.opened) {
+          this.options.opened.call(this, this.options)
+        }
+      },
       _addDraggable () {
         if (!this.options.draggable || this.canDraggable) {
           return
@@ -95,22 +125,6 @@
         }
 
         this.canDraggable = true
-      },
-      close () { // 供外部调用的接口
-        this.visible = false
-        this.$emit('closed')
-        if (this.options.closed) {
-          this.options.closed.call(this)
-        }
-      },
-      open (options) { // 供外部调用的接口
-        if (this.selectorOptions.context && this.selectorOptions.context.name) {
-          this.options.title = '请选择' + this.selectorOptions.context.name
-        }
-        this.options.params = {}
-        this.$lodash.merge(this.options, this.selectorOptions, options)
-        this._addDraggable()
-        this.visible = true
       },
       onCancel () {
         this.close()

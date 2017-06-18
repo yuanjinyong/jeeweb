@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeweb.platform.sys.mapper.DictItemMapper">
+
+    <sql id="Insert_Clause">
+        INSERT INTO t_sys_dict_item(
+        f_tenant_id,
+        f_dict_code,
+        f_item_order,
+        f_item_code,
+        f_item_text,
+        f_is_preset
+        )
+        VALUES
+    </sql>
+    <sql id="Insert_Value_Clause">
+        (
+        #{f_tenant_id},
+        #{f_dict_code},
+        #{f_item_order},
+        #{f_item_code},
+        #{f_item_text},
+        #{f_is_preset}
+        )
+    </sql>
+    <sql id="Insert_Values_Clause">
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.f_tenant_id},
+            #{item.f_dict_code},
+            #{item.f_item_order},
+            #{item.f_item_code},
+            #{item.f_item_text},
+            #{item.f_is_preset}
+            )
+        </foreach>
+    </sql>
+
+    <sql id="Select_Clause">
+        SELECT
+        t.f_id,
+        t.f_tenant_id,
+        t.f_dict_code,
+        t.f_item_order,
+        t.f_item_code,
+        t.f_item_text,
+        t.f_is_preset
+    </sql>
+    <sql id="From_Clause">
+        FROM t_sys_dict_item t
+    </sql>
+    <sql id="Where_Clause">
+        WHERE 1=1
+        <if test="f_tenant_id != null and f_tenant_id != ''">AND t.f_tenant_id = #{f_tenant_id}</if>
+        <if test="f_tenant_id_in != null and f_tenant_id_in != ''">AND t.f_tenant_id IN (${f_tenant_id_in})</if>
+        <if test="f_dict_code != null and f_dict_code != ''">AND t.f_dict_code = #{f_dict_code}</if>
+        <if test="f_is_preset != null and f_is_preset != ''">AND t.f_is_preset = #{f_is_preset}</if>
+    </sql>
+
+
+    <!-- select -->
+    <select id="selectEntity" parameterType="java.lang.Integer" resultType="com.jeeweb.platform.sys.entity.DictItemEntity">
+        <include refid="Select_Clause" />
+        <include refid="From_Clause" />
+        WHERE t.f_id = #{f_id}
+    </select>
+    <select id="selectEntityListPage" parameterType="com.jeeweb.framework.core.model.ParameterMap" resultType="com.jeeweb.platform.sys.entity.DictItemEntity">
+        <include refid="Select_Clause" />
+        <include refid="From_Clause" />
+        <include refid="Where_Clause" />
+    </select>
+    <select id="selectMapEntityListPage" parameterType="com.jeeweb.framework.core.model.ParameterMap" resultType="com.jeeweb.framework.core.model.RowMap">
+        <include refid="Select_Clause" />
+        <include refid="From_Clause" />
+        <include refid="Where_Clause" />
+    </select>
+
+    <!-- insert -->
+    <insert id="insertEntity" parameterType="com.jeeweb.platform.sys.entity.DictItemEntity">
+        <selectKey resultType="java.lang.Integer" keyProperty="f_id" order="AFTER">
+            SELECT @@IDENTITY
+        </selectKey>
+        <include refid="Insert_Clause" />
+        <include refid="Insert_Value_Clause" />
+    </insert>
+    <insert id="insertEntities" parameterType="java.util.ArrayList">
+        <include refid="Insert_Clause" />
+        <include refid="Insert_Values_Clause" />
+    </insert>
+
+    <!-- update -->
+    <update id="updateEntity" parameterType="com.jeeweb.platform.sys.entity.DictItemEntity">
+        UPDATE t_sys_dict_item SET
+        <if test="f_tenant_id != null">f_tenant_id=#{f_tenant_id},</if>
+        <if test="f_dict_code != null">f_dict_code=#{f_dict_code},</if>
+        <if test="f_item_order != null">f_item_order=#{f_item_order},</if>
+        <if test="f_item_code != null">f_item_code=#{f_item_code},</if>
+        <if test="f_item_text != null">f_item_text=#{f_item_text},</if>
+        <if test="f_is_preset != null">f_is_preset=#{f_is_preset},</if>
+        f_id=#{f_id}
+        WHERE f_id=#{f_id}
+    </update>
+
+    <!-- delete -->
+    <select id="isCanDeleteEntity" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT 0 FROM DUAL
+    </select>
+    <delete id="deleteEntity" parameterType="java.lang.Integer">
+        DELETE FROM t_sys_dict_item WHERE f_id=#{f_id}
+    </delete>
+    <delete id="deleteEntities" parameterType="com.jeeweb.framework.core.model.ParameterMap">
+        DELETE FROM t_sys_dict_item WHERE 1=1
+        <if test="f_id_in != null and f_id_in != ''">AND f_id IN(${f_id_in})</if>
+        <if test="f_dict_code != null and f_dict_code != ''">AND f_dict_code = #{f_dict_code}</if>
+    </delete>
+
+    <!-- 其他SQL -->
+</mapper>
