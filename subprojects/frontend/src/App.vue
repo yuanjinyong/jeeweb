@@ -1,7 +1,7 @@
 <style>
   body {
     font-size: 14px;
-    background-color: #fff;
+    background-color: #324157;
     margin: 0px;
     padding: 0px;
     overflow: auto;
