@@ -7,6 +7,7 @@
         distBaseUrl = "${nexusUrl}/content/groups/public/download/nodejs"
         download = true
         workDir = file("${rootProject.projectDir}/.gradle/nodejs") // 把nodejs安装到Root Project的.gradle目录下
+        npmWorkDir = file("${rootProject.projectDir}/.gradle/nodejs/npm")
     }
 
     task copyCfg(type: Copy) {
