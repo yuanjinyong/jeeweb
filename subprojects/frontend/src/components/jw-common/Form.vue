@@ -109,6 +109,10 @@
       open (options) { // 供外部调用的接口
         this.options.params = {}
         this.$lodash.merge(this.options, {title: this.titles[options.operation]}, this.formOptions, options)
+        if (this.$store.state.layout.window.width < 768) {
+          this.options.size = 'mini'
+        }
+
         if (this.options.beforeOpen) {
           this.options.beforeOpen.call(this, this.options, () => {
             this._open()
