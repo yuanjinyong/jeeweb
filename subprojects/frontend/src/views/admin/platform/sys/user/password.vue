@@ -26,7 +26,7 @@
         options: {
           context: {
             name: '用户密码',
-            url: 'api/admin/index/change/password'
+            url: 'api/admin/index/user/change/password'
           },
           loadRemoteEntity (options, cb) {
             cb({oldPassword: null, newPassword: null, newPassword2: null})
