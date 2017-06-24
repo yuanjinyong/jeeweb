@@ -40,6 +40,12 @@ public class IndexApi extends SuperController {
         }
     }
 
+    @RequestMapping(value = "/user/change/password", method = RequestMethod.POST)
+    public ResponseResult changePassword() {
+        userService.changePassword($("oldPassword"), $("newPassword"));
+        return new ResponseResult(new Result(), HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/menus", method = RequestMethod.GET)
     public ResponseResult getMenus() {
         // 获取当前用户可以访问的菜单和按钮
@@ -54,11 +60,5 @@ public class IndexApi extends SuperController {
         Page<MenuEntity> page = new Page<>();
         page.setItems(TreeUtil.listToTree(menuList));
         return new ResponseResult(new Result(page), HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/change/password", method = RequestMethod.POST)
-    public ResponseResult changePassword() {
-        userService.changePassword($("oldPassword"), $("newPassword"));
-        return new ResponseResult(new Result(), HttpStatus.OK);
     }
 }

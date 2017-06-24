@@ -29,7 +29,7 @@ public final class RequestMappingInfoUtil {
 
     public static UrlEntity getUrlEntity(HttpServletRequest request,
             RequestMappingHandlerMapping requestMappingHandlerMapping) {
-        List<RequestMappingInfo> matches = new ArrayList<RequestMappingInfo>();
+        List<RequestMappingInfo> matches = new ArrayList<>();
         Map<RequestMappingInfo, HandlerMethod> handlerMethods = requestMappingHandlerMapping.getHandlerMethods();
         for (Entry<RequestMappingInfo, HandlerMethod> entry : handlerMethods.entrySet()) {
             RequestMappingInfo info = entry.getKey().getMatchingCondition(request);

@@ -1,11 +1,11 @@
 <template>
   <jw-form ref="form" :form-options="options" :entity="entity">
     <template slot="fieldset">
-      <el-form-item prop="sql">
+      <div class="jw-form-item">
         <el-input v-model="entity.sql" type="textarea" class="jw-textarea-full-width jw-textarea-nowrap"
                   :autosize="{minRows: 4, maxRows: 18}">
         </el-input>
-      </el-form-item>
+      </div>
     </template>
   </jw-form>
 </template>
@@ -21,8 +21,8 @@
       return {
         options: {
           context: {
-            name: '菜单SQL',
-            url: 'api/platform/sys/menus',
+            name: '字典组',
+            url: 'api/platform/sys/dicts',
             detailComponent: this
           },
           loadRemoteEntity (options, cb) {
@@ -34,60 +34,41 @@
     },
     methods: {
       _loadEntity (cb) {
-        this.$http.get(this.options.context.url + '/' + this.options.params.f_id + '/sql').then((response) => {
-          let data = response.body.success ? response.body.data : {}
-          let menuStr = '/*Data for the table `t_sys_menu` */\n'
-          menuStr += this._appendMenus(data.menuList)
+        this.$http.get(this.options.context.url + '/' + this.options.params.f_id).then((response) => {
+          let entity = response.body.success ? response.body.data : {}
+          let sql = '-- ' + entity.f_code + ' ' + entity.f_name + '\n'
+          sql += '/*Data for the table `t_sys_dict` */\n'
+          sql += 'insert  into `t_sys_dict`(`f_code`,`f_name`,`f_db_name`,`f_table_name`,`f_tenant_column`,`f_code_column`,`f_name_column`,`f_order_column`,`f_where_clause`,`f_is_preset`,`f_remark`) values '
+          sql += '(' + (entity.f_code ? ('\'' + entity.f_code.replace(/'/g, "\\'") + '\'') : 'NULL')
+          sql += ',' + (entity.f_name ? ('\'' + entity.f_name.replace(/'/g, "\\'") + '\'') : 'NULL')
+          sql += ',' + (entity.f_db_name ? ('\'' + entity.f_db_name.replace(/'/g, "\\'") + '\'') : 'NULL')
+          sql += ',' + (entity.f_table_name ? ('\'' + entity.f_table_name.replace(/'/g, "\\'") + '\'') : 'NULL')
+          sql += ',' + (entity.f_tenant_column ? ('\'' + entity.f_tenant_column.replace(/'/g, "\\'") + '\'') : 'NULL')
+          sql += ',' + (entity.f_code_column ? ('\'' + entity.f_code_column.replace(/'/g, "\\'") + '\'') : 'NULL')
+          sql += ',' + (entity.f_name_column ? ('\'' + entity.f_name_column.replace(/'/g, "\\'") + '\'') : 'NULL')
+          sql += ',' + (entity.f_order_column ? ('\'' + entity.f_order_column.replace(/'/g, "\\'") + '\'') : 'NULL')
+          sql += ',' + (entity.f_where_clause ? ('\'' + entity.f_where_clause.replace(/'/g, "\\'") + '\'') : 'NULL')
+          sql += ',' + entity.f_is_preset
+          sql += ',' + (entity.f_remark ? ('\'' + entity.f_remark.replace(/'/g, "\\'") + '\'') : 'NULL')
+          sql += ');\n'
 
-          let menuUrlStr = '/*Data for the table `t_sys_menu_url` */\n'
-          if (data.menuUrlList && data.menuUrlList.length > 0) {
-            data.menuUrlList.forEach((menuUrl) => {
-              menuUrlStr += 'insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values (\'' + menuUrl.f_menu_id + '\',\'' + menuUrl.f_url_id + '\');\n'
+          if (entity.itemList && entity.itemList.length > 0) {
+            sql += '\n'
+            sql += '/*Data for the table `t_sys_dict_item` */\n'
+            entity.itemList.forEach((item) => {
+              sql += 'insert  into `t_sys_dict_item`(`f_tenant_id`,`f_dict_code`,`f_item_order`,`f_item_code`,`f_item_text`,`f_is_preset`) values '
+              sql += '(' + item.f_tenant_id
+              sql += ',\'' + item.f_dict_code + '\''
+              sql += ',' + item.f_item_order
+              sql += ',\'' + item.f_item_code + '\''
+              sql += ',\'' + item.f_item_text + '\''
+              sql += ',' + item.f_is_preset
+              sql += ');\n'
             })
           }
 
-          let roleMenuStr = '/*Data for the table `t_sys_role_menu` */\n'
-          if (data.roleMenuList && data.roleMenuList.length > 0) {
-            data.roleMenuList.forEach((roleMenu) => {
-              roleMenuStr += 'insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (' + roleMenu.f_role_id + ',\'' + roleMenu.f_menu_id + '\');\n'
-            })
-          }
-
-          let sql = '-- ' + this.options.params.f_id + ' ' + this.options.params.f_name + '\n'
-          sql += menuStr + '\n'
-          sql += menuUrlStr + '\n'
-          sql += roleMenuStr + '\n'
-
-          // this.entity.sql = sql
           cb({sql: sql})
         })
-      },
-      _appendMenus (menus) {
-        let menuStr = ''
-        if (menus && menus.length > 0) {
-          menus.forEach((menu) => {
-            menuStr += 'insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values '
-            menuStr += '(\'' + menu.f_id + '\''
-            menuStr += ',\'' + menu.f_parent_id + '\''
-            menuStr += ',\'' + menu.f_parent_path + '\''
-            menuStr += ',' + menu.f_order
-            menuStr += ',\'' + menu.f_name.replace(/'/g, "\\'") + '\''
-            menuStr += ',' + (menu.f_desc ? ('\'' + menu.f_desc.replace(/'/g, "\\'") + '\'') : 'NULL')
-            menuStr += ',' + (menu.f_icon ? ('\'' + menu.f_icon + '\'') : 'NULL')
-            menuStr += ',' + menu.f_type
-            menuStr += ',' + (menu.f_route_path ? ('\'' + menu.f_route_path + '\'') : 'NULL')
-            menuStr += ',' + menu.f_is_web
-            menuStr += ',' + menu.f_is_android
-            menuStr += ',' + menu.f_is_ios
-            menuStr += ',' + menu.f_status
-            menuStr += ',' + (menu.f_remark ? ('\'' + menu.f_remark.replace(/'/g, "\\'") + '\'') : 'NULL')
-            menuStr += ');\n'
-
-            menuStr += this._appendMenus(menu.children)
-          })
-        }
-
-        return menuStr
       }
     }
   }

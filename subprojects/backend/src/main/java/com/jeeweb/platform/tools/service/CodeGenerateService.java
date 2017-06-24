@@ -51,6 +51,7 @@ public class CodeGenerateService extends BaseService<Integer, GenerateRuleEntity
     }
 
     @Override
+    @Transactional(readOnly = true)
     public GenerateRuleEntity selectEntity(Integer primaryKey) {
         GenerateRuleEntity entity = super.selectEntity(primaryKey);
 
@@ -73,10 +74,10 @@ public class CodeGenerateService extends BaseService<Integer, GenerateRuleEntity
     }
 
     @Override
-    public void updateEntity(GenerateRuleEntity entity) {
+    public void updateEntity(Integer primaryKey, GenerateRuleEntity entity) {
         deleteTableEntities(entity.getF_id());
         insertTableEntities(entity);
-        super.updateEntity(entity);
+        super.updateEntity(primaryKey, entity);
     }
 
     @Override
@@ -147,6 +148,7 @@ public class CodeGenerateService extends BaseService<Integer, GenerateRuleEntity
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    @Transactional(readOnly = true)
     public void generateCode(Integer f_rule_id) {
 
         URL rootPath = this.getClass().getResource("/");

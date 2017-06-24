@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jeeweb.framework.business.entity.TreeNodeEntity;
 import com.jeeweb.framework.business.mapper.BaseMapper;
+import com.jeeweb.framework.business.model.IAuditor;
 import com.jeeweb.framework.business.model.ICreator;
 import com.jeeweb.framework.business.model.IPreset;
 import com.jeeweb.framework.core.exception.BusinessException;
@@ -23,14 +25,17 @@ public abstract class BaseService<P, E> {
 
     protected abstract BaseMapper<P, E> getMapper();
 
+    @Transactional(readOnly = true)
     public E selectEntity(P primaryKey) {
         return getMapper().selectEntity(primaryKey);
     }
 
+    @Transactional(readOnly = true)
     public List<E> selectEntityListPage(ParameterMap params) {
         return getMapper().selectEntityListPage(params);
     }
 
+    @Transactional(readOnly = true)
     public List<RowMap> selectMapEntityListPage(ParameterMap params) {
         return getMapper().selectMapEntityListPage(params);
     }
@@ -46,7 +51,7 @@ public abstract class BaseService<P, E> {
         getMapper().insertEntities(entityList);
     }
 
-    public void updateEntity(E entity) {
+    public void updateEntity(P primaryKey, E entity) {
         getMapper().updateEntity(entity);
     }
 
@@ -130,5 +135,38 @@ public abstract class BaseService<P, E> {
                 throw new BusinessException("系统预置数据，不能删除！");
             }
         }
+    }
+
+    public void auditEntity(P primaryKey, E entity) {
+        if (!(entity instanceof IAuditor)) {
+            return;
+        }
+
+        E oldEntity = getMapper().selectEntity(primaryKey);
+        IAuditor auditor = (IAuditor) entity;
+        IAuditor oldAuditor = (IAuditor) oldEntity;
+        if (oldAuditor.getF_status() == auditor.getF_status()) {
+            return;
+        }
+        if (oldAuditor.getF_status() != IAuditor.STATUS_NEW && oldAuditor.getF_status() != IAuditor.STATUS_REJECTED) {
+            throw new BusinessException("只有未审核和审核未通过的记录才可进行审核！");
+        }
+        if (auditor.getF_status() == IAuditor.STATUS_REJECTED && HelpUtil.isEmpty(auditor.getF_audited_comments())) {
+            throw new BusinessException("审不通过时，必须填写审核意见！");
+        }
+        checkAuditor(oldEntity);
+
+        UserEntity user = SecurityUtil.getCurUser();
+        if (user != null) {
+            oldAuditor.setF_auditor_id(user.getF_id());
+            oldAuditor.setF_auditor_name(user.getF_name());
+        }
+        oldAuditor.setF_audited_time(HelpUtil.getNowTime());
+        oldAuditor.setF_status(auditor.getF_status());
+        oldAuditor.setF_audited_comments(auditor.getF_audited_comments());
+        getMapper().updateEntity(oldEntity);
+    }
+
+    protected void checkAuditor(E oldEntity) {
     }
 }

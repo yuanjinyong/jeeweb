@@ -36,7 +36,7 @@ public abstract class BaseApi<P, E extends BaseEntity<P>> extends SuperControlle
     }
 
     protected ResponseResult updateEntity(P primaryKey, E entity) {
-        getService().updateEntity(entity);
+        getService().updateEntity(primaryKey, entity);
         return new ResponseResult(new Result(entity), HttpStatus.OK);
     }
 
@@ -56,5 +56,10 @@ public abstract class BaseApi<P, E extends BaseEntity<P>> extends SuperControlle
         // 返回码具体意义请参考HTTP协议：https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
         // return new ResponseEntity<MapEntity>(success(), HttpStatus.NO_CONTENT);
         return new ResponseResult(new Result(), HttpStatus.OK);
+    }
+
+    protected ResponseResult auditEntity(P primaryKey, E entity) {
+        getService().auditEntity(primaryKey, entity);
+        return new ResponseResult(new Result(entity), HttpStatus.OK);
     }
 }

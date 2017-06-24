@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jeeweb.framework.business.mapper.BaseMapper;
+import com.jeeweb.framework.business.model.IPreset;
 import com.jeeweb.framework.business.service.BaseService;
 import com.jeeweb.framework.core.exception.BusinessException;
 import com.jeeweb.framework.core.model.ParameterMap;
@@ -40,6 +41,7 @@ public class UserService extends BaseService<Integer, UserEntity> {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserEntity selectEntity(Integer primaryKey) {
         UserEntity entity = super.selectEntity(primaryKey);
         entity.setRoleIdList(selectRoleIdList(primaryKey));
@@ -48,11 +50,7 @@ public class UserService extends BaseService<Integer, UserEntity> {
 
     @Override
     public void insertEntity(UserEntity entity) {
-        entity.setF_tenant_id(0);
-        entity.setF_department_id(0);
-        entity.setF_password(passwordService.generatePassword());
-        entity.setF_is_can_login(1); // 一般只有预置的用户才设置为不能登录。
-        entity.setF_status(UserEntity.STATUS_NORMAL);
+        fillUserEntity(entity);
 
         super.insertEntity(entity);
 
@@ -60,7 +58,7 @@ public class UserService extends BaseService<Integer, UserEntity> {
     }
 
     @Override
-    public void updateEntity(UserEntity entity) {
+    public void updateEntity(Integer primaryKey, UserEntity entity) {
         UserEntity oldEntity = super.selectEntity(entity.getF_id());
         if (oldEntity.getF_status() == UserEntity.STATUS_DEREGISTER) {
             throw new BusinessException("已注销用户不能进行此操作！");
@@ -69,7 +67,7 @@ public class UserService extends BaseService<Integer, UserEntity> {
         deleteRoleList(entity.getF_id());
         insertRoleList(entity);
 
-        super.updateEntity(entity);
+        super.updateEntity(primaryKey, entity);
     }
 
     @Override
@@ -83,6 +81,7 @@ public class UserService extends BaseService<Integer, UserEntity> {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    @Transactional(readOnly = true)
     public List<RowMap> selectUserMenuListPage(Integer f_user_id) {
         ParameterMap params = new ParameterMap();
         params.put("f_user_id", f_user_id);
@@ -119,6 +118,15 @@ public class UserService extends BaseService<Integer, UserEntity> {
         userMenuMapper.deleteEntities(new ParameterMap("f_user_id", f_user_id));
     }
 
+    private void fillUserEntity(UserEntity user) {
+        user.setF_tenant_id(0);
+        user.setF_department_id(0);
+        user.setF_password(user.getF_password() == null ? passwordService.generatePassword()
+                : passwordService.encodePassword(user.getF_password()));
+        user.setF_is_can_login(1); // 一般只有预置的用户才设置为不能登录。
+        user.setF_status(UserEntity.STATUS_NORMAL);
+    }
+
     private List<Integer> selectRoleIdList(Integer f_user_id) {
         List<RowMap> roleList = userRoleMapper.selectEntityListPage(new ParameterMap("f_user_id", f_user_id));
         List<Integer> roleIdList = new ArrayList<>();
@@ -153,11 +161,14 @@ public class UserService extends BaseService<Integer, UserEntity> {
         if (entity.getF_status() == UserEntity.STATUS_DEREGISTER) {
             throw new BusinessException("已注销用户不能进行此操作！");
         }
+        if (entity.getF_is_preset() == IPreset.YES) {
+            throw new BusinessException("系统预置用户不能进行此操作！");
+        }
 
         entity.setF_unregister_time(HelpUtil.getNowTime());
         entity.setF_status(UserEntity.STATUS_DEREGISTER);
         entity.setF_remark("被操作员【" + SecurityUtil.getCurUser().getF_name() + "】注销。");
-        super.updateEntity(entity);
+        super.updateEntity(primaryKey, entity);
     }
 
     public void unlockUser(Integer primaryKey) {
@@ -176,7 +187,7 @@ public class UserService extends BaseService<Integer, UserEntity> {
         }
 
         entity.setF_password(passwordService.generatePassword());
-        super.updateEntity(entity);
+        super.updateEntity(primaryKey, entity);
     }
 
     public void changePassword(String oldPassword, String newPassword) {
@@ -186,6 +197,6 @@ public class UserService extends BaseService<Integer, UserEntity> {
         }
 
         entity.setF_password(passwordService.encodePassword(newPassword));
-        super.updateEntity(entity);
+        super.updateEntity(entity.getF_id(), entity);
     }
 }

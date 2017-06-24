@@ -12,10 +12,8 @@
   import {ViewlMixin} from 'mixins'
   import {
     AddHeaderComponenetFramework,
-    DictRendererFramework,
     LikeFilterFramework,
     LikeFloatingFilterComponentFramework,
-    IndexRendererFramework,
     OperationRendererFramework,
     ViewRendererFramework
   } from 'components/ag-grid'
@@ -24,7 +22,7 @@
   //  import {DictDetail, DictSqlDetail} from 'views'
 
   export default {
-    name: 'dictView',
+    name: 'settingView',
     mixins: [ViewlMixin],
     components: {
       DictDetail,
@@ -51,8 +49,8 @@
         },
         gridOptions: this.$grid.buildOptions({
           context: {
-            name: '字典组',
-            url: 'api/platform/sys/dicts',
+            name: '系统设置项',
+            url: 'api/platform/sys/settings',
             featureComponent: this,
             getPermissions (params, operation) {
               return params.context.featureComponent.permission
@@ -61,7 +59,7 @@
               return params.context.featureComponent.$refs['detail']
             },
             params: {
-              orderBy: 'f_code'
+              orderBy: 'f_order'
             }
           }
         })
@@ -70,29 +68,21 @@
     computed: {
       permission () {
         return {
-          sql: this.hasPermission('XTGL-ZDGL-DCSQL'),
-          add: this.hasPermission('XTGL-ZDGL-ZJ'),
-          edit: this.hasPermission('XTGL-ZDGL-XG'),
-          remove: this.hasPermission('XTGL-ZDGL-SC')
+          sql: this.hasPermission('XTGL-XTSZ-DCSQL'),
+          add: this.hasPermission('XTGL-XTSZ-ZJ'),
+          edit: this.hasPermission('XTGL-XTSZ-XG'),
+          remove: this.hasPermission('XTGL-XTSZ-SC')
         }
       }
     },
     created () {
       this.gridOptions.columnDefs = [
         {
-          headerName: '',
-          pinned: 'left',
-          hide: this.mode !== 'selector',
-          checkboxSelection: this.mode === 'selector',
-          cellStyle: {'text-align': 'center'},
-          width: 24
-        },
-        {
           headerName: '#',
+          field: 'f_order',
           pinned: 'left',
           headerComponentFramework: this.mode !== 'selector' ? AddHeaderComponenetFramework : null,
           cellStyle: {'text-align': 'right'},
-          cellRendererFramework: IndexRendererFramework,
           width: 38
         },
         {
@@ -104,68 +94,36 @@
           filterFramework: LikeFilterFramework,
           floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
           cellRendererFramework: ViewRendererFramework,
-          width: 160
+          width: 350
         },
         {
           headerName: '名称',
           field: 'f_name',
-          tooltipField: 'f_name',
           pinned: 'left',
           suppressSorting: false,
           suppressFilter: false,
           filterFramework: LikeFilterFramework,
           floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
-          width: 200
+          width: 160
         },
         {
-          headerName: '数据库名',
-          field: 'f_db_name',
-          tooltipField: 'f_db_name',
+          headerName: '取值',
+          field: 'f_value',
+          tooltipField: 'f_value',
+          // cellRendererFramework: TextEditorFramework,
           width: 150
         },
         {
-          headerName: '数据表名',
-          field: 'f_table_name',
-          tooltipField: 'f_table_name',
+          headerName: '描述',
+          field: 'f_desc',
+          tooltipField: 'f_desc',
           width: 200
-        },
-        {
-          headerName: '字典项编码字段',
-          field: 'f_code_column',
-          tooltipField: 'f_code_column',
-          width: 120
-        },
-        {
-          headerName: '字典项名称字段',
-          field: 'f_name_column',
-          tooltipField: 'f_name_column',
-          width: 120
-        },
-        {
-          headerName: '字典项排序字段',
-          field: 'f_order_column',
-          tooltipField: 'f_order_column',
-          width: 120
-        },
-        {
-          headerName: '查询Where条件',
-          field: 'f_where_clause',
-          tooltipField: 'f_where_clause',
-          width: 200
-        },
-        {
-          headerName: '是否预置',
-          field: 'f_is_preset',
-          cellStyle: {'text-align': 'center'},
-          cellRendererFramework: DictRendererFramework,
-          cellRendererParams: {dict: 'YesNo2'},
-          width: 75
         },
         {
           headerName: '备注',
           field: 'f_remark',
           tooltipField: 'f_remark',
-          width: 300
+          width: 200
         },
         {
           headerName: '操作',

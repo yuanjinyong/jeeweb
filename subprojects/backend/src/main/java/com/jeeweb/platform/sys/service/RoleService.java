@@ -50,6 +50,7 @@ public class RoleService extends BaseService<Integer, RoleEntity> {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    @Transactional(readOnly = true)
     public List<RowMap> selectRoleMenuListPage(Integer roleId) {
         ParameterMap params = new ParameterMap();
         params.put("f_role_id", roleId);
@@ -69,7 +70,7 @@ public class RoleService extends BaseService<Integer, RoleEntity> {
 
     private void insertRoleMenu(Integer f_role_id, List<String> f_menu_ids) {
         if (!HelpUtil.isEmpty(f_menu_ids)) {
-            List<RowMap> roleMenuList = new ArrayList<RowMap>();
+            List<RowMap> roleMenuList = new ArrayList<>();
             for (String f_menu_id : f_menu_ids) {
                 RowMap roleMenu = new RowMap();
                 roleMenuList.add(roleMenu);

@@ -10,8 +10,8 @@
 
 
     <!-- 中部 -->
-    <div id="middleContainer" style="display:table;width: 100%;padding:0 20px;"
-      :style="{'min-height': middleSize.height + 'px'}">
+    <div id="middleContainer" style="background-color:#fff;display:table;width: 100%;padding:0 20px;"
+         :style="{'min-height': middleSize.height + 'px'}">
       <div style="display:table-cell;vertical-align:middle;">
         <login-form></login-form>
       </div>

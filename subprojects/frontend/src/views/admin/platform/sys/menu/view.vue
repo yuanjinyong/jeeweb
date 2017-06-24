@@ -33,6 +33,7 @@
     data () {
       return {
         sqlOptions: {
+          size: 'middle',
           context: {
             featureComponent: this,
             getGridComponent (options) {
@@ -116,6 +117,18 @@
           filterFramework: LikeFilterFramework,
           floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
           cellRendererFramework: ViewRendererFramework,
+          cellRendererParams: {
+            operation: {
+              render (params, entity) {
+                if (entity.f_type < 3) {
+                  let icon = entity.f_icon ? entity.f_icon : (entity.f_type < 2 ? 'fa fa-list' : 'fa fa-file-o')
+                  return '<i class="' + icon + '" style="min-width:14px;"></i> ' + entity.f_name
+                } else {
+                  return '<div style="min-width:14px;display: inline-block;">&nbsp;</div> ' + entity.f_name
+                }
+              }
+            }
+          },
           width: 150
         },
         {

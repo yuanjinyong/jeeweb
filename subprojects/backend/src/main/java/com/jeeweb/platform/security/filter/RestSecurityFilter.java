@@ -41,8 +41,8 @@ public class RestSecurityFilter extends AbstractSecurityInterceptor implements F
 
     private AuthenticationEntryPoint authenticationEntryPoint;
     private FilterInvocationSecurityMetadataSource securityMetadataSource;
-    private List<RequestMatcher> permitAllMatchers = new ArrayList<RequestMatcher>();
-    private List<RequestMatcher> authenticatedMatchers = new ArrayList<RequestMatcher>();
+    private List<RequestMatcher> permitAllMatchers = new ArrayList<>();
+    private List<RequestMatcher> authenticatedMatchers = new ArrayList<>();
 
     /*
      * (non-Javadoc)

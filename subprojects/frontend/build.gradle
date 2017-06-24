@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.moowork.gradle:gradle-node-plugin:1.0.1'
+        classpath 'com.moowork.gradle:gradle-node-plugin:1.2.0'
         // classpath 'com.moowork.gradle:gradle-node-plugin:1.2.0.fixed-SNAPSHOT'
     }
 
@@ -24,7 +24,7 @@ apply from: "${gradleDir}/java.gradle"
 apply from: "${gradleDir}/node.gradle"
 
 
-description = '筑库建筑项目管理系统 - 前端工程'
+description = 'J2EE Web管理系统 - 前端工程'
 
 
 webAppDirName = 'build/webapp'

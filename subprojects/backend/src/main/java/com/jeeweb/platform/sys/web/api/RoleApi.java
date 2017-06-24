@@ -73,7 +73,7 @@ public class RoleApi extends BaseApi<Integer, RoleEntity> {
         if (primaryKey >= 0) {
             menuList = roleService.selectRoleMenuListPage(primaryKey);
         } else {
-            menuList = new ArrayList<RowMap>();
+            menuList = new ArrayList<>();
         }
 
         if ($bool("treeData", true)) {

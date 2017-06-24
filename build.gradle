@@ -51,7 +51,7 @@ buildscript {
 }
 
 
-description = 'J2EE Web项目'
+description = 'J2EE Web管理系统'
 
 
 allprojects {

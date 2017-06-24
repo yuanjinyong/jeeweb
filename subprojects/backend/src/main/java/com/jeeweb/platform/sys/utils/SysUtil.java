@@ -1,31 +1,35 @@
 package com.jeeweb.platform.sys.utils;
 
+import com.jeeweb.framework.core.aware.SpringContextAware;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.platform.security.utils.SecurityUtil;
 import com.jeeweb.platform.sys.entity.UserEntity;
+import com.jeeweb.platform.sys.service.SettingService;
 
-public class SysUtil {
+public final class SysUtil {
     public static String P_DEFAULT_PASSWORD = "DefaultPassword";
     public static String P_EXPIRY_DATE = "ExpiryDate";
 
-    // public static String getParameterValue(String parameterId, String defaultValue) {
-    // return getParameterValue(parameterId, defaultValue, getTenantId());
-    // }
-    //
-    // public static String getParameterValue(String parameterId, String defaultValue, Integer tenantId) {
-    // return getParameterValue(parameterId, defaultValue, String.class, tenantId);
-    // }
-    //
-    // public static <T> T getParameterValue(String parameterId, T defaultValue, Class<T> clz) {
-    // return getParameterValue(parameterId, defaultValue, clz, getTenantId());
-    // }
-    //
-    // public static <T> T getParameterValue(String parameterId, T defaultValue, Class<T> clz, Integer tenantId) {
-    // T value = ParameterCache.getParameterValue(getTenantIdList(tenantId), parameterId, clz);
-    // return value == null ? defaultValue : value;
-    // }
-    //
+    public static void appendCurUserAndRoles(ParameterMap params) {
+        UserEntity user = SecurityUtil.getCurUser();
+        // 是否为超级管理员
+        if (user != null && !user.isSuperAdmin()) {
+            params.put("cur_user_id", user.getF_id());
+            params.put("cur_role_id_in", HelpUtil.joinToInString(user.getRoleIdList()));
+        }
+    }
+
+    public static String getSetting(String code, String defaultValue) {
+        return getSetting(code, defaultValue, String.class);
+    }
+
+    public static <T> T getSetting(String code, T defaultValue, Class<T> clz) {
+        SettingService settingService = SpringContextAware.getBean(SettingService.class);
+        T value = settingService.getValue(code, defaultValue, clz);
+        return value == null ? defaultValue : value;
+    }
+
     // public static List<DictItemEntity> getDictItemList(String dictCode) {
     // return DictCache.getDictItemList(getTenantIdList(), dictCode);
     // }
@@ -48,16 +52,7 @@ public class SysUtil {
     // public static List<Integer> getTenantIdList(Integer tenantId) {
     // return TenantCache.getTenantIdList(tenantId);
     // }
-
-    public static void appendCurUserAndRoles(ParameterMap params) {
-        UserEntity user = SecurityUtil.getCurUser();
-        // 是否为超级管理员
-        if (user != null && !user.isSuperAdmin()) {
-            params.put("cur_user_id", user.getF_id());
-            params.put("cur_role_id_in", HelpUtil.joinToInString(user.getRoleIdList()));
-        }
-    }
-
+    //
     // public static void appendCurTenantIds(MapEntity params) {
     // UserEntity user = getCurUser();
     // if (user != null && user.getF_tenant_id() != TenantEntity.ROOT_TENANT) {

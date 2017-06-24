@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.jeeweb.framework.core.configure;
+package com.jeeweb.framework.configure;
 
 import javax.sql.DataSource;
 

@@ -28,7 +28,7 @@ public class UrlService extends BaseService<String, UrlEntity> {
     }
 
     @Override
-    public void updateEntity(UrlEntity entity) {
+    public void updateEntity(String primaryKey, UrlEntity entity) {
         super.deleteEntity(entity.getF_id());
 
         this.insertEntity(entity);

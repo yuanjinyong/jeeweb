@@ -36,6 +36,7 @@ public class RestTokenService {
         userMapper.updateEntity(entity);
 
         String token = UUID.randomUUID().toString();
+        securityUser.setToken(token);
         byteRedisTemplate.opsForValue().set("token:" + token, authentication, 1, TimeUnit.DAYS);
         return token;
     }

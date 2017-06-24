@@ -44,6 +44,7 @@ public class DictService extends BaseService<Integer, DictEntity> implements Ini
     }
 
     @Override
+    @Transactional(readOnly = true)
     public DictEntity selectEntity(Integer primaryKey) {
         DictEntity entity = getMapper().selectEntity(primaryKey);
         entity.setItemList(
@@ -60,11 +61,11 @@ public class DictService extends BaseService<Integer, DictEntity> implements Ini
     }
 
     @Override
-    public void updateEntity(DictEntity entity) {
+    public void updateEntity(Integer primaryKey, DictEntity entity) {
         deleteDictItemList(entity);
         insertDictItemList(entity);
 
-        super.updateEntity(entity);
+        super.updateEntity(primaryKey, entity);
     }
 
     @Override
@@ -76,6 +77,7 @@ public class DictService extends BaseService<Integer, DictEntity> implements Ini
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
+    @Transactional(readOnly = true)
     public void afterPropertiesSet() throws Exception {
         long startTime = System.currentTimeMillis();
         LOG.info("====加载字典信息。");
@@ -86,6 +88,7 @@ public class DictService extends BaseService<Integer, DictEntity> implements Ini
     }
 
     // TODO 后续需要改为Redis缓存，区分启动加载和首次使用加载
+    @Transactional(readOnly = true)
     public Map<String, List<DictItemEntity>> getDicts() {
         Map<String, List<DictItemEntity>> dicts = new HashMap<>();
 
@@ -130,11 +133,13 @@ public class DictService extends BaseService<Integer, DictEntity> implements Ini
     }
 
     // TODO 后续需要改为Redis缓存
+    @Transactional(readOnly = true)
     public List<DictItemEntity> getDictItemList(String dictCode) {
         return selectDictItemList(new ParameterMap("f_dict_code", dictCode).setOrderBy("f_item_order"));
     }
 
     // TODO 后续需要改为Redis缓存
+    @Transactional(readOnly = true)
     public Map<Object, Object> getDict(String dictCode) {
         Map<Object, Object> dictMap = new HashMap<>();
         List<RowMap> dictItemList = dictItemMapper.selectMapEntityListPage(new ParameterMap("f_dict_code", dictCode));

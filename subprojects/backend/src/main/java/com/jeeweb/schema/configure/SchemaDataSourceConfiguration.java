@@ -25,7 +25,7 @@ public class SchemaDataSourceConfiguration {
     @Value("${spring.datasource.schema.url:#{null}}")
     private String url;
     @Value("${spring.datasource.schema.username:#{null}}")
-    private String user;
+    private String username;
     @Value("${spring.datasource.schema.password:#{null}}")
     private String password;
 
@@ -43,7 +43,7 @@ public class SchemaDataSourceConfiguration {
     private Integer maintenanceInterval;
     @Value("${spring.datasource.schema.maxIdleTime:60}")
     private Integer maxIdleTime;
-    @Value("${spring.datasource.default.reapTimeout:120}")
+    @Value("${spring.datasource.schema.reapTimeout:120}")
     private Integer reapTimeout;
     @Value("${spring.datasource.schema.testQuery:SELECT 1}")
     private String testQuery;
@@ -53,8 +53,8 @@ public class SchemaDataSourceConfiguration {
         MysqlXADataSource mysqlXaDataSource = new MysqlXADataSource();
         mysqlXaDataSource.setPinGlobalTxToPhysicalConnection(true);
         mysqlXaDataSource.setUrl(url);
+        mysqlXaDataSource.setUser(username);
         mysqlXaDataSource.setPassword(password);
-        mysqlXaDataSource.setUser(user);
 
         AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
         xaDataSource.setXaDataSource(mysqlXaDataSource);

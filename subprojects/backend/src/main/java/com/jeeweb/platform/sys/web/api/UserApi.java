@@ -15,6 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.jeeweb.framework.business.service.BaseService;
 import com.jeeweb.framework.business.web.api.BaseApi;
+import com.jeeweb.framework.core.exception.BusinessException;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
@@ -45,6 +46,10 @@ public class UserApi extends BaseApi<Integer, UserEntity> {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseResult create(@RequestBody UserEntity entity, UriComponentsBuilder ucBuilder) {
+        if (entity.getF_account().length() > 30) {
+            throw new BusinessException("用户名长度必须小于30个字符！");
+        }
+
         return super.createEntity(entity, ucBuilder);
     }
 
@@ -75,7 +80,7 @@ public class UserApi extends BaseApi<Integer, UserEntity> {
         if (primaryKey >= 0) {
             menuList = userService.selectUserMenuListPage(primaryKey);
         } else {
-            menuList = new ArrayList<RowMap>();
+            menuList = new ArrayList<>();
         }
 
         if ($bool("treeData", true)) {

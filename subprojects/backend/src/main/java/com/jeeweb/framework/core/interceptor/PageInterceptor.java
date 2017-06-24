@@ -28,11 +28,9 @@ import org.apache.ibatis.type.TypeHandler;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.jeeweb.framework.core.configure.MybatisPageProperties;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.framework.core.utils.MetaUtil;
@@ -43,14 +41,15 @@ import com.jeeweb.framework.core.utils.MetaUtil;
  * @author 袁进勇
  */
 @Component
-@EnableConfigurationProperties(MybatisPageProperties.class)
 @Intercepts({
         @Signature(type = StatementHandler.class, method = "prepare", args = { Connection.class, Integer.class }) })
 public class PageInterceptor implements Interceptor {
     private static final Logger LOG = LoggerFactory.getLogger(PageInterceptor.class);
 
-    @Autowired
-    private MybatisPageProperties properties;
+    @Value("${mybatis.page.dialect:mysql}")
+    private String dialect;
+    @Value("${mybatis.page.sqlIdRegex:.*ListPage$}")
+    private String sqlIdRegex;
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
@@ -77,12 +76,11 @@ public class PageInterceptor implements Interceptor {
             ParameterMap params = (ParameterMap) parameterObject;
             // 要传入了pageSize或orderBy且SqlId以“ListPage”结尾，才进行翻页数据的处理
             if (params.hasPagenation() || !HelpUtil.isEmpty(params.getOrderBy())) {
-                if (mappedStatement.getId().matches(properties.getSqlIdRegex())) {
+                if (mappedStatement.getId().matches(sqlIdRegex)) {
                     processTotalCount((Connection) args[0], mappedStatement, boundSql);
 
-                    String pageSql = generatePageSql(boundSql.getSql(), params);
+                    String pageSql = generatePageSql(boundSql);
                     metaObject.setValue("delegate.boundSql.sql", pageSql);
-
                     LOG.info("\n重写分页和排序后的SQL如下：\n{}", pageSql);
                 }
             }
@@ -126,7 +124,7 @@ public class PageInterceptor implements Interceptor {
     }
 
     private String generatCountSql(MappedStatement mappedStatement, BoundSql boundSql) {
-        String countSqlId = mappedStatement.getId().replaceAll(properties.getSqlIdRegex(), "ListCount");
+        String countSqlId = mappedStatement.getId().replaceAll(sqlIdRegex, "ListCount");
         if (mappedStatement.getConfiguration().hasStatement(countSqlId)) {
             MappedStatement countMappedStatement = mappedStatement.getConfiguration().getMappedStatement(countSqlId);
 
@@ -190,28 +188,22 @@ public class PageInterceptor implements Interceptor {
     /**
      * 根据数据库方言，生成特定的分页sql
      * 
-     * @param sql
-     * @param page
+     * @param boundSql
      * @return
      */
-    private String generatePageSql(String sql, ParameterMap params) {
+    private String generatePageSql(BoundSql boundSql) {
+        String sql = boundSql.getSql();
+        ParameterMap params = (ParameterMap) boundSql.getParameterObject();
+
         StringBuffer pageSql = new StringBuffer();
-        if ("mysql".equals(properties.getDialect())) {
-            pageSql.append(sql);
-            String orderBy = params.getOrderBy();
-            if (!HelpUtil.isEmpty(orderBy)) {
-                pageSql.append(" \nORDER BY ").append(orderBy);
-            }
+        if ("mysql".equals(dialect)) {
+            pageSql.append(buildOrderBySql(sql, params.getOrderBy()));
             if (params.hasPagenation()) {
                 pageSql.append(" \nLIMIT " + params.getBeginRowNo() + "," + params.getPageSize());
             }
-        } else if ("oracle".equals(properties.getDialect())) {
+        } else if ("oracle".equals(dialect)) {
             pageSql.append("SELECT * FROM (SELECT TMP_TB.*, ROWNUM ROW_ID FROM (\n");
-            pageSql.append(sql);
-            String orderBy = params.getOrderBy();
-            if (!HelpUtil.isEmpty(orderBy)) {
-                pageSql.append(" \nORDER BY ").append(orderBy);
-            }
+            pageSql.append(buildOrderBySql(sql, params.getOrderBy()));
             if (params.hasPagenation()) {
                 Integer beginRow = params.getBeginRowNo();
                 pageSql.append("\n) AS TMP_TB WHERE ROWNUM <= ").append(beginRow + params.getPageSize())
@@ -220,6 +212,10 @@ public class PageInterceptor implements Interceptor {
         }
 
         return pageSql.toString();
+    }
+
+    private String buildOrderBySql(String sql, String orderBy) {
+        return HelpUtil.isEmpty(orderBy) ? sql : (sql + "\nORDER BY " + orderBy);
     }
 
     @Override

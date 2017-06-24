@@ -15,7 +15,7 @@ apply from: "${gradleDir}/java.gradle"
 apply plugin: 'eclipse-wtp'
 
 
-description = 'J2EE Web项目 - 后台工程'
+description = 'J2EE Web管理系统 - 后台工程'
 
 
 configurations {

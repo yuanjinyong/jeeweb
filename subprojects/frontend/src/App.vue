@@ -16,6 +16,10 @@
     float: right !important;
   }
 
+  .fa {
+    text-align: center;
+  }
+
   .jw-menu-item-text {
     font-size: 18px;
   }
@@ -172,7 +176,7 @@
     width: auto;
   }
 
-  .jw-dialog.jw-dialog-middle .jw-form .jw-form, .jw-dialog-selector .jw-dialog.jw-dialog-middle .jw-form {
+  .jw-dialog.jw-dialog-middle .jw-form, .jw-dialog-selector .jw-dialog.jw-dialog-middle .jw-form {
     width: 1098px;
   }
 
@@ -180,7 +184,7 @@
     width: auto;
   }
 
-  .jw-dialog.jw-dialog-large .jw-form, .jw-form .jw-form, .jw-dialog-selector .jw-dialog.jw-dialog-large .jw-form {
+  .jw-dialog.jw-dialog-large .jw-form, .jw-dialog-selector .jw-dialog.jw-dialog-large .jw-form {
     width: 1452px;
   }
 

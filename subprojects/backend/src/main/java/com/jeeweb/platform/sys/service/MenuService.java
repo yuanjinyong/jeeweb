@@ -39,6 +39,7 @@ public class MenuService extends BaseService<String, MenuEntity> {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public MenuEntity selectEntity(String primaryKey) {
         MenuEntity menu = super.selectEntity(primaryKey);
         menu.setUrlList(selectMenuUrlList(new ParameterMap("f_menu_id", menu.getF_id()).setOrderBy("f_url,f_methods")));
@@ -53,38 +54,33 @@ public class MenuService extends BaseService<String, MenuEntity> {
     }
 
     @Override
-    public void updateEntity(MenuEntity entity) {
+    public void updateEntity(String primaryKey, MenuEntity entity) {
         deleteMenuUrl(entity);
         insertMenuUrl(entity);
 
-        super.updateEntity(entity);
+        super.updateEntity(primaryKey, entity);
     }
 
     @Override
-    public void deleteEntity(String primaryKey) {
-        MenuEntity menu = super.selectEntity(primaryKey);
-        if (menu.getF_parent_id() == null) {
-            throw new BusinessException("顶级根菜单不能删除！");
-        }
-
-        // 查出所有的子菜单，先删除子菜单
-        ParameterMap params = new ParameterMap("f_parent_path_like", menu.getF_full_path());
+    protected void beforeDeleteEntity(MenuEntity entity) {
+        // 查出所有的子菜单，先删除子菜单及其URL
+        ParameterMap params = new ParameterMap("f_parent_path_like", entity.getF_full_path());
         menuUrlMapper.deleteEntities(params);
-        super.deleteEntities(params);
+        super.deleteEntities(params); // 这里要调用父类的，不能调用子类覆写后的
 
-        // 最后再删除自己
-        deleteMenuUrl(menu);
-        super.deleteEntity(primaryKey);
+        // 再删除自己的URL
+        deleteMenuUrl(entity);
     }
 
     @Override
     public void deleteEntities(ParameterMap params) {
-        throw new BusinessException("菜单不支持一次删除多条！");
+        throw new BusinessException("不支持一次删除多条菜单！");
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    @Transactional(readOnly = true)
     public RowMap getSqlData(String f_menu_id) {
         MenuEntity menu = menuMapper.selectEntity(f_menu_id);
 
@@ -102,10 +98,10 @@ public class MenuService extends BaseService<String, MenuEntity> {
 
         List<Map<String, Object>> roleMenuList = new ArrayList<>();
         roleMenuList.addAll(sqlMapper.selectListPage(
-                "SELECT * FROM `t_sys_role_menu` WHERE f_role_id = 0 AND f_menu_id = #{f_menu_id}",
+                "SELECT * FROM `t_sys_role_menu` WHERE f_role_id < 1000 AND f_menu_id = #{f_menu_id}",
                 new ParameterMap("f_menu_id", menu.getF_id()).setOrderBy("f_role_id,f_menu_id")));
         roleMenuList.addAll(sqlMapper.selectListPage(
-                "SELECT * FROM `t_sys_role_menu` WHERE  f_role_id = 0 AND f_menu_id IN (SELECT f_id FROM `t_sys_menu` WHERE f_parent_path LIKE CONCAT('%', #{f_parent_path_like}, '%'))",
+                "SELECT * FROM `t_sys_role_menu` WHERE  f_role_id < 1000 AND f_menu_id IN (SELECT f_id FROM `t_sys_menu` WHERE f_parent_path LIKE CONCAT('%', #{f_parent_path_like}, '%'))",
                 new ParameterMap("f_parent_path_like", menu.getF_full_path()).setOrderBy("f_role_id,f_menu_id")));
 
         RowMap data = new RowMap();

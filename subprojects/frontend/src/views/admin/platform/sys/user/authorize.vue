@@ -1,16 +1,34 @@
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style>
+  .jw-tree-tooltip {
+    float: right;
+    margin-right: 20px;
+    color: #fff;
+  }
+
+  .el-tree-node__content:hover .jw-tree-tooltip {
+    color: #20a0ff;
+  }
+</style>
+
+
 <template>
   <jw-form ref="form" :form-options="options" :entity="entity">
     <template slot="fieldset">
-      <el-tree ref="menuTree"
-               show-checkbox
-               node-key="f_id"
-               :props="treeOptions.props"
-               :check-strictly="true"
-               :default-expanded-keys="treeOptions.expandedMenuIds"
-               :default-checked-keys="treeOptions.checkedMenuIds"
-               :data="treeOptions.nodes"
-               @check-change="onCheckChange">
-      </el-tree>
+      <div class="jw-form-item">
+        <el-tree ref="menuTree"
+                 :style="{'overflow-y': 'auto', 'max-height': maxTreeHeight + 'px'}"
+                 show-checkbox
+                 node-key="f_id"
+                 :props="treeOptions.props"
+                 :check-strictly="true"
+                 :default-expanded-keys="treeOptions.expandedMenuIds"
+                 :default-checked-keys="treeOptions.checkedMenuIds"
+                 :data="treeOptions.nodes"
+                 :render-content="renderContent"
+                 @check-change="onCheckChange">
+        </el-tree>
+      </div>
     </template>
   </jw-form>
 </template>
@@ -25,7 +43,7 @@
     data () {
       return {
         treeOptions: {
-          menus: [],
+          nodes: [],
           expandedMenuIds: [],
           checkedMenuIds: [],
           props: {
@@ -49,6 +67,11 @@
         entity: {}
       }
     },
+    computed: {
+      maxTreeHeight () {
+        return this.$store.state.layout.window.height - 75 - 59 - 76 - 35 - 40
+      }
+    },
     methods: {
       _submitEntity (cb) {
         let selectedMenuIds = this.$refs['menuTree'].getCheckedKeys()
@@ -59,6 +82,9 @@
         })
       },
       _loadEntity (cb) {
+        this.treeOptions.nodes = []
+        this.treeOptions.expandedMenuIds = []
+        this.treeOptions.checkedMenuIds = []
         this.$http.get(this.options.context.url + '/' + this.options.params.f_id + '/menus').then((response) => {
           this.treeOptions.nodes = response.body.success ? response.body.data : []
           this._updateCheckedNode(this.treeOptions.nodes)
@@ -95,6 +121,18 @@
         })
 
         return parent
+      },
+      renderContent (h, {node, data, store}) {
+        return (
+          <span>
+            <span>
+              <i class={data.f_icon || (data.f_type < 2 ? 'fa fa-list' : (data.f_type === 2 ? 'fa fa-file-o' : ''))} style="min-width:16px;"></i> {data.f_type < 3 ? data.f_name : data.f_desc}
+            </span>
+            <span class="jw-tree-tooltip">
+              {data.f_remark ? data.f_remark : (data.f_desc ? data.f_desc : data.f_name)}
+            </span>
+          </span>
+        )
       },
       onCheckChange (data, checked, indeterminate) {
         if (checked) {

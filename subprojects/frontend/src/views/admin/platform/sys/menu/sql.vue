@@ -1,11 +1,11 @@
 <template>
   <jw-form ref="form" :form-options="options" :entity="entity">
     <template slot="fieldset">
-      <el-form-item prop="sql">
+      <div class="jw-form-item">
         <el-input v-model="entity.sql" type="textarea" class="jw-textarea-full-width jw-textarea-nowrap"
                   :autosize="{minRows: 4, maxRows: 18}">
         </el-input>
-      </el-form-item>
+      </div>
     </template>
   </jw-form>
 </template>

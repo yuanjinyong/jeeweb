@@ -5,7 +5,7 @@
                :title="operation.title"
                :disabled="!hasPermission(operation) || isDisabled(operation)"
                @click.prevent="onClick(operation)">
-      <i :class="operation.icon"></i>
+      <i :class="operation.icon" style="min-width:12px;"></i>
     </el-button>
   </div>
 </template>

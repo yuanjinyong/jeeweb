@@ -16,10 +16,10 @@ import org.springframework.util.StringUtils;
 import com.jeeweb.framework.core.exception.BusinessException;
 
 public class HelpUtil extends StringUtils {
-    private static final String DATETIME_PATTERN_DEFUALT = "yyyy-MM-dd HH:mm:ss";
-    private static final String DATETIME_PATTERN_DAYBEGIN = "yyyy-MM-dd 00:00:00";
-    private static final String DATETIME_PATTERN_DAYEND = "yyyy-MM-dd 23:59:59";
-    private static final String DATETIME_PATTERN_MONTHBEGIN = "yyyy-MM-01 00:00:00";
+    public static final String DATETIME_PATTERN_DEFUALT = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATETIME_PATTERN_DAYBEGIN = "yyyy-MM-dd 00:00:00";
+    public static final String DATETIME_PATTERN_DAYEND = "yyyy-MM-dd 23:59:59";
+    public static final String DATETIME_PATTERN_MONTHBEGIN = "yyyy-MM-01 00:00:00";
     private static Map<String, Format> formatCache = new HashMap<>();
 
     public static boolean isEmpty(String string) {

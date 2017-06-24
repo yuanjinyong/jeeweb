@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.jeeweb.framework.core.configure;
+package com.jeeweb.framework.configure;
 
 import java.sql.SQLException;
 
@@ -26,7 +26,7 @@ public class DefaultDataSourceConfiguration {
     @Value("${spring.datasource.default.url:#{null}}")
     private String url;
     @Value("${spring.datasource.default.username:#{null}}")
-    private String user;
+    private String username;
     @Value("${spring.datasource.default.password:#{null}}")
     private String password;
 
@@ -55,8 +55,8 @@ public class DefaultDataSourceConfiguration {
         MysqlXADataSource mysqlXaDataSource = new MysqlXADataSource();
         mysqlXaDataSource.setPinGlobalTxToPhysicalConnection(true);
         mysqlXaDataSource.setUrl(url);
+        mysqlXaDataSource.setUser(username);
         mysqlXaDataSource.setPassword(password);
-        mysqlXaDataSource.setUser(user);
 
         AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
         xaDataSource.setXaDataSource(mysqlXaDataSource);

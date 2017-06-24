@@ -7,6 +7,9 @@ import {MenuView} from './menu'
 export * from './role'
 import {RoleView} from './role'
 
+export * from './setting'
+import {SettingView} from './setting'
+
 export * from './url'
 import {UrlView} from './url'
 
@@ -31,6 +34,10 @@ export default [
   {
     path: 'role',
     component: RoleView
+  },
+  {
+    path: 'setting',
+    component: SettingView
   },
   {
     path: 'url',

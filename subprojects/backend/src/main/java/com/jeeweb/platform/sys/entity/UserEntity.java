@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import com.jeeweb.framework.business.entity.BaseEntity;
 import com.jeeweb.framework.business.model.ICreator;
 import com.jeeweb.framework.business.model.IPreset;
@@ -20,9 +22,10 @@ public class UserEntity extends BaseEntity<Integer> implements ICreator, IPreset
     private Integer f_tenant_id; // 租户ID
     private String f_tenant_name; // 租户名称
     private String f_account;// 账号
-    @JsonIgnore
+    @JsonProperty(access = Access.WRITE_ONLY)
     private String f_password;// 密码，这个字段不能被Json序列化出去，否则导致密码泄露，所以这里需要添加@JsonIgnore注解
     private String f_name;// 姓名
+    private String f_telephone;// 绑定的手机号
     private Integer f_department_id;// 部门ID
     private String f_department_name;// 部门名称
     private Integer f_creator_id;// 创建人
@@ -63,6 +66,7 @@ public class UserEntity extends BaseEntity<Integer> implements ICreator, IPreset
         this.f_account = f_account;
     }
 
+    @JsonIgnore
     public String getF_password() {
         return f_password;
     }
@@ -77,6 +81,14 @@ public class UserEntity extends BaseEntity<Integer> implements ICreator, IPreset
 
     public void setF_name(String f_name) {
         this.f_name = f_name;
+    }
+
+    public String getF_telephone() {
+        return f_telephone;
+    }
+
+    public void setF_telephone(String f_telephone) {
+        this.f_telephone = f_telephone;
     }
 
     public Integer getF_department_id() {
