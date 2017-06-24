@@ -110,7 +110,7 @@
             </div>
             <jw-menu class="jw-menu-body jw-side-menu-body"
                      :style="{'width':layout.sideMenu.body.width+'px', 'height':layout.sideMenu.body.height+'px'}"
-                     :default-active="tabsManager.activeName" :menu-list="menuList" @select="onSelectMenu">
+                     :default-active="tabs.activeName" :menu-list="menuList" @select="onSelectMenu">
             </jw-menu>
           </div>
         </div>
@@ -119,13 +119,13 @@
         <div id="layoutRight" style="background-color: #fff;"
              :style="{'width':layout.right.width+'px', 'height':layout.right.height+'px', 'margin-left':layout.left.width+'px'}">
           <div id="viewTab" class="jw-view-tab">
-            <el-tabs type="card" class="jw-card-tabs jw-view-tab-header" v-model="tabsManager.activeName"
+            <el-tabs type="card" class="jw-card-tabs jw-view-tab-header" v-model="tabs.activeName"
                      @tab-remove="onCloseTab" @tab-click="onClickTab">
-              <el-tab-pane v-for="(item, index) in tabsManager.tabs"
-                           :closable="item.params.f_closable !== false"
-                           :label="item.params.f_name"
-                           :name="item.params.f_id"
-                           :key="item.params.f_id">
+              <el-tab-pane v-for="(route, index) in tabs.routes"
+                           :closable="route.params.f_closable !== false"
+                           :label="route.params.f_name"
+                           :name="route.params.f_id"
+                           :key="route.params.f_id">
               </el-tab-pane>
             </el-tabs>
             <div class="jw-view-tab-body"
@@ -148,20 +148,21 @@
 
   export default {
     name: 'adminIndex',
-    beforeRouteEnter (to, from, next) {
+    beforeRouteEnter (to, from, next) { // 在渲染该组件的对应路由被 confirm 前调用，不能获取组件实例`this`，因为当钩子执行前，组件实例还没被创建。
+//      console.log('beforeRouteEnter', from, to)
       Vue.http.get('api/platform/data/dicts').then((response) => {
         Vue.store.commit('setDicts', response.body.data)
         next()
       })
     },
+    beforeRouteLeave (to, from, next) { // 导航离开该组件的对应路由时调用，可以访问组件实例 `this`。
+//      console.log('beforeRouteLeave', from, to)
+      next()
+    },
     data () {
       return {
         showMenu: false,
         resizeTimer: null,
-        tabsManager: {
-          activeName: 'AdminHome',
-          tabs: []
-        },
         loadingUser: true,
         loadingMenu: true
       }
@@ -174,7 +175,10 @@
         return this.$store.state.user
       },
       menuList () {
-        return [].concat(this.$store.state.menuHome, this.$store.state.menuList)
+        return this.$store.state.menuList
+      },
+      tabs () {
+        return this.$store.state.tabs
       }
     },
     created () {
@@ -191,75 +195,42 @@
     },
     watch: {
       curUser (val, oldVal) {
-        if (oldVal && !val) { // 登出后，重新调用后台接口加载用户信息，以便自动跳转到登录页面
-          this.loadUser()
+        if (val) {
+          this.loadMenus()
+        }
+
+        if (oldVal && !val) {
+          this.loadUser() // 登出后，重新调用后台接口加载用户信息，以便自动跳转到登录页面
           return
         }
       }
     },
     methods: {
       loadUser () {
-        var vm = this
-        vm.loadingUser = true
-        vm.$http.get('api/admin/index/user').then(function (response) {
-          vm.loadingUser = false
+        this.loadingUser = true
+        this.$http.get('api/admin/index/user').then((response) => {
+          this.loadingUser = false
           if (response.body.success) {
-            vm.$store.commit('setUser', {user: response.body.data})
-            vm.loadMenus()
+            this.$store.commit('setUser', {user: response.body.data})
           } else {
-            vm.$store.commit('setUser', {user: null})
+            this.$store.commit('setUser', {user: null})
           }
         }).catch(function (e) {
           // console.error(e) // 打印一下错误
         })
       },
       loadMenus () {
-        var vm = this
-        vm.loadingMenu = true
-        vm.$http.get('api/admin/index/menus').then(function (response) {
-          vm.loadingMenu = false
+        this.loadingMenu = true
+        this.$http.get('api/admin/index/menus').then((response) => {
+          this.loadingMenu = false
           if (response.body.success) {
-            vm.$store.commit('setMenuList', {menuList: response.body.data.items})
-            vm.openMenuByRoute([].concat(vm.$store.state.menuHome, response.body.data.items))
+            this.$store.commit('setMenuList', {menuList: response.body.data.items, route: this.$route})
           } else {
-            vm.$store.commit('setMenuList', {menuList: []})
+            this.$store.commit('setMenuList', {menuList: [], route: this.$route})
           }
+
+          this.onResize()
         })
-      },
-      openMenuByRoute (menus) {
-        var vm = this
-        var menu = vm.findMenuByRoute(vm.$route, menus)
-        if (!menu) {
-          vm.tabsManager.tabs.push({path: menus[0].f_route_path, params: menus[0]})
-        } else {
-          if (menu.f_id !== menus[0].f_id) {
-            vm.tabsManager.tabs.push({path: menus[0].f_route_path, params: menus[0]})
-          }
-          vm.tabsManager.tabs.push({path: menu.f_route_path, params: menu})
-        }
-
-        var activeTab = vm.tabsManager.tabs[vm.tabsManager.tabs.length - 1]
-        vm.tabsManager.activeName = activeTab.params.f_id
-        vm.$router.push(activeTab)
-
-        vm.onResize()
-      },
-      findMenuByRoute (route, menus) {
-        for (var i in menus) {
-          var menu = menus[i]
-          if (menu.f_route_path === route.path) {
-            return menu
-          }
-
-          if (menu.children && menu.children.length > 0) {
-            var subMenu = this.findMenuByRoute(route, menu.children)
-            if (subMenu) {
-              return subMenu
-            }
-          }
-        }
-
-        return null
       },
       onResize () {
         var vm = this
@@ -336,46 +307,13 @@
       },
       onSelectMenu (index, indexPath, route) {
         this.showMenu = false
-
-        var tabExists = true
-        for (var i in this.tabsManager.tabs) {
-          if (this.tabsManager.tabs[i].params.f_id === route.params.f_id) {
-            tabExists = false
-            break
-          }
-        }
-        if (tabExists) {
-          this.tabsManager.tabs.push(route)
-        }
-
-        this.tabsManager.activeName = route.params.f_id
-        this.$router.push(route)
+        this.$store.commit('openTab', route)
       },
-      onClickTab (tab) {
-        for (var i in this.tabsManager.tabs) {
-          if (this.tabsManager.tabs[i].params.f_id === this.tabsManager.activeName) {
-            this.$router.push(this.tabsManager.tabs[i])
-            break
-          }
-        }
+      onClickTab (tabComponent) {
+        this.$store.commit('switchTab', tabComponent.name)
       },
       onCloseTab (targetName) {
-        var tabs = this.tabsManager.tabs
-        var activeName = this.tabsManager.activeName
-        if (activeName === targetName) {
-          tabs.forEach((tab, index) => {
-            if (tab.params.f_id === targetName) {
-              var nextTab = tabs[index + 1] || tabs[index - 1]
-              if (nextTab) {
-                activeName = nextTab.params.f_id
-                this.$router.push(nextTab)
-              }
-            }
-          })
-        }
-
-        this.tabsManager.activeName = activeName
-        this.tabsManager.tabs = tabs.filter(tab => tab.params.f_id !== targetName)
+        this.$store.commit('removeTab', targetName)
       }
     }
   }
