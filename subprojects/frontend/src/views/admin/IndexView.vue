@@ -64,25 +64,22 @@
 
       <!-- 中部 -->
       <div id="layoutMiddle" :style="{'width':layout.middle.width+'px', 'height':layout.middle.height+'px'}">
-        <loading v-if="loadingUser"></loading>
-        <div>
-          <el-row id="topMenu" class="jw-menu jw-top-menu">
-            <div class="jw-menu-header jw-top-menu-header">
-              <el-button class="jw-menu-switch" type="text" @click="onshowMenu">
-                <i class="fa fa-bars" aria-hidden="true"></i>
-              </el-button>
-            </div>
-            <el-col style="float: left;position: absolute;" :span="16">
-              <jw-menu class="jw-menu-body jw-top-menu-body" :menu-list="menuList" @select="onSelectMenu"
-                       v-show="showMenu">
-              </jw-menu>
-            </el-col>
-          </el-row>
-
-          <div style="background-color: #fff;overflow: auto;"
-               :style="{'width':layout.right.width+'px', 'height':layout.right.height+'px'}">
-            <router-view></router-view>
+        <el-row id="topMenu" class="jw-menu jw-top-menu">
+          <div class="jw-menu-header jw-top-menu-header">
+            <el-button class="jw-menu-switch" type="text" @click="onshowMenu">
+              <i class="fa fa-bars" aria-hidden="true"></i>
+            </el-button>
           </div>
+          <el-col style="float: left;position: absolute;" :span="16">
+            <jw-menu class="jw-menu-body jw-top-menu-body" :menu-list="menuList" @select="onSelectMenu"
+                     v-show="showMenu">
+            </jw-menu>
+          </el-col>
+        </el-row>
+
+        <div style="background-color: #fff;overflow: auto;"
+             :style="{'width':layout.right.width+'px', 'height':layout.right.height+'px'}">
+          <router-view></router-view>
         </div>
       </div>
 
@@ -97,7 +94,6 @@
 
       <!-- 中部 -->
       <div id="layoutMiddle" :style="{'width':layout.middle.width+'px', 'height':layout.middle.height+'px'}">
-        <loading v-if="loadingUser"></loading>
         <!-- 左部 -->
         <div id="layoutLeft" style="float: left;"
              :style="{'width':layout.left.width+'px', 'height':layout.left.height+'px'}">
@@ -108,7 +104,7 @@
                 <i class="fa fa-bars" aria-hidden="true"></i>
               </el-button>
             </div>
-            <jw-menu class="jw-menu-body jw-side-menu-body"
+            <jw-menu ref="menu" class="jw-menu-body jw-side-menu-body"
                      :style="{'width':layout.sideMenu.body.width+'px', 'height':layout.sideMenu.body.height+'px'}"
                      :default-active="tabs.activeName" :menu-list="menuList" @select="onSelectMenu">
             </jw-menu>
@@ -150,10 +146,20 @@
     name: 'adminIndex',
     beforeRouteEnter (to, from, next) { // 在渲染该组件的对应路由被 confirm 前调用，不能获取组件实例`this`，因为当钩子执行前，组件实例还没被创建。
 //      console.log('beforeRouteEnter', from, to)
-      Vue.http.get('api/platform/data/dicts').then((response) => {
-        Vue.store.commit('setDicts', response.body.data)
-        next()
-      })
+      Vue.store.commit('backupRoute', to)
+      let loading = Vue.prototype.$loading({text: '加载中……'})
+      Promise.all([Vue.http.get('api/platform/data/dicts'), Vue.http.get('api/admin/index/user')]).then((responses) => {
+        let response = responses[0]
+        Vue.store.commit('setDicts', response.body.success ? response.body.data : {})
+
+        response = responses[1]
+        Vue.store.commit('setUser', response.body.success ? response.body.data : null)
+
+        loading.close()
+        next(vm =>
+          vm.loadMenus()
+        )
+      }).catch(e => loading.close())
     },
     beforeRouteLeave (to, from, next) { // 导航离开该组件的对应路由时调用，可以访问组件实例 `this`。
 //      console.log('beforeRouteLeave', from, to)
@@ -162,9 +168,7 @@
     data () {
       return {
         showMenu: false,
-        resizeTimer: null,
-        loadingUser: true,
-        loadingMenu: true
+        resizeTimer: null
       }
     },
     computed: {
@@ -181,9 +185,6 @@
         return this.$store.state.tabs
       }
     },
-    created () {
-      this.loadUser()
-    },
     mounted () {
       window.addEventListener('resize', this.onResize)
       this.$nextTick(() => {
@@ -195,42 +196,25 @@
     },
     watch: {
       curUser (val, oldVal) {
-        if (val) {
-          this.loadMenus()
-        }
-
-        if (oldVal && !val) {
-          this.loadUser() // 登出后，重新调用后台接口加载用户信息，以便自动跳转到登录页面
-          return
-        }
+        // 1、首次打开页面时，在用户信息加载成功后，触发加载菜单
+        // 2、登出后，重新调用后台接口加载菜单，以便自动跳转到登录页面
+        this.loadMenus()
       }
     },
     methods: {
-      loadUser () {
-        this.loadingUser = true
-        this.$http.get('api/admin/index/user').then((response) => {
-          this.loadingUser = false
-          if (response.body.success) {
-            this.$store.commit('setUser', {user: response.body.data})
-          } else {
-            this.$store.commit('setUser', {user: null})
-          }
-        }).catch(function (e) {
-          // console.error(e) // 打印一下错误
-        })
-      },
       loadMenus () {
-        this.loadingMenu = true
-        this.$http.get('api/admin/index/menus').then((response) => {
-          this.loadingMenu = false
-          if (response.body.success) {
-            this.$store.commit('setMenuList', {menuList: response.body.data.items, route: this.$route})
-          } else {
-            this.$store.commit('setMenuList', {menuList: [], route: this.$route})
-          }
+        this.$lodash.debounce(() => {
+          let loading = this.$loading({text: '加载中……', target: '#layoutMiddle'})
+          Vue.http.get('api/admin/index/menus').then((response) => {
+            Vue.store.commit('setMenuList', {
+              route: this.$route,
+              menuList: response.body.success ? response.body.data.items : []
+            })
 
-          this.onResize()
-        })
+            loading.close()
+            this.onResize()
+          }).catch(e => loading.close())
+        }, 100)()
       },
       onResize () {
         var vm = this

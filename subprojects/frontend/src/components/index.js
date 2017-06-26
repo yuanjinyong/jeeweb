@@ -8,9 +8,6 @@ Vue.component(Foot.name, Foot)
 import Head from './Head'
 Vue.component(Head.name, Head)
 
-import Loading from './Loading'
-Vue.component(Loading.name, Loading)
-
 import LoginForm from './LoginForm'
 Vue.component(LoginForm.name, LoginForm)
 

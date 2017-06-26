@@ -48,13 +48,13 @@ Vue.http.interceptors.push(function (request, next) {
     } else if (response.status === 201) {
       Vue.prototype.$message({type: 'success', duration: 1500, message: response.body.message})
     } else if (response.status === 401) {
-      if (vm.$route.path === '/admin/login') {
+      if (vm.$route && vm.$route.path === '/admin/login') {
         console && console.error('账号密码错误，请重新输入！')
       } else {
         console && console.warn('请先登录验证！')
         Vue.cookie.delete('X-REST-TOKEN')  // 服务器端token过期后会返回401，再重新登录前，清空本地cookie中的token
+        Vue.store.commit('setUser', null)
         Vue.store.commit('backupRoute', vm.$route)
-        Vue.store.commit('setUser', {user: null})
         Vue.router.push({path: '/admin/login'})
       }
     } else {

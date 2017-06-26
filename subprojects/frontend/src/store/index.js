@@ -173,7 +173,7 @@ const store = new Vuex.Store({
       state.dicts = payload
     },
     setUser (state, payload) {
-      state.user = payload.user
+      state.user = payload
     },
     setMenuList (state, payload) {
       // console.log('setMenuList', payload)
@@ -238,7 +238,9 @@ const store = new Vuex.Store({
       state.tabs.routes = state.tabs.routes.filter(route => route.params.f_id !== removedTabName)
     },
     backupRoute (state, payload) {
-      state.originalRoute = payload
+      if (payload) {
+        state.originalRoute = payload
+      }
     },
     logout (state) {
       state.user = null

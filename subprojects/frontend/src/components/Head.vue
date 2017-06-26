@@ -101,8 +101,8 @@
           type: 'success'
         }).then(() => {
           this.$cookie.delete('X-REST-TOKEN')  // 服务器端token过期后会返回401，再重新登录前，清空本地cookie中的token
+          this.$store.commit('setUser', null)
           this.$store.commit('backupRoute', this.$route)
-          this.$store.commit('setUser', {user: null})
           this.$router.push({path: '/admin/login'})
         })
       },
@@ -119,7 +119,7 @@
           this.result = response.body
           if (this.result.success) {
             this.$store.commit('logout')
-            this.$router.push({path: '/'})
+            // this.$router.push({path: '/'})
           } else {
             console && console.error(this.result.message)
           }
