@@ -56,6 +56,63 @@ const store = new Vuex.Store({
     },
     originalRoute: null,
     dicts: {},
+    getDictValue (value, dict) {
+      let items = dict
+      if (typeof (dict) === 'string') {
+        items = this.dicts[dict]
+        if (!items) {
+          console && console.error('请先配置字典', dict)
+        }
+      }
+
+      if (typeof (items) === 'object') {
+        if (typeof (items.length) !== 'undefined') {
+          for (let i = 0; i < items.length; i++) {
+            let item = items[i]
+            if (item.f_item_code === value + '') {
+              return item.f_item_text
+            }
+          }
+        } else {
+          return items[value]
+        }
+      }
+      return value
+    },
+    getDictItems (dict, cb) {
+      let options = dict
+      if (typeof (dict) === 'string') {
+        options = this.dicts[dict]
+        if (!options) {
+          console && console.error('请先配置字典', dict)
+        }
+      }
+
+      let items = null
+      if (typeof (options) === 'object') {
+        if (typeof (options.length) !== 'undefined') { // 如果为数组
+          items = [].concat(options)
+          cb(items)
+        } else if (options.url) { // 如果为带url的对象
+          Vue.http.get(options.url).then((response) => {
+            items = []
+            let codeFiled = options.codeFiled ? options.codeFiled : 'f_item_code'
+            let textFiled = options.textFiled ? options.textFiled : 'f_item_text'
+            let options = response.body.success ? response.body.data.items : []
+            options.forEach((option) => {
+              items.push({f_item_code: option[codeFiled], f_item_text: option[textFiled]})
+            })
+            cb(items)
+          })
+        } else {
+          items = []
+          for (let p in options) {
+            items.push({f_item_code: p, f_item_text: options[p]})
+          }
+          cb(items)
+        }
+      }
+    },
     user: null,
     menuList: [],
     permissionList: [],
@@ -190,6 +247,13 @@ const store = new Vuex.Store({
   }
 })
 Vue.store = store
+
+Vue.prototype.getDictValue = function (value, dict) {
+  return Vue.store.state.getDictValue(value, dict)
+}
+Vue.prototype.getDictItems = function (dict, cb) {
+  return Vue.store.state.getDictItems(dict, cb)
+}
 Vue.prototype.hasPermission = function (f_menu_id) {
   return Vue.store.state.hasPermission(f_menu_id)
 }

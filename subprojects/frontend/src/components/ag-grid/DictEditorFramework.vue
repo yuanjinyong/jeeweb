@@ -26,33 +26,9 @@
     created () {
       Vue.lodash.merge(this.editorOptions, this.params.editorOptions)
 
-      if (this.params.dict) {
-        var items = this.params.dict
-        if (typeof (this.params.dict) === 'string') {
-          items = Vue.store.state.dicts[this.params.dict]
-          if (!items) {
-            console && console.error('请先配置字典', this.params.dict)
-          }
-        }
-        if (typeof (items.length) !== 'undefined') {
-          this.options = items
-        } else {
-          this.options = []
-          for (var p in items) {
-            this.options.push({f_item_code: p, f_item_text: items[p]})
-          }
-        }
-      } else {
-        Vue.http.get(this.params.url).then((response) => {
-          this.options = []
-          var codeFiled = this.params.codeFiled ? this.params.codeFiled : 'f_item_code'
-          var textFiled = this.params.textFiled ? this.params.textFiled : 'f_item_text'
-          var items = response.body.success ? response.body.data.items : []
-          items.forEach((item) => {
-            this.options.push({f_item_code: item[codeFiled], f_item_text: item[textFiled]})
-          })
-        })
-      }
+      this.getDictItems(this.params.dict || {url: this.params.url}, (items) => {
+        this.options = items
+      })
 
       this.$nextTick(() => {
         this.value = this.params.value + ''
