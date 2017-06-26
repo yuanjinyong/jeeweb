@@ -3,8 +3,6 @@
  */
 package com.jeeweb.framework.redis;
 
-import java.lang.reflect.ParameterizedType;
-
 import org.springframework.data.redis.connection.DefaultStringRedisConnection;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -15,6 +13,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -25,21 +24,19 @@ public class JsonRedisTemplate<V> extends RedisTemplate<String, V> {
 
     public JsonRedisTemplate() {
         RedisSerializer<String> stringSerializer = new StringRedisSerializer();
+        setHashKeySerializer(stringSerializer);
+        // setHashValueSerializer(stringSerializer);
+
         setKeySerializer(stringSerializer);
 
-        ParameterizedType parameterizedType = (ParameterizedType) this.getClass().getGenericSuperclass();
-        @SuppressWarnings("unchecked")
-        Class<V> clz = (Class<V>) parameterizedType.getActualTypeArguments()[0];
-        Jackson2JsonRedisSerializer<V> jsonSerializer = new Jackson2JsonRedisSerializer<V>(clz);
+        Jackson2JsonRedisSerializer<Object> jsonSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
         setValueSerializer(jsonSerializer);
 
-        ObjectMapper om = new ObjectMapper();
-        jsonSerializer.setObjectMapper(om);
-        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-
-        setHashKeySerializer(stringSerializer);
-        setHashValueSerializer(stringSerializer);
+        ObjectMapper objectMapper = new ObjectMapper();
+        jsonSerializer.setObjectMapper(objectMapper);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
     }
 
     public JsonRedisTemplate(RedisConnectionFactory connectionFactory) {
@@ -48,6 +45,7 @@ public class JsonRedisTemplate<V> extends RedisTemplate<String, V> {
         afterPropertiesSet();
     }
 
+    @Override
     protected RedisConnection preProcessConnection(RedisConnection connection, boolean existingConnection) {
         return new DefaultStringRedisConnection(connection);
     }
