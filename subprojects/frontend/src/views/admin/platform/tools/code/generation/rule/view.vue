@@ -4,13 +4,9 @@
 
 <template>
   <div :style="contentStyle">
-    <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
+    <ag-grid ref="grid" id="generationRuleGrid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
     <generation-rule-detail ref="detail" :detail-options="detailOptions"></generation-rule-detail>
-
-    <el-dialog v-model="generating" :title="'代码生成中……'" :show-close="false">
-      <loading></loading>
-    </el-dialog>
   </div>
 </template>
 
@@ -36,7 +32,6 @@
     },
     data () {
       return {
-        generating: false,
         detailOptions: {
           size: 'large',
           context: {
@@ -168,11 +163,11 @@
     },
     methods: {
       onGenerate (entity) {
-        this.generating = true
+        let loading = this.$loading({text: '代码生成中……', target: '#generationRuleGrid'})
         this.$http.put(this.gridOptions.context.url + '/' + entity.f_id + '/generate').then(() => {
-          this.generating = false
+          loading.close()
         }).catch(() => {
-          this.generating = false
+          loading.close()
         })
       }
     }

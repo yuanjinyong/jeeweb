@@ -81,7 +81,7 @@
               return params.context.featureComponent.$refs['detail']
             },
             params: {
-              orderBy: 'f_is_preset,f_name'
+              orderBy: 'f_parent_path,f_order'
             }
           }
         })
@@ -250,7 +250,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(function () {
-          this.$http.delete(this.featureOptions.url + '/' + entity.f_id).then((response) => {
+          this.$http.delete(this.gridOptions.context.url + '/' + entity.f_id).then((response) => {
             if (response.body.success) {
               this._loadMenuList()
             }

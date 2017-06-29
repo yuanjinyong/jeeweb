@@ -3,7 +3,7 @@
     <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
     <role-detail ref="detail" :detail-options="detailOptions"></role-detail>
-    <role-authorize-detail ref="authorize" :detail-options="authorizeOptions"></role-authorize-detail>
+    <jw-authorize ref="authorize" :detail-options="authorizeOptions"></jw-authorize>
   </div>
 </template>
 
@@ -20,20 +20,19 @@
     ViewRendererFramework
   } from 'components/ag-grid'
   import RoleDetail from './detail'
-  import RoleAuthorizeDetail from './authorize'
-  //  import {RoleDetail, RoleAuthorizeDetail} from 'views'
+  //  import {RoleDetail} from 'views'
 
   export default {
     name: 'roleView',
     mixins: [ViewlMixin],
     components: {
-      RoleDetail,
-      RoleAuthorizeDetail
+      RoleDetail
     },
     data () {
       return {
         authorizeOptions: {
           context: {
+            url: 'api/platform/sys/roles',
             featureComponent: this,
             getGridComponent (options) {
               return options.context.featureComponent.$refs['grid']
@@ -67,6 +66,9 @@
       }
     },
     computed: {
+      curUser () {
+        return this.$store.state.user || {}
+      },
       permission () {
         return {
           authorize: this.hasPermission('XTGL-JSGL-SQ'),
@@ -139,6 +141,10 @@
               type: 'warning',
               icon: 'fa fa-key',
               permission: 'authorize',
+              isDisabled (params, entity) {
+                let user = params.context.featureComponent.curUser
+                return entity.f_id === 1 && !user.superAdmin // 只有超级管理员账号才能给系统管理员角色授权
+              },
               onClick (params, entity) {
                 params.context.featureComponent.$refs['authorize'].open({
                   operation: 'authorize',

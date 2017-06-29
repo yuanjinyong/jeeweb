@@ -100,9 +100,11 @@
     <select id="selectUserMenuListPage" parameterType="com.jeeweb.framework.core.model.ParameterMap" resultType="com.jeeweb.framework.core.model.RowMap">
         SELECT
         m.*,
-        r.f_menu_id
+        u.f_menu_id,
+        u.f_user_id as id,
+        u.f_user_id
         FROM t_sys_menu m
-        LEFT JOIN (SELECT f_menu_id FROM t_sys_user_menu WHERE f_user_id = #{f_user_id}) r ON m.f_id = r.f_menu_id
+        LEFT JOIN (SELECT f_user_id, f_menu_id FROM t_sys_user_menu WHERE f_user_id = #{f_user_id}) u ON m.f_id = u.f_menu_id
         WHERE 1=1
         <if test="f_parent_path_like != null and f_parent_path_like != ''">AND m.f_parent_path LIKE CONCAT(#{f_parent_path_like}, '%')</if>
         <if test="f_status != null and f_status != ''">AND m.f_status = #{f_status}</if>

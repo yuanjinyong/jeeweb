@@ -9,7 +9,7 @@ const router = new Router({
 })
 // 注册全局导航钩子
 router.beforeEach((to, from, next) => {
-  // console && console.log('beforeEach', 'to', to, 'from', from)
+  console && console.info('Route:', from.path, '=>', to.path)
   next()
 })
 router.afterEach((route) => { // 不知道哪里的问题，貌似这个没有调用进来

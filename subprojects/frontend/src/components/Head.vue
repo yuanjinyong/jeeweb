@@ -25,7 +25,7 @@
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <el-button type="warning" @click="onLogout"><i class="fa fa-sign-out"></i>&nbsp;退出</el-button>
+          <el-button type="warning" @click="onLogout"><i class="fa fa-sign-out"></i>&nbsp;退 出</el-button>
         </div>
       </el-col>
     </el-row>

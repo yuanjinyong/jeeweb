@@ -139,6 +139,13 @@
           let viewComponent = this.options.context.getViewComponent && this.options.context.getViewComponent.call(this, this.options)
           if (viewComponent && viewComponent.getSelectedRows) {
             selectedRows = viewComponent.getSelectedRows()
+            if (!selectedRows || selectedRows.length === 0) {
+              this.$alert('请先选择一条记录！', '错误', {
+                confirmButtonText: '关闭',
+                type: 'error'
+              })
+              return
+            }
           }
 
           this.options.selected.call(this, selectedRows, (close) => {

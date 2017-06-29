@@ -13,8 +13,8 @@
           <el-input type="password" v-model="entity.f_password"></el-input>
         </el-form-item>
         <el-form-item style="margin-bottom: 0;">
-          <el-button type="primary" @click="onSubmitForm('loginForm')">登录</el-button>
-          <el-button type="warning" @click="onResetForm('loginForm')">重置</el-button>
+          <el-button type="primary" @click="onSubmitForm('loginForm')">登 录</el-button>
+          <el-button type="warning" @click="onResetForm('loginForm')">重 置</el-button>
         </el-form-item>
       </el-form>
       <div style="margin: 20px 0px;min-height:40px;text-align: center;">

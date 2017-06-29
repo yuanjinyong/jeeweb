@@ -63,6 +63,10 @@
     background-color: #f6f8ff;
   }
 
+  .jw-grid .ag-row-selected {
+    background-color: #b0e0e6;
+  }
+
   .jw-grid .ag-root {
     border: 1px solid #ddd;
     border-radius: 4px;

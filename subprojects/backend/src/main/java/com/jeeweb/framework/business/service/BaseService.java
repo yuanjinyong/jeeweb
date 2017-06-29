@@ -14,13 +14,13 @@ import com.jeeweb.framework.business.model.IPreset;
 import com.jeeweb.framework.core.exception.BusinessException;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.RowMap;
+import com.jeeweb.framework.core.service.SuperService;
 import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.platform.security.utils.SecurityUtil;
 import com.jeeweb.platform.sys.entity.UserEntity;
 
 
-
-public abstract class BaseService<P, E> {
+public abstract class BaseService<P, E> extends SuperService {
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
     protected abstract BaseMapper<P, E> getMapper();

@@ -83,11 +83,7 @@
 
     <!-- delete -->
     <select id="isCanDeleteEntity" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT COUNT(f_menu_id) AS TOTAL_COUNT FROM (
-        SELECT f_menu_id FROM t_sys_role_menu WHERE f_menu_id = #{f_id}
-        UNION
-        SELECT f_menu_id FROM t_sys_user_menu WHERE f_menu_id = #{f_id}
-        ) TOTAL
+        SELECT 0 FROM DUAL
     </select>
     <delete id="deleteEntity" parameterType="java.lang.Integer">
         DELETE FROM t_sys_role_menu WHERE f_id=#{f_id}
@@ -103,9 +99,11 @@
     <select id="selectRoleMenuListPage" parameterType="com.jeeweb.framework.core.model.ParameterMap" resultType="com.jeeweb.framework.core.model.RowMap">
         SELECT
         m.*,
-        r.f_menu_id
+        r.f_menu_id,
+        r.f_role_id as id,
+        r.f_role_id
         FROM t_sys_menu m
-        LEFT JOIN (SELECT f_menu_id FROM t_sys_role_menu WHERE f_role_id = #{f_role_id}) r ON m.f_id = r.f_menu_id
+        LEFT JOIN (SELECT f_role_id, f_menu_id FROM t_sys_role_menu WHERE f_role_id = #{f_role_id}) r ON m.f_id = r.f_menu_id
         WHERE 1=1
         <if test="f_status != null and f_status != ''">AND m.f_status = #{f_status}</if>
         <if test="cur_user_id != null and cur_role_id_in == null">AND m.f_id IN(SELECT f_menu_id FROM t_sys_user_menu WHERE f_user_id=#{cur_user_id})</if>

@@ -7,11 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.jeeweb.framework.business.entity.BaseEntity;
+import com.jeeweb.framework.business.entity.TreeNodeEntity;
 import com.jeeweb.framework.business.service.BaseService;
 import com.jeeweb.framework.business.web.controller.SuperController;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
+import com.jeeweb.framework.core.utils.TreeUtil;
 
 public abstract class BaseApi<P, E extends BaseEntity<P>> extends SuperController {
     protected abstract BaseService<P, E> getService();
@@ -20,6 +22,12 @@ public abstract class BaseApi<P, E extends BaseEntity<P>> extends SuperControlle
         ParameterMap params = $params();
         List<E> entities = getService().selectEntityListPage(params);
         return new ResponseResult(new Result(params.page(entities)), HttpStatus.OK);
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    protected ResponseResult treeEntity() {
+        List<TreeNodeEntity> entities = (List<TreeNodeEntity>) getService().selectEntityListPage($params());
+        return new ResponseResult(new Result(TreeUtil.listToTree(entities)), HttpStatus.OK);
     }
 
     protected ResponseResult createEntity(E entity, UriComponentsBuilder ucBuilder) {

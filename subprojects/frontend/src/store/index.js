@@ -115,6 +115,23 @@ const store = new Vuex.Store({
     },
     user: null,
     menuList: [],
+    findMenuById (menuId, menus) {
+      for (let i in menus) {
+        let menu = menus[i]
+        if (menu.f_id === menuId) {
+          return menu
+        }
+
+        if (menu.children && menu.children.length > 0) {
+          let subMenu = this.findMenuById(menuId, menu.children)
+          if (subMenu) {
+            return subMenu
+          }
+        }
+      }
+
+      return null
+    },
     permissionList: [],
     hasPermission (f_menu_id) {
       return this.permissionList.indexOf(f_menu_id) > -1
@@ -143,6 +160,29 @@ const store = new Vuex.Store({
           f_type: 2
         }
       }]
+    },
+    _initTabs (tabs, menuList, routePath) {
+      // console.log('_initTabs', tabs, menuList, routePath)
+      // 仍旧保留原来已有的Tab页
+      let routes = []
+      tabs.routes.forEach((route) => {
+        let menu = this.findMenuByRoutePath(route.path, menuList)
+        if (menu) {
+          routes.push(route)
+        }
+      })
+      tabs.routes = routes
+
+      // 先打开首页的Tab，如果原来不是首页，则延时打开原来的Tab。
+      Vue.store.commit('openTab', tabs.routes[0])
+      if (routePath !== tabs.routes[0].path) {
+        let menu = this.findMenuByRoutePath(routePath, menuList)
+        if (menu) {
+          setTimeout(() => {
+            Vue.store.commit('openTab', {path: menu.f_route_path, params: menu})
+          }, 100)
+        }
+      }
     },
     findMenuByRoutePath (routePath, menus) {
       for (let i in menus) {
@@ -182,15 +222,7 @@ const store = new Vuex.Store({
       state.permissionList = []
       state._addPermission(state.menuList, state.permissionList)
 
-      state.tabs = {
-        activeName: state.menuHome.f_id,
-        routes: [{path: state.menuHome.f_route_path, params: state.menuHome}]
-      }
-      let menu = state.findMenuByRoutePath(payload.route.path, state.menuList)
-      if (!menu) {
-        menu = state.menuHome
-      }
-      Vue.store.commit('openTab', {path: menu.f_route_path, params: menu})
+      state._initTabs(state.tabs, state.menuList, payload.route.path)
     },
     openTab (state, payload) {
       // console.log('openTab', state.tabs, payload)
@@ -245,6 +277,7 @@ const store = new Vuex.Store({
     logout (state) {
       state.user = null
       state.menuList = []
+      state.tabs.routes = state.tabs.routes.slice(0, 1)
     }
   }
 })
@@ -261,6 +294,9 @@ Vue.prototype.hasPermission = function (f_menu_id) {
 }
 Vue.prototype.findMenuByRoutePath = function (routePath) {
   return Vue.store.state.findMenuByRoutePath(routePath, Vue.store.state.menuList)
+}
+Vue.prototype.findMenuById = function (menuId) {
+  return Vue.store.state.findMenuById(menuId, Vue.store.state.menuList)
 }
 
 export default store

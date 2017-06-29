@@ -5,6 +5,8 @@ import LoginView from './LoginView'
 export * from './platform'
 import platform from './platform'
 
+export * from './profile'
+import profile from './profile'
 export default [
   {
     path: '',
@@ -20,6 +22,13 @@ export default [
           template: '<router-view></router-view>'
         },
         children: platform
+      },
+      {
+        path: 'profile',
+        component: {
+          template: '<router-view></router-view>'
+        },
+        children: profile
       }
     ]
   },

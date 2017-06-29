@@ -38,7 +38,7 @@
   import {DetailMixin} from 'mixins'
 
   export default {
-    name: 'roleAuthorizeDetail',
+    name: 'jwAuthorize',
     mixins: [DetailMixin],
     data () {
       return {
@@ -53,8 +53,8 @@
         },
         options: {
           context: {
-            name: '角色',
-            url: 'api/platform/sys/roles',
+            name: '授权可以操作的功能',
+            url: null,
             detailComponent: this
           },
           loadRemoteEntity (options, cb) {
@@ -75,7 +75,7 @@
     methods: {
       _submitEntity (cb) {
         let selectedMenuIds = this.$refs['menuTree'].getCheckedKeys()
-        this.$http.post(this.options.context.url + '/' + this.options.params.f_id + '/menus', {f_menu_ids: selectedMenuIds.join(',')}, {emulateJSON: true}).then((response) => {
+        this.$http.post(this.options.context.url + '/' + this.options.params.f_id + '/menus', {f_menu_ids: selectedMenuIds.join(',')}, {emulateJSON: true, params: this.options.queryString}).then((response) => {
           if (response.body.success) {
             cb(response.body.data)
           }
@@ -85,7 +85,7 @@
         this.treeOptions.nodes = []
         this.treeOptions.expandedMenuIds = []
         this.treeOptions.checkedMenuIds = []
-        this.$http.get(this.options.context.url + '/' + this.options.params.f_id + '/menus').then((response) => {
+        this.$http.get(this.options.context.url + '/' + this.options.params.f_id + '/menus', {params: this.options.queryString}).then((response) => {
           this.treeOptions.nodes = response.body.success ? response.body.data : []
           this._updateCheckedNode(this.treeOptions.nodes)
           // this.entity = {f_menu_ids: this.treeOptions.checkedMenuIds.join(',')}
@@ -128,6 +128,7 @@
             <span>
               <i class={data.f_icon || (data.f_type < 2 ? 'fa fa-list' : (data.f_type === 2 ? 'fa fa-file-o' : ''))} style="min-width:16px;"></i> {data.f_type < 3 ? data.f_name : data.f_desc}
             </span>
+            <span style="color: #f00;font-weight: bold;">{data.mark ? '*' : ''}</span>
             <span class="jw-tree-tooltip">
               {data.f_remark ? data.f_remark : (data.f_desc ? data.f_desc : data.f_name)}
             </span>
@@ -136,21 +137,33 @@
       },
       onCheckChange (data, checked, indeterminate) {
         if (checked) {
-          data.f_menu_id = data.f_id
-
           let node = this._getParent(this.treeOptions.nodes, data)
           if (node && !node.f_menu_id) {
-            node.f_menu_id = node.f_id
+            node.f_menu_id = node.f_id // 这里需要先赋值
             this.$refs['menuTree'].setChecked(node, checked, false) // 勾选父节点
           }
+
+          if (!data.f_menu_id && data.children && data.children.length) {
+            this._setChildrenChecked(data.children)
+          }
+          data.f_menu_id = data.f_id
         } else {
-          data.f_menu_id = null
           if (data.children && data.children.length) {
             data.children.forEach((node) => {
               this.$refs['menuTree'].setChecked(node, checked, true) // 不勾选所有的子节点
             })
           }
+          data.f_menu_id = null
         }
+      },
+      _setChildrenChecked (nodes) {
+        nodes.forEach((node) => {
+          this.$refs['menuTree'].setChecked(node, true, false)
+
+          if (node.children && node.children.length) {
+            this._setChildrenChecked(node.children)
+          }
+        })
       }
     }
   }

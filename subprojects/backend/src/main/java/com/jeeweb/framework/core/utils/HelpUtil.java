@@ -14,6 +14,7 @@ import java.util.Map;
 import org.springframework.util.StringUtils;
 
 import com.jeeweb.framework.core.exception.BusinessException;
+import com.jeeweb.framework.core.model.IValue;
 
 public class HelpUtil extends StringUtils {
     public static final String DATETIME_PATTERN_DEFUALT = "yyyy-MM-dd HH:mm:ss";
@@ -61,16 +62,25 @@ public class HelpUtil extends StringUtils {
         return sb.substring(1);
     }
 
-    public static String joinToInString(List<?> list) {
+    public static <T> String joinToInString(List<T> list) {
+        return joinToInString(list, null);
+    }
+
+    public static <T> String joinToInString(List<T> list, IValue<T> value) {
         StringBuffer sb = new StringBuffer();
-        for (Object e : list) {
-            if (e instanceof String) {
-                sb.append(",'").append(e).append('\'');
+        for (T e : list) {
+            Object val = e;
+            if (value != null) {
+                val = value.getValue(e);
+            }
+
+            if (val instanceof String) {
+                sb.append(",'").append(val).append('\'');
             } else {
-                sb.append(',').append(e);
+                sb.append(',').append(val);
             }
         }
-        return sb.substring(1);
+        return sb.length() == 0 ? null : sb.substring(1);
     }
 
     public static List<String> splitToList(String listStr) {

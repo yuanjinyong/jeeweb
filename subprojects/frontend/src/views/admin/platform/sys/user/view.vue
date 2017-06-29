@@ -3,7 +3,7 @@
     <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
     <user-detail ref="detail" :detail-options="detailOptions"></user-detail>
-    <user-authorize-detail ref="authorize" :detail-options="authorizeOptions"></user-authorize-detail>
+    <jw-authorize ref="authorize" :detail-options="authorizeOptions"></jw-authorize>
   </div>
 </template>
 
@@ -25,20 +25,19 @@
     ViewRendererFramework
   } from 'components/ag-grid'
   import UserDetail from './detail'
-  import UserAuthorizeDetail from './authorize'
-  //  import {UserDetail, UserAuthorizeDetail} from 'views'
+  //  import {UserDetail} from 'views'
 
   export default {
     name: 'userView',
     mixins: [ViewlMixin],
     components: {
-      UserDetail,
-      UserAuthorizeDetail
+      UserDetail
     },
     data () {
       return {
         authorizeOptions: {
           context: {
+            url: 'api/platform/sys/users',
             featureComponent: this,
             getGridComponent (options) {
               return options.context.featureComponent.$refs['grid']

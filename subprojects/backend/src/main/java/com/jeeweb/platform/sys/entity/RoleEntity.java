@@ -4,7 +4,10 @@ import com.jeeweb.framework.business.entity.BaseEntity;
 import com.jeeweb.framework.business.model.IPreset;
 
 public class RoleEntity extends BaseEntity<Integer> implements IPreset {
-    public static final Integer ID_ADMIN_SYS = 0; // 系统管理员角色
+    public static final Integer ID_ADMIN_SYS = 1; // 系统管理员角色
+    public static final Integer ID_NORMAL_USER = 2; // 普通用户角色
+    public static final Integer ID_ADMIN_PLATFORM = 3; // 平台管理员角色
+    public static final Integer ID_ADMIN_COMPANY = 4; // 企业管理员角色
 
     private static final long serialVersionUID = 5663590213239944053L;
 

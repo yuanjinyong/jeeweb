@@ -101,13 +101,28 @@
         }).then(() => {
           this.$http.delete(this.params.context.url + '/' + this.entity.f_id).then((response) => {
             if (response.body.success) {
-              this.params.context.params.totalCount = 0
-              this.params.api.setDatasource(this.params.api.gridOptionsWrapper.gridOptions.datasource)
+              this._refreshGrid()
             }
           })
         }).catch((e) => {
           // console && console.error(e)
         })
+      },
+      _refreshGrid () {
+        this.params.context.params.totalCount = 0
+        if (this.gridOptions.rowModelType === 'normal') {
+          if (this.gridOptions.context.url) {
+            this.$http.get(this.gridOptions.context.url, {params: this.gridOptions.context.params}).then((response) => {
+              let rowData = []
+              if (response.body.success) {
+                rowData = response.body.data.items ? response.body.data.items : response.body.data
+              }
+              this.gridOptions.api.setRowData(rowData)
+            })
+          }
+        } else {
+          this.params.api.setDatasource(this.params.api.gridOptionsWrapper.gridOptions.datasource)
+        }
       }
     }
   })

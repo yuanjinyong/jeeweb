@@ -13,7 +13,7 @@
                      :key="menu.f_id"
                      :value="menu.f_id"
                      :label="menu.f_name">
-            {{menu.f_name}}
+            <div :style="{'padding-left':(menu.f_parent_path.split('/').length-3)*14+'px'}">{{menu.f_name}}</div>
           </el-option>
         </el-select>
       </el-form-item>

@@ -104,7 +104,7 @@
                 <i class="fa fa-bars" aria-hidden="true"></i>
               </el-button>
             </div>
-            <jw-menu ref="menu" class="jw-menu-body jw-side-menu-body"
+            <jw-menu class="jw-menu-body jw-side-menu-body"
                      :style="{'width':layout.sideMenu.body.width+'px', 'height':layout.sideMenu.body.height+'px'}"
                      :default-active="tabs.activeName" :menu-list="menuList" @select="onSelectMenu">
             </jw-menu>

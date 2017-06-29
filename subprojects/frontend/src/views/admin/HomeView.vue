@@ -117,10 +117,10 @@
       return {}
     },
     mounted () {
-      window.devMode && console.info('mounted', this.$options.name, this._uid)
+//      window.devMode && console.info('mounted', this.$options.name, this._uid)
     },
     activated () {
-      window.devMode && console.info('activated', this.$options.name, this._uid)
+//      window.devMode && console.info('activated', this.$options.name, this._uid)
     },
     methods: {}
   }

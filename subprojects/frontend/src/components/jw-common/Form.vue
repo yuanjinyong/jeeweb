@@ -81,6 +81,7 @@
           labelWidth: 150, // 单位px
           maxHeight: null,
           params: {},
+          queryString: {},
           beforeOpen: null,
           opened: null,
           createEntity: null,
@@ -177,7 +178,7 @@
                 this.bus.$emit('loaded-entity', entity)
               })
             } else {
-              this.$http.get(this.options.context.url + '/' + this.options.params.f_id).then((response) => {
+              this.$http.get(this.options.context.url + '/' + this.options.params.f_id, {params: this.options.queryString}).then((response) => {
                 this.bus.$emit('loaded-entity', response.body.success ? response.body.data : {})
               })
             }
@@ -218,15 +219,15 @@
           }
 
           if (this.options.operation === 'add') {
-            this.$http.post(this.options.context.url, this.entity).then((response) => {
+            this.$http.post(this.options.context.url, this.entity, {params: this.options.queryString}).then((response) => {
               this._submitted(response.body)
             })
           } else if (this.options.operation === 'edit') {
-            this.$http.put(this.options.context.url + '/' + this.options.params.f_id, this.entity).then((response) => {
+            this.$http.put(this.options.context.url + '/' + this.options.params.f_id, this.entity, {params: this.options.queryString}).then((response) => {
               this._submitted(response.body)
             })
           } else if (this.options.operation === 'audit') {
-            this.$http.put(this.options.context.url + '/' + this.options.params.f_id + '/audit', this.entity).then((response) => {
+            this.$http.put(this.options.context.url + '/' + this.options.params.f_id + '/audit', this.entity, {params: this.options.queryString}).then((response) => {
               this._submitted(response.body)
             })
           } else {
