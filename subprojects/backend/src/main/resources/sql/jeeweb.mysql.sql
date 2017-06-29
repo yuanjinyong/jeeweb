@@ -406,6 +406,91 @@ CREATE TABLE `t_sys_role_menu` (
 
 /*Data for the table `t_sys_role_menu` */
 
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (1,1,'ROOT');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (2,1,'GRZX');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (3,1,'QYGL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (4,1,'QYGL-SJYGL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (5,1,'QYGL-SJYGL-XG');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (6,1,'QYGL-QYXXGL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (7,1,'QYGL-QYXXGL-XG');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (8,1,'QYGL-QYXXGL-SH');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (9,1,'QYXTGL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (10,1,'QYXTGL-ZZRY');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (11,1,'QYXTGL-ZZRY-BMGL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (12,1,'QYXTGL-ZZRY-GWGL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (13,1,'QYXTGL-ZZRY-YGGL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (14,1,'QYXTGL-JCSJ');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (15,1,'QYXTGL-QYXXWH');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (16,1,'QYXTGL-QYYHSP');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (17,1,'XTGL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (18,1,'XTGL-JSGL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (19,1,'XTGL-JSGL-ZJ');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (20,1,'XTGL-JSGL-XG');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (21,1,'XTGL-JSGL-SC');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (22,1,'XTGL-JSGL-SQ');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (23,1,'XTGL-YHGL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (24,1,'XTGL-YHGL-ZJ');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (25,1,'XTGL-YHGL-XG');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (26,1,'XTGL-YHGL-SC');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (27,1,'XTGL-YHGL-SQ');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (28,1,'XTGL-YHGL-CZMM');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (29,1,'XTGL-YHGL-JS');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (30,1,'XTGL-ZDGL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (31,1,'XTGL-ZDGL-ZJ');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (32,1,'XTGL-ZDGL-XG');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (33,1,'XTGL-ZDGL-SC');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (34,1,'XTGL-ZDGL-DCSQL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (35,1,'XTGL-XTSZ');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (36,1,'XTGL-XTSZ-ZJ');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (37,1,'XTGL-XTSZ-XG');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (38,1,'XTGL-XTSZ-SC');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (39,1,'XTGL-XTSZ-DCSQL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (40,1,'XTGL-XTSZ-SZQZ');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (41,2,'ROOT');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (42,2,'GRZX');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (43,3,'ROOT');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (44,3,'GRZX');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (45,3,'QYGL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (46,3,'QYGL-SJYGL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (47,3,'QYGL-SJYGL-XG');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (48,3,'QYGL-QYXXGL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (49,3,'QYGL-QYXXGL-XG');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (50,3,'QYGL-QYXXGL-SH');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (51,3,'XTGL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (52,3,'XTGL-JSGL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (53,3,'XTGL-JSGL-ZJ');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (54,3,'XTGL-JSGL-XG');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (55,3,'XTGL-JSGL-SC');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (56,3,'XTGL-JSGL-SQ');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (57,3,'XTGL-YHGL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (58,3,'XTGL-YHGL-ZJ');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (59,3,'XTGL-YHGL-XG');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (60,3,'XTGL-YHGL-SC');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (61,3,'XTGL-YHGL-SQ');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (62,3,'XTGL-YHGL-CZMM');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (63,3,'XTGL-YHGL-JS');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (64,3,'XTGL-ZDGL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (65,3,'XTGL-ZDGL-ZJ');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (66,3,'XTGL-ZDGL-XG');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (67,3,'XTGL-ZDGL-SC');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (68,3,'XTGL-ZDGL-DCSQL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (69,3,'XTGL-XTSZ');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (70,3,'XTGL-XTSZ-ZJ');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (71,3,'XTGL-XTSZ-XG');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (72,3,'XTGL-XTSZ-SC');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (73,3,'XTGL-XTSZ-DCSQL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (74,3,'XTGL-XTSZ-SZQZ');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (75,4,'ROOT');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (76,4,'GRZX');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (77,4,'QYXTGL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (78,4,'QYXTGL-ZZRY');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (79,4,'QYXTGL-ZZRY-BMGL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (80,4,'QYXTGL-ZZRY-GWGL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (81,4,'QYXTGL-ZZRY-YGGL');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (82,4,'QYXTGL-JCSJ');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (83,4,'QYXTGL-QYXXWH');
+insert  into `t_sys_role_menu`(`f_id`,`f_role_id`,`f_menu_id`) values (84,4,'QYXTGL-QYYHSP');
+
 /*Table structure for table `t_sys_setting` */
 
 DROP TABLE IF EXISTS `t_sys_setting`;
@@ -501,7 +586,7 @@ CREATE TABLE `t_sys_user` (
 
 /*Data for the table `t_sys_user` */
 
-insert  into `t_sys_user`(`f_id`,`f_tenant_id`,`f_account`,`f_password`,`f_name`,`f_department_id`,`f_creator_id`,`f_created_time`,`f_last_login_time`,`f_locked_time`,`f_unregister_time`,`f_is_can_login`,`f_is_preset`,`f_status`,`f_remark`) values (1,0,'SuperAdmin','$2a$10$o6R1D7JhRW7d56inhUm50eF5xy8fF1l3KPCc0kdgpKBMw6olsamiq','超级管理员',0,0,'1970-01-01 00:00:00','2017-06-26 22:44:55',NULL,NULL,1,1,1,'该账号是开发人员维护系统用，不能提供给客户使用。');
+insert  into `t_sys_user`(`f_id`,`f_tenant_id`,`f_account`,`f_password`,`f_name`,`f_department_id`,`f_creator_id`,`f_created_time`,`f_last_login_time`,`f_locked_time`,`f_unregister_time`,`f_is_can_login`,`f_is_preset`,`f_status`,`f_remark`) values (1,0,'SuperAdmin','$2a$10$o6R1D7JhRW7d56inhUm50eF5xy8fF1l3KPCc0kdgpKBMw6olsamiq','超级管理员',0,0,'1970-01-01 00:00:00','2017-06-29 21:37:34',NULL,NULL,1,1,1,'该账号是开发人员维护系统用，不能提供给客户使用。');
 insert  into `t_sys_user`(`f_id`,`f_tenant_id`,`f_account`,`f_password`,`f_name`,`f_department_id`,`f_creator_id`,`f_created_time`,`f_last_login_time`,`f_locked_time`,`f_unregister_time`,`f_is_can_login`,`f_is_preset`,`f_status`,`f_remark`) values (2,0,'admin','$2a$10$BtvvDJwfxzJP7TRGEoG6p.PQbW1hWC6wvqiDUqjvMrfLoMgHjvjBa','系统管理员',0,0,'1970-01-01 00:00:00','2017-06-25 07:20:38',NULL,NULL,1,1,1,'该账号用于维护系统设置和权限分配。');
 
 /*Table structure for table `t_sys_user_menu` */
@@ -530,7 +615,7 @@ CREATE TABLE `t_sys_user_role` (
 
 /*Data for the table `t_sys_user_role` */
 
-insert  into `t_sys_user_role`(`f_id`,`f_user_id`,`f_role_id`) values (1,2,0);
+insert  into `t_sys_user_role`(`f_id`,`f_user_id`,`f_role_id`) values (2,2,1);
 
 /*Table structure for table `t_tool_generate_rule` */
 
