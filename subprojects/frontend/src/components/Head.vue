@@ -40,7 +40,7 @@
   import ChangePasswordForm from 'views/admin/platform/sys/user/password'
 
   export default {
-    name: 'jw-head',
+    name: 'jwHead',
     components: {
       UserDetail,
       ChangePasswordForm

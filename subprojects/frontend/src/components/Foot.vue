@@ -26,7 +26,7 @@
 
 <script>
   export default {
-    name: 'jw-foot',
+    name: 'jwFoot',
     computed: {
       devMode () {
         return this.$store.state.devMode

@@ -46,7 +46,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
             LOG.warn("账号密码错误！");
             ResponseUtil.failure(response, HttpServletResponse.SC_UNAUTHORIZED, new Result("账号密码错误！"));
         } else if (authException instanceof RestException) {
-            LOG.warn("其他异常！");
+            LOG.warn("其他异常！", authException);
             ResponseUtil.failure(response, HttpServletResponse.SC_OK, new Result(authException.getMessage()));
         } else {
             LOG.warn("访问[{}][{}]需要先登录验证！", request.getMethod(),

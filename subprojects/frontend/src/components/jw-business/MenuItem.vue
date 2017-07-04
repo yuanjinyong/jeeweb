@@ -9,7 +9,7 @@
 
 <script>
   export default {
-    name: 'jw-menu-item',
+    name: 'jwMenuItem',
     props: {
       menu: {
         type: Object,

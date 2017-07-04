@@ -41,7 +41,7 @@
   } from 'components/ag-grid'
 
   export default {
-    name: 'jw-company-dropdown',
+    name: 'jwCompanyDropdown',
     data () {
       return {
         companies: [],

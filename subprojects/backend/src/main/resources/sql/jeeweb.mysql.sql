@@ -2,7 +2,7 @@
 SQLyog Ultimate v12.09 (64 bit)
 MySQL - 5.7.10-log : Database - jeeweb
 *********************************************************************
-*/
+*/
 
 /*!40101 SET NAMES utf8 */;
 
@@ -170,8 +170,8 @@ insert  into `t_sys_dict_item`(`f_id`,`f_tenant_id`,`f_dict_code`,`f_item_order`
 DROP TABLE IF EXISTS `t_sys_menu`;
 
 CREATE TABLE `t_sys_menu` (
-  `f_id` varchar(256) COLLATE utf8_bin NOT NULL COMMENT '主键，以模块加横杠分隔，如 XTGL-QXGL 表示系统管理-权限管理',
-  `f_parent_id` varchar(256) COLLATE utf8_bin DEFAULT NULL COMMENT '父级菜单',
+  `f_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT '主键，以模块加横杠分隔，如 XTGL-QXGL 表示系统管理-权限管理',
+  `f_parent_id` varchar(128) COLLATE utf8_bin DEFAULT NULL COMMENT '父级菜单',
   `f_parent_path` varchar(1024) COLLATE utf8_bin NOT NULL COMMENT '树形结构的路径，以“/”开头、分隔和结尾。',
   `f_order` int(11) NOT NULL DEFAULT '10' COMMENT '排序',
   `f_name` varchar(256) COLLATE utf8_bin NOT NULL COMMENT '菜单名称',
@@ -254,7 +254,7 @@ DROP TABLE IF EXISTS `t_sys_menu_url`;
 
 CREATE TABLE `t_sys_menu_url` (
   `f_id` int(11) NOT NULL AUTO_INCREMENT,
-  `f_menu_id` varchar(64) COLLATE utf8_bin NOT NULL COMMENT '菜单ID，关联t_sys_menu表的f_id',
+  `f_menu_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT '菜单ID，关联t_sys_menu表的f_id',
   `f_url_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT 'URL的ID，关联t_sys_url表的f_id',
   PRIMARY KEY (`f_id`),
   UNIQUE KEY `UNQ_MENU_URL` (`f_menu_id`,`f_url_id`)
@@ -400,7 +400,7 @@ DROP TABLE IF EXISTS `t_sys_role_menu`;
 CREATE TABLE `t_sys_role_menu` (
   `f_id` int(11) NOT NULL AUTO_INCREMENT,
   `f_role_id` int(11) NOT NULL COMMENT '角色ID',
-  `f_menu_id` varchar(50) COLLATE utf8_bin NOT NULL COMMENT '权限ID',
+  `f_menu_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT '权限ID',
   PRIMARY KEY (`f_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='角色权限表';
 
@@ -568,6 +568,7 @@ CREATE TABLE `t_sys_user` (
   `f_account` varchar(30) COLLATE utf8_bin DEFAULT NULL COMMENT '账号',
   `f_password` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '密码',
   `f_name` varchar(32) COLLATE utf8_bin NOT NULL COMMENT '姓名',
+  `f_telephone` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '绑定的手机号',
   `f_department_id` int(11) NOT NULL DEFAULT '0' COMMENT '部门ID',
   `f_creator_id` int(11) NOT NULL DEFAULT '0' COMMENT '创建人',
   `f_created_time` datetime NOT NULL COMMENT '创建时间',
@@ -582,12 +583,12 @@ CREATE TABLE `t_sys_user` (
   UNIQUE KEY `UNI_USER_ACCOUNT` (`f_account`),
   KEY `IDX_USER_TENANT` (`f_tenant_id`),
   KEY `IDX_USER_DEPARTMENT` (`f_department_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户（操作员）表';
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户（操作员）表';
 
 /*Data for the table `t_sys_user` */
 
-insert  into `t_sys_user`(`f_id`,`f_tenant_id`,`f_account`,`f_password`,`f_name`,`f_department_id`,`f_creator_id`,`f_created_time`,`f_last_login_time`,`f_locked_time`,`f_unregister_time`,`f_is_can_login`,`f_is_preset`,`f_status`,`f_remark`) values (1,0,'SuperAdmin','$2a$10$o6R1D7JhRW7d56inhUm50eF5xy8fF1l3KPCc0kdgpKBMw6olsamiq','超级管理员',0,0,'1970-01-01 00:00:00','2017-06-29 21:37:34',NULL,NULL,1,1,1,'该账号是开发人员维护系统用，不能提供给客户使用。');
-insert  into `t_sys_user`(`f_id`,`f_tenant_id`,`f_account`,`f_password`,`f_name`,`f_department_id`,`f_creator_id`,`f_created_time`,`f_last_login_time`,`f_locked_time`,`f_unregister_time`,`f_is_can_login`,`f_is_preset`,`f_status`,`f_remark`) values (2,0,'admin','$2a$10$BtvvDJwfxzJP7TRGEoG6p.PQbW1hWC6wvqiDUqjvMrfLoMgHjvjBa','系统管理员',0,0,'1970-01-01 00:00:00','2017-06-25 07:20:38',NULL,NULL,1,1,1,'该账号用于维护系统设置和权限分配。');
+insert  into `t_sys_user`(`f_id`,`f_tenant_id`,`f_account`,`f_password`,`f_name`,`f_telephone`,`f_department_id`,`f_creator_id`,`f_created_time`,`f_last_login_time`,`f_locked_time`,`f_unregister_time`,`f_is_can_login`,`f_is_preset`,`f_status`,`f_remark`) values (1,0,'SuperAdmin','$2a$10$o6R1D7JhRW7d56inhUm50eF5xy8fF1l3KPCc0kdgpKBMw6olsamiq','超级管理员',NULL,0,0,'1970-01-01 00:00:00','2017-06-29 21:37:34',NULL,NULL,1,1,1,'该账号是开发人员维护系统用，不能提供给客户使用。');
+insert  into `t_sys_user`(`f_id`,`f_tenant_id`,`f_account`,`f_password`,`f_name`,`f_telephone`,`f_department_id`,`f_creator_id`,`f_created_time`,`f_last_login_time`,`f_locked_time`,`f_unregister_time`,`f_is_can_login`,`f_is_preset`,`f_status`,`f_remark`) values (2,0,'admin','$2a$10$BtvvDJwfxzJP7TRGEoG6p.PQbW1hWC6wvqiDUqjvMrfLoMgHjvjBa','系统管理员',NULL,0,0,'1970-01-01 00:00:00','2017-06-25 07:20:38',NULL,NULL,1,1,1,'该账号用于维护系统设置和权限分配。');
 
 /*Table structure for table `t_sys_user_menu` */
 
@@ -596,7 +597,7 @@ DROP TABLE IF EXISTS `t_sys_user_menu`;
 CREATE TABLE `t_sys_user_menu` (
   `f_id` int(11) NOT NULL AUTO_INCREMENT,
   `f_user_id` int(11) NOT NULL COMMENT '用户ID',
-  `f_menu_id` varchar(50) COLLATE utf8_bin NOT NULL COMMENT '权限ID',
+  `f_menu_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT '权限ID',
   PRIMARY KEY (`f_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户权限表';
 

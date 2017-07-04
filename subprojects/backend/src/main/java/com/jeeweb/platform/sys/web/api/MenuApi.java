@@ -14,7 +14,6 @@ import com.jeeweb.framework.business.service.BaseService;
 import com.jeeweb.framework.business.web.api.BaseApi;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
-import com.jeeweb.framework.core.utils.TreeUtil;
 import com.jeeweb.platform.security.SecurityCacheManager;
 import com.jeeweb.platform.sys.entity.MenuEntity;
 import com.jeeweb.platform.sys.service.MenuService;
@@ -33,9 +32,8 @@ public class MenuApi extends BaseApi<String, MenuEntity> {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseResult list() {
-        return new ResponseResult(new Result(TreeUtil.listToTree(getService().selectEntityListPage($params()))),
-                HttpStatus.OK);
+    public ResponseResult tree() {
+        return super.treeEntities();
     }
 
     @RequestMapping(method = RequestMethod.POST)

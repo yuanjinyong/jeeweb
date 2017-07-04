@@ -104,9 +104,9 @@
         },
         gridOptions: this.$grid.buildOptions({
           rowModelType: 'normal',
-          rowData: [],
           pagination: false,
           enableFilter: false,
+          floatingFilter: false,
           context: {
             featureComponent: this,
             getPermissions (params, operation) {

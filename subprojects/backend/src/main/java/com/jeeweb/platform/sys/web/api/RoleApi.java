@@ -77,7 +77,7 @@ public class RoleApi extends BaseApi<Integer, RoleEntity> {
         }
 
         if ($bool("treeData", true)) {
-            return new ResponseResult(new Result(TreeUtil.listToTree(menuList, "f_id", "f_parent_id")), HttpStatus.OK);
+            return new ResponseResult(new Result(TreeUtil.listToTree(menuList, "f_id")), HttpStatus.OK);
         } else {
             return new ResponseResult(new Result(menuList), HttpStatus.OK);
         }

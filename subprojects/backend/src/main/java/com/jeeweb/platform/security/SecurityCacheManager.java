@@ -43,13 +43,13 @@ public class SecurityCacheManager {
     private static final Logger LOG = LoggerFactory.getLogger(SecurityCacheManager.class);
 
     // 权限缓存
-    private static Map<String, SecurityAuthority> authoritiesCache = new HashMap<String, SecurityAuthority>();
+    private static Map<String, SecurityAuthority> authoritiesCache = new HashMap<>();
     // URL配置的权限缓存
-    private static Map<String, Collection<ConfigAttribute>> urlAuthoritiesCache = new HashMap<String, Collection<ConfigAttribute>>();
+    private static Map<String, Collection<ConfigAttribute>> urlAuthoritiesCache = new HashMap<>();
     // 后台URL地址如果未配置访问权限
-    private static Collection<ConfigAttribute> unconfigAuthority = new ArrayList<ConfigAttribute>();
+    private static Collection<ConfigAttribute> unconfigAuthority = new ArrayList<>();
     // 操作员缓存，采用集群部署时，不能使用下面的单机版缓存。
-    private static Map<String, SecurityUser> securityUserCache = new HashMap<String, SecurityUser>();
+    private static Map<String, SecurityUser> securityUserCache = new HashMap<>();
 
     private UrlPathHelper urlPathHelper = new UrlPathHelper();
     private RequestMappingHandlerMapping requestMappingHandlerMapping;
@@ -83,7 +83,7 @@ public class SecurityCacheManager {
             String urlId = menuUrlMap.getString("f_url_id");
             Collection<ConfigAttribute> authorityList = urlAuthoritiesCache.get(urlId);
             if (authorityList == null) {
-                authorityList = new ArrayList<ConfigAttribute>();
+                authorityList = new ArrayList<>();
                 urlAuthoritiesCache.put(urlId, authorityList);
             }
 
@@ -140,7 +140,7 @@ public class SecurityCacheManager {
         }
         List<MenuEntity> menuList = userMenuMapper.selectUserAndRoleMenuListPage(params);
 
-        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        List<GrantedAuthority> authorities = new ArrayList<>();
         for (MenuEntity menu : menuList) {
             authorities.add(getAuthority(menu.getF_id()));
         }
@@ -148,7 +148,7 @@ public class SecurityCacheManager {
         return authorities;
     }
 
-    private SecurityAuthority getAuthority(String menuId) {
+    public static SecurityAuthority getAuthority(String menuId) {
         SecurityAuthority authority = authoritiesCache.get(menuId);
         if (authority == null) {
             authority = new SecurityAuthority(menuId);
@@ -196,6 +196,10 @@ public class SecurityCacheManager {
 
     private SecurityUser getSecurityUserFromDB(String f_account) {
         UserEntity user = userMapper.selectUserByAccount(f_account);
+        if (user == null) {
+            user = userMapper.selectUserByTelephone(f_account);
+        }
+
         if (user != null && user.getF_is_can_login() == 1) {
             if (user.getF_status() == UserEntity.STATUS_LOCKED) {
                 LOG.error("账号[{}]已锁定，请联系系统管理员解锁！", f_account);

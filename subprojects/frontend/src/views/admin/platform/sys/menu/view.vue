@@ -47,16 +47,9 @@
             getGridComponent (options) {
               return options.context.featureComponent.$refs['grid']
             }
-          },
-          submitted (result) {
-            this.options.context.featureComponent._loadMenuList()
           }
         },
         gridOptions: this.$grid.buildOptions({
-          enableServerSideFilter: false,
-          rowModelType: 'normal',
-          rowData: [],
-          pagination: false,
           getNodeChildDetails: function (rowData) {
             if (rowData.children && rowData.children.length > 0) {
               return {
@@ -81,6 +74,7 @@
               return params.context.featureComponent.$refs['detail']
             },
             params: {
+              tree: true,
               orderBy: 'f_parent_path,f_order'
             }
           }
@@ -210,9 +204,6 @@
               permission: 'remove',
               isDisabled (params, entity) {
                 return !entity.f_parent_id
-              },
-              onClick (params, entity) {
-                params.context.featureComponent.onRemove(entity)
               }
             }, {
               id: 'sql',
@@ -231,32 +222,6 @@
           width: 96
         }
       ]
-
-      this._loadMenuList()
-    },
-    methods: {
-      _loadMenuList () {
-        this.$http.get(this.gridOptions.context.url, {params: {orderBy: 'f_parent_path,f_order'}}).then((response) => {
-          if (response.body.success) {
-            this.gridOptions.api.setRowData(response.body.data)
-          } else {
-            this.gridOptions.api.setRowData([])
-          }
-        })
-      },
-      onRemove (entity) {
-        this.$confirm('确定要删除所选的菜单及其子菜单吗?', '删除菜单', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(function () {
-          this.$http.delete(this.gridOptions.context.url + '/' + entity.f_id).then((response) => {
-            if (response.body.success) {
-              this._loadMenuList()
-            }
-          })
-        })
-      }
     }
   }
 </script>

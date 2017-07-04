@@ -37,7 +37,7 @@
         WHERE 1=1
         <if test="f_user_id != null">AND t.f_user_id = #{f_user_id}</if>
         <if test="f_role_id != null">AND t.f_role_id = #{f_role_id}</if>
-        <if test="f_role_name_like != null">AND r.f_role_name LIKE CONCAT('%', #{f_role_name_like}, '%')</if>
+        <if test="f_role_name_like != null">AND r.f_name LIKE CONCAT('%', #{f_role_name_like}, '%')</if>
     </sql>
 
 
@@ -95,15 +95,4 @@
     </delete>
 
     <!-- 其他SQL -->
-    <!-- 查询用户（操作员）可赋&已赋的角色列表 -->
-    <select id="selectRoleListPage" parameterType="com.jeeweb.framework.core.model.ParameterMap" resultType="com.jeeweb.framework.core.model.RowMap">
-        SELECT
-        r.*,
-        u.f_role_id
-        FROM t_sys_role r
-        LEFT JOIN (SELECT f_role_id FROM t_sys_user_role WHERE f_user_id = #{f_user_id}) u ON u.f_role_id = r.f_id
-        WHERE 1=1
-        <if test="f_tenant_id != null">AND r.f_tenant_id = #{f_tenant_id}</if>
-        <if test="f_tenant_id_in != null">AND r.f_tenant_id = #{f_tenant_id_in}</if>
-    </select>
 </mapper>

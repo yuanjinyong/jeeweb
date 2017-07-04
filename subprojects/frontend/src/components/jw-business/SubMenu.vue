@@ -13,7 +13,7 @@
 
 <script>
   export default {
-    name: 'jw-submenu',
+    name: 'jwSubmenu',
     props: {
       menu: {
         type: Object,

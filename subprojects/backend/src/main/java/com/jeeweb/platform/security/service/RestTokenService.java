@@ -3,11 +3,15 @@
  */
 package com.jeeweb.platform.security.service;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.jeeweb.framework.core.utils.HelpUtil;
@@ -52,5 +56,19 @@ public class RestTokenService {
 
     public Authentication getAuthentication(String token) {
         return byteRedisTemplate.opsForValue().get("token:" + token);
+    }
+
+    public void updateAuthorities(List<GrantedAuthority> authorities) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
+        String token = securityUser.getToken();
+
+        SecurityUser newSecurityUser = new SecurityUser(securityUser.getUser(), authorities);
+        newSecurityUser.setToken(token);
+
+        UsernamePasswordAuthenticationToken newAuthentication = new UsernamePasswordAuthenticationToken(newSecurityUser,
+                authentication.getCredentials(), authorities);
+        newAuthentication.setDetails(authentication.getDetails());
+        byteRedisTemplate.opsForValue().set("token:" + token, newAuthentication, 1, TimeUnit.DAYS);
     }
 }

@@ -164,4 +164,41 @@
     </delete>
 
     <!-- 其他SQL -->
+    <update id="createTempMenuIdTable">
+        CREATE TEMPORARY TABLE IF NOT EXISTS `t_temp_menu` (
+        `f_role_id` int(11) DEFAULT NULL COMMENT '角色ID',
+        `f_user_id` int(11) DEFAULT NULL COMMENT '用户ID',
+        `f_post_id` int(11) DEFAULT NULL COMMENT '岗位ID',
+        `f_employee_id` int(11) DEFAULT NULL COMMENT '员工ID',
+        `f_menu_id` VARCHAR(128) COLLATE utf8_bin NOT NULL COMMENT '菜单ID'
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+    </update>
+    <update id="cleanTempMenuIdTable">
+        DELETE FROM `t_temp_menu`
+    </update>
+    <insert id="insertTempMenuIds" parameterType="java.util.ArrayList">
+        INSERT INTO t_temp_menu(
+        f_role_id,
+        f_user_id,
+        f_post_id,
+        f_employee_id,
+        f_menu_id
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.f_role_id},
+            #{item.f_user_id},
+            #{item.f_post_id},
+            #{item.f_employee_id},
+            #{item.f_menu_id}
+            )
+        </foreach>
+    </insert>
+    <select id="selectTempMenuListPage" parameterType="com.jeeweb.framework.core.model.ParameterMap" resultType="com.jeeweb.platform.sys.entity.MenuEntity">
+        <include refid="Select_Clause" />
+        <include refid="From_Clause" />
+        RIGHT JOIN (SELECT DISTINCT f_menu_id FROM t_temp_menu) tm ON tm.f_menu_id = t.f_id
+        <include refid="Where_Clause" />
+    </select>
 </mapper>

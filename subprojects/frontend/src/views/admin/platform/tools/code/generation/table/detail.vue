@@ -104,9 +104,9 @@
         }],
         gridOptions: this.$grid.buildOptions({
           rowModelType: 'normal',
-          rowData: [],
           pagination: false,
           enableFilter: false,
+          floatingFilter: false,
           context: {
             name: '生成规则字段配置',
             url: null,
@@ -122,7 +122,7 @@
           createEntity (options, cb) {
             let vm = options.context.detailComponent
             let entity = {
-              f_db_name: 'zhuku_master',
+              f_db_name: 'jeeweb',
               f_table_name: null,
               f_order: 1,
               f_is_main: 1,

@@ -66,7 +66,6 @@ public class MenuService extends BaseService<String, MenuEntity> {
         // 查出所有的子菜单，先删除子菜单及其URL
         ParameterMap params = new ParameterMap("f_parent_path_like", entity.getF_full_path());
         menuUrlMapper.deleteEntities(params);
-        super.deleteEntities(params); // 这里要调用父类的，不能调用子类覆写后的
 
         // 再删除自己的URL
         deleteMenuUrl(entity);

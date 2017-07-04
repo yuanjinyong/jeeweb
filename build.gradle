@@ -84,7 +84,6 @@ configure(subprojects.findAll{!it.childProjects}) { project ->
 
     apply plugin: 'com.bmuschko.nexus'
 
-
     nexus {
         sign = false
         repositoryUrl = "${nexusUrl}/content/repositories/releases/"

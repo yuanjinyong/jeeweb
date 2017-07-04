@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import com.jeeweb.framework.core.utils.JsonUtil;
 
-
 /**
  * 所有实体类的基类
  * 

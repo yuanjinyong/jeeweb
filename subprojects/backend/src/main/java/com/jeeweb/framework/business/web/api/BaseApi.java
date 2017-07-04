@@ -10,6 +10,7 @@ import com.jeeweb.framework.business.entity.BaseEntity;
 import com.jeeweb.framework.business.entity.TreeNodeEntity;
 import com.jeeweb.framework.business.service.BaseService;
 import com.jeeweb.framework.business.web.controller.SuperController;
+import com.jeeweb.framework.core.model.Page;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
@@ -18,16 +19,22 @@ import com.jeeweb.framework.core.utils.TreeUtil;
 public abstract class BaseApi<P, E extends BaseEntity<P>> extends SuperController {
     protected abstract BaseService<P, E> getService();
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    protected ResponseResult treeEntities() {
+        ParameterMap params = $params();
+        List entities = getService().selectEntityListPage(params);
+        Page<TreeNodeEntity> page = params.page(entities);
+        page.setItems(TreeUtil.listToTree(entities));
+        if (!$bool("tree", false)) {
+            page.setItems(TreeUtil.treeToList(page.getItems()));
+        }
+        return new ResponseResult(new Result(page), HttpStatus.OK);
+    }
+
     protected ResponseResult listEntities() {
         ParameterMap params = $params();
         List<E> entities = getService().selectEntityListPage(params);
         return new ResponseResult(new Result(params.page(entities)), HttpStatus.OK);
-    }
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    protected ResponseResult treeEntity() {
-        List<TreeNodeEntity> entities = (List<TreeNodeEntity>) getService().selectEntityListPage($params());
-        return new ResponseResult(new Result(TreeUtil.listToTree(entities)), HttpStatus.OK);
     }
 
     protected ResponseResult createEntity(E entity, UriComponentsBuilder ucBuilder) {

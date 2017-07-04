@@ -93,8 +93,7 @@
           return
         }
 
-        let featureName = this.params.context.name || '记录'
-        this.$confirm('确定要删除所选的' + featureName + '吗?', '删除' + featureName, {
+        this.$confirm('确定要删除所选的' + operation.title.substring(2) + '吗?', operation.title, {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -109,19 +108,12 @@
         })
       },
       _refreshGrid () {
-        this.params.context.params.totalCount = 0
-        if (this.gridOptions.rowModelType === 'normal') {
-          if (this.gridOptions.context.url) {
-            this.$http.get(this.gridOptions.context.url, {params: this.gridOptions.context.params}).then((response) => {
-              let rowData = []
-              if (response.body.success) {
-                rowData = response.body.data.items ? response.body.data.items : response.body.data
-              }
-              this.gridOptions.api.setRowData(rowData)
-            })
-          }
+        let gridOptions = this.params.api.gridOptionsWrapper.gridOptions
+        if (gridOptions.rowModelType === 'normal') {
+          gridOptions.getRows4Normal()
         } else {
-          this.params.api.setDatasource(this.params.api.gridOptionsWrapper.gridOptions.datasource)
+          gridOptions.context.params.totalCount = 0
+          gridOptions.api.setDatasource(gridOptions.datasource)
         }
       }
     }

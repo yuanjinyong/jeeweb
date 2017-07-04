@@ -239,16 +239,23 @@
       },
       _submitted (result) {
         if (result.success) {
-          let gridComponent = this.options.context.getGridComponent && this.options.context.getGridComponent.call(this, this.options)
-          if (gridComponent && gridComponent.gridOptions.rowModelType === 'infinite') {
-            gridComponent.gridOptions.context.params.totalCount = 0
-            gridComponent.gridOptions.api.setDatasource(gridComponent.gridOptions.datasource)
-          }
-
+          this._refreshGrid()
           this.close()
           this.$emit('submitted', {type: this.options.operation, data: result.data})
           if (this.options.submitted) {
             this.options.submitted.call(this, {operation: this.options.operation, data: result.data})
+          }
+        }
+      },
+      _refreshGrid () {
+        let gridComponent = this.options.context.getGridComponent && this.options.context.getGridComponent.call(this, this.options)
+        if (gridComponent) {
+          let gridOptions = gridComponent.gridOptions
+          if (gridOptions.rowModelType === 'normal') {
+            gridOptions.getRows4Normal()
+          } else {
+            gridOptions.context.params.totalCount = 0
+            gridOptions.api.setDatasource(gridOptions.datasource)
           }
         }
       }

@@ -19,7 +19,6 @@ import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.platform.security.utils.SecurityUtil;
 import com.jeeweb.platform.sys.entity.UserEntity;
 
-
 public abstract class BaseService<P, E> extends SuperService {
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -64,6 +63,12 @@ public abstract class BaseService<P, E> extends SuperService {
         }
 
         beforeDeleteEntity(entity);
+
+        if (entity instanceof TreeNodeEntity) {
+            // 删除孩子
+            TreeNodeEntity<?, ?> node = (TreeNodeEntity<?, ?>) entity;
+            getMapper().deleteEntities(new ParameterMap("f_parent_path_like", node.getF_full_path()));
+        }
 
         getMapper().deleteEntity(primaryKey);
 
@@ -145,9 +150,6 @@ public abstract class BaseService<P, E> extends SuperService {
         E oldEntity = getMapper().selectEntity(primaryKey);
         IAuditor auditor = (IAuditor) entity;
         IAuditor oldAuditor = (IAuditor) oldEntity;
-        if (oldAuditor.getF_status() == auditor.getF_status()) {
-            return;
-        }
         if (oldAuditor.getF_status() != IAuditor.STATUS_NEW && oldAuditor.getF_status() != IAuditor.STATUS_REJECTED) {
             throw new BusinessException("只有未审核和审核未通过的记录才可进行审核！");
         }

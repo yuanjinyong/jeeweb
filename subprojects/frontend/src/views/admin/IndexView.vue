@@ -71,8 +71,8 @@
             </el-button>
           </div>
           <el-col style="float: left;position: absolute;" :span="16">
-            <jw-menu class="jw-menu-body jw-top-menu-body" :menu-list="menuList" @select="onSelectMenu"
-                     v-show="showMenu">
+            <jw-menu class="jw-menu-body jw-top-menu-body" :default-active="tabs.activeName" :menu-list="menuList"
+                     @select="onSelectMenu" v-show="showMenu">
             </jw-menu>
           </el-col>
         </el-row>
@@ -148,7 +148,10 @@
 //      console.log('beforeRouteEnter', from, to)
       Vue.store.commit('backupRoute', to)
       let loading = Vue.prototype.$loading({text: '加载中……'})
-      Promise.all([Vue.http.get('api/platform/data/dicts'), Vue.http.get('api/admin/index/user')]).then((responses) => {
+      Promise.all([
+        Vue.http.get('api/platform/data/dicts'),
+        Vue.http.get('api/admin/index/user')
+      ]).then((responses) => {
         let response = responses[0]
         Vue.store.commit('setDicts', response.body.success ? response.body.data : {})
 
@@ -185,7 +188,27 @@
         return this.$store.state.tabs
       }
     },
-    mounted () {
+    created () {
+      this.loadMenus = this.$lodash.debounce((company) => {
+        let loading = this.$loading({text: '加载中……', target: '#layoutMiddle'})
+        let url = 'api/admin/index/menus'
+        if (company) {
+          url = 'api/zkpms/workbench/menus'
+        }
+        Vue.http.get(url).then((response) => {
+          Vue.store.commit('setMenuList', {
+            route: this.$route,
+            menuList: response.body.success ? response.body.data.items : []
+          })
+
+          loading.close()
+          this.onResize()
+        }).catch(e => loading.close())
+      }, 300)
+
+      this.$root.$on('company-switched', (company) => {
+        this.loadMenus(company)
+      })
       window.addEventListener('resize', this.onResize)
       this.$nextTick(() => {
         this.onResize()
@@ -202,20 +225,6 @@
       }
     },
     methods: {
-      loadMenus () {
-        this.$lodash.debounce(() => {
-          let loading = this.$loading({text: '加载中……', target: '#layoutMiddle'})
-          Vue.http.get('api/admin/index/menus').then((response) => {
-            Vue.store.commit('setMenuList', {
-              route: this.$route,
-              menuList: response.body.success ? response.body.data.items : []
-            })
-
-            loading.close()
-            this.onResize()
-          }).catch(e => loading.close())
-        }, 100)()
-      },
       onResize () {
         var vm = this
         if (vm.resizeTimer) {

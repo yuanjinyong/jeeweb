@@ -7,6 +7,7 @@
         f_account,
         f_password,
         f_name,
+        f_telephone,
         f_department_id,
         f_creator_id,
         f_created_time,
@@ -26,6 +27,7 @@
         #{f_account},
         #{f_password},
         #{f_name},
+        #{f_telephone},
         #{f_department_id},
         #{f_creator_id},
         #{f_created_time},
@@ -45,6 +47,7 @@
             #{item.f_account},
             #{item.f_password},
             #{item.f_name},
+            #{item.f_telephone},
             #{item.f_department_id},
             #{item.f_creator_id},
             #{item.f_created_time},
@@ -66,6 +69,7 @@
         t.f_account,
         t.f_password,
         t.f_name,
+        t.f_telephone,
         t.f_department_id,
         d.f_name f_department_name,
         t.f_creator_id,
@@ -94,6 +98,8 @@
         <if test="f_account_like != null and f_account_like != ''">AND t.f_account LIKE CONCAT('%', #{f_account_like}, '%')</if>
         <if test="f_account_notIn != null and f_account_notIn != ''">AND t.f_account NOT IN (${f_account_notIn})</if>
         <if test="f_name_like != null and f_name_like != ''">AND t.f_name LIKE CONCAT('%', #{f_name_like}, '%')</if>
+        <if test="f_telephone != null and f_telephone != ''">AND t.f_telephone = #{f_telephone}</if>
+        <if test="f_telephone_like != null and f_telephone_like != ''">AND t.f_telephone LIKE CONCAT('%', #{f_telephone_like}, '%')</if>
         <if test="f_status != null and f_status != ''">AND t.f_status = #{f_status}</if>
         <if test="f_status_in != null and f_status_in != ''">AND t.f_status IN (${f_status_in})</if>
         <if test="f_created_time_begin != null and f_created_time_begin != ''">AND t.f_created_time &gt;= #{f_created_time_begin} </if>
@@ -141,6 +147,7 @@
         <if test="f_account != null">f_account=#{f_account},</if>
         <if test="f_password != null">f_password=#{f_password},</if>
         <if test="f_name != null">f_name=#{f_name},</if>
+        <if test="f_telephone != null">f_telephone=#{f_telephone},</if>
         <if test="f_department_id != null">f_department_id=#{f_department_id},</if>
         <!--if test="f_creator_id != null">f_creator_id=#{f_creator_id},</if -->
         <!--if test="f_created_time != null">f_created_time=#{f_created_time},</if -->
@@ -176,6 +183,11 @@
         <include refid="From_Clause" />
         LEFT JOIN t_sys_tenant tenant ON tenant.f_id = t.f_tenant_id
         WHERE t.f_is_can_login = 1 AND t.f_account = #{f_account}
+    </select>
+    <select id="selectUserByTelephone" parameterType="java.lang.String" resultType="com.jeeweb.platform.sys.entity.UserEntity">
+        <include refid="Select_Clause" />
+        <include refid="From_Clause" />
+        WHERE t.f_is_can_login = 1 AND t.f_status = 1 AND t.f_telephone = #{f_telephone}
     </select>
     <update id="unlockUser" parameterType="java.lang.Integer">
         UPDATE t_sys_user SET

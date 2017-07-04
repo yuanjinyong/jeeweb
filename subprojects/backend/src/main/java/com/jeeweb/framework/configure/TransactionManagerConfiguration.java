@@ -32,7 +32,7 @@ public class TransactionManagerConfiguration {
     @Value("${mybatis.transaction.logBaseDir:${catalina.base}/logs/}")
     private String logBaseDir;
     @Value("${mybatis.transaction.logBaseName:tm_atomikos}")
-    private String logBaseName; // 默认30秒超时
+    private String logBaseName;
 
     @Bean(name = "userTransaction")
     public UserTransaction userTransaction() throws SystemException {

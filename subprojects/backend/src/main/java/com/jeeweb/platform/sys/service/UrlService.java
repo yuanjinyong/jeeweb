@@ -9,7 +9,6 @@ import com.jeeweb.framework.business.service.BaseService;
 import com.jeeweb.platform.sys.entity.UrlEntity;
 import com.jeeweb.platform.sys.mapper.UrlMapper;
 
-
 @Service
 @Transactional
 public class UrlService extends BaseService<String, UrlEntity> {

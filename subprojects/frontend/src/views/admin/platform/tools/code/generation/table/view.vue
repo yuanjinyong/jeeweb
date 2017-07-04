@@ -71,9 +71,9 @@
         },
         gridOptions: this.$grid.buildOptions({
           rowModelType: 'normal',
-          rowData: [],
           pagination: false,
           enableFilter: false,
+          floatingFilter: false,
           context: {
             name: '生成规则数据库表',
             url: null,

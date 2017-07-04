@@ -61,7 +61,11 @@ public abstract class SuperController {
 
     public static Integer $int(String paramName, Integer defaultValue) {
         String value = $(paramName);
-        return HelpUtil.isEmpty(value) ? defaultValue : Integer.parseInt(value);
+        if (HelpUtil.isEmpty(value)) {
+            return defaultValue;
+        } else {
+            return Integer.parseInt(value);
+        }
     }
 
     public static Long $long(String paramName) {

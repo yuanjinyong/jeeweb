@@ -10,7 +10,7 @@
 
 <script>
   export default {
-    name: 'jw-menu',
+    name: 'jwMenu',
     props: {
       router: {
         type: Boolean,
