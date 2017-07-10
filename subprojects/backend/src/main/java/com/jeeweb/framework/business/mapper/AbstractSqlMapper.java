@@ -136,7 +136,7 @@ public abstract class AbstractSqlMapper implements SqlMapper {
         }
 
         SqlSource sqlSource = parameter == null ? new StaticSqlSource(configuration, sql)
-                : configuration.getDefaultScriptingLanuageInstance().createSqlSource(configuration, sql,
+                : configuration.getDefaultScriptingLanguageInstance().createSqlSource(configuration, sql,
                         parameter.getClass());
         ResultMap defaultResultMap = new ResultMap.Builder(configuration, "defaultResultMap", resultType,
                 new ArrayList<ResultMapping>(0)).build();
