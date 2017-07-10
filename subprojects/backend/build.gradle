@@ -8,7 +8,7 @@
  */
 // 添加Gradle插件
 plugins {
-    id "org.springframework.boot" version "1.4.3.RELEASE"
+    id "org.springframework.boot" version "1.5.4.RELEASE"
 }
 apply plugin: 'war'
 apply from: "${gradleDir}/java.gradle"
@@ -46,8 +46,7 @@ dependencies {
     compile "mysql:mysql-connector-java"
 
     // Redis缓存
-    compile "redis.clients:jedis:2.4.0"
-    compile "org.springframework.boot:spring-boot-starter-redis"
+    compile "org.springframework.boot:spring-boot-starter-data-redis"
 
     // 代码生成
     compile "org.codehaus.groovy:groovy-all:2.4.7"
