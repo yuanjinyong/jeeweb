@@ -384,7 +384,7 @@ CREATE TABLE `t_sys_role` (
   `f_remark` longtext COLLATE utf8_bin COMMENT '备注',
   PRIMARY KEY (`f_id`),
   UNIQUE KEY `UNI_ROLE_NAME` (`f_name`,`f_company_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='角色表';
+) ENGINE=InnoDB AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='角色表';
 
 /*Data for the table `t_sys_role` */
 
@@ -583,11 +583,11 @@ CREATE TABLE `t_sys_user` (
   UNIQUE KEY `UNI_USER_ACCOUNT` (`f_account`),
   KEY `IDX_USER_TENANT` (`f_tenant_id`),
   KEY `IDX_USER_DEPARTMENT` (`f_department_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户（操作员）表';
+) ENGINE=InnoDB AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户（操作员）表';
 
 /*Data for the table `t_sys_user` */
 
-insert  into `t_sys_user`(`f_id`,`f_tenant_id`,`f_account`,`f_password`,`f_name`,`f_telephone`,`f_department_id`,`f_creator_id`,`f_created_time`,`f_last_login_time`,`f_locked_time`,`f_unregister_time`,`f_is_can_login`,`f_is_preset`,`f_status`,`f_remark`) values (1,0,'SuperAdmin','$2a$10$o6R1D7JhRW7d56inhUm50eF5xy8fF1l3KPCc0kdgpKBMw6olsamiq','超级管理员',NULL,0,0,'1970-01-01 00:00:00','2017-06-29 21:37:34',NULL,NULL,1,1,1,'该账号是开发人员维护系统用，不能提供给客户使用。');
+insert  into `t_sys_user`(`f_id`,`f_tenant_id`,`f_account`,`f_password`,`f_name`,`f_telephone`,`f_department_id`,`f_creator_id`,`f_created_time`,`f_last_login_time`,`f_locked_time`,`f_unregister_time`,`f_is_can_login`,`f_is_preset`,`f_status`,`f_remark`) values (1,0,'SuperAdmin','$2a$10$o6R1D7JhRW7d56inhUm50eF5xy8fF1l3KPCc0kdgpKBMw6olsamiq','超级管理员',NULL,0,0,'1970-01-01 00:00:00','2017-07-10 11:29:52',NULL,NULL,1,1,1,'该账号是开发人员维护系统用，不能提供给客户使用。');
 insert  into `t_sys_user`(`f_id`,`f_tenant_id`,`f_account`,`f_password`,`f_name`,`f_telephone`,`f_department_id`,`f_creator_id`,`f_created_time`,`f_last_login_time`,`f_locked_time`,`f_unregister_time`,`f_is_can_login`,`f_is_preset`,`f_status`,`f_remark`) values (2,0,'admin','$2a$10$BtvvDJwfxzJP7TRGEoG6p.PQbW1hWC6wvqiDUqjvMrfLoMgHjvjBa','系统管理员',NULL,0,0,'1970-01-01 00:00:00','2017-06-25 07:20:38',NULL,NULL,1,1,1,'该账号用于维护系统设置和权限分配。');
 
 /*Table structure for table `t_sys_user_menu` */
