@@ -12,7 +12,7 @@ Vue.lodash = lodash
 import VueCookie from 'vue-cookie'
 Vue.use(VueCookie)
 
-import 'font-awesome-loader'
+import 'font-awesome-webpack'
 
 import ElementUI from 'element-ui'
 Vue.use(ElementUI)
