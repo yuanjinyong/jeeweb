@@ -43,7 +43,7 @@
         this.params.column.colDef.floatingFilterComponentParams.suppressFilterButton = true
       }
 
-      this.getDictItems(this.filterParams.dict || {url: this.filterParams.url}, (items) => {
+      this.getDictItems(this.filterParams.dict || this.filterParams.dictOptions, (items) => {
         this.options = items
       })
 

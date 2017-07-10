@@ -26,7 +26,7 @@
     created () {
       Vue.lodash.merge(this.editorOptions, this.params.editorOptions)
 
-      this.getDictItems(this.params.dict || {url: this.params.url}, (items) => {
+      this.getDictItems(this.params.dict || this.filterParams.dictOptions, (items) => {
         this.options = items
       })
 

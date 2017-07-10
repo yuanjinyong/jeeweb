@@ -13,5 +13,5 @@ Vue.component(Menu.name, Menu)
 import MenuItem from './MenuItem'
 Vue.component(MenuItem.name, MenuItem)
 
-import SubMenu from './SubMenu'
-Vue.component(SubMenu.name, SubMenu)
+import Submenu from './Submenu'
+Vue.component(Submenu.name, Submenu)

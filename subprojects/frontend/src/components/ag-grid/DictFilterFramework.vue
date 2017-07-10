@@ -35,7 +35,7 @@
         this.params.column.colDef.filterParams.dict = this.params.column.colDef.cellRendererParams.dict
       }
 
-      this.getDictItems(this.filterParams.dict || {url: this.filterParams.url}, (items) => {
+      this.getDictItems(this.filterParams.dict || this.filterParams.dictOptions, (items) => {
         this.options = items
       })
 

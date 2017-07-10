@@ -8,8 +8,29 @@
           <div class="jw-form-body">
             <el-form ref="form" :model="entity" :rules="rules" :inline="options.inline"
                      :label-width="options.labelWidth+'px'">
-              <fieldset :disabled="options.operation === 'view'">
+              <fieldset :disabled="options.operation === 'view' || options.operation === 'audit'">
                 <slot name="fieldset"></slot>
+              </fieldset>
+
+              <fieldset v-if="options.operation === 'audit'|| entity.f_auditor_id">
+                <slot name="auditset">
+                  <template v-if="entity.f_auditor_id">
+                    <el-form-item label="审核人" prop="f_auditor_name">
+                      <el-input class="jw-field-col-1" v-model="entity.f_auditor_name" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="审核时间" prop="f_audited_time">
+                      <el-date-picker class="jw-field-col-1" v-model="entity.f_audited_time" type="datetime" disabled>
+                      </el-date-picker>
+                    </el-form-item>
+                  </template>
+                  <el-form-item label="审核意见" prop="f_audited_comments">
+                    <el-input class="jw-field-col-2" v-model.trim="entity.f_audited_comments" type="textarea" autosize
+                              :placeholder="options.operation === 'audit' ? '驳回时必须填写审核意见。':''"
+                              :disabled="options.operation !== 'audit'"
+                              :autofocus="true">
+                    </el-input>
+                  </el-form-item>
+                </slot>
               </fieldset>
 
               <slot></slot>
@@ -24,8 +45,14 @@
     <div slot="footer" class="dialog-footer jw-dialog-footer">
       <slot name="buttons"></slot>
       <slot name="defaultButtons">
-        <el-button @click="onCancel">取 消</el-button>
-        <el-button type="primary" @click="onSubmit" :disabled="options.operation === 'view'">确 定</el-button>
+        <template v-if="options.operation === 'audit'">
+          <el-button type="danger" @click="onReject">驳 回</el-button>
+          <el-button type="success" @click="onApprove">同 意</el-button>
+        </template>
+        <template v-else>
+          <el-button @click="onCancel">取 消</el-button>
+          <el-button type="primary" @click="onSubmit" :disabled="options.operation === 'view'">确 定</el-button>
+        </template>
       </slot>
     </div>
   </el-dialog>
@@ -74,7 +101,7 @@
           modal: true, // 是否为模态对话框
           closeOnClickModal: false, // 点击遮罩层是否关闭对话框
           modalAppendToBody: true, // 遮罩层是否插入至 body 元素上，若为 false，则遮罩层会插入至 Dialog 的父元素上
-          top: 75, //
+          top: 80, //
           size: 'small', // 可选值：mini（phones 1列）、small（tablets 2列）、middle（desktops 3列）、large（ larger desktops 4列）、full（全屏）
           elDialogSize: {mini: 'tiny', small: 'small', middle: 'small', large: 'large', full: 'full'},
           inline: true,
@@ -193,6 +220,25 @@
           }
         }
       },
+      onApprove () {
+        this._doAudit(2)
+      },
+      onReject () {
+        if (this.entity.f_audited_comments) {
+          this._doAudit(3)
+        } else {
+          this.$alert('请填写审核意见！', '错误', {
+            confirmButtonText: '关闭',
+            type: 'error'
+          })
+        }
+      },
+      _doAudit (status) {
+        this.entity.f_status = status
+        this.$http.put(this.options.context.url + '/' + this.entity.f_id + '/audit', this.entity, {params: this.options.queryString}).then((response) => {
+          this._submitted(response.body)
+        })
+      },
       onCancel () {
         this.close()
         this.$emit('cancelled')
@@ -223,13 +269,13 @@
               this._submitted(response.body)
             })
           } else if (this.options.operation === 'edit') {
-            this.$http.put(this.options.context.url + '/' + this.options.params.f_id, this.entity, {params: this.options.queryString}).then((response) => {
+            this.$http.put(this.options.context.url + '/' + this.entity.f_id, this.entity, {params: this.options.queryString}).then((response) => {
               this._submitted(response.body)
             })
-          } else if (this.options.operation === 'audit') {
-            this.$http.put(this.options.context.url + '/' + this.options.params.f_id + '/audit', this.entity, {params: this.options.queryString}).then((response) => {
-              this._submitted(response.body)
-            })
+//          } else if (this.options.operation === 'audit') {
+//            this.$http.put(this.options.context.url + '/' + this.entity.f_id + '/audit', this.entity, {params: this.options.queryString}).then((response) => {
+//              this._submitted(response.body)
+//            })
           } else {
             this._submitted({success: true, data: this.entity})
           }

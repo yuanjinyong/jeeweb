@@ -83,160 +83,148 @@
       }
     },
     created () {
-      this.gridOptions.columnDefs = [
-        {
-          headerName: '',
-          pinned: 'left',
-          hide: this.mode !== 'selector',
-          checkboxSelection: this.mode === 'selector',
-          cellStyle: {'text-align': 'center'},
-          width: 24
+      this.gridOptions.columnDefs = [{
+        headerName: '',
+        pinned: 'left',
+        hide: this.mode !== 'selector',
+        checkboxSelection: this.mode === 'selector',
+        cellStyle: {'text-align': 'center'},
+        width: 24
+      }, {
+        headerName: '#',
+        pinned: 'left',
+        headerComponentFramework: this.mode !== 'selector' ? AddHeaderComponenetFramework : null,
+        cellStyle: {'text-align': 'right'},
+        cellRendererFramework: IndexRendererFramework,
+        width: 38
+      }, {
+        headerName: '账号',
+        field: 'f_account',
+        pinned: 'left',
+        suppressSorting: false,
+        suppressFilter: false,
+        filterFramework: LikeFilterFramework,
+        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
+        cellRendererFramework: ViewRendererFramework,
+        width: 100
+      }, {
+        headerName: '姓名',
+        field: 'f_name',
+        pinned: 'left',
+        suppressSorting: false,
+        suppressFilter: false,
+        filterFramework: LikeFilterFramework,
+        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
+        width: 100
+      }, {
+        headerName: '创建时间',
+        field: 'f_created_time',
+        suppressSorting: false,
+        suppressFilter: false,
+        filterFramework: TimestampFilterFramework,
+        floatingFilterComponentFramework: TimestampFloatingFilterComponentFramework,
+        cellStyle: {'text-align': 'center'},
+        cellRendererFramework: TimestampRendererFramework,
+        width: 190 // 有filter的为190，没有的为140
+      }, {
+        headerName: '创建人',
+        field: 'f_creator_name',
+        width: 100
+      }, {
+        headerName: '最近登录时间',
+        field: 'f_last_login_time',
+        suppressSorting: false,
+        cellStyle: {'text-align': 'center'},
+        cellRendererFramework: TimestampRendererFramework,
+        width: 140
+      }, {
+        headerName: '系统预置',
+        field: 'f_is_preset',
+        cellStyle: {'text-align': 'center'},
+        cellRendererFramework: DictRendererFramework,
+        cellRendererParams: {dict: 'YesNo2'},
+        width: 75
+      }, {
+        headerName: '状态',
+        field: 'f_status',
+        suppressFilter: false,
+        filterParams: {type: 'in'},
+        filterFramework: DictFilterFramework,
+        floatingFilterComponentFramework: DictFloatingFilterComponentFramework,
+        cellStyle: {'text-align': 'center'},
+        cellRendererFramework: DictRendererFramework,
+        cellRendererParams: {dict: 'UserStatus'},
+        width: 88
+      }, {
+        headerName: '备注',
+        field: 'f_remark',
+        tooltipField: 'f_remark',
+        width: 300
+      }, {
+        headerName: '操作',
+        field: '',
+        pinned: 'right',
+        hide: this.mode === 'selector',
+        cellStyle: {'text-align': 'center'},
+        cellRendererFramework: OperationRendererFramework,
+        cellRendererParams: {
+          operations: [{
+            id: 'authorize',
+            title: '授权可以操作的功能',
+            type: 'warning',
+            icon: 'fa fa-key',
+            permission: 'authorize',
+            isDisabled (params, entity) {
+              return entity.f_status === 3
+            },
+            onClick (params, entity) {
+              params.context.featureComponent.$refs['authorize'].open({
+                operation: 'authorize',
+                title: '授权可以操作的功能',
+                params: entity
+              })
+            }
+          }, {
+            id: 'edit',
+            permission: 'edit',
+            isDisabled (params, entity) {
+              return entity.f_status === 3
+            }
+          }, {
+            id: 'remove',
+            title: '注销用户',
+            permission: 'remove',
+            isDisabled (params, entity) {
+              return entity.f_status === 3 || entity.f_is_preset === 1
+            }
+          }, {
+            id: 'unlock',
+            title: '解锁用户',
+            type: 'success',
+            icon: 'fa fa-unlock',
+            permission: 'unlock',
+            isDisabled (params, entity) {
+              return entity.f_status !== 2
+            },
+            onClick (params, entity) {
+              params.context.featureComponent.onUnlock(entity)
+            }
+          }, {
+            id: 'resetPassword',
+            title: '重置密码',
+            type: 'warning',
+            icon: 'fa fa-cog',
+            permission: 'resetPassword',
+            isDisabled (params, entity) {
+              return entity.f_status === 3 || entity.f_is_preset === 1
+            },
+            onClick (params, entity) {
+              params.context.featureComponent.onResetPassword(entity)
+            }
+          }]
         },
-        {
-          headerName: '#',
-          pinned: 'left',
-          headerComponentFramework: this.mode !== 'selector' ? AddHeaderComponenetFramework : null,
-          cellStyle: {'text-align': 'right'},
-          cellRendererFramework: IndexRendererFramework,
-          width: 38
-        },
-        {
-          headerName: '账号',
-          field: 'f_account',
-          pinned: 'left',
-          suppressSorting: false,
-          suppressFilter: false,
-          filterFramework: LikeFilterFramework,
-          floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
-          cellRendererFramework: ViewRendererFramework,
-          width: 100
-        },
-        {
-          headerName: '姓名',
-          field: 'f_name',
-          pinned: 'left',
-          suppressSorting: false,
-          suppressFilter: false,
-          filterFramework: LikeFilterFramework,
-          floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
-          width: 100
-        },
-        {
-          headerName: '创建时间',
-          field: 'f_created_time',
-          suppressSorting: false,
-          suppressFilter: false,
-          filterFramework: TimestampFilterFramework,
-          floatingFilterComponentFramework: TimestampFloatingFilterComponentFramework,
-          cellStyle: {'text-align': 'center'},
-          cellRendererFramework: TimestampRendererFramework,
-          width: 190 // 有filter的为190，没有的为140
-        },
-        {
-          headerName: '创建人',
-          field: 'f_creator_name',
-          width: 100
-        },
-        {
-          headerName: '最近登录时间',
-          field: 'f_last_login_time',
-          suppressSorting: false,
-          cellStyle: {'text-align': 'center'},
-          cellRendererFramework: TimestampRendererFramework,
-          width: 140
-        },
-        {
-          headerName: '系统预置',
-          field: 'f_is_preset',
-          cellStyle: {'text-align': 'center'},
-          cellRendererFramework: DictRendererFramework,
-          cellRendererParams: {dict: 'YesNo2'},
-          width: 75
-        },
-        {
-          headerName: '状态',
-          field: 'f_status',
-          suppressFilter: false,
-          filterParams: {type: 'in'},
-          filterFramework: DictFilterFramework,
-          floatingFilterComponentFramework: DictFloatingFilterComponentFramework,
-          cellStyle: {'text-align': 'center'},
-          cellRendererFramework: DictRendererFramework,
-          cellRendererParams: {dict: 'UserStatus'},
-          width: 88
-        },
-        {
-          headerName: '备注',
-          field: 'f_remark',
-          tooltipField: 'f_remark',
-          width: 300
-        },
-        {
-          headerName: '操作',
-          field: '',
-          pinned: 'right',
-          hide: this.mode === 'selector',
-          cellStyle: {'text-align': 'center'},
-          cellRendererFramework: OperationRendererFramework,
-          cellRendererParams: {
-            operations: [{
-              id: 'authorize',
-              title: '授权可以操作的功能',
-              type: 'warning',
-              icon: 'fa fa-key',
-              permission: 'authorize',
-              isDisabled (params, entity) {
-                return entity.f_status === 3
-              },
-              onClick (params, entity) {
-                params.context.featureComponent.$refs['authorize'].open({
-                  operation: 'authorize',
-                  title: '授权可以操作的功能',
-                  params: entity
-                })
-              }
-            }, {
-              id: 'edit',
-              permission: 'edit',
-              isDisabled (params, entity) {
-                return entity.f_status === 3
-              }
-            }, {
-              id: 'remove',
-              title: '注销用户',
-              permission: 'remove',
-              isDisabled (params, entity) {
-                return entity.f_status === 3 || entity.f_is_preset === 1
-              }
-            }, {
-              id: 'unlock',
-              title: '解锁用户',
-              type: 'success',
-              icon: 'fa fa-unlock',
-              permission: 'unlock',
-              isDisabled (params, entity) {
-                return entity.f_status !== 2
-              },
-              onClick (params, entity) {
-                params.context.featureComponent.onUnlock(entity)
-              }
-            }, {
-              id: 'resetPassword',
-              title: '重置密码',
-              type: 'warning',
-              icon: 'fa fa-cog',
-              permission: 'resetPassword',
-              isDisabled (params, entity) {
-                return entity.f_status === 3 || entity.f_is_preset === 1
-              },
-              onClick (params, entity) {
-                params.context.featureComponent.onResetPassword(entity)
-              }
-            }]
-          },
-          width: 120
-        }
-      ]
+        width: 120
+      }]
     },
     methods: {
       onUnlock (entity) {

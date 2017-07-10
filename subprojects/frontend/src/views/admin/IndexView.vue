@@ -1,5 +1,5 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
   .jw-menu {
     color: #bfcbd9;
     background-color: #324157;
@@ -46,12 +46,15 @@
   }
 
   .jw-view-tab-header {
-    padding-top: 13px;
+    padding-top: 11px;
+  }
+
+  .jw-view-tab-header .el-tabs__header {
+    margin: 0px;
   }
 
   .jw-view-tab-body {
     overflow: auto;
-    margin-top: -15px;
   }
 </style>
 

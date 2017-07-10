@@ -79,93 +79,85 @@
       }
     },
     created () {
-      this.gridOptions.columnDefs = [
-        {
-          headerName: '',
-          pinned: 'left',
-          hide: this.mode !== 'selector',
-          checkboxSelection: this.mode === 'selector',
-          cellStyle: {'text-align': 'center'},
-          width: 24
+      this.gridOptions.columnDefs = [{
+        headerName: '',
+        pinned: 'left',
+        hide: this.mode !== 'selector',
+        checkboxSelection: this.mode === 'selector',
+        cellStyle: {'text-align': 'center'},
+        width: 24
+      }, {
+        headerName: '#',
+        pinned: 'left',
+        headerComponentFramework: this.mode !== 'selector' ? AddHeaderComponenetFramework : null,
+        cellStyle: {'text-align': 'right'},
+        cellRendererFramework: IndexRendererFramework,
+        width: 38
+      }, {
+        headerName: '角色名称',
+        field: 'f_name',
+        pinned: 'left',
+        suppressSorting: false,
+        suppressFilter: false,
+        filterFramework: LikeFilterFramework,
+        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
+        cellRendererFramework: ViewRendererFramework,
+        width: 160
+      }, {
+        headerName: '角色描述',
+        field: 'f_desc',
+        tooltipField: 'f_desc',
+        width: 300
+      }, {
+        headerName: '是否预置',
+        field: 'f_is_preset',
+        cellStyle: {'text-align': 'center'},
+        cellRendererFramework: DictRendererFramework,
+        cellRendererParams: {dict: 'YesNo2'},
+        width: 75
+      }, {
+        headerName: '备注',
+        field: 'f_remark',
+        tooltipField: 'f_remark',
+        width: 300
+      }, {
+        headerName: '操作',
+        field: '',
+        pinned: 'right',
+        hide: this.mode === 'selector',
+        cellStyle: {'text-align': 'center'},
+        cellRendererFramework: OperationRendererFramework,
+        cellRendererParams: {
+          operations: [{
+            id: 'authorize',
+            title: '授权可以操作的功能',
+            type: 'warning',
+            icon: 'fa fa-key',
+            permission: 'authorize',
+            isDisabled (params, entity) {
+              let user = params.context.featureComponent.curUser
+              return entity.f_id === 1 && !user.superAdmin // 只有超级管理员账号才能给系统管理员角色授权
+            },
+            onClick (params, entity) {
+              params.context.featureComponent.$refs['authorize'].open({
+                operation: 'authorize',
+                title: '授权可以操作的功能',
+                params: entity
+              })
+            }
+          }, {
+            id: 'edit',
+            permission: 'edit'
+          }, {
+            id: 'remove',
+            permission: 'remove',
+            isDisabled (params, entity) {
+              return entity.f_is_preset === 1
+            }
+          }]
         },
-        {
-          headerName: '#',
-          pinned: 'left',
-          headerComponentFramework: this.mode !== 'selector' ? AddHeaderComponenetFramework : null,
-          cellStyle: {'text-align': 'right'},
-          cellRendererFramework: IndexRendererFramework,
-          width: 38
-        },
-        {
-          headerName: '角色名称',
-          field: 'f_name',
-          pinned: 'left',
-          suppressSorting: false,
-          suppressFilter: false,
-          filterFramework: LikeFilterFramework,
-          floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
-          cellRendererFramework: ViewRendererFramework,
-          width: 160
-        },
-        {
-          headerName: '角色描述',
-          field: 'f_desc',
-          tooltipField: 'f_desc',
-          width: 300
-        },
-        {
-          headerName: '是否预置',
-          field: 'f_is_preset',
-          cellStyle: {'text-align': 'center'},
-          cellRendererFramework: DictRendererFramework,
-          cellRendererParams: {dict: 'YesNo2'},
-          width: 75
-        },
-        {
-          headerName: '备注',
-          field: 'f_remark',
-          tooltipField: 'f_remark',
-          width: 300
-        },
-        {
-          headerName: '操作',
-          field: '',
-          pinned: 'right',
-          hide: this.mode === 'selector',
-          cellStyle: {'text-align': 'center'},
-          cellRendererFramework: OperationRendererFramework,
-          cellRendererParams: {
-            operations: [{
-              id: 'authorize',
-              title: '授权可以操作的功能',
-              type: 'warning',
-              icon: 'fa fa-key',
-              permission: 'authorize',
-              isDisabled (params, entity) {
-                let user = params.context.featureComponent.curUser
-                return entity.f_id === 1 && !user.superAdmin // 只有超级管理员账号才能给系统管理员角色授权
-              },
-              onClick (params, entity) {
-                params.context.featureComponent.$refs['authorize'].open({
-                  operation: 'authorize',
-                  title: '授权可以操作的功能',
-                  params: entity
-                })
-              }
-            }, {
-              id: 'edit',
-              permission: 'edit'
-            }, {
-              id: 'remove',
-              permission: 'remove',
-              isDisabled (params, entity) {
-                return entity.f_is_preset === 1
-              }
-            }]
-          },
-          width: 80
-        }
-      ]
+        width: 80
+      }]
     }
   }
 </script>

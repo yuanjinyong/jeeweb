@@ -78,129 +78,115 @@
       }
     },
     created () {
-      this.gridOptions.columnDefs = [
-        {
-          headerName: '',
-          pinned: 'left',
-          hide: this.mode !== 'selector',
-          checkboxSelection: this.mode === 'selector',
-          cellStyle: {'text-align': 'center'},
-          width: 24
+      this.gridOptions.columnDefs = [{
+        headerName: '',
+        pinned: 'left',
+        hide: this.mode !== 'selector',
+        checkboxSelection: this.mode === 'selector',
+        cellStyle: {'text-align': 'center'},
+        width: 24
+      }, {
+        headerName: '#',
+        pinned: 'left',
+        headerComponentFramework: this.mode !== 'selector' ? AddHeaderComponenetFramework : null,
+        cellStyle: {'text-align': 'right'},
+        cellRendererFramework: IndexRendererFramework,
+        width: 38
+      }, {
+        headerName: '编码',
+        field: 'f_code',
+        pinned: 'left',
+        suppressSorting: false,
+        suppressFilter: false,
+        filterFramework: LikeFilterFramework,
+        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
+        cellRendererFramework: ViewRendererFramework,
+        width: 160
+      }, {
+        headerName: '名称',
+        field: 'f_name',
+        tooltipField: 'f_name',
+        pinned: 'left',
+        suppressSorting: false,
+        suppressFilter: false,
+        filterFramework: LikeFilterFramework,
+        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
+        width: 200
+      }, {
+        headerName: '数据库名',
+        field: 'f_db_name',
+        tooltipField: 'f_db_name',
+        width: 150
+      }, {
+        headerName: '数据表名',
+        field: 'f_table_name',
+        tooltipField: 'f_table_name',
+        width: 200
+      }, {
+        headerName: '字典项编码字段',
+        field: 'f_code_column',
+        tooltipField: 'f_code_column',
+        width: 120
+      }, {
+        headerName: '字典项名称字段',
+        field: 'f_name_column',
+        tooltipField: 'f_name_column',
+        width: 120
+      }, {
+        headerName: '字典项排序字段',
+        field: 'f_order_column',
+        tooltipField: 'f_order_column',
+        width: 120
+      }, {
+        headerName: '查询Where条件',
+        field: 'f_where_clause',
+        tooltipField: 'f_where_clause',
+        width: 200
+      }, {
+        headerName: '是否预置',
+        field: 'f_is_preset',
+        cellStyle: {'text-align': 'center'},
+        cellRendererFramework: DictRendererFramework,
+        cellRendererParams: {dict: 'YesNo2'},
+        width: 75
+      }, {
+        headerName: '备注',
+        field: 'f_remark',
+        tooltipField: 'f_remark',
+        width: 300
+      }, {
+        headerName: '操作',
+        field: '',
+        pinned: 'right',
+        hide: this.mode === 'selector',
+        cellStyle: {'text-align': 'center'},
+        cellRendererFramework: OperationRendererFramework,
+        cellRendererParams: {
+          operations: [{
+            id: 'edit',
+            permission: 'edit'
+          }, {
+            id: 'remove',
+            permission: 'remove',
+            isDisabled (params, entity) {
+              return entity.f_is_preset === 1
+            }
+          }, {
+            id: 'sql',
+            title: 'SQL脚本',
+            icon: 'fa fa-file-code-o',
+            permission: 'sql',
+            onClick (params, entity) {
+              params.context.featureComponent.$refs['sql'].open({
+                operation: 'sql',
+                title: 'SQL脚本',
+                params: entity
+              })
+            }
+          }]
         },
-        {
-          headerName: '#',
-          pinned: 'left',
-          headerComponentFramework: this.mode !== 'selector' ? AddHeaderComponenetFramework : null,
-          cellStyle: {'text-align': 'right'},
-          cellRendererFramework: IndexRendererFramework,
-          width: 38
-        },
-        {
-          headerName: '编码',
-          field: 'f_code',
-          pinned: 'left',
-          suppressSorting: false,
-          suppressFilter: false,
-          filterFramework: LikeFilterFramework,
-          floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
-          cellRendererFramework: ViewRendererFramework,
-          width: 160
-        },
-        {
-          headerName: '名称',
-          field: 'f_name',
-          tooltipField: 'f_name',
-          pinned: 'left',
-          suppressSorting: false,
-          suppressFilter: false,
-          filterFramework: LikeFilterFramework,
-          floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
-          width: 200
-        },
-        {
-          headerName: '数据库名',
-          field: 'f_db_name',
-          tooltipField: 'f_db_name',
-          width: 150
-        },
-        {
-          headerName: '数据表名',
-          field: 'f_table_name',
-          tooltipField: 'f_table_name',
-          width: 200
-        },
-        {
-          headerName: '字典项编码字段',
-          field: 'f_code_column',
-          tooltipField: 'f_code_column',
-          width: 120
-        },
-        {
-          headerName: '字典项名称字段',
-          field: 'f_name_column',
-          tooltipField: 'f_name_column',
-          width: 120
-        },
-        {
-          headerName: '字典项排序字段',
-          field: 'f_order_column',
-          tooltipField: 'f_order_column',
-          width: 120
-        },
-        {
-          headerName: '查询Where条件',
-          field: 'f_where_clause',
-          tooltipField: 'f_where_clause',
-          width: 200
-        },
-        {
-          headerName: '是否预置',
-          field: 'f_is_preset',
-          cellStyle: {'text-align': 'center'},
-          cellRendererFramework: DictRendererFramework,
-          cellRendererParams: {dict: 'YesNo2'},
-          width: 75
-        },
-        {
-          headerName: '备注',
-          field: 'f_remark',
-          tooltipField: 'f_remark',
-          width: 300
-        },
-        {
-          headerName: '操作',
-          field: '',
-          pinned: 'right',
-          hide: this.mode === 'selector',
-          cellStyle: {'text-align': 'center'},
-          cellRendererFramework: OperationRendererFramework,
-          cellRendererParams: {
-            operations: [{
-              id: 'edit',
-              permission: 'edit'
-            }, {
-              id: 'remove',
-              permission: 'remove',
-              isDisabled (params, entity) {
-                return entity.f_is_preset === 1
-              }
-            }, {
-              id: 'sql',
-              title: 'SQL脚本',
-              icon: 'fa fa-file-code-o',
-              permission: 'sql',
-              onClick (params, entity) {
-                params.context.featureComponent.$refs['sql'].open({
-                  operation: 'sql',
-                  title: 'SQL脚本',
-                  params: entity
-                })
-              }
-            }]
-          },
-          width: 80
-        }
-      ]
+        width: 80
+      }]
     }
   }
 </script>

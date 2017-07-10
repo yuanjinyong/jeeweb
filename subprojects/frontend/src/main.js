@@ -13,7 +13,6 @@ import VueCookie from 'vue-cookie'
 Vue.use(VueCookie)
 
 import 'font-awesome-loader'
-import 'bootstrap-loader'
 
 import ElementUI from 'element-ui'
 Vue.use(ElementUI)

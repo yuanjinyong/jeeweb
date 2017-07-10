@@ -40,6 +40,12 @@
           view: {
             title: '查看',
             icon: 'fa fa-file-text'
+          },
+          audit: {
+            title: '审核',
+            type: 'success',
+            icon: 'fa fa-check',
+            permission: 'audit'
           }
         }
       }

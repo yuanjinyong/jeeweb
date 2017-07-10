@@ -72,7 +72,6 @@ apply plugin: 'eclipse'
 apply from: "${gradleDir}/eclipse.gradle"
 
 
-
 // 这里只对最底层的子工程进行通用配置
 configure(subprojects.findAll{!it.childProjects}) { project ->
     group = "com.jeeweb"

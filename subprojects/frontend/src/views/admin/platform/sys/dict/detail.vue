@@ -162,112 +162,106 @@
       }
     },
     created () {
-      this.gridOptions.columnDefs = [
-        {
-          headerName: '排序',
-          headerComponentFramework: AddHeaderComponenetFramework,
-          headerComponentParams: {
-            operation: {
-              isDisabled (params, entity) {
-                return params.context.featureComponent.options.operation === 'view'
-              },
-              onClick (params, entity) {
-                params.context.featureComponent.onAddItem()
+      this.gridOptions.columnDefs = [{
+        headerName: '排序',
+        headerComponentFramework: AddHeaderComponenetFramework,
+        headerComponentParams: {
+          operation: {
+            isDisabled (params, entity) {
+              return params.context.featureComponent.options.operation === 'view'
+            },
+            onClick (params, entity) {
+              params.context.featureComponent.onAddItem()
+            }
+          }
+        },
+        field: 'f_item_order',
+        cellStyle: {'text-align': 'right'},
+        cellRendererFramework: IndexRendererFramework,
+        width: 38
+      }, {
+        headerName: '编码',
+        field: 'f_item_code',
+        cellRendererFramework: TextEditorFramework,
+        cellRendererParams: {
+          editorOptions: {
+            rule: [],
+            isDisabled (params, entity) {
+              if (entity.f_id && entity.f_is_preset === '1') {
+                return true
+              } else {
+                return false
               }
             }
-          },
-          field: 'f_item_order',
-          cellStyle: {'text-align': 'right'},
-          cellRendererFramework: IndexRendererFramework,
-          width: 38
+          }
         },
-        {
-          headerName: '编码',
-          field: 'f_item_code',
-          cellRendererFramework: TextEditorFramework,
-          cellRendererParams: {
-            editorOptions: {
-              rule: [],
-              isDisabled (params, entity) {
-                if (entity.f_id && entity.f_is_preset === '1') {
-                  return true
-                } else {
-                  return false
-                }
+        width: 200
+      }, {
+        headerName: '名称',
+        field: 'f_item_text',
+        cellRendererFramework: TextEditorFramework,
+        width: 300
+      }, {
+        headerName: '是否预置',
+        field: 'f_is_preset',
+        cellStyle: {'text-align': 'center'},
+        cellRendererFramework: DictEditorFramework,
+        cellRendererParams: {
+          dict: 'YesNo2',
+          editorOptions: {
+            rule: [],
+            isDisabled (params, entity) {
+              if (entity.f_id) {
+                return true
+              } else {
+                return false
               }
             }
-          },
-          width: 200
+          }
         },
-        {
-          headerName: '名称',
-          field: 'f_item_text',
-          cellRendererFramework: TextEditorFramework,
-          width: 300
-        },
-        {
-          headerName: '是否预置',
-          field: 'f_is_preset',
-          cellStyle: {'text-align': 'center'},
-          cellRendererFramework: DictEditorFramework,
-          cellRendererParams: {
-            dict: 'YesNo2',
-            editorOptions: {
-              rule: [],
-              isDisabled (params, entity) {
-                if (entity.f_id) {
-                  return true
-                } else {
-                  return false
-                }
-              }
+        width: 75
+      }, {
+        headerName: '操作',
+        field: '',
+        cellStyle: {'text-align': 'center'},
+        cellRendererFramework: OperationRendererFramework,
+        cellRendererParams: {
+          operations: [{
+            id: 'up',
+            title: '上移',
+            type: 'primary',
+            icon: 'fa fa-arrow-up',
+            permission: '',
+            isDisabled (params, entity) {
+              return params.context.featureComponent.options.operation === 'view' || params.node.firstChild
+            },
+            onClick (params, entity) {
+              params.context.featureComponent.onMoveUp(entity)
             }
-          },
-          width: 75
+          }, {
+            id: 'down',
+            title: '下移',
+            type: 'primary',
+            icon: 'fa fa-arrow-down',
+            permission: '',
+            isDisabled (params, entity) {
+              return params.context.featureComponent.options.operation === 'view' || params.node.lastChild
+            },
+            onClick (params, entity) {
+              params.context.featureComponent.onMoveDown(entity)
+            }
+          }, {
+            id: 'remove',
+            isDisabled (params, entity) {
+              return params.context.featureComponent.options.operation === 'view' || (entity.f_id && entity.f_is_preset === '1')
+            },
+            onClick (params, entity) {
+              params.context.featureComponent.onRemoveItem(entity)
+            }
+          }]
         },
-        {
-          headerName: '操作',
-          field: '',
-          cellStyle: {'text-align': 'center'},
-          cellRendererFramework: OperationRendererFramework,
-          cellRendererParams: {
-            operations: [{
-              id: 'up',
-              title: '上移',
-              type: 'primary',
-              icon: 'fa fa-arrow-up',
-              permission: '',
-              isDisabled (params, entity) {
-                return params.context.featureComponent.options.operation === 'view' || params.node.firstChild
-              },
-              onClick (params, entity) {
-                params.context.featureComponent.onMoveUp(entity)
-              }
-            }, {
-              id: 'down',
-              title: '下移',
-              type: 'primary',
-              icon: 'fa fa-arrow-down',
-              permission: '',
-              isDisabled (params, entity) {
-                return params.context.featureComponent.options.operation === 'view' || params.node.lastChild
-              },
-              onClick (params, entity) {
-                params.context.featureComponent.onMoveDown(entity)
-              }
-            }, {
-              id: 'remove',
-              isDisabled (params, entity) {
-                return params.context.featureComponent.options.operation === 'view' || (entity.f_id && entity.f_is_preset === '1')
-              },
-              onClick (params, entity) {
-                params.context.featureComponent.onRemoveItem(entity)
-              }
-            }]
-          },
-          width: 70
-        }
-      ]
+        width: 70
+      }]
     },
     methods: {
       _loadSchematas (cb) {

@@ -1,16 +1,13 @@
 export * from './company'
 import {MyCompanyView} from './company'
 
-export default [
-  {
-    path: '',
-    component: {
-      template: '<router-view></router-view>'
-    },
-    children: []
+export default [{
+  path: '',
+  component: {
+    template: '<router-view></router-view>'
   },
-  {
-    path: 'company',
-    component: MyCompanyView
-  }
-]
+  children: []
+}, {
+  path: 'company',
+  component: MyCompanyView
+}]

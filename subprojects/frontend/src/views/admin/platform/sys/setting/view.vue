@@ -76,89 +76,81 @@
       }
     },
     created () {
-      this.gridOptions.columnDefs = [
-        {
-          headerName: '#',
-          field: 'f_order',
-          pinned: 'left',
-          headerComponentFramework: this.mode !== 'selector' ? AddHeaderComponenetFramework : null,
-          cellStyle: {'text-align': 'right'},
-          width: 38
+      this.gridOptions.columnDefs = [{
+        headerName: '#',
+        field: 'f_order',
+        pinned: 'left',
+        headerComponentFramework: this.mode !== 'selector' ? AddHeaderComponenetFramework : null,
+        cellStyle: {'text-align': 'right'},
+        width: 38
+      }, {
+        headerName: '编码',
+        field: 'f_code',
+        pinned: 'left',
+        suppressSorting: false,
+        suppressFilter: false,
+        filterFramework: LikeFilterFramework,
+        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
+        cellRendererFramework: ViewRendererFramework,
+        width: 350
+      }, {
+        headerName: '名称',
+        field: 'f_name',
+        pinned: 'left',
+        suppressSorting: false,
+        suppressFilter: false,
+        filterFramework: LikeFilterFramework,
+        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
+        width: 160
+      }, {
+        headerName: '取值',
+        field: 'f_value',
+        tooltipField: 'f_value',
+        // cellRendererFramework: TextEditorFramework,
+        width: 150
+      }, {
+        headerName: '描述',
+        field: 'f_desc',
+        tooltipField: 'f_desc',
+        width: 200
+      }, {
+        headerName: '备注',
+        field: 'f_remark',
+        tooltipField: 'f_remark',
+        width: 200
+      }, {
+        headerName: '操作',
+        field: '',
+        pinned: 'right',
+        hide: this.mode === 'selector',
+        cellStyle: {'text-align': 'center'},
+        cellRendererFramework: OperationRendererFramework,
+        cellRendererParams: {
+          operations: [{
+            id: 'edit',
+            permission: 'edit'
+          }, {
+            id: 'remove',
+            permission: 'remove',
+            isDisabled (params, entity) {
+              return entity.f_is_preset === 1
+            }
+          }, {
+            id: 'sql',
+            title: 'SQL脚本',
+            icon: 'fa fa-file-code-o',
+            permission: 'sql',
+            onClick (params, entity) {
+              params.context.featureComponent.$refs['sql'].open({
+                operation: 'sql',
+                title: 'SQL脚本',
+                params: entity
+              })
+            }
+          }]
         },
-        {
-          headerName: '编码',
-          field: 'f_code',
-          pinned: 'left',
-          suppressSorting: false,
-          suppressFilter: false,
-          filterFramework: LikeFilterFramework,
-          floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
-          cellRendererFramework: ViewRendererFramework,
-          width: 350
-        },
-        {
-          headerName: '名称',
-          field: 'f_name',
-          pinned: 'left',
-          suppressSorting: false,
-          suppressFilter: false,
-          filterFramework: LikeFilterFramework,
-          floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
-          width: 160
-        },
-        {
-          headerName: '取值',
-          field: 'f_value',
-          tooltipField: 'f_value',
-          // cellRendererFramework: TextEditorFramework,
-          width: 150
-        },
-        {
-          headerName: '描述',
-          field: 'f_desc',
-          tooltipField: 'f_desc',
-          width: 200
-        },
-        {
-          headerName: '备注',
-          field: 'f_remark',
-          tooltipField: 'f_remark',
-          width: 200
-        },
-        {
-          headerName: '操作',
-          field: '',
-          pinned: 'right',
-          hide: this.mode === 'selector',
-          cellStyle: {'text-align': 'center'},
-          cellRendererFramework: OperationRendererFramework,
-          cellRendererParams: {
-            operations: [{
-              id: 'edit',
-              permission: 'edit'
-            }, {
-              id: 'remove',
-              permission: 'remove',
-              isDisabled (params, entity) {
-                return entity.f_is_preset === 1
-              }
-            }, {
-              id: 'sql',
-              title: 'SQL脚本',
-              icon: 'fa fa-file-code-o',
-              permission: 'sql',
-              onClick (params, entity) {
-                params.context.featureComponent.$refs['sql'].open({
-                  operation: 'sql',
-                  title: 'SQL脚本',
-                  params: entity
-                })
-              }
-            }]
-          },
-          width: 80
-        }
-      ]
+        width: 80
+      }]
     }
   }
 </script>

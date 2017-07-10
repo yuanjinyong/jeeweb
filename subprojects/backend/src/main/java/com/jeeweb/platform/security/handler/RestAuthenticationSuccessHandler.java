@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 import com.jeeweb.platform.security.service.RestTokenService;
 import com.jeeweb.platform.security.utils.ResponseUtil;
 
-
 /**
  * @author 袁进勇
  *

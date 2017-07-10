@@ -170,54 +170,49 @@
       }
     },
     created () {
-      this.gridOptions.columnDefs = [
-        {
-          headerName: '序号',
-          headerComponentFramework: AddHeaderComponenetFramework,
-          headerComponentParams: {
-            operation: {
-              isDisabled (params, entity) {
-                return params.context.featureComponent.options.operation === 'view'
-              },
-              onClick (params, entity) {
-                params.context.featureComponent.$refs['selector'].open()
-              }
+      this.gridOptions.columnDefs = [{
+        headerName: '序号',
+        headerComponentFramework: AddHeaderComponenetFramework,
+        headerComponentParams: {
+          operation: {
+            isDisabled (params, entity) {
+              return params.context.featureComponent.options.operation === 'view'
+            },
+            onClick (params, entity) {
+              params.context.featureComponent.$refs['selector'].open()
             }
-          },
-          cellStyle: {'text-align': 'right'},
-          cellRendererFramework: IndexRendererFramework,
-          width: 38
+          }
         },
-        {
-          headerName: 'URL',
-          field: 'f_url',
-          width: 535 - 15
+        cellStyle: {'text-align': 'right'},
+        cellRendererFramework: IndexRendererFramework,
+        width: 38
+      }, {
+        headerName: 'URL',
+        field: 'f_url',
+        width: 535 - 15
+      }, {
+        headerName: '提交方式',
+        field: 'f_methods',
+        width: 92
+      }, {
+        headerName: '操作',
+        field: '',
+        cellStyle: {'text-align': 'center'},
+        cellRendererFramework: OperationRendererFramework,
+        cellRendererParams: {
+          operations: [{
+            id: 'remove',
+            title: '删除URL',
+            isDisabled (params, entity) {
+              return params.context.featureComponent.options.operation === 'view'
+            },
+            onClick (params, entity) {
+              params.context.featureComponent.onRemoveUrl(entity)
+            }
+          }]
         },
-        {
-          headerName: '提交方式',
-          field: 'f_methods',
-          width: 92
-        },
-        {
-          headerName: '操作',
-          field: '',
-          cellStyle: {'text-align': 'center'},
-          cellRendererFramework: OperationRendererFramework,
-          cellRendererParams: {
-            operations: [{
-              id: 'remove',
-              title: '删除URL',
-              isDisabled (params, entity) {
-                return params.context.featureComponent.options.operation === 'view'
-              },
-              onClick (params, entity) {
-                params.context.featureComponent.onRemoveUrl(entity)
-              }
-            }]
-          },
-          width: 48
-        }
-      ]
+        width: 48
+      }]
     },
     methods: {
       onRemoveUrl (url) {

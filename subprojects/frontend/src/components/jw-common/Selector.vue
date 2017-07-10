@@ -62,7 +62,7 @@
     },
     computed: {
       maxBodyHeight () {
-        return this.$store.state.layout.window.height - 75 - 30 - 59 - 76 - 30 - 35
+        return this.$store.state.layout.window.height - 80 - 30 - 59 - 76 - 30 - 35
       }
     },
     methods: {

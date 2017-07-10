@@ -1,4 +1,10 @@
 <style>
+  * {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box; /* Firefox */
+    -webkit-box-sizing: border-box; /* Safari */
+  }
+
   body {
     font-size: 14px;
     background-color: #324157;
@@ -6,6 +12,21 @@
     padding: 0px;
     overflow: auto;
     height: 100%;
+  }
+
+  fieldset {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    min-width: 0;
+  }
+
+  a {
+    color: #20a0ff;
+  }
+
+  a:hover {
+    color: #4db3ff
   }
 
   #app {
@@ -156,6 +177,20 @@
     margin-bottom: 0px;
   }
 
+  .jw-dialog .el-dialog__header {
+    padding: 20px;
+    background-color: #f1f1f1;
+  }
+
+  .jw-dialog .el-dialog__footer {
+    padding: 20px;
+    background-color: #f1f1f1;
+  }
+
+  .jw-dialog .el-dialog__body {
+    padding: 0px;
+  }
+
   .jw-dialog .jw-dialog-body {
     overflow-y: auto;
   }
@@ -173,7 +208,7 @@
   }
 
   .jw-dialog.jw-dialog-small .jw-form, .jw-dialog-selector .jw-dialog.jw-dialog-small .jw-form {
-    width: 744px;
+    width: 745px;
   }
 
   .jw-dialog.jw-dialog-middle {
@@ -181,7 +216,7 @@
   }
 
   .jw-dialog.jw-dialog-middle .jw-form, .jw-dialog-selector .jw-dialog.jw-dialog-middle .jw-form {
-    width: 1098px;
+    width: 1100px;
   }
 
   .jw-dialog.jw-dialog-large {
@@ -189,7 +224,7 @@
   }
 
   .jw-dialog.jw-dialog-large .jw-form, .jw-dialog-selector .jw-dialog.jw-dialog-large .jw-form {
-    width: 1452px;
+    width: 1455px;
   }
 
   .jw-dialog.jw-dialog-full {
@@ -198,21 +233,6 @@
 
   .jw-dialog.jw-sub-dialog {
     width: auto;
-  }
-
-  .jw-dialog .el-dialog__header {
-    padding: 20px;
-    background-color: #f1f1f1;
-  }
-
-  .jw-dialog .el-dialog__footer {
-    padding: 20px;
-    background-color: #f1f1f1;
-  }
-
-  .jw-dialog .el-dialog__body {
-    padding: 0px;
-    color: #48576a;
   }
 
   .jw-form {
@@ -230,23 +250,19 @@
     text-align: right;
   }
 
-  .jw-form label {
-    margin-bottom: 0px;
+  .jw-form .jw-form-item {
+    margin-bottom: 10px;
   }
 
   .jw-form .el-form-item {
     margin-bottom: 10px;
   }
 
-  .jw-form .jw-form-item {
-    margin-bottom: 10px;
-  }
-
-  .el-form--inline .el-form-item {
+  .jw-form .el-form--inline .el-form-item {
     margin-right: 0px;
   }
 
-  .el-form--inline .el-form-item .el-form-item__content {
+  .jw-form .el-form--inline .el-form-item .el-form-item__content {
     line-height: 20px;
   }
 
@@ -258,46 +274,39 @@
     width: 200px;
   }
 
+  .jw-sub-dialog .jw-form .jw-field-col-1, .jw-sub-dialog .jw-form .jw-field-col-2, jw-sub-dialog .jw-form .jw-field-col-3, jw-sub-dialog .jw-form .jw-field-col-4 {
+    width: 200px;
+  }
+
   .jw-form .jw-field-col-1 {
-    min-width: 200px;
     width: 200px;
   }
 
   .jw-form .jw-field-col-2 {
-    min-width: 200px;
     width: 554px;
   }
 
-  .jw-sub-dialog .jw-form .jw-field-col-2 {
-    min-width: 200px;
-    width: 200px;
-  }
-
   .jw-form .jw-field-col-3 {
-    min-width: 200px;
     width: 908px;
   }
 
-  .jw-sub-dialog .jw-form .jw-field-col-3 {
-    min-width: 200px;
-    width: 200px;
-  }
-
-  .jw-form .el-radio {
-    color: inherit;
+  .jw-form label {
+    margin-bottom: 0px;
   }
 
   .jw-form .el-checkbox {
     color: inherit;
-  }
-
-  .jw-form .el-select {
-    min-width: 200px;
-  }
-
-  .jw-form .el-radio-group {
-    min-width: 200px;
     line-height: 36px;
+  }
+
+  .jw-form .el-date-editor.el-input {
+    min-width: 200px;
+    width: 200px;
+  }
+
+  .jw-form .el-form-item__error {
+    background: #fff;
+    z-index: 9999999;
   }
 
   .jw-form .el-input-number {
@@ -308,13 +317,18 @@
     line-height: 35px;
   }
 
-  .jw-form .el-date-editor.el-input {
-    min-width: 200px;
-    width: 200px;
+  .jw-form .el-radio {
+    color: inherit;
   }
 
-  .jw-form .el-checkbox {
+  .jw-form .el-radio-group {
+    min-width: 200px;
     line-height: 36px;
+    height: 36px;
+  }
+
+  .jw-form .el-select {
+    min-width: 200px;
   }
 
   .jw-form .el-textarea {
@@ -331,11 +345,6 @@
 
   .jw-form .jw-textarea-nowrap .el-textarea__inner {
     white-space: nowrap;
-  }
-
-  .jw-form .el-form-item__error {
-    background: #fff;
-    z-index: 9999999;
   }
 </style>
 

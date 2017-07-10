@@ -98,81 +98,73 @@
       }
     },
     created () {
-      this.gridOptions.columnDefs = [
-        {
-          headerName: '#',
-          field: 'f_order',
-          pinned: 'left',
-          headerComponentFramework: AddHeaderComponenetFramework,
-          headerComponentParams: {
-            operation: {
-              permission: '',
-              isDisabled (params, entity) {
-                return params.context.featureComponent.operation === 'view'
-              }
+      this.gridOptions.columnDefs = [{
+        headerName: '#',
+        field: 'f_order',
+        pinned: 'left',
+        headerComponentFramework: AddHeaderComponenetFramework,
+        headerComponentParams: {
+          operation: {
+            permission: '',
+            isDisabled (params, entity) {
+              return params.context.featureComponent.operation === 'view'
             }
-          },
-          cellStyle: {'text-align': 'right'},
-          width: 38
+          }
         },
-        {
-          headerName: '数据库名',
-          field: 'f_db_name',
-          pinned: 'left',
-          width: 120
+        cellStyle: {'text-align': 'right'},
+        width: 38
+      }, {
+        headerName: '数据库名',
+        field: 'f_db_name',
+        pinned: 'left',
+        width: 120
+      }, {
+        headerName: '表名',
+        field: 'f_table_name',
+        pinned: 'left',
+        cellRendererFramework: ViewRendererFramework,
+        width: 180
+      }, {
+        headerName: '主表',
+        field: 'f_is_main',
+        cellStyle: {'text-align': 'center'},
+        cellRendererFramework: DictRendererFramework,
+        cellRendererParams: {dict: 'YesNo2'},
+        width: 60
+      }, {
+        headerName: 'Entity类名',
+        field: 'f_entity_class',
+        tooltipField: 'f_entity_class',
+        width: 400
+      }, {
+        headerName: 'API类名',
+        field: 'f_rest_class',
+        tooltipField: 'f_rest_class',
+        width: 400
+      }, {
+        headerName: '操作',
+        field: '',
+        pinned: 'right',
+        cellStyle: {'text-align': 'center'},
+        cellRendererFramework: OperationRendererFramework,
+        cellRendererParams: {
+          operations: [{
+            id: 'edit',
+            isDisabled (params, entity) {
+              return params.context.featureComponent.operation === 'view'
+            }
+          }, {
+            id: 'remove',
+            isDisabled (params, entity) {
+              return params.context.featureComponent.operation === 'view'
+            },
+            onClick (params, entity) {
+              params.context.featureComponent.onRemove(entity)
+            }
+          }]
         },
-        {
-          headerName: '表名',
-          field: 'f_table_name',
-          pinned: 'left',
-          cellRendererFramework: ViewRendererFramework,
-          width: 180
-        },
-        {
-          headerName: '主表',
-          field: 'f_is_main',
-          cellStyle: {'text-align': 'center'},
-          cellRendererFramework: DictRendererFramework,
-          cellRendererParams: {dict: 'YesNo2'},
-          width: 60
-        },
-        {
-          headerName: 'Entity类名',
-          field: 'f_entity_class',
-          tooltipField: 'f_entity_class',
-          width: 400
-        },
-        {
-          headerName: 'API类名',
-          field: 'f_rest_class',
-          tooltipField: 'f_rest_class',
-          width: 400
-        },
-        {
-          headerName: '操作',
-          field: '',
-          pinned: 'right',
-          cellStyle: {'text-align': 'center'},
-          cellRendererFramework: OperationRendererFramework,
-          cellRendererParams: {
-            operations: [{
-              id: 'edit',
-              isDisabled (params, entity) {
-                return params.context.featureComponent.operation === 'view'
-              }
-            }, {
-              id: 'remove',
-              isDisabled (params, entity) {
-                return params.context.featureComponent.operation === 'view'
-              },
-              onClick (params, entity) {
-                params.context.featureComponent.onRemove(entity)
-              }
-            }]
-          },
-          width: 60
-        }
-      ]
+        width: 60
+      }]
     },
     methods: {
       onRemove (entity) {

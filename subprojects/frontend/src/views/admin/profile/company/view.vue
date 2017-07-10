@@ -74,6 +74,12 @@
         tooltipField: 'f_joined_remark',
         width: 200
       }, {
+        headerName: '最近登录时间',
+        field: 'f_last_login_time',
+        cellStyle: {'text-align': 'center'},
+        cellRendererFramework: TimestampRendererFramework,
+        width: 140
+      }, {
         headerName: '审核人',
         field: 'f_joined_auditor_name',
         width: 100

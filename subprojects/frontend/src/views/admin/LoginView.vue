@@ -4,59 +4,103 @@
 
 
 <template>
-  <div class="jw-admin-login">
-    <!-- 顶部 -->
-    <jw-head id="headContainer"></jw-head>
+  <jw-layout>
+    <jw-head slot="top"></jw-head>
 
+    <div slot="middle" class="jw-dialog jw-dialog-mini" style="background-color: #fff;width:100%;height:100%;">
+      <div class="jw-form"
+           style="position: absolute;top: 0;left: 0;bottom: 0;right: 0;margin: auto;height:215px;">
+        <div class="jw-form-body">
+          <el-form ref="form" :model="entity" :rules="rules" :label-width="'100px'">
+            <fieldset>
+              <el-form-item label="账号" prop="f_account">
+                <el-input class="jw-field-col-1" v-model="entity.f_account" type="text"></el-input>
+              </el-form-item>
+              <el-form-item label="密码" prop="f_password">
+                <el-input class="jw-field-col-1" v-model="entity.f_password" type="password"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="text" @click="$router.push('/register')">企业注册</el-button>
+                <el-button type="text">个人注册</el-button>
+                <el-button type="text">忘记密码</el-button>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="onSubmit">登 录</el-button>
+                <el-button type="warning" @click="onReset">重 置</el-button>
+              </el-form-item>
 
-    <!-- 中部 -->
-    <div id="middleContainer" style="background-color:#fff;display:table;width: 100%;padding:0 20px;"
-         :style="{'min-height': middleSize.height + 'px'}">
-      <div style="display:table-cell;vertical-align:middle;">
-        <login-form></login-form>
+              <div class="jw-form-item">
+                <el-alert type="error" :closable="false" :title="errorMessage" v-if="errorMessage"></el-alert>
+              </div>
+            </fieldset>
+          </el-form>
+        </div>
       </div>
-
     </div>
 
-
-    <!-- 底部 -->
-    <jw-foot id="footContainer"></jw-foot>
-  </div>
+    <jw-foot slot="bottom" v-if="layout.window.width >= 768"></jw-foot>
+  </jw-layout>
 </template>
 
 
-<script type="text/ecmascript-6">
-  import $ from 'jquery'
-
+<script>
   export default {
-    name: 'adminLogin',
+    name: 'adminLoginView',
     data () {
       return {
-        middleSize: {width: 0, height: 0},
-        resizeTimer: null
+        errorMessage: null,
+        entity: {
+          f_account: process.env.NODE_ENV === 'development' ? 'SuperAdmin' : null,
+          f_password: process.env.NODE_ENV === 'development' ? '12345678' : null
+        },
+        rules: {
+          f_account: [
+            {required: true, message: '请输入账号', trigger: 'blur'}
+          ],
+          f_password: [
+            {required: true, message: '请输入密码', trigger: 'blur'}
+          ]
+        }
       }
     },
-    mounted () {
-      window.devMode && console.info('mounted', this.$options.name, this._uid)
-
-      window.addEventListener('resize', this.onResize)
-      this.onResize()
-    },
-    activated () {
-      window.devMode && console.info('activated', this.$options.name, this._uid)
+    computed: {
+      originalRoute () {
+        return this.$store.state.originalRoute ? this.$store.state.originalRoute : {path: '/'}
+      },
+      layout () {
+        return this.$store.state.layout
+      }
     },
     methods: {
-      onResize () {
-        var vm = this
-        if (vm.resizeTimer) {
-          clearTimeout(vm.resizeTimer)
-        }
+      onReset () {
+        this.$refs['form'].resetFields()
+      },
+      onSubmit () {
+        this.$refs['form'].validate((valid) => {
+          if (!valid) {
+            return false
+          }
 
-        vm.resizeTimer = setTimeout(function () {
-          vm.middleSize.width = $(window).outerWidth()
-          vm.middleSize.height = $(window).outerHeight() - $('#middleContainer').offset().top - $('#footContainer').outerHeight()
-          vm.resizeTimer = null
-        }, 50)
+          this.errorMessage = null
+          this.$http.post('api/platform/security/token', {}, {
+            showSuccessMessage: false,
+            headers: {
+              Authorization: 'Basic ' + btoa(this.entity.f_account + ':' + this.entity.f_password)
+            }
+          }).then((response) => {
+            if (response.body.success) {
+              this.$store.commit('setUser', {user: response.body.data})
+              this.$router.push(this.originalRoute)
+            } else {
+              this.errorMessage = response.body.message
+            }
+          }).catch((e) => {
+            console && console.error(e) // 打印一下错误
+            this.errorMessage = '账号密码错误，请重新输入！'
+          })
+
+          return true
+        })
       }
     }
   }

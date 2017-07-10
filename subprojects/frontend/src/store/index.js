@@ -80,34 +80,34 @@ const store = new Vuex.Store({
       return value
     },
     getDictItems (dict, cb) {
-      let options = dict
+      let dictOptions = dict
       if (typeof (dict) === 'string') {
-        options = this.dicts[dict]
-        if (!options) {
+        dictOptions = this.dicts[dict]
+        if (!dictOptions) {
           console && console.error('请先配置字典', dict)
         }
       }
 
       let items = null
-      if (typeof (options) === 'object') {
-        if (typeof (options.length) !== 'undefined') { // 如果为数组
-          items = [].concat(options)
+      if (typeof (dictOptions) === 'object') {
+        if (typeof (dictOptions.length) !== 'undefined') { // 如果为数组
+          items = [].concat(dictOptions)
           cb(items)
-        } else if (options.url) { // 如果为带url的对象
-          Vue.http.get(options.url).then((response) => {
+        } else if (dictOptions.url) { // 如果为带url的对象
+          Vue.http.get(dictOptions.url).then((response) => {
             items = []
-            let codeFiled = options.codeFiled ? options.codeFiled : 'f_item_code'
-            let textFiled = options.textFiled ? options.textFiled : 'f_item_text'
-            let options = response.body.success ? response.body.data.items : []
-            options.forEach((option) => {
-              items.push({f_item_code: option[codeFiled], f_item_text: option[textFiled]})
+            let codeFiled = dictOptions.codeFiled ? dictOptions.codeFiled : 'f_item_code'
+            let textFiled = dictOptions.textFiled ? dictOptions.textFiled : 'f_item_text'
+            let dictItems = response.body.success ? response.body.data.items : []
+            dictItems.forEach((dictItem) => {
+              items.push({f_item_code: dictItem[codeFiled], f_item_text: dictItem[textFiled]})
             })
             cb(items)
           })
         } else {
           items = []
-          for (let p in options) {
-            items.push({f_item_code: p, f_item_text: options[p]})
+          for (let p in dictOptions) {
+            items.push({f_item_code: p, f_item_text: dictOptions[p]})
           }
           cb(items)
         }

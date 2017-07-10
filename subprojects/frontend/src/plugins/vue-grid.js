@@ -182,7 +182,9 @@ var VueGrid = {
             gridParams.context.params.totalCount = response.body.data.totalCount
             gridParams.successCallback(response.body.data.items, gridParams.context.params.totalCount)
           } else {
-            gridParams.failCallback()
+            // gridParams.failCallback()
+            gridParams.context.params.totalCount = 0
+            gridParams.successCallback([], 0)
           }
         })
       } else {

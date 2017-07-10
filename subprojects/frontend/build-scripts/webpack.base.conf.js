@@ -6,13 +6,13 @@ var vueLoaderConfig = require('./vue-loader.conf')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var CopyWebpackPlugin = require('copy-webpack-plugin')
 
-function resolve(dir) {
+function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
 module.exports = {
   entry: {
-    app: './src/main.js'
+    app: ['babel-polyfill', './src/main.js']
   },
   output: {
     path: config.build.assetsRoot,
@@ -39,7 +39,7 @@ module.exports = {
       {
         test: /\.(js|vue)$/,
         loader: 'eslint-loader',
-        enforce: "pre",
+        enforce: 'pre',
         include: [resolve('src')],
         options: {
           formatter: require('eslint-friendly-formatter')
@@ -69,7 +69,7 @@ module.exports = {
         query: {
           limit: 102400,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
-        },
+        }
       }
     ]
   },
@@ -85,11 +85,6 @@ module.exports = {
         to: config.build.assetsSubDirectory,
         ignore: ['.*', '**/.svn/**']
       }
-    ]),
-    new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery",
-      "window.jQuery": "jquery"
-    })
+    ])
   ]
 }
