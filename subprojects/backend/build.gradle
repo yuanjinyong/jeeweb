@@ -36,6 +36,12 @@ dependencies {
     // 用于生成spring-configuration-metadata.json文件
     compile "org.springframework.boot:spring-boot-configuration-processor"
 
+    // Redis缓存
+    compile "org.springframework.boot:spring-boot-starter-data-redis"
+
+    // Flowable工作流
+    compile "org.flowable:flowable-spring-boot-starter-basic:6.1.0"
+
     // atomikos的分布式事务
     compile "org.springframework.boot:spring-boot-starter-jta-atomikos"
     // druid (数据库连接池)
@@ -44,9 +50,6 @@ dependencies {
     compile "org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.0"
     // MySQL
     compile "mysql:mysql-connector-java"
-
-    // Redis缓存
-    compile "org.springframework.boot:spring-boot-starter-data-redis"
 
     // 代码生成
     compile "org.codehaus.groovy:groovy-all:2.4.7"
