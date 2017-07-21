@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.endpoint.mvc.EndpointHandlerMapping;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -53,6 +54,7 @@ public class SecurityCacheManager {
 
     private UrlPathHelper urlPathHelper = new UrlPathHelper();
     private RequestMappingHandlerMapping requestMappingHandlerMapping;
+    private EndpointHandlerMapping endpointHandlerMapping;
 
     @Autowired
     private MenuUrlMapper menuUrlMapper;
@@ -67,9 +69,12 @@ public class SecurityCacheManager {
         unconfigAuthority.add(new SecurityAuthority(SecurityAuthority.UNCONFIGURED_AUTHORITY));
     }
 
-    public void loadCache(RequestMappingHandlerMapping requestMappingHandlerMapping) {
+    public void setRequestMappingHandlerMapping(RequestMappingHandlerMapping requestMappingHandlerMapping) {
         this.requestMappingHandlerMapping = requestMappingHandlerMapping;
-        loadUrlAuthoritiesCache();
+    }
+
+    public void setEndpointHandlerMapping(EndpointHandlerMapping endpointHandlerMapping) {
+        this.endpointHandlerMapping = endpointHandlerMapping;
     }
 
     public void loadUrlAuthoritiesCache() {
@@ -159,7 +164,7 @@ public class SecurityCacheManager {
 
     public Collection<ConfigAttribute> getRequestAuthorities(final HttpServletRequest request) {
         String url = urlPathHelper.getLookupPathForRequest(request);
-        UrlEntity urlEntity = RequestMappingInfoUtil.getUrlEntity(request, requestMappingHandlerMapping);
+        UrlEntity urlEntity = getUrlEntity(request);
         // 未匹配到后台controller处理方法的，为前台静态资源路径
         if (urlEntity == null) {
             LOG.debug("请求[" + request.getMethod() + "][" + url + "]，配置权限：[]。");
@@ -175,6 +180,15 @@ public class SecurityCacheManager {
         }
 
         return authorityList;
+    }
+
+    private UrlEntity getUrlEntity(HttpServletRequest request) {
+        UrlEntity urlEntity = RequestMappingInfoUtil.getUrlEntity(request,
+                requestMappingHandlerMapping.getHandlerMethods());
+        if (urlEntity == null) {
+            urlEntity = RequestMappingInfoUtil.getUrlEntity(request, endpointHandlerMapping.getHandlerMethods());
+        }
+        return urlEntity;
     }
 
     public SecurityUser getSecurityUser(String username) {

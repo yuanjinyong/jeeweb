@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.endpoint.mvc.EndpointHandlerMapping;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -32,6 +33,8 @@ public class SecurityInitAware implements InitializingBean {
 
     @Autowired
     private RequestMappingHandlerMapping requestMappingHandlerMapping;
+    @Autowired
+    private EndpointHandlerMapping endpointHandlerMapping;
 
     @Autowired
     private SecurityCacheManager securityCacheManager;
@@ -51,7 +54,9 @@ public class SecurityInitAware implements InitializingBean {
         long startTime = System.currentTimeMillis();
         LOG.info("====加载URL和权限控制信息。");
         updateUrls();
-        securityCacheManager.loadCache(requestMappingHandlerMapping);
+        securityCacheManager.setRequestMappingHandlerMapping(requestMappingHandlerMapping);
+        securityCacheManager.setEndpointHandlerMapping(endpointHandlerMapping);
+        securityCacheManager.loadUrlAuthoritiesCache();
         LOG.info("====URL和权限控制信息加载完成，耗时：{}ms。", (System.currentTimeMillis() - startTime));
     }
 
@@ -59,15 +64,20 @@ public class SecurityInitAware implements InitializingBean {
         LOG.info("========更新t_sys_url开始========");
 
         long startTime = System.currentTimeMillis();
-        List<UrlEntity> entityList = new ArrayList<UrlEntity>();
-        Map<RequestMappingInfo, HandlerMethod> handlerMethods = requestMappingHandlerMapping.getHandlerMethods();
-        for (Entry<RequestMappingInfo, HandlerMethod> entry : handlerMethods.entrySet()) {
-            entityList.add(RequestMappingInfoUtil.buildUrlEntity(entry.getKey(), entry.getValue()));
-        }
-
+        List<UrlEntity> entityList = new ArrayList<>();
+        entityList.addAll(buildUrlEntityList(requestMappingHandlerMapping.getHandlerMethods()));
+        entityList.addAll(buildUrlEntityList(endpointHandlerMapping.getHandlerMethods()));
         urlMapper.deleteEntities(new ParameterMap("f_auto", true));
         urlMapper.insertEntities(entityList);
 
         LOG.info("========更新t_sys_url完成，耗时：{}ms========", (System.currentTimeMillis() - startTime));
+    }
+
+    private List<UrlEntity> buildUrlEntityList(Map<RequestMappingInfo, HandlerMethod> handlerMethods) {
+        List<UrlEntity> entityList = new ArrayList<>();
+        for (Entry<RequestMappingInfo, HandlerMethod> entry : handlerMethods.entrySet()) {
+            entityList.add(RequestMappingInfoUtil.buildUrlEntity(entry.getKey(), entry.getValue()));
+        }
+        return entityList;
     }
 }

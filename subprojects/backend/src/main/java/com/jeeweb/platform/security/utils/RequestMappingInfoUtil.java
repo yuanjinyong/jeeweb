@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import com.jeeweb.platform.sys.entity.UrlEntity;
 
@@ -28,13 +27,12 @@ public final class RequestMappingInfoUtil {
     }
 
     public static UrlEntity getUrlEntity(HttpServletRequest request,
-            RequestMappingHandlerMapping requestMappingHandlerMapping) {
+            Map<RequestMappingInfo, HandlerMethod> handlerMethods) {
         List<RequestMappingInfo> matches = new ArrayList<>();
-        Map<RequestMappingInfo, HandlerMethod> handlerMethods = requestMappingHandlerMapping.getHandlerMethods();
         for (Entry<RequestMappingInfo, HandlerMethod> entry : handlerMethods.entrySet()) {
-            RequestMappingInfo info = entry.getKey().getMatchingCondition(request);
-            if (info != null) {
-                matches.add(info);
+            RequestMappingInfo mapping = entry.getKey();
+            if (mapping.getMatchingCondition(request) != null) {
+                matches.add(mapping);
             }
         }
 

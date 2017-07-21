@@ -109,10 +109,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(restAccessDeniedHandler); // 当用户没有访问URL地址的权限时，将调用该对象的handle方法
 
         // 设置URL的访问权限（授权）
-        http.authorizeRequests() // 这里不使用Spring Security自带的URL权限匹配，改为通过数据库配置权限的授权规则
-                .antMatchers("/api/**").permitAll() // 所有api都放通，在下面的restSecurityFilter中进行权限控制
-                .anyRequest().denyAll() // 其他URL地址不能访问
-                .and().addFilterBefore(restSecurityFilter(), FilterSecurityInterceptor.class); // 添加自定义的过滤器，读取数据库中的权限配置来判断是否可以访问URL地址
+        // 这里不使用Spring Security自带的URL权限匹配，改为通过数据库配置权限的授权规则
+        http.addFilterBefore(restSecurityFilter(), FilterSecurityInterceptor.class); // 添加自定义的过滤器，读取数据库中的权限配置来判断是否可以访问URL地址
+        http.authorizeRequests().anyRequest().permitAll(); // 所有URL都放通，在上面的restSecurityFilter中进行权限控制
     }
 
     @Bean
