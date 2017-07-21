@@ -39,8 +39,8 @@ dependencies {
     // Redis缓存
     compile "org.springframework.boot:spring-boot-starter-data-redis"
 
-    // Flowable工作流
-    compile "org.flowable:flowable-spring-boot-starter-basic:6.1.0"
+    // Activiti工作流
+    compile "org.activiti:activiti-spring-boot-starter-basic:5.22.0"
 
     // atomikos的分布式事务
     compile "org.springframework.boot:spring-boot-starter-jta-atomikos"

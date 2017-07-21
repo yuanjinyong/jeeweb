@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.jeeweb.framework.flowable.configure;
+package com.jeeweb.framework.activiti.configure;
 
 import java.sql.SQLException;
 
@@ -19,37 +19,37 @@ import com.mysql.jdbc.jdbc2.optional.MysqlXADataSource;
  *
  */
 @Configuration
-public class FlowableDataSourceConfiguration {
-    @Value("${spring.datasource.flowable.uniqueResourceName:flowableDataSource}")
+public class ActivitiDataSourceConfiguration {
+    @Value("${spring.datasource.activiti.uniqueResourceName:activitiDataSource}")
     private String uniqueResourceName;
-    @Value("${spring.datasource.flowable.url:#{null}}")
+    @Value("${spring.datasource.activiti.url:#{null}}")
     private String url;
-    @Value("${spring.datasource.flowable.username:#{null}}")
+    @Value("${spring.datasource.activiti.username:#{null}}")
     private String username;
-    @Value("${spring.datasource.flowable.password:#{null}}")
+    @Value("${spring.datasource.activiti.password:#{null}}")
     private String password;
 
-    @Value("${spring.datasource.flowable.minPoolSize:5}")
+    @Value("${spring.datasource.activiti.minPoolSize:5}")
     private Integer minPoolSize;
-    @Value("${spring.datasource.flowable.maxPoolSize:25}")
+    @Value("${spring.datasource.activiti.maxPoolSize:25}")
     private Integer maxPoolSize;
-    @Value("${spring.datasource.flowable.maxLifetime:120}")
+    @Value("${spring.datasource.activiti.maxLifetime:120}")
     private Integer maxLifetime;
-    @Value("${spring.datasource.flowable.borrowConnectionTimeout:30}")
+    @Value("${spring.datasource.activiti.borrowConnectionTimeout:30}")
     private Integer borrowConnectionTimeout;
-    @Value("${spring.datasource.flowable.loginTimeout:30}")
+    @Value("${spring.datasource.activiti.loginTimeout:30}")
     private Integer loginTimeout;
-    @Value("${spring.datasource.flowable.maintenanceInterval:60}")
+    @Value("${spring.datasource.activiti.maintenanceInterval:60}")
     private Integer maintenanceInterval;
-    @Value("${spring.datasource.flowable.maxIdleTime:60}")
+    @Value("${spring.datasource.activiti.maxIdleTime:60}")
     private Integer maxIdleTime;
-    @Value("${spring.datasource.flowable.reapTimeout:120}")
+    @Value("${spring.datasource.activiti.reapTimeout:120}")
     private Integer reapTimeout;
-    @Value("${spring.datasource.flowable.testQuery:SELECT 1}")
+    @Value("${spring.datasource.activiti.testQuery:SELECT 1}")
     private String testQuery;
 
-    @Bean(name = "flowableDataSource")
-    public DataSource flowableDataSource() throws SQLException {
+    @Bean(name = "activitiDataSource")
+    public DataSource activitiDataSource() throws SQLException {
         MysqlXADataSource mysqlXaDataSource = new MysqlXADataSource();
         mysqlXaDataSource.setPinGlobalTxToPhysicalConnection(true);
         mysqlXaDataSource.setUrl(url);

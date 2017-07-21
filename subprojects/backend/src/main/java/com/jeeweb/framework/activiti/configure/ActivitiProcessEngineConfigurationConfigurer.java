@@ -1,12 +1,12 @@
 /**
  * 
  */
-package com.jeeweb.framework.flowable.configure;
+package com.jeeweb.framework.activiti.configure;
 
 import javax.sql.DataSource;
 
-import org.flowable.spring.SpringProcessEngineConfiguration;
-import org.flowable.spring.boot.ProcessEngineConfigurationConfigurer;
+import org.activiti.spring.SpringProcessEngineConfiguration;
+import org.activiti.spring.boot.ProcessEngineConfigurationConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,12 +17,14 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class FlowableProcessEngineConfigurationConfigurer implements ProcessEngineConfigurationConfigurer {
-    @Value("${spring.flowable.asyncExecutorActivate:true}")
+public class ActivitiProcessEngineConfigurationConfigurer implements ProcessEngineConfigurationConfigurer {
+    @Value("${spring.activiti.jobExecutorActivate:true}")
+    private Boolean jobExecutorActivate;
+    @Value("${spring.activiti.asyncExecutorActivate:true}")
     private Boolean asyncExecutorActivate;
 
     @Autowired
-    @Qualifier("flowableDataSource")
+    @Qualifier("activitiDataSource")
     private DataSource dataSource;
 
     /*
@@ -35,6 +37,7 @@ public class FlowableProcessEngineConfigurationConfigurer implements ProcessEngi
     public void configure(SpringProcessEngineConfiguration processEngineConfiguration) {
         processEngineConfiguration.setDataSource(dataSource);
         // processEngineConfiguration.setDatabaseSchemaUpdate("true");
+        processEngineConfiguration.setJobExecutorActivate(jobExecutorActivate);
         processEngineConfiguration.setAsyncExecutorActivate(asyncExecutorActivate);
 
         // 设置字体解决中文乱码
