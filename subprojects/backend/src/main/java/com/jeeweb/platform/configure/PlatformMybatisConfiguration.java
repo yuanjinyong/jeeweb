@@ -19,6 +19,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.util.ObjectUtils;
 
+import liquibase.integration.spring.SpringLiquibase;
+
 /**
  * @author 袁进勇
  *
@@ -56,5 +58,14 @@ public class PlatformMybatisConfiguration {
     public SqlSessionTemplate platformSqlSessionTemplate(
             @Qualifier("platformSqlSessionFactory") SqlSessionFactory sqlSessionFactory) {
         return new SqlSessionTemplate(sqlSessionFactory);
+    }
+
+    @Bean(name = "platformLiquibase")
+    public SpringLiquibase platformLiquibase(@Qualifier("defaultDataSource") DataSource dataSource) {
+        SpringLiquibase liquibase = new SpringLiquibase();
+        liquibase.setDataSource(dataSource);
+        liquibase.setChangeLog("classpath:/com/jeeweb/platform/**/mapper/*Liquibase.sql");
+        liquibase.setContexts("test, production");
+        return liquibase;
     }
 }

@@ -31,7 +31,7 @@ dependencies {
     // spring-mvc，支持 Web 应用开发，这里不使用内嵌的Tomcat
     compile "org.springframework.boot:spring-boot-starter-web"
     providedCompile "org.springframework.boot:spring-boot-starter-tomcat"
-    providedCompile "org.apache.tomcat:servlet-api:6.0.45"
+    providedCompile "javax.servlet:javax.servlet-api:3.1.0"
     compile "org.springframework.boot:spring-boot-starter-security"
     // 用于生成spring-configuration-metadata.json文件
     compile "org.springframework.boot:spring-boot-configuration-processor"
@@ -50,6 +50,9 @@ dependencies {
     compile "org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.0"
     // MySQL
     compile "mysql:mysql-connector-java"
+
+    // 数据库脚本升级
+    compile "org.liquibase:liquibase-core:3.5.3"
 
     // 代码生成
     compile "org.codehaus.groovy:groovy-all:2.4.7"
