@@ -26,7 +26,7 @@ public final class RequestMappingInfoUtil {
 
     }
 
-    public static UrlEntity getUrlEntity(HttpServletRequest request,
+    public static UrlEntity getUrlEntity(final HttpServletRequest request,
             Map<RequestMappingInfo, HandlerMethod> handlerMethods) {
         List<RequestMappingInfo> matches = new ArrayList<>();
         for (Entry<RequestMappingInfo, HandlerMethod> entry : handlerMethods.entrySet()) {

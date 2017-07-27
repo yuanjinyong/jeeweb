@@ -70,15 +70,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private SecurityUserDetailsService securityUserDetailsService;
 
+    @Value("${spring.security.ignoringUrls:#{null}}")
+    private String[] ignoringUrls;
     @Value("${spring.security.permitAllUrls:#{null}}")
-    private String permitAllUrls;
+    private String[] permitAllUrls;
     @Value("${spring.security.authenticatedUrls:#{null}}")
-    private String authenticatedUrls;
+    private String[] authenticatedUrls;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
         // 配置不走Spring Security权限控制的URL地址
-        web.ignoring().antMatchers("/web/**");
+        web.ignoring().antMatchers(ignoringUrls);
     }
 
     @Override
@@ -133,16 +135,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public RestSecurityFilter restSecurityFilter() throws Exception {
         RestSecurityFilter filter = new RestSecurityFilter();
+        // 配置进行过滤处理的的URL
+        if (!HelpUtil.isEmpty(ignoringUrls)) {
+            filter.addIgnoringMatchers(ignoringUrls);
+        }
+
         // 配置不登陆（授权）也可以访问的URL
         filter.addPermitAllMatchers(API_TOKEN);
         if (!HelpUtil.isEmpty(permitAllUrls)) {
-            filter.addPermitAllMatchers(permitAllUrls.trim().split(","));
+            filter.addPermitAllMatchers(permitAllUrls);
         }
 
         // 配置只要登陆即可访问的URL
         filter.addAuthenticatedMatchers(API_LOGOUT);
         if (!HelpUtil.isEmpty(authenticatedUrls)) {
-            filter.addAuthenticatedMatchers(authenticatedUrls.trim().split(","));
+            filter.addAuthenticatedMatchers(authenticatedUrls);
         }
 
         filter.setAuthenticationEntryPoint(restAuthenticationEntryPoint);

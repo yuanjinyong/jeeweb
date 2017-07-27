@@ -71,7 +71,7 @@ public class RestAccessDecisionManager implements AccessDecisionManager {
         HttpServletRequest request = fi.getRequest();
         String uri = new UrlPathHelper().getLookupPathForRequest(request);
         String method = request.getMethod();
-        LOG.debug("请求[{}][{}]，需要权限：[{}]，已有权限：[{}]。", method, uri, configAttributes, authentication.getAuthorities());
+        LOG.debug("请求[{}][{}]，配置权限：[{}]，已有权限：[{}]。", method, uri, configAttributes, authentication.getAuthorities());
 
         if (configAttributes == null) {
             return;

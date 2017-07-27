@@ -41,11 +41,13 @@ public class RestSecurityFilter extends AbstractSecurityInterceptor implements F
 
     private AuthenticationEntryPoint authenticationEntryPoint;
     private FilterInvocationSecurityMetadataSource securityMetadataSource;
+    private List<RequestMatcher> ignoringMatchers = new ArrayList<>();
     private List<RequestMatcher> permitAllMatchers = new ArrayList<>();
     private List<RequestMatcher> authenticatedMatchers = new ArrayList<>();
 
     /*
      * (non-Javadoc)
+     * 
      * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
      */
     @Override
@@ -55,6 +57,7 @@ public class RestSecurityFilter extends AbstractSecurityInterceptor implements F
 
     /*
      * (non-Javadoc)
+     * 
      * @see javax.servlet.Filter#destroy()
      */
     @Override
@@ -64,12 +67,18 @@ public class RestSecurityFilter extends AbstractSecurityInterceptor implements F
 
     /*
      * (non-Javadoc)
+     * 
      * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse,
      * javax.servlet.FilterChain)
      */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+        if (isMatcher((HttpServletRequest) request, ignoringMatchers)) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         FilterInvocation fi = new FilterInvocation(request, response, chain);
         if (fi.getRequest().getAttribute(FILTER_APPLIED) != null) {
             // ensure that filter is only applied once per request
@@ -131,6 +140,7 @@ public class RestSecurityFilter extends AbstractSecurityInterceptor implements F
 
     /*
      * (non-Javadoc)
+     * 
      * @see org.springframework.security.access.intercept.AbstractSecurityInterceptor#getSecureObjectClass()
      */
     @Override
@@ -140,6 +150,7 @@ public class RestSecurityFilter extends AbstractSecurityInterceptor implements F
 
     /*
      * (non-Javadoc)
+     * 
      * @see org.springframework.security.access.intercept.AbstractSecurityInterceptor#obtainSecurityMetadataSource()
      */
     @Override
@@ -159,6 +170,15 @@ public class RestSecurityFilter extends AbstractSecurityInterceptor implements F
      */
     public void setSecurityMetadataSource(FilterInvocationSecurityMetadataSource securityMetadataSource) {
         this.securityMetadataSource = securityMetadataSource;
+    }
+
+    /**
+     * @param antPatterns
+     */
+    public void addIgnoringMatchers(String... antPatterns) {
+        for (String pattern : antPatterns) {
+            ignoringMatchers.add(new AntPathRequestMatcher(pattern));
+        }
     }
 
     /**
