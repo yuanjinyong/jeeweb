@@ -77,4 +77,13 @@ public class MultiSqlChangeLogParser extends SqlChangeLogParser {
 
         return changeSet;
     }
+
+    protected InputStream openChangeLogFile(String physicalChangeLogLocation, ResourceAccessor resourceAccessor)
+            throws IOException {
+        InputStream resourceAsStream = StreamUtil.singleInputStream(physicalChangeLogLocation, resourceAccessor);
+        if (resourceAsStream == null) {
+            throw new IOException("File does not exist: " + physicalChangeLogLocation);
+        }
+        return resourceAsStream;
+    }
 }

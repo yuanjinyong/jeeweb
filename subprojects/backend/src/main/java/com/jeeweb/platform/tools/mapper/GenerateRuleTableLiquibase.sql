@@ -1,7 +1,7 @@
 -- liquibase formatted
 
 
--- changeset yuanjinyong:20170726165201
+-- changeset 袁进勇:20170726165201
 CREATE TABLE `t_tool_generate_rule_table` (
   `f_id` int(11) NOT NULL AUTO_INCREMENT,
   `f_rule_id` int(11) DEFAULT NULL COMMENT '生成规则ID',

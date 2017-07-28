@@ -5,7 +5,9 @@ package com.jeeweb.framework.liquibase;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,12 +51,7 @@ public class MultiFormattedSqlChangeLogParser extends FormattedSqlChangeLogParse
 
             String resourcePath = resources[0].getURL().toString();
             if (resourcePath.endsWith(".sql")) {
-                InputStream fileStream = openChangeLogFile(resourcePath, resourceAccessor);
-                if (fileStream == null) {
-                    return false;
-                }
-                reader = new BufferedReader(new UtfBomAwareReader(fileStream));
-
+                reader = new BufferedReader(new UtfBomAwareReader(openChangeLogFile(resourcePath, resourceAccessor)));
                 String line = reader.readLine();
                 return line != null && line.matches("\\-\\-\\s*liquibase formatted.*");
             } else {
@@ -336,6 +333,15 @@ public class MultiFormattedSqlChangeLogParser extends FormattedSqlChangeLogParse
                     }
                 }
             }
+
+            // 返回之前，根据ChangeSet的Id进行排序
+            List<ChangeSet> changeSetList = changeLog.getChangeSets();
+            Collections.sort(changeSetList, new Comparator<ChangeSet>() {
+                @Override
+                public int compare(ChangeSet o1, ChangeSet o2) {
+                    return o1.getId().compareTo(o2.getId());
+                }
+            });
 
             return changeLog;
         } catch (IOException e) {
