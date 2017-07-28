@@ -4,10 +4,8 @@
 package com.jeeweb.framework.liquibase;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import com.jeeweb.framework.core.utils.HelpUtil;
 
@@ -17,7 +15,6 @@ import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.database.ObjectQuotingStrategy;
 import liquibase.exception.ChangeLogParseException;
-import liquibase.parser.core.sql.SqlChangeLogParser;
 import liquibase.resource.ResourceAccessor;
 import liquibase.util.StreamUtil;
 
@@ -25,7 +22,7 @@ import liquibase.util.StreamUtil;
  * @author 袁进勇
  *
  */
-public class MultiSqlChangeLogParser extends SqlChangeLogParser {
+public class MultiSqlChangeLogParser extends AbstractSqlChangeLogParser {
 
     @Override
     public int getPriority() {
@@ -35,55 +32,40 @@ public class MultiSqlChangeLogParser extends SqlChangeLogParser {
     @Override
     public DatabaseChangeLog parse(String physicalChangeLogLocation, ChangeLogParameters changeLogParameters,
             ResourceAccessor resourceAccessor) throws ChangeLogParseException {
-
         DatabaseChangeLog changeLog = new DatabaseChangeLog();
         changeLog.setPhysicalFilePath(physicalChangeLogLocation);
 
-        try {
-            Resource[] resources = new PathMatchingResourcePatternResolver().getResources(physicalChangeLogLocation);
-            if (!HelpUtil.isEmpty(resources)) {
-                for (Resource resource : resources) {
+        Resource[] resources = getResources(physicalChangeLogLocation);
+        if (!HelpUtil.isEmpty(resources)) {
+            for (Resource resource : resources) {
+                try {
                     changeLog.addChangeSet(parseChangeSet(resource.getURL().toString(), changeLog, resourceAccessor));
+                } catch (IOException e) {
+                    throw new ChangeLogParseException("Resource does not exist: " + resource, e);
                 }
             }
-        } catch (IOException e) {
-            throw new ChangeLogParseException("Resource does not exist: " + physicalChangeLogLocation);
         }
 
         return changeLog;
     }
 
-    private ChangeSet parseChangeSet(String physicalChangeLogLocation, DatabaseChangeLog changeLog,
+    private ChangeSet parseChangeSet(String fileLocation, DatabaseChangeLog changeLog,
             ResourceAccessor resourceAccessor) throws ChangeLogParseException {
         RawSQLChange change = new RawSQLChange();
-
-        try {
-            InputStream sqlStream = StreamUtil.singleInputStream(physicalChangeLogLocation, resourceAccessor);
-            if (sqlStream == null) {
-                throw new ChangeLogParseException("File does not exist: " + physicalChangeLogLocation);
-            }
-            String sql = StreamUtil.getStreamContents(sqlStream, null);
-            change.setSql(sql);
-        } catch (IOException e) {
-            throw new ChangeLogParseException(e);
-        }
         change.setResourceAccessor(resourceAccessor);
         change.setSplitStatements(false);
         change.setStripComments(false);
 
-        ChangeSet changeSet = new ChangeSet("raw", "includeAll", false, false, physicalChangeLogLocation, null, null,
-                true, ObjectQuotingStrategy.LEGACY, changeLog);
+        try {
+            change.setSql(StreamUtil.getStreamContents(openChangeLogFile(fileLocation, resourceAccessor), null));
+        } catch (IOException e) {
+            throw new ChangeLogParseException(e);
+        }
+
+        ChangeSet changeSet = new ChangeSet("raw", "includeAll", false, false, fileLocation, null, null, true,
+                ObjectQuotingStrategy.LEGACY, changeLog);
         changeSet.addChange(change);
 
         return changeSet;
-    }
-
-    protected InputStream openChangeLogFile(String physicalChangeLogLocation, ResourceAccessor resourceAccessor)
-            throws IOException {
-        InputStream resourceAsStream = StreamUtil.singleInputStream(physicalChangeLogLocation, resourceAccessor);
-        if (resourceAsStream == null) {
-            throw new IOException("File does not exist: " + physicalChangeLogLocation);
-        }
-        return resourceAsStream;
     }
 }
