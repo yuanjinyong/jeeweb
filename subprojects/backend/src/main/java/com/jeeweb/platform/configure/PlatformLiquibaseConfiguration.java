@@ -29,4 +29,13 @@ public class PlatformLiquibaseConfiguration {
         liquibase.setContexts("test, production");
         return liquibase;
     }
+
+    @Bean(name = "menuLiquibase")
+    public SpringLiquibase activitiMenuLiquibase(@Qualifier("defaultDataSource") DataSource dataSource) {
+        SpringLiquibase liquibase = new SpringLiquibase();
+        liquibase.setDataSource(dataSource);
+        liquibase.setChangeLog("classpath:/com/jeeweb/**/mapper/*Menu.sql");
+        liquibase.setContexts("test, production");
+        return liquibase;
+    }
 }
