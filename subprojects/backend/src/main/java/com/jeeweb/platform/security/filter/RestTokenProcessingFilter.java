@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -40,13 +41,14 @@ public class RestTokenProcessingFilter extends OncePerRequestFilter {
 
     /*
      * (non-Javadoc)
+     * 
      * @see org.springframework.web.filter.OncePerRequestFilter#doFilterInternal(javax.servlet.http.HttpServletRequest,
      * javax.servlet.http.HttpServletResponse, javax.servlet.FilterChain)
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String token = request.getHeader(RestTokenService.REST_TOKEN);
+        String token = getToken(request);
         if (HelpUtil.isEmpty(token)) {
             filterChain.doFilter(request, response);
             return;
@@ -78,5 +80,23 @@ public class RestTokenProcessingFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private String getToken(HttpServletRequest request) {
+        String token = request.getHeader(RestTokenService.REST_TOKEN);
+        if (!HelpUtil.isEmpty(token)) {
+            return token;
+        }
+
+        Cookie[] cookies = request.getCookies();
+        if (!HelpUtil.isEmpty(cookies)) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(RestTokenService.REST_TOKEN)) {
+                    return cookie.getValue();
+                }
+            }
+        }
+
+        return null;
     }
 }

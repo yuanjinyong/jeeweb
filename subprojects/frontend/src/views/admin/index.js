@@ -2,6 +2,9 @@ import IndexView from './IndexView'
 import HomeView from './HomeView'
 import LoginView from './LoginView'
 
+export * from './activiti'
+import activiti from './activiti'
+
 export * from './platform'
 import platform from './platform'
 
@@ -14,6 +17,12 @@ export default [{
   children: [{
     path: 'home',
     component: HomeView
+  }, {
+    path: 'activiti',
+    component: {
+      template: '<router-view></router-view>'
+    },
+    children: activiti
   }, {
     path: 'platform',
     component: {
