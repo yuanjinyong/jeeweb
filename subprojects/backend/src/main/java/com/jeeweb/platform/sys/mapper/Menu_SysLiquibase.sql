@@ -3,7 +3,7 @@
 
 
 -- changeset 袁进勇:20170801010000
--- comment: KFGJ-SJKGL 数据库管理
+-- comment: 数据库管理
 /*Data for the table `t_sys_menu` */
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-SJKGL','KFGJ','/ROOT/KFGJ/',100,'数据库管理','数据库管理页面','fa fa-table',2,'/admin/platform/tools/information/schema',1,2,2,1,NULL);
 
@@ -17,7 +17,7 @@ insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-SJKGL','bace
 
 
 -- changeset 袁进勇:20170801010001
--- comment: KFGJ-DMSC 代码生成
+-- comment: 代码生成
 /*Data for the table `t_sys_menu` */
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-DMSC','KFGJ','/ROOT/KFGJ/',40,'代码生成','代码生成规则配置',NULL,2,'/admin/platform/tools/code/generation',1,1,1,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-DMSC-ZJ','KFGJ-DMSC','/ROOT/KFGJ/KFGJ-DMSC/',10,'增加','增加代码生成规则',NULL,3,NULL,1,2,2,1,NULL);
@@ -81,29 +81,6 @@ insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL-ZJ','a6
 
 
 
--- changeset 袁进勇:20170801010003
--- comment: 菜单管理
-/*Data for the table `t_sys_menu` */
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL','KFGJ','/ROOT/KFGJ/',20,'菜单管理','菜单管理页面','fa fa-bars',2,'/admin/platform/sys/menu',1,0,0,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL-ZJ','KFGJ-CDGL','/ROOT/KFGJ/KFGJ-CDGL/',10,'增加','增加菜单',NULL,3,NULL,1,0,0,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL-XG','KFGJ-CDGL','/ROOT/KFGJ/KFGJ-CDGL/',20,'修改','修改菜单',NULL,3,NULL,1,0,0,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL-SC','KFGJ-CDGL','/ROOT/KFGJ/KFGJ-CDGL/',30,'删除','删除菜单',NULL,3,NULL,1,0,0,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL-DCSQL','KFGJ-CDGL','/ROOT/KFGJ/KFGJ-CDGL/',100,'导出SQL','导出SQL脚本',NULL,3,NULL,1,0,0,1,NULL);
-
-/*Data for the table `t_sys_menu_url` */
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','0c0362062f72869516168ed479fa82bb');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','4050f6a3ffd77bdc4534d886e11f8012');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','55847dc87d27c4b9146caf118c45321c');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','d7b9102569dc7cfdc45956fa9cd32ad3');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL-DCSQL','d7e533dd5cc473d1f2fcec5557881f91');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL-SC','5a91bc0915d3e5c0b2e49d45c1b168ca');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL-XG','fed4f0beac39e30f0c8354eaa65fd25f');
-insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL-ZJ','a61340a1087d2e7bed041cf57d43a397');
--- rollback DELETE FROM t_sys_menu_url WHERE f_menu_id LIKE 'KFGJ-CDGL%';
--- rollback DELETE FROM t_sys_menu WHERE f_id LIKE 'KFGJ-CDGL%';
-
-
-
 -- changeset 袁进勇:20170801010004
 -- comment: 角色管理
 /*Data for the table `t_sys_menu` */
@@ -140,7 +117,7 @@ insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (3,'XTGL-JSGL-ZJ'
 
 
 -- changeset 袁进勇:20170801010005
--- comment: XTGL-YHGL 用户管理
+-- comment: 用户管理
 /*Data for the table `t_sys_menu` */
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL','XTGL','/ROOT/XTGL/',30,'用户管理','用户管理页面','fa fa-user',2,'/admin/platform/sys/user',1,2,2,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-ZJ','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',10,'增加','增加用户',NULL,3,NULL,1,2,2,1,NULL);
@@ -184,7 +161,7 @@ insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (3,'XTGL-YHGL-ZJ'
 
 
 -- changeset 袁进勇:20170801010006
--- comment: XTGL-ZDGL 字典管理
+-- comment: 字典管理
 /*Data for the table `t_sys_menu` */
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-ZDGL','XTGL','/ROOT/XTGL/',60,'字典管理','字典管理页面','fa fa-book',2,'/admin/platform/sys/dict',1,2,2,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-ZDGL-ZJ','XTGL-ZDGL','/ROOT/XTGL/XTGL-ZDGL/',10,'增加','增加字典组',NULL,3,NULL,1,2,2,1,NULL);
@@ -217,7 +194,7 @@ insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (3,'XTGL-ZDGL-ZJ'
 
 
 -- changeset 袁进勇:20170801010007
--- comment: XTGL-XTSZ 系统设置
+-- comment: 系统设置
 /*Data for the table `t_sys_menu` */
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-XTSZ','XTGL','/ROOT/XTGL/',70,'系统设置','系统设置页面','fa fa-wrench',2,'/admin/platform/sys/setting',1,2,2,1,'系统设置（参数）管理功能。');
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-XTSZ-ZJ','XTGL-XTSZ','/ROOT/XTGL/XTGL-XTSZ/',10,'增加','增加系统设置项',NULL,3,NULL,1,2,2,1,NULL);
