@@ -60,6 +60,7 @@
     
     "BUTTON.ACTION.DELETE.TOOLTIP": "Delete the element from the model",
     "BUTTON.ACTION.MORPH.TOOLTIP": "Change the element type",
+    "MODEL.MORPH.TITLE": "Change the element type:",
     
     "ELEMENT.AUTHOR" : "Author",
     "ELEMENT.DATE_CREATED" : "Date created",

@@ -15,12 +15,16 @@ package com.jeeweb.activiti.rest.editor.main;
 
 import java.io.InputStream;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.activiti.engine.ActivitiException;
 import org.apache.commons.io.IOUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  * @author Tijs Rademakers
@@ -29,13 +33,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/activiti/modeler")
 public class StencilsetRestResource {
 
-    @RequestMapping(value = "/editor/stencilset", method = RequestMethod.GET,
-            produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/editor/stencilset", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
     public @ResponseBody String getStencilset() {
-        InputStream stencilsetStream = this.getClass().getClassLoader()
-                .getResourceAsStream("activiti/modeler/stencilset.json");
+        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String language = req.getParameter("language");
+        String fileName = "activiti/modeler/stencilset" + (language == null || language.trim().length() == 0 ? "" : ("." + language)) + ".json";
+
         try {
-            return IOUtils.toString(stencilsetStream, "utf-8");
+            return IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream(fileName), "utf-8");
         } catch (Exception e) {
             throw new ActivitiException("Error while loading stencil set", e);
         }
