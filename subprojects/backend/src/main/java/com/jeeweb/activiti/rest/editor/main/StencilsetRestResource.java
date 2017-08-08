@@ -13,7 +13,6 @@
  */
 package com.jeeweb.activiti.rest.editor.main;
 
-import java.io.InputStream;
 
 import javax.servlet.http.HttpServletRequest;
 
