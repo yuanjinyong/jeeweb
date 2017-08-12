@@ -150,6 +150,7 @@ public class MultiFormattedSqlChangeLogParser extends AbstractSqlChangeLogParser
                     String logicalFilePath = parseString(logicalFilePathMatcher);
                     if (HelpUtil.isEmpty(logicalFilePath)) {
                         logicalFilePath = resource.getURL().toString();
+                        logicalFilePath = logicalFilePath.substring(logicalFilePath.indexOf("/com/"));
                     }
                     changeLog.setLogicalFilePath(logicalFilePath);
                 }

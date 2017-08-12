@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,8 @@ import org.springframework.context.annotation.Primary;
 
 import com.atomikos.jdbc.AtomikosDataSourceBean;
 import com.mysql.jdbc.jdbc2.optional.MysqlXADataSource;
+
+import liquibase.integration.spring.SpringLiquibase;
 
 /**
  * @author 袁进勇
@@ -80,5 +83,14 @@ public class DefaultDataSourceConfiguration {
         xaDataSource.setTestQuery(testQuery);
 
         return xaDataSource;
+    }
+
+    @Bean(name = "defaultLiquibase")
+    public SpringLiquibase defaultLiquibase(@Qualifier("defaultDataSource") DataSource dataSource) {
+        SpringLiquibase liquibase = new SpringLiquibase();
+        liquibase.setDataSource(dataSource);
+        liquibase.setChangeLog("classpath:/com/jeeweb/**/mapper/*Liquibase.default.sql");
+        liquibase.setContexts("test, production");
+        return liquibase;
     }
 }

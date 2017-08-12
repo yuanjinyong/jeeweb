@@ -1,7 +1,7 @@
 -- liquibase formatted
 
 
--- changeset 袁进勇:20170801000201
+-- changeset 袁进勇:20170501000201
 -- comment: 创建菜单表结构
 CREATE TABLE `t_sys_menu` (
   `f_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT '主键，以模块加横杠分隔，如 XTGL-QXGL 表示系统管理-权限管理',
@@ -32,8 +32,6 @@ CREATE TABLE `t_sys_menu_url` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='菜单可以访问的URL地址';
 
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('ROOT',NULL,'/',0,'系统菜单','根菜单',NULL,0,NULL,1,1,1,1,NULL);
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('GRZX','ROOT','/ROOT/',10,'个人中心','个人中心模块','fa fa-user-circle',1,NULL,1,1,1,1,'日常工作常用功能的快捷入口。');
-insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL','ROOT','/ROOT/',990,'系统管理','系统管理模块','fa fa-cog',1,NULL,1,1,1,1,'平台系统管理。');
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ','ROOT','/ROOT/',995,'开发人员工具','开发人员工具模块','fa fa-wrench',1,NULL,1,0,0,1,'仅限开发人员使用，请不要授权给客户使用。');
 -- rollback DROP TABLE IF EXISTS t_sys_menu_url;
 -- rollback DROP TABLE IF EXISTS t_sys_menu;

@@ -2,7 +2,7 @@
 
 
 
--- changeset 袁进勇:20170805010000
+-- changeset 袁进勇:20170705010000
 -- comment: 数据库管理
 /*Data for the table `t_sys_menu` */
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-SJKGL','KFGJ','/ROOT/KFGJ/',100,'数据库管理','数据库管理页面','fa fa-table',2,'/admin/platform/tools/information/schema',1,2,2,1,NULL);
@@ -16,7 +16,7 @@ insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-SJKGL','bace
 
 
 
--- changeset 袁进勇:20170805010001
+-- changeset 袁进勇:20170705010001
 -- comment: 代码生成
 /*Data for the table `t_sys_menu` */
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-DMSC','KFGJ','/ROOT/KFGJ/',40,'代码生成','代码生成规则配置',NULL,2,'/admin/platform/tools/code/generation',1,1,1,1,NULL);

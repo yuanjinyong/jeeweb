@@ -1,7 +1,7 @@
 -- liquibase formatted
 
 
--- changeset 袁进勇:20170801000301
+-- changeset 袁进勇:20170501000301
 -- comment: 创建角色表结构
 CREATE TABLE `t_sys_role` (
   `f_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -23,7 +23,7 @@ CREATE TABLE `t_sys_role_menu` (
 -- rollback DROP TABLE IF EXISTS t_sys_role;
 
 
--- changeset 袁进勇:20170801000302
+-- changeset 袁进勇:20170501000302
 -- comment: 预置角色
 /*Data for the table `t_sys_role` */
 insert  into `t_sys_role`(`f_id`,`f_name`,`f_desc`,`f_is_preset`,`f_remark`) values (1,'系统管理员角色','用于系统的运营维护。',1,'系统主要分为平台运维、施工企业、业主监督等子系统。');

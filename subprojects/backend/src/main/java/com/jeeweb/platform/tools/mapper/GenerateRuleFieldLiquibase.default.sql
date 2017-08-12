@@ -1,7 +1,7 @@
 -- liquibase formatted
 
 
--- changeset 袁进勇:20170601000003
+-- changeset 袁进勇:20170401000003
 -- comment: 创建代码生成规则表结构
 CREATE TABLE t_tool_generate_rule_field (
   f_id int(11) NOT NULL AUTO_INCREMENT,

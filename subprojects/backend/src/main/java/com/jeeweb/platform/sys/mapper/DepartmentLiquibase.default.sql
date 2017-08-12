@@ -1,7 +1,7 @@
 -- liquibase formatted
 
 
--- changeset 袁进勇:20170702000001
+-- changeset 袁进勇:20170430000001
 -- comment: 创建部门表结构
 CREATE TABLE `t_sys_department` (
   `f_id` int(11) NOT NULL AUTO_INCREMENT,

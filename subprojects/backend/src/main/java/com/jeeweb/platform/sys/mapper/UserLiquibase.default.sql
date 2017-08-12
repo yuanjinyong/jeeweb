@@ -1,7 +1,7 @@
 -- liquibase formatted
 
 
--- changeset 袁进勇:20170801000401
+-- changeset 袁进勇:20170501000401
 -- comment: 创建用户表结构
 CREATE TABLE `t_sys_user` (
   `f_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -44,7 +44,7 @@ CREATE TABLE `t_sys_user_role` (
 -- rollback DROP TABLE IF EXISTS t_sys_user;
 
 
--- changeset 袁进勇:20170801000402
+-- changeset 袁进勇:20170501000402
 -- comment: 预置用户
 /*Data for the table `t_sys_user` */
 insert  into `t_sys_user`(`f_id`,`f_tenant_id`,`f_account`,`f_password`,`f_name`,`f_telephone`,`f_department_id`,`f_creator_id`,`f_created_time`,`f_last_login_time`,`f_locked_time`,`f_unregister_time`,`f_is_can_login`,`f_is_preset`,`f_status`,`f_remark`) values (1,0,'SuperAdmin','$2a$10$o6R1D7JhRW7d56inhUm50eF5xy8fF1l3KPCc0kdgpKBMw6olsamiq','超级管理员',NULL,0,0,'1970-01-01 00:00:00','2017-07-10 11:29:52',NULL,NULL,1,1,1,'该账号是开发人员维护系统用，不能提供给客户使用。');

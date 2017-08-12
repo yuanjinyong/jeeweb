@@ -39,7 +39,9 @@ public class MultiSqlChangeLogParser extends AbstractSqlChangeLogParser {
         if (!HelpUtil.isEmpty(resources)) {
             for (Resource resource : resources) {
                 try {
-                    changeLog.addChangeSet(parseChangeSet(resource.getURL().toString(), changeLog, resourceAccessor));
+                    String logicalFilePath = resource.getURL().toString();
+                    logicalFilePath = logicalFilePath.substring(logicalFilePath.indexOf("/com/"));
+                    changeLog.addChangeSet(parseChangeSet(logicalFilePath, changeLog, resourceAccessor));
                 } catch (IOException e) {
                     throw new ChangeLogParseException("Resource does not exist: " + resource, e);
                 }

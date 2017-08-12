@@ -1,7 +1,7 @@
 -- liquibase formatted
 
 
--- changeset 袁进勇:20170701000001
+-- changeset 袁进勇:20170429000001
 -- comment: 创建租户表结构
 CREATE TABLE `t_sys_tenant` (
   `f_id` int(11) NOT NULL AUTO_INCREMENT,

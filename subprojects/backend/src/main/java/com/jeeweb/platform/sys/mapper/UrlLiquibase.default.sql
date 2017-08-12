@@ -1,7 +1,7 @@
 -- liquibase formatted
 
 
--- changeset 袁进勇:20170801000101
+-- changeset 袁进勇:20170501000101
 -- comment: 创建URL表结构
 CREATE TABLE `t_sys_url` (
   `f_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT 'f_url和f_methods的MD5值',
