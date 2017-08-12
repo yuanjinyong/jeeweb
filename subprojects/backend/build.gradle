@@ -41,6 +41,16 @@ dependencies {
 
     // Activiti工作流
     compile "org.activiti:activiti-spring-boot-starter-basic:5.22.0"
+    compile "org.activiti:activiti-explorer:5.22.0"
+    // compile "org.activiti:activiti-modeler:5.22.0"
+    compile "org.apache.xmlgraphics:batik-parser:1.7"
+    compile "org.apache.xmlgraphics:batik-transcoder:1.7"
+    compile "org.apache.xmlgraphics:batik-bridge:1.7"
+    compile "org.apache.xmlgraphics:batik-codec:1.7"
+    compile "org.apache.xmlgraphics:batik-svg-dom:1.7"
+    compile "org.apache.xmlgraphics:batik-svggen:1.7"
+    compile "org.activiti:activiti-diagram-rest:5.22.0"
+    compile "org.activiti:activiti-simple-workflow:5.22.0"
 
     // atomikos的分布式事务
     compile "org.springframework.boot:spring-boot-starter-jta-atomikos"
