@@ -26,8 +26,6 @@ import org.apache.ibatis.scripting.xmltags.ForEachSqlNode;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.TypeHandler;
 import org.apache.ibatis.type.TypeHandlerRegistry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -44,27 +42,41 @@ import com.jeeweb.framework.core.utils.MetaUtil;
 @Intercepts({
         @Signature(type = StatementHandler.class, method = "prepare", args = { Connection.class, Integer.class }) })
 public class PageInterceptor implements Interceptor {
-    private static final Logger LOG = LoggerFactory.getLogger(PageInterceptor.class);
+    // private static final Logger LOG = LoggerFactory.getLogger(PageInterceptor.class);
+    private static final String DB_PRODUCT_NAME_MYSQL = "MySQL";
+    private static final String DB_PRODUCT_NAME_SQLSERVER = "Microsoft SQL Server";
 
-    @Value("${mybatis.page.dialect:mysql}")
-    private String dialect;
     @Value("${mybatis.page.sqlIdRegex:.*ListPage$}")
     private String sqlIdRegex;
+    private String databaseProductName;
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
         Object target = invocation.getTarget();
-        if (target instanceof RoutingStatementHandler) {
-            MetaObject metaObject = MetaUtil.getMetaObject(invocation.getTarget());
-            MappedStatement mappedStatement = (MappedStatement) metaObject.getValue("delegate.mappedStatement");
-            BoundSql boundSql = (BoundSql) metaObject.getValue("delegate.boundSql");
-            LOG.debug("\n执行SQL：{}\n对应XML：{}\n原始的SQL如下：\n    {}", mappedStatement.getId(), mappedStatement.getResource(),
-                    boundSql.getSql());
-
-            doPageIntercept(metaObject, invocation.getArgs());
+        if (!(target instanceof RoutingStatementHandler)) {
+            return invocation.proceed();
         }
 
-        return invocation.proceed();
+        MetaObject metaObject = MetaUtil.getMetaObject(invocation.getTarget());
+        MappedStatement mappedStatement = (MappedStatement) metaObject.getValue("delegate.mappedStatement");
+        BoundSql boundSql = (BoundSql) metaObject.getValue("delegate.boundSql");
+        mappedStatement.getStatementLog()
+                .trace(new StringBuffer("\n执行SQL：").append(mappedStatement.getId()).append("\n对应XML：")
+                        .append(mappedStatement.getResource()).append("\n原始的SQL如下：\n    ").append(boundSql.getSql())
+                        .toString());
+        try {
+            doPageIntercept(metaObject, invocation.getArgs());
+            return invocation.proceed();
+        } catch (Exception e) {
+            if (e instanceof SQLException) {
+                mappedStatement.getStatementLog()
+                        .error(new StringBuffer("\n执行SQL：").append(mappedStatement.getId()).append("\n对应XML：")
+                                .append(mappedStatement.getResource()).append("\n原始的SQL如下：\n    ")
+                                .append(boundSql.getSql()).toString());
+            }
+
+            throw e;
+        }
     }
 
     private void doPageIntercept(MetaObject metaObject, Object[] args) throws SQLException, Exception {
@@ -77,11 +89,17 @@ public class PageInterceptor implements Interceptor {
             // 要传入了pageSize或orderBy且SqlId以“ListPage”结尾，才进行翻页数据的处理
             if (params.hasPagenation() || !HelpUtil.isEmpty(params.getOrderBy())) {
                 if (mappedStatement.getId().matches(sqlIdRegex)) {
-                    processTotalCount((Connection) args[0], mappedStatement, boundSql);
+                    Connection connection = (Connection) args[0];
+                    databaseProductName = connection.getMetaData().getDatabaseProductName();
+                    // 如果入参中已经传入了totalCount，则不需要再去查询出总数了
+                    if (params.hasPagenation() && (params.getTotalCount() == null || params.getTotalCount() == 0)) {
+                        processTotalCount(connection, mappedStatement, boundSql);
+                    }
 
                     String pageSql = generatePageSql(boundSql);
                     metaObject.setValue("delegate.boundSql.sql", pageSql);
-                    LOG.info("\n重写分页和排序后的SQL如下：\n{}", pageSql);
+                    mappedStatement.getStatementLog()
+                            .trace(new StringBuffer("\n重写分页和排序后的SQL如下：\n").append(pageSql).toString());
                 }
             }
         }
@@ -89,15 +107,10 @@ public class PageInterceptor implements Interceptor {
 
     private void processTotalCount(Connection connection, MappedStatement mappedStatement, BoundSql boundSql)
             throws Exception, SQLException {
-        ParameterMap params = (ParameterMap) boundSql.getParameterObject();
-        // 如果入参中已经传入了totalCount，则不需要再去查询出总数了
-        if (params.getPageSize() == null || (params.getTotalCount() != null && params.getTotalCount() > 0)) {
-            return;
-        }
-
         PreparedStatement countStmt = null;
         ResultSet resultSet = null;
         try {
+            ParameterMap params = (ParameterMap) boundSql.getParameterObject();
             String countSql = generatCountSql(mappedStatement, boundSql);
             countStmt = connection.prepareStatement(countSql);
             BoundSql countBoundSql = new BoundSql(mappedStatement.getConfiguration(), countSql,
@@ -108,7 +121,8 @@ public class PageInterceptor implements Interceptor {
             resultSet = countStmt.executeQuery();
             if (resultSet.next()) {
                 params.setTotalCount(resultSet.getInt(1));
-                LOG.info("\n重写分页参数里的总页数：totalCount=" + params.getTotalCount() + "\n" + countSql);
+                mappedStatement.getStatementLog().trace(new StringBuffer("\n重写分页参数里的总记录数：totalCount=")
+                        .append(params.getTotalCount()).append("\n").append(countSql).toString());
             }
         } finally {
             try {
@@ -196,12 +210,25 @@ public class PageInterceptor implements Interceptor {
         ParameterMap params = (ParameterMap) boundSql.getParameterObject();
 
         StringBuffer pageSql = new StringBuffer();
-        if ("mysql".equals(dialect)) {
+        if (DB_PRODUCT_NAME_MYSQL.equals(databaseProductName)) {
             pageSql.append(buildOrderBySql(sql, params.getOrderBy()));
             if (params.hasPagenation()) {
                 pageSql.append(" \nLIMIT " + params.getBeginRowNo() + "," + params.getPageSize());
             }
-        } else if ("oracle".equals(dialect)) {
+        } else if (DB_PRODUCT_NAME_SQLSERVER.equals(databaseProductName)) {
+            pageSql.append("SELECT * FROM (\n");
+            pageSql.append("    SELECT *, ROW_NUMBER() OVER(order by ")
+                    .append(HelpUtil.isEmpty(params.getOrderBy()) ? "(select 0)" : params.getOrderBy())
+                    .append(") RowNumber FROM (\n");
+            pageSql.append(sql);
+            pageSql.append("\n    ) TMP_TB\n");
+            pageSql.append(") TEMP_TB ");
+            if (params.hasPagenation()) {
+                Integer beginRow = params.getBeginRowNo();
+                pageSql.append(" WHERE TEMP_TB.RowNumber > ").append(beginRow).append(" AND TEMP_TB.RowNumber <= ")
+                        .append(beginRow + params.getPageSize());
+            }
+        } else if ("oracle".equals(databaseProductName)) {
             pageSql.append("SELECT * FROM (SELECT TMP_TB.*, ROWNUM ROW_ID FROM (\n");
             pageSql.append(buildOrderBySql(sql, params.getOrderBy()));
             if (params.hasPagenation()) {
