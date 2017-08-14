@@ -13,8 +13,8 @@ import org.springframework.context.event.ContextRefreshedEvent;
  * @author 袁进勇
  *
  */
-public class ApplicationStartupListener implements ApplicationListener<ContextRefreshedEvent> {
-    private static final Logger LOG = LoggerFactory.getLogger(ApplicationStartupListener.class);
+public class ContextRefreshedEventListener implements ApplicationListener<ContextRefreshedEvent> {
+    private static final Logger LOG = LoggerFactory.getLogger(ContextRefreshedEventListener.class);
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {

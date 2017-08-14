@@ -82,6 +82,7 @@ public class DefaultDataSourceConfiguration {
         xaDataSource.setReapTimeout(reapTimeout);
         xaDataSource.setTestQuery(testQuery);
 
+        defaultLiquibase(xaDataSource);
         return xaDataSource;
     }
 

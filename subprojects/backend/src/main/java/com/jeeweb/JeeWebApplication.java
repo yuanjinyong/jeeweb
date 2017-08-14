@@ -8,7 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 
-import com.jeeweb.framework.core.listener.ApplicationStartupListener;
+import com.jeeweb.framework.core.listener.ContextRefreshedEventListener;
+import com.jeeweb.framework.liquibase.LiquibaseApplicationStartingEventListener;
 
 /**
  * @author 袁进勇
@@ -27,16 +28,21 @@ public class JeeWebApplication extends SpringBootServletInitializer {
      */
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        builder.application().addListeners(new ApplicationStartupListener());
-        return builder.sources(JeeWebApplication.class);
+        initSpringApplication(builder.sources(JeeWebApplication.class).application());
+        return builder;
+    }
+
+    private static SpringApplication initSpringApplication(SpringApplication application) {
+        application.addListeners(new LiquibaseApplicationStartingEventListener());
+        application.addListeners(new ContextRefreshedEventListener());
+
+        return application;
     }
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-        SpringApplication springApplication = new SpringApplication(JeeWebApplication.class);
-        springApplication.addListeners(new ApplicationStartupListener());
-        springApplication.run(args);
+        initSpringApplication(new SpringApplication(JeeWebApplication.class)).run(args);
     }
 }

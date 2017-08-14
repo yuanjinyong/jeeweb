@@ -9,13 +9,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jeeweb.framework.business.mapper.BaseMapper;
 import com.jeeweb.framework.business.mapper.SqlMapper;
 import com.jeeweb.framework.business.service.BaseService;
+import com.jeeweb.framework.core.aware.SpringContextAware;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
@@ -34,9 +34,9 @@ public class DictService extends BaseService<Integer, DictEntity> implements Ini
     @Autowired
     private DictItemMapper dictItemMapper;
 
-    @Autowired
-    @Qualifier("defaultSqlMapper")
-    private SqlMapper sqlMapper;
+    // @Autowired
+    // @Qualifier("defaultSqlMapper")
+    // private SqlMapper sqlMapper;
 
     @Override
     protected BaseMapper<Integer, DictEntity> getMapper() {
@@ -82,7 +82,7 @@ public class DictService extends BaseService<Integer, DictEntity> implements Ini
         long startTime = System.currentTimeMillis();
         LOG.info("====加载字典信息。");
 
-        // getDicts();
+        getDicts();
 
         LOG.info("====加载字典信息完成，耗时：{}ms。", (System.currentTimeMillis() - startTime));
     }
@@ -108,8 +108,9 @@ public class DictService extends BaseService<Integer, DictEntity> implements Ini
     }
 
     private void addDict(Map<String, List<DictItemEntity>> dicts, DictEntity dict) {
-        String sql = String.format("SELECT %s as f_item_code, %s as f_item_text FROM %s.%s %s ORDER BY %s",
-                dict.getF_code_column(), dict.getF_name_column(), dict.getF_db_name(), dict.getF_table_name(),
+        SqlMapper sqlMapper = SpringContextAware.getBean(dict.getF_db_name(), SqlMapper.class);
+        String sql = String.format("SELECT %s as f_item_code, %s as f_item_text FROM %s %s ORDER BY %s",
+                dict.getF_code_column(), dict.getF_name_column(), dict.getF_table_name(),
                 HelpUtil.isEmpty(dict.getF_where_clause()) ? "" : dict.getF_where_clause(), dict.getF_order_column());
         LOG.debug("====加载{}：{}。", dict.getF_code(), sql);
         dicts.put(dict.getF_code(), sqlMapper.selectListPage(sql, DictItemEntity.class));
