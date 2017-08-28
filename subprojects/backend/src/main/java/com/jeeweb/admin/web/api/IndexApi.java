@@ -1,9 +1,12 @@
 package com.jeeweb.admin.web.api;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,8 +17,9 @@ import com.jeeweb.framework.core.model.Page;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
+import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.framework.core.utils.TreeUtil;
-import com.jeeweb.platform.security.utils.SecurityUtil;
+import com.jeeweb.platform.security.context.RestContext;
 import com.jeeweb.platform.sys.entity.MenuEntity;
 import com.jeeweb.platform.sys.entity.UserEntity;
 import com.jeeweb.platform.sys.service.MenuService;
@@ -29,10 +33,30 @@ public class IndexApi extends SuperController {
     private UserService userService;
     @Resource
     private MenuService menuService;
+    @Autowired(required = false)
+    private List<IndexHandler> indexHandlers;
+
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseResult index() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("user", RestContext.getCurUser());
+
+        if (!HelpUtil.isEmpty(indexHandlers)) {
+            for (IndexHandler handler : indexHandlers) {
+                handler.onIndex(data);
+            }
+        }
+
+        if (!data.containsKey("menuList")) {
+            data.put("menuList", getMenuList());
+        }
+
+        return new ResponseResult(new Result(data), HttpStatus.OK);
+    }
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public ResponseResult getUser() {
-        UserEntity user = SecurityUtil.getCurUser();
+        UserEntity user = RestContext.getCurUser();
         if (user != null) {
             return new ResponseResult(new Result(userService.selectEntity(user.getF_id())), HttpStatus.OK);
         } else {
@@ -49,6 +73,12 @@ public class IndexApi extends SuperController {
     @RequestMapping(value = "/menus", method = RequestMethod.GET)
     public ResponseResult getMenus() {
         // 获取当前用户可以访问的菜单和按钮
+        Page<MenuEntity> page = new Page<>();
+        page.setItems(getMenuList());
+        return new ResponseResult(new Result(page), HttpStatus.OK);
+    }
+
+    private List<MenuEntity> getMenuList() {
         ParameterMap params = new ParameterMap();
         params.put("f_status", 1);
         // params.put("f_is_web", 1); // TODO 等移动端开始开发时，再来完善代码，暂时直接写死只查询Web端的功能列表。
@@ -57,8 +87,6 @@ public class IndexApi extends SuperController {
         params.put("orderBy", "f_parent_path,f_order");
         SysUtil.appendCurUserAndRoles(params);
         List<MenuEntity> menuList = menuService.selectEntityListPage(params);
-        Page<MenuEntity> page = new Page<>();
-        page.setItems(TreeUtil.listToTree(menuList));
-        return new ResponseResult(new Result(page), HttpStatus.OK);
+        return TreeUtil.listToTree(menuList);
     }
 }

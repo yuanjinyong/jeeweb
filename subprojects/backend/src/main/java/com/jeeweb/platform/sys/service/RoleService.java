@@ -13,7 +13,7 @@ import com.jeeweb.framework.core.exception.BusinessException;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
-import com.jeeweb.platform.security.utils.SecurityUtil;
+import com.jeeweb.platform.security.context.RestContext;
 import com.jeeweb.platform.sys.entity.RoleEntity;
 import com.jeeweb.platform.sys.mapper.RoleMapper;
 import com.jeeweb.platform.sys.mapper.RoleMenuMapper;
@@ -64,7 +64,7 @@ public class RoleService extends BaseService<Integer, RoleEntity> {
 
     public void updateRoleMenuList(Integer f_role_id, List<String> f_menu_ids) {
         // 只有超级管理员账号才能给系统管理员角色授权
-        if (f_role_id == RoleEntity.ID_ADMIN_SYS && !SecurityUtil.getCurUser().isSuperAdmin()) {
+        if (f_role_id == RoleEntity.ID_ADMIN_SYS && !RestContext.getCurUser().isSuperAdmin()) {
             throw new BusinessException("系统管理员角色的授权不能被修改！");
         }
 

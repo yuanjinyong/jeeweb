@@ -19,12 +19,11 @@ public class ByteRedisTemplate<V> extends RedisTemplate<String, V> {
     public ByteRedisTemplate() {
         RedisSerializer<String> stringSerializer = new StringRedisSerializer();
         setKeySerializer(stringSerializer);
-
-        ByteRedisSerializer<V> jsonSerializer = new ByteRedisSerializer<V>();
-        setValueSerializer(jsonSerializer);
-
         setHashKeySerializer(stringSerializer);
-        setHashValueSerializer(stringSerializer);
+
+        ByteRedisSerializer<V> byteSerializer = new ByteRedisSerializer<>();
+        setValueSerializer(byteSerializer);
+        setHashValueSerializer(byteSerializer);
     }
 
     public ByteRedisTemplate(RedisConnectionFactory connectionFactory) {
@@ -33,6 +32,7 @@ public class ByteRedisTemplate<V> extends RedisTemplate<String, V> {
         afterPropertiesSet();
     }
 
+    @Override
     protected RedisConnection preProcessConnection(RedisConnection connection, boolean existingConnection) {
         return new DefaultStringRedisConnection(connection);
     }

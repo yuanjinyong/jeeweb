@@ -34,10 +34,6 @@ public class DictService extends BaseService<Integer, DictEntity> implements Ini
     @Autowired
     private DictItemMapper dictItemMapper;
 
-    // @Autowired
-    // @Qualifier("defaultSqlMapper")
-    // private SqlMapper sqlMapper;
-
     @Override
     protected BaseMapper<Integer, DictEntity> getMapper() {
         return dictMapper;
@@ -82,7 +78,7 @@ public class DictService extends BaseService<Integer, DictEntity> implements Ini
         long startTime = System.currentTimeMillis();
         LOG.info("====加载字典信息。");
 
-        getDicts();
+        // getDicts();
 
         LOG.info("====加载字典信息完成，耗时：{}ms。", (System.currentTimeMillis() - startTime));
     }

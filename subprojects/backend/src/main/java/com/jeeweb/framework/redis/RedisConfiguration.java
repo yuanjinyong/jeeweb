@@ -60,11 +60,11 @@ public class RedisConfiguration extends CachingConfigurerSupport {
 
     @Bean
     public <V> JsonRedisTemplate<V> jsonRedisTemplate(RedisConnectionFactory factory) {
-        return new JsonRedisTemplate<V>(factory);
+        return new JsonRedisTemplate<>(factory);
     }
 
     @Bean
     public <V> ByteRedisTemplate<V> byteRedisTemplate(RedisConnectionFactory factory) {
-        return new ByteRedisTemplate<V>(factory);
+        return new ByteRedisTemplate<>(factory);
     }
 }

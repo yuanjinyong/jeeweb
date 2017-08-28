@@ -4,29 +4,39 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jeeweb.framework.business.entity.TreeNodeEntity;
 import com.jeeweb.framework.business.mapper.BaseMapper;
+import com.jeeweb.framework.business.model.IAttachment;
 import com.jeeweb.framework.business.model.IAuditor;
 import com.jeeweb.framework.business.model.ICreator;
+import com.jeeweb.framework.business.model.IModifier;
 import com.jeeweb.framework.business.model.IPreset;
 import com.jeeweb.framework.core.exception.BusinessException;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.service.SuperService;
 import com.jeeweb.framework.core.utils.HelpUtil;
-import com.jeeweb.platform.security.utils.SecurityUtil;
+import com.jeeweb.platform.pub.entity.AttachmentEntity;
+import com.jeeweb.platform.pub.mapper.AttachmentMapper;
+import com.jeeweb.platform.security.context.RestContext;
 import com.jeeweb.platform.sys.entity.UserEntity;
 
 public abstract class BaseService<P, E> extends SuperService {
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
+    @Autowired
+    protected AttachmentMapper attachmentMapper;
+
     protected abstract BaseMapper<P, E> getMapper();
 
     @Transactional(readOnly = true)
     public E selectEntity(P primaryKey) {
-        return getMapper().selectEntity(primaryKey);
+        E entity = getMapper().selectEntity(primaryKey);
+        selectAttachmentList(entity);
+        return entity;
     }
 
     @Transactional(readOnly = true)
@@ -42,15 +52,23 @@ public abstract class BaseService<P, E> extends SuperService {
     public void insertEntity(E entity) {
         fillCreator(entity);
         fillPreset(entity);
-
         getMapper().insertEntity(entity);
+
+        insertAttachmentList(entity);
     }
 
     public void insertEntities(List<E> entityList) {
+        for (E entity : entityList) {
+            fillCreator(entity);
+            fillPreset(entity);
+        }
         getMapper().insertEntities(entityList);
     }
 
     public void updateEntity(P primaryKey, E entity) {
+        fillModifier(entity);
+        updateAttachmentList(primaryKey, entity);
+
         getMapper().updateEntity(entity);
     }
 
@@ -70,6 +88,7 @@ public abstract class BaseService<P, E> extends SuperService {
             getMapper().deleteEntities(new ParameterMap("f_parent_path_like", node.getF_full_path()));
         }
 
+        deleteAttachmentList(primaryKey, entity);
         getMapper().deleteEntity(primaryKey);
 
         afterDeleteEntity(entity);
@@ -104,9 +123,21 @@ public abstract class BaseService<P, E> extends SuperService {
     protected void afterDeleteEntities(ParameterMap params) {
     }
 
+    protected void fillModifier(E entity) {
+        if (entity instanceof IModifier) {
+            UserEntity user = RestContext.getCurUser();
+            IModifier modifier = (IModifier) entity;
+            if (user != null) {
+                modifier.setF_modifier_id(user.getF_id());
+                modifier.setF_modifier_name(user.getF_name());
+            }
+            modifier.setF_modified_time(HelpUtil.getNowTime());
+        }
+    }
+
     protected void fillCreator(E entity) {
         if (entity instanceof ICreator) {
-            UserEntity user = SecurityUtil.getCurUser();
+            UserEntity user = RestContext.getCurUser();
             ICreator creator = (ICreator) entity;
             if (user != null) {
                 creator.setF_creator_id(user.getF_id());
@@ -120,6 +151,61 @@ public abstract class BaseService<P, E> extends SuperService {
         if (entity instanceof IPreset) {
             IPreset preset = (IPreset) entity;
             preset.setF_is_preset(IPreset.NO); // 系统预置数据是不能通过程序来修改的，这里能够写入的数据都不是系统预置的。
+        }
+    }
+
+    protected List<AttachmentEntity> selectAttachmentList(E entity) {
+        if (entity instanceof IAttachment) {
+            IAttachment attachment = (IAttachment) entity;
+            String f_id_in = attachment.getF_attachment_ids();
+            if (!HelpUtil.isEmpty(f_id_in)) {
+                ParameterMap params = new ParameterMap("f_id_in", f_id_in).put("f_status_in", "2,3");
+                attachment.setAttachmentList(attachmentMapper.selectEntityListPage(params));
+            }
+
+            return attachment.getAttachmentList();
+        }
+
+        return null;
+    }
+
+    protected void insertAttachmentList(E entity) {
+        if (entity instanceof IAttachment) {
+            IAttachment businessEntity = (IAttachment) entity;
+            String f_id_in = businessEntity.getF_attachment_ids();
+            if (!HelpUtil.isEmpty(f_id_in)) {
+                ParameterMap params = new ParameterMap("f_id_in", f_id_in).put("f_status_in", "1,4");
+                List<AttachmentEntity> attachmentList = attachmentMapper.selectEntityListPage(params);
+                for (AttachmentEntity attachmentEntity : attachmentList) {
+                    if (!HelpUtil.isEmpty(attachmentEntity.getF_local_path())) {
+                        attachmentEntity.setF_entity_name(businessEntity.getClass().getName());
+                        attachmentEntity.setF_entity_id(businessEntity.getF_id());
+                        attachmentEntity.setF_status(AttachmentEntity.STATUS_ARCHIVED);
+                    }
+                    if (!HelpUtil.isEmpty(attachmentEntity.getF_remote_path())) {
+                        attachmentEntity.setF_status(AttachmentEntity.STATUS_UPLOADED);
+                    }
+                    attachmentMapper.updateEntity(attachmentEntity);
+                }
+                businessEntity.setAttachmentList(attachmentList);
+            } else {
+                businessEntity.setAttachmentList(null);
+            }
+        }
+    }
+
+    protected void updateAttachmentList(P primaryKey, E entity) {
+        deleteAttachmentList(primaryKey, entity);
+        insertAttachmentList(entity);
+    }
+
+    protected void deleteAttachmentList(P primaryKey, E entity) {
+        if (entity instanceof IAttachment) {
+            List<AttachmentEntity> attachmentList = selectAttachmentList(selectEntity(primaryKey));
+            for (AttachmentEntity attachmentEntity : attachmentList) {
+                attachmentEntity.setF_status(AttachmentEntity.STATUS_PREDELETE);
+                attachmentMapper.updateEntity(attachmentEntity);
+            }
         }
     }
 
@@ -158,7 +244,7 @@ public abstract class BaseService<P, E> extends SuperService {
         }
         checkAuditor(oldEntity);
 
-        UserEntity user = SecurityUtil.getCurUser();
+        UserEntity user = RestContext.getCurUser();
         if (user != null) {
             oldAuditor.setF_auditor_id(user.getF_id());
             oldAuditor.setF_auditor_name(user.getF_name());

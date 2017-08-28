@@ -26,6 +26,16 @@ public class InformationSchemaService {
         return sqlMapper.selectListPage(sql.toString(), params);
     }
 
+    public Map<String, Object> selectTable(String tableSchema, String tableName) {
+        ParameterMap params = new ParameterMap("TABLE_SCHEMA", tableSchema).put("TABLE_NAME", tableName);
+        SqlBuilder sql = new SqlBuilder(params, "SELECT * FROM TABLES WHERE 1=1 \n");
+        sql.and("TABLE_SCHEMA").and("TABLE_NAME");
+
+        Map<String, Object> table = sqlMapper.selectOne(sql.toString(), params);
+        table.put("columnList", selectColumnListPage(params));
+        return table;
+    }
+
     public List<Map<String, Object>> selectTableListPage(ParameterMap params) {
         SqlBuilder sql = new SqlBuilder(params, "SELECT * FROM TABLES WHERE 1=1 \n");
         sql.and("TABLE_SCHEMA").and("TABLE_TYPE").and("TABLE_NAME_like").and("TABLE_COMMENT_like");

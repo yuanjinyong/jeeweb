@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jeeweb.platform.security.SecurityCacheManager;
 import com.jeeweb.platform.security.model.SecurityUser;
 
 /**
@@ -20,7 +19,7 @@ import com.jeeweb.platform.security.model.SecurityUser;
 @Service
 public class SecurityUserDetailsService implements UserDetailsService {
     @Autowired
-    private SecurityCacheManager securityCacheManager;
+    private SecurityCacheService securityCacheService;
 
     /*
      * (non-Javadoc)
@@ -32,7 +31,7 @@ public class SecurityUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // return securityCacheManager.getSecurityUser(username);
 
-        SecurityUser securityUser = securityCacheManager.getSecurityUser(username);
+        SecurityUser securityUser = securityCacheService.getSecurityUser(username);
         SecurityUser curUser = new SecurityUser(securityUser.getUsername(), securityUser.getPassword(),
                 securityUser.getAuthorities());
         curUser.setUser(securityUser.getUser());

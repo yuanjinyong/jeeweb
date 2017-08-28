@@ -24,13 +24,12 @@ public class JsonRedisTemplate<V> extends RedisTemplate<String, V> {
 
     public JsonRedisTemplate() {
         RedisSerializer<String> stringSerializer = new StringRedisSerializer();
-        setHashKeySerializer(stringSerializer);
-        // setHashValueSerializer(stringSerializer);
-
         setKeySerializer(stringSerializer);
+        setHashKeySerializer(stringSerializer);
 
         Jackson2JsonRedisSerializer<Object> jsonSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
         setValueSerializer(jsonSerializer);
+        setHashValueSerializer(jsonSerializer);
 
         ObjectMapper objectMapper = new ObjectMapper();
         jsonSerializer.setObjectMapper(objectMapper);

@@ -16,7 +16,7 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.framework.core.utils.JsonUtil;
-import com.jeeweb.platform.security.service.RestTokenService;
+import com.jeeweb.platform.security.service.RestTokenCacheService;
 
 /**
  * @author 袁进勇
@@ -45,7 +45,7 @@ public final class ResponseUtil {
         response.setCharacterEncoding("UTF-8");
         response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, CorsConfiguration.ALL);
         response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, CorsConfiguration.ALL);
-        response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, RestTokenService.REST_TOKEN);
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, RestTokenCacheService.REST_TOKEN);
         response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, StringUtils.collectionToCommaDelimitedString(
                 Arrays.asList(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE)));
 

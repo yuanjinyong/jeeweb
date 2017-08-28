@@ -3,6 +3,12 @@
  */
 package com.jeeweb.framework.core.listener;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -19,13 +25,36 @@ public class ContextRefreshedEventListener implements ApplicationListener<Contex
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         ApplicationContext ac = event.getApplicationContext();
-        // 在web 项目中（spring mvc），系统会存在两个容器，一个是root application context ,另一个是我们自己的 projectName-servlet context
-        // 这种情况下，就会造成onApplicationEvent方法被执行两次。为了避免上面提到的问题，我们可以只在root application
-        // context初始化完成后调用逻辑代码，其他的容器的初始化完成，则不做任何处理。
-        if (ac.getParent() != null) {
-            return;
+        // Spring Boot项目中，只有一个AnnotationConfigEmbeddedWebApplicationContext
+        onStartup(ac);
+    }
+
+    private void onStartup(ApplicationContext ac) {
+        LOG.info("========执行启动项开始========");
+        long startTime = System.currentTimeMillis();
+
+        Map<String, StartupItem> itemMap = ac.getBeansOfType(StartupItem.class);
+        List<StartupItem> items = new ArrayList<>();
+        for (Map.Entry<String, StartupItem> entry : itemMap.entrySet()) {
+            items.add(entry.getValue());
+        }
+        Collections.sort(items, new Comparator<StartupItem>() {
+            @Override
+            public int compare(StartupItem arg0, StartupItem arg1) {
+                Startup item0 = arg0.getClass().getAnnotation(Startup.class);
+                Startup item1 = arg1.getClass().getAnnotation(Startup.class);
+                return item0.order() - item1.order();
+            }
+        });
+
+        for (StartupItem item : items) {
+            String desc = item.getClass().getAnnotation(Startup.class).desc();
+            LOG.info("========" + desc + "开始========");
+            long invokeTime = System.currentTimeMillis();
+            item.invoke(ac);
+            LOG.info("========" + desc + "完成，耗时：{}ms========", (System.currentTimeMillis() - invokeTime));
         }
 
-        LOG.info("Application context加载完成。");
+        LOG.info("========执行启动项完成，耗时：{}ms========", (System.currentTimeMillis() - startTime));
     }
 }

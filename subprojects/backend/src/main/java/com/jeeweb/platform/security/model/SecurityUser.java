@@ -18,7 +18,6 @@ import com.jeeweb.platform.sys.entity.UserEntity;
 public class SecurityUser extends User {
     private static final long serialVersionUID = -106245041227776233L;
 
-    private String token;
     private UserEntity user; // 系统操作员
 
     public SecurityUser(UserEntity user, Collection<? extends GrantedAuthority> authorities) {
@@ -45,14 +44,6 @@ public class SecurityUser extends User {
         }
 
         return super.getUsername();
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     public UserEntity getUser() {

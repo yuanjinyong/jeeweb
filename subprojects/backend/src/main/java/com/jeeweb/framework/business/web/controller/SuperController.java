@@ -27,6 +27,8 @@ import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.framework.core.utils.HelpUtil;
 
 public abstract class SuperController {
+    public static final String ATTACHMENT_API = "/api/platform/data/attachments";
+    public static final String ATTACHMENT_URL_FORMAT = "%s/api/platform/data/attachments/%d/download";
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
     @InitBinder
@@ -158,6 +160,18 @@ public abstract class SuperController {
 
     protected static ServletContext getServletContext() {
         return getRequest().getSession().getServletContext();
+    }
+
+    protected static String buildUrl() {
+        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        return new StringBuffer(req.getScheme()).append("://").append(req.getServerName()).append(':')
+                .append(req.getServerPort()).append(req.getContextPath()).toString();
+    }
+
+    protected static String buildUrl(String url) {
+        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        return new StringBuffer(req.getScheme()).append("://").append(req.getServerName()).append(':')
+                .append(req.getServerPort()).append(req.getContextPath()).append(url).toString();
     }
 
     ///////////////////////////////////////////////////////////////////////////

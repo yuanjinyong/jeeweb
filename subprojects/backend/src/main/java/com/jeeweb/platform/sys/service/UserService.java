@@ -14,8 +14,8 @@ import com.jeeweb.framework.core.exception.BusinessException;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
+import com.jeeweb.platform.security.context.RestContext;
 import com.jeeweb.platform.security.service.PasswordService;
-import com.jeeweb.platform.security.utils.SecurityUtil;
 import com.jeeweb.platform.sys.entity.UserEntity;
 import com.jeeweb.platform.sys.mapper.UserMapper;
 import com.jeeweb.platform.sys.mapper.UserMenuMapper;
@@ -170,7 +170,7 @@ public class UserService extends BaseService<Integer, UserEntity> {
 
         entity.setF_unregister_time(HelpUtil.getNowTime());
         entity.setF_status(UserEntity.STATUS_DEREGISTER);
-        entity.setF_remark("被操作员【" + SecurityUtil.getCurUser().getF_name() + "】注销。");
+        entity.setF_remark("被操作员【" + RestContext.getCurUser().getF_name() + "】注销。");
         super.updateEntity(primaryKey, entity);
     }
 
@@ -194,7 +194,7 @@ public class UserService extends BaseService<Integer, UserEntity> {
     }
 
     public void changePassword(String oldPassword, String newPassword) {
-        UserEntity entity = userMapper.selectEntity(SecurityUtil.getCurUser().getF_id());
+        UserEntity entity = userMapper.selectEntity(RestContext.getCurUser().getF_id());
         if (!passwordService.validatePassword(oldPassword, entity.getF_password())) {
             throw new BusinessException("旧密码不正确！");
         }

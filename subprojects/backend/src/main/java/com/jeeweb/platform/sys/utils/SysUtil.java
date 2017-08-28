@@ -3,7 +3,7 @@ package com.jeeweb.platform.sys.utils;
 import com.jeeweb.framework.core.aware.SpringContextAware;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
-import com.jeeweb.platform.security.utils.SecurityUtil;
+import com.jeeweb.platform.security.context.RestContext;
 import com.jeeweb.platform.sys.entity.UserEntity;
 import com.jeeweb.platform.sys.service.SettingService;
 
@@ -12,7 +12,7 @@ public final class SysUtil {
     public static String P_EXPIRY_DATE = "ExpiryDate";
 
     public static void appendCurUserAndRoles(ParameterMap params) {
-        UserEntity user = SecurityUtil.getCurUser();
+        UserEntity user = RestContext.getCurUser();
         // 是否为超级管理员
         if (user != null && !user.isSuperAdmin()) {
             params.put("cur_user_id", user.getF_id());

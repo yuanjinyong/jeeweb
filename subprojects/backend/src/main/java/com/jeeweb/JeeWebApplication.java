@@ -9,7 +9,6 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 import com.jeeweb.framework.core.listener.ContextRefreshedEventListener;
-import com.jeeweb.framework.liquibase.LiquibaseApplicationStartingEventListener;
 
 /**
  * @author 袁进勇
@@ -33,7 +32,6 @@ public class JeeWebApplication extends SpringBootServletInitializer {
     }
 
     private static SpringApplication initSpringApplication(SpringApplication application) {
-        application.addListeners(new LiquibaseApplicationStartingEventListener());
         application.addListeners(new ContextRefreshedEventListener());
 
         return application;

@@ -3,6 +3,7 @@ package com.jeeweb.schema.web.api;
 import javax.annotation.Resource;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +31,13 @@ public class InformationSchemaApi extends SuperController {
     public ResponseResult listTable() {
         ParameterMap params = $params();
         return new ResponseResult(new Result(params.page(informationSchemaService.selectTableListPage(params))),
+                HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/tables/{tableSchema}/{tableName}", method = RequestMethod.GET)
+    public ResponseResult getTable(@PathVariable("tableSchema") String tableSchema,
+            @PathVariable("tableName") String tableName) {
+        return new ResponseResult(new Result(informationSchemaService.selectTable(tableSchema, tableName)),
                 HttpStatus.OK);
     }
 

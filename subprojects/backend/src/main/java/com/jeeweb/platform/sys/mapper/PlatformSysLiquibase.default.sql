@@ -14,9 +14,9 @@ insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (1,'GRZX');
 insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (2,'GRZX');
 insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (3,'GRZX');
 insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (4,'GRZX');
--- rollback DELETE FROM t_sys_role_menu WHERE f_menu_id LIKE 'GRZX%';
--- rollback DELETE FROM t_sys_menu_url WHERE f_menu_id LIKE 'GRZX%';
--- rollback DELETE FROM t_sys_menu WHERE f_menu_id LIKE 'GRZX%';
+-- rollback DELETE FROM t_sys_role_menu WHERE f_menu_id = 'GRZX';
+-- rollback DELETE FROM t_sys_menu_url WHERE f_menu_id = 'GRZX';
+-- rollback DELETE FROM t_sys_menu WHERE f_menu_id = 'GRZX';
 
 
 
@@ -30,21 +30,22 @@ insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name
 /*Data for the table `t_sys_role_menu` */
 insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (1,'XTGL');
 insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (3,'XTGL');
--- rollback DELETE FROM t_sys_role_menu WHERE f_menu_id LIKE 'XTGL%';
--- rollback DELETE FROM t_sys_menu_url WHERE f_menu_id LIKE 'XTGL%';
--- rollback DELETE FROM t_sys_menu WHERE f_menu_id LIKE 'XTGL%';
+-- rollback DELETE FROM t_sys_role_menu WHERE f_menu_id = 'XTGL';
+-- rollback DELETE FROM t_sys_menu_url WHERE f_menu_id = 'XTGL';
+-- rollback DELETE FROM t_sys_menu WHERE f_menu_id = 'XTGL';
 
 
 
--- changeset 袁进勇:20170706010002
+-- changeset 袁进勇:20170706010002 runOnChange:true
 -- comment: URL管理
-/*Data for the table `t_sys_menu` */
+DELETE FROM t_sys_menu_url WHERE f_menu_id LIKE 'KFGJ-URLGL%';
+DELETE FROM t_sys_menu WHERE f_id LIKE 'KFGJ-URLGL%';
+
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-URLGL','KFGJ','/ROOT/KFGJ/',30,'URL管理','URL管理页面','fa fa-link',2,'/admin/platform/sys/url',1,0,0,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-URLGL-ZJ','KFGJ-URLGL','/ROOT/KFGJ/KFGJ-URLGL/',10,'增加','增加URL',NULL,3,NULL,1,0,0,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-URLGL-XG','KFGJ-URLGL','/ROOT/KFGJ/KFGJ-URLGL/',20,'修改','修改URL',NULL,3,NULL,1,0,0,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-URLGL-SC','KFGJ-URLGL','/ROOT/KFGJ/KFGJ-URLGL/',30,'删除','删除URL',NULL,3,NULL,1,0,0,1,NULL);
 
-/*Data for the table `t_sys_menu_url` */
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL','0c0362062f72869516168ed479fa82bb');
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL','d7b9102569dc7cfdc45956fa9cd32ad3');
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL-SC','4087eb30e3c4c0dac2765498b3b0cab7');
@@ -56,16 +57,17 @@ insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-URLGL-ZJ','f
 
 
 
--- changeset 袁进勇:20170706010003
+-- changeset 袁进勇:20170706010003 runOnChange:true
 -- comment: 菜单管理
-/*Data for the table `t_sys_menu` */
+DELETE FROM t_sys_menu_url WHERE f_menu_id LIKE 'KFGJ-CDGL%';
+DELETE FROM t_sys_menu WHERE f_id LIKE 'KFGJ-CDGL%';
+
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL','KFGJ','/ROOT/KFGJ/',20,'菜单管理','菜单管理页面','fa fa-bars',2,'/admin/platform/sys/menu',1,0,0,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL-ZJ','KFGJ-CDGL','/ROOT/KFGJ/KFGJ-CDGL/',10,'增加','增加菜单',NULL,3,NULL,1,0,0,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL-XG','KFGJ-CDGL','/ROOT/KFGJ/KFGJ-CDGL/',20,'修改','修改菜单',NULL,3,NULL,1,0,0,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL-SC','KFGJ-CDGL','/ROOT/KFGJ/KFGJ-CDGL/',30,'删除','删除菜单',NULL,3,NULL,1,0,0,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('KFGJ-CDGL-DCSQL','KFGJ-CDGL','/ROOT/KFGJ/KFGJ-CDGL/',100,'导出SQL','导出SQL脚本',NULL,3,NULL,1,0,0,1,NULL);
 
-/*Data for the table `t_sys_menu_url` */
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','0c0362062f72869516168ed479fa82bb');
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','4050f6a3ffd77bdc4534d886e11f8012');
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL','55847dc87d27c4b9146caf118c45321c');
@@ -79,16 +81,18 @@ insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-CDGL-ZJ','a6
 
 
 
--- changeset 袁进勇:20170706010004
+-- changeset 袁进勇:20170706010004 runOnChange:true
 -- comment: 角色管理
-/*Data for the table `t_sys_menu` */
+DELETE FROM t_sys_role_menu WHERE f_menu_id LIKE 'XTGL-JSGL%';
+DELETE FROM t_sys_menu_url WHERE f_menu_id LIKE 'XTGL-JSGL%';
+DELETE FROM t_sys_menu WHERE f_id LIKE 'XTGL-JSGL%';
+
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-JSGL','XTGL','/ROOT/XTGL/',20,'角色管理','角色管理页面','fa fa-flag',2,'/admin/platform/sys/role',1,0,0,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-JSGL-ZJ','XTGL-JSGL','/ROOT/XTGL/XTGL-JSGL/',10,'增加','增加角色',NULL,3,NULL,1,0,0,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-JSGL-XG','XTGL-JSGL','/ROOT/XTGL/XTGL-JSGL/',20,'修改','修改角色',NULL,3,NULL,1,0,0,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-JSGL-SC','XTGL-JSGL','/ROOT/XTGL/XTGL-JSGL/',30,'删除','删除角色',NULL,3,NULL,1,0,0,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-JSGL-SQ','XTGL-JSGL','/ROOT/XTGL/XTGL-JSGL/',40,'授权','授权可以操作的功能',NULL,3,NULL,1,0,0,1,NULL);
 
-/*Data for the table `t_sys_menu_url` */
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL','0eadc8c7c022f13cdedaa7e7413a0fe1');
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL','2f12fc88084ea062e3bdde086342a323');
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL','83b5dcfd8eae19d04a703d55c507f35b');
@@ -97,7 +101,6 @@ insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL-SQ','2d
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL-XG','d5d29576cc3167cbdb8fe3a0b2e9cb58');
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-JSGL-ZJ','fa4524d97c93bb8f196782d4a66ecdd0');
 
-/*Data for the table `t_sys_role_menu` */
 insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (1,'XTGL-JSGL');
 insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (1,'XTGL-JSGL-SC');
 insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (1,'XTGL-JSGL-SQ');
@@ -114,9 +117,12 @@ insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (3,'XTGL-JSGL-ZJ'
 
 
 
--- changeset 袁进勇:20170706010005
+-- changeset 袁进勇:20170706010005 runOnChange:true
 -- comment: 用户管理
-/*Data for the table `t_sys_menu` */
+DELETE FROM t_sys_role_menu WHERE f_menu_id LIKE 'XTGL-YHGL%';
+DELETE FROM t_sys_menu_url WHERE f_menu_id LIKE 'XTGL-YHGL%';
+DELETE FROM t_sys_menu WHERE f_id LIKE 'XTGL-YHGL%';
+
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL','XTGL','/ROOT/XTGL/',30,'用户管理','用户管理页面','fa fa-user',2,'/admin/platform/sys/user',1,2,2,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-ZJ','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',10,'增加','增加用户',NULL,3,NULL,1,2,2,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-XG','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',20,'修改','修改用户',NULL,3,NULL,1,2,2,1,NULL);
@@ -125,7 +131,6 @@ insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-CZMM','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',50,'重置密码','重置用户密码',NULL,3,NULL,1,2,2,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-YHGL-JS','XTGL-YHGL','/ROOT/XTGL/XTGL-YHGL/',60,'解锁','解锁用户',NULL,3,NULL,1,2,2,1,NULL);
 
-/*Data for the table `t_sys_menu_url` */
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL','2f12fc88084ea062e3bdde086342a323');
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL','954c06cf2c5133fb3bdf244d26955a14');
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL','c2e253ad345ea3998b90df4e6e97e356');
@@ -137,7 +142,6 @@ insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL-SQ','30
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL-XG','b91a4be3d763864cbc7efe78010e3980');
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-YHGL-ZJ','b640c19e353f49757e9fa7991b62ed7a');
 
-/*Data for the table `t_sys_role_menu` */
 insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (1,'XTGL-YHGL');
 insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (1,'XTGL-YHGL-CZMM');
 insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (1,'XTGL-YHGL-JS');
@@ -158,16 +162,18 @@ insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (3,'XTGL-YHGL-ZJ'
 
 
 
--- changeset 袁进勇:20170706010006
+-- changeset 袁进勇:20170706010006 runOnChange:true
 -- comment: 字典管理
-/*Data for the table `t_sys_menu` */
+DELETE FROM t_sys_role_menu WHERE f_menu_id LIKE 'XTGL-ZDGL%';
+DELETE FROM t_sys_menu_url WHERE f_menu_id LIKE 'XTGL-ZDGL%';
+DELETE FROM t_sys_menu WHERE f_id LIKE 'XTGL-ZDGL%';
+
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-ZDGL','XTGL','/ROOT/XTGL/',60,'字典管理','字典管理页面','fa fa-book',2,'/admin/platform/sys/dict',1,2,2,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-ZDGL-ZJ','XTGL-ZDGL','/ROOT/XTGL/XTGL-ZDGL/',10,'增加','增加字典组',NULL,3,NULL,1,2,2,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-ZDGL-XG','XTGL-ZDGL','/ROOT/XTGL/XTGL-ZDGL/',20,'修改','修改字典组',NULL,3,NULL,1,2,2,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-ZDGL-SC','XTGL-ZDGL','/ROOT/XTGL/XTGL-ZDGL/',30,'删除','删除字典组',NULL,3,NULL,1,2,2,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-ZDGL-DCSQL','XTGL-ZDGL','/ROOT/XTGL/XTGL-ZDGL/',40,'导出SQL','导出SQL脚本',NULL,3,NULL,1,2,2,1,NULL);
 
-/*Data for the table `t_sys_menu_url` */
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-ZDGL','247045bb9c8412526f9ff48b9fc4b98b');
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-ZDGL','5cf851af135d49453d13f68313176112');
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-ZDGL','7632e2b173c88248ecfc42614ab3472f');
@@ -178,7 +184,6 @@ insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-ZDGL-SC','0e
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-ZDGL-XG','de1613a5a8f4f669e345085786e60831');
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('XTGL-ZDGL-ZJ','a7e30f1ae19ec6b6bde9a7d9efbd5f82');
 
-/*Data for the table `t_sys_role_menu` */
 insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (1,'XTGL-ZDGL');
 insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (1,'XTGL-ZDGL-DCSQL');
 insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (1,'XTGL-ZDGL-SC');
@@ -195,9 +200,12 @@ insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (3,'XTGL-ZDGL-ZJ'
 
 
 
--- changeset 袁进勇:20170706010007
+-- changeset 袁进勇:20170706010007 runOnChange:true
 -- comment: 系统设置
-/*Data for the table `t_sys_menu` */
+DELETE FROM t_sys_role_menu WHERE f_menu_id LIKE 'XTGL-XTSZ%';
+DELETE FROM t_sys_menu_url WHERE f_menu_id LIKE 'XTGL-XTSZ%';
+DELETE FROM t_sys_menu WHERE f_id LIKE 'XTGL-XTSZ%';
+
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-XTSZ','XTGL','/ROOT/XTGL/',70,'系统设置','系统设置页面','fa fa-wrench',2,'/admin/platform/sys/setting',1,2,2,1,'系统设置（参数）管理功能。');
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-XTSZ-ZJ','XTGL-XTSZ','/ROOT/XTGL/XTGL-XTSZ/',10,'增加','增加系统设置项',NULL,3,NULL,1,2,2,1,NULL);
 insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values ('XTGL-XTSZ-XG','XTGL-XTSZ','/ROOT/XTGL/XTGL-XTSZ/',20,'修改','修改系统设置项',NULL,3,NULL,1,2,2,1,NULL);

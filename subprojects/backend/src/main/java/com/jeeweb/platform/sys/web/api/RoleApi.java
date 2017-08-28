@@ -1,6 +1,5 @@
 package com.jeeweb.platform.sys.web.api;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -69,18 +68,8 @@ public class RoleApi extends BaseApi<Integer, RoleEntity> {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @RequestMapping(value = "/{id}/menus", method = RequestMethod.GET)
     public ResponseResult listMenu(@PathVariable("id") Integer primaryKey) {
-        List<RowMap> menuList = null;
-        if (primaryKey >= 0) {
-            menuList = roleService.selectRoleMenuListPage(primaryKey);
-        } else {
-            menuList = new ArrayList<>();
-        }
-
-        if ($bool("treeData", true)) {
-            return new ResponseResult(new Result(TreeUtil.listToTree(menuList, "f_id")), HttpStatus.OK);
-        } else {
-            return new ResponseResult(new Result(menuList), HttpStatus.OK);
-        }
+        List<RowMap> menuList = roleService.selectRoleMenuListPage(primaryKey);
+        return new ResponseResult(new Result(TreeUtil.listToTree(menuList, "f_id")), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}/menus", method = RequestMethod.POST)

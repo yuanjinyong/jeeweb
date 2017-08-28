@@ -1,6 +1,5 @@
 package com.jeeweb.platform.sys.web.api;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -76,18 +75,8 @@ public class UserApi extends BaseApi<Integer, UserEntity> {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @RequestMapping(value = "/{id}/menus", method = RequestMethod.GET)
     public ResponseResult listMenu(@PathVariable("id") Integer primaryKey) {
-        List<RowMap> menuList = null;
-        if (primaryKey >= 0) {
-            menuList = userService.selectUserMenuListPage(primaryKey);
-        } else {
-            menuList = new ArrayList<>();
-        }
-
-        if ($bool("treeData", true)) {
-            return new ResponseResult(new Result(TreeUtil.listToTree(menuList, "f_id")), HttpStatus.OK);
-        } else {
-            return new ResponseResult(new Result(menuList), HttpStatus.OK);
-        }
+        List<RowMap> menuList = userService.selectUserMenuListPage(primaryKey);
+        return new ResponseResult(new Result(TreeUtil.listToTree(menuList, "f_id")), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}/menus", method = RequestMethod.POST)

@@ -31,11 +31,11 @@ public class HelpUtil extends StringUtils {
         return array == null || array.length == 0;
     }
 
-    public static boolean isEmpty(List<?> list) {
+    public static <O> boolean isEmpty(List<O> list) {
         return list == null || list.size() == 0;
     }
 
-    public static boolean isEmpty(Map<?, ?> map) {
+    public static <K, V> boolean isEmpty(Map<K, V> map) {
         return map == null || map.size() == 0;
     }
 
@@ -62,13 +62,13 @@ public class HelpUtil extends StringUtils {
         return sb.substring(1);
     }
 
-    public static <T> String joinToInString(List<T> list) {
+    public static <O> String joinToInString(List<O> list) {
         return joinToInString(list, null);
     }
 
-    public static <T> String joinToInString(List<T> list, IValue<T> value) {
+    public static <O, V> String joinToInString(List<O> list, IValue<O, V> value) {
         StringBuffer sb = new StringBuffer();
-        for (T e : list) {
+        for (O e : list) {
             Object val = e;
             if (value != null) {
                 val = value.getValue(e);
@@ -91,12 +91,12 @@ public class HelpUtil extends StringUtils {
         return splitToList(listStr, separator, String.class);
     }
 
-    public static <T> List<T> splitToList(String listStr, Class<T> clz) {
+    public static <O> List<O> splitToList(String listStr, Class<O> clz) {
         return splitToList(listStr, ",", clz);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> List<T> splitToList(String listStr, String separator, Class<T> clz) {
+    public static <O> List<O> splitToList(String listStr, String separator, Class<O> clz) {
         if (isEmpty(listStr)) {
             return new ArrayList<>(); // 这里为了方便外面接收者可以继续往list中增加元素，不能用Collections.emptyList()代替。
         }
@@ -109,7 +109,7 @@ public class HelpUtil extends StringUtils {
                     list.add(Integer.valueOf(s.trim()));
                 }
             }
-            return (List<T>) list;
+            return (List<O>) list;
         } else {
             List<String> list = new ArrayList<>();
             for (String s : sa) {
@@ -117,8 +117,20 @@ public class HelpUtil extends StringUtils {
                     list.add(s.trim());
                 }
             }
-            return (List<T>) list;
+            return (List<O>) list;
         }
+    }
+
+    public static <O, V> List<V> listToList(List<O> list, IValue<O, V> value) {
+        if (list == null) {
+            return null;
+        }
+
+        List<V> newList = new ArrayList<>();
+        for (O e : list) {
+            newList.add(value.getValue(e));
+        }
+        return newList;
     }
 
     /**

@@ -11,19 +11,21 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jeeweb.framework.business.web.controller.SuperController;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
-import com.jeeweb.platform.security.service.RestTokenService;
+import com.jeeweb.platform.security.context.RestContext;
+import com.jeeweb.platform.security.service.RestTokenCacheService;
 
 @RestController
 @RequestMapping(value = "/api/platform/security/token")
 public class RestTokenApi extends SuperController {
     @Autowired
-    private RestTokenService restTokenService;
+    private RestTokenCacheService restTokenCacheService;
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseResult getToken() {
-        String token = restTokenService.generateToken(SecurityContextHolder.getContext().getAuthentication());
+        RestContext.setToken(restTokenCacheService.generateToken(SecurityContextHolder.getContext().getAuthentication()));
+
         HttpHeaders headers = new HttpHeaders();
-        headers.add(RestTokenService.REST_TOKEN, token);
+        headers.add(RestTokenCacheService.REST_TOKEN, RestContext.getToken());
         return new ResponseResult(new Result(), headers, HttpStatus.OK);
     }
 }

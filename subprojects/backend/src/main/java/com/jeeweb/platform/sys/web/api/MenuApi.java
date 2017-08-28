@@ -14,7 +14,7 @@ import com.jeeweb.framework.business.service.BaseService;
 import com.jeeweb.framework.business.web.api.BaseApi;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
-import com.jeeweb.platform.security.SecurityCacheManager;
+import com.jeeweb.platform.security.service.SecurityCacheService;
 import com.jeeweb.platform.sys.entity.MenuEntity;
 import com.jeeweb.platform.sys.service.MenuService;
 
@@ -24,7 +24,7 @@ public class MenuApi extends BaseApi<String, MenuEntity> {
     @Resource
     private MenuService menuService;
     @Resource
-    private SecurityCacheManager securityCacheManager;
+    private SecurityCacheService securityCacheService;
 
     @Override
     protected BaseService<String, MenuEntity> getService() {
@@ -40,7 +40,7 @@ public class MenuApi extends BaseApi<String, MenuEntity> {
     public ResponseResult create(@RequestBody MenuEntity entity, UriComponentsBuilder ucBuilder) {
         ResponseResult result = super.createEntity(entity, ucBuilder);
         // 刷新权限控制的缓存
-        securityCacheManager.loadUrlAuthoritiesCache();
+        securityCacheService.loadUrlAuthoritiesCache();
         return result;
     }
 
@@ -53,7 +53,7 @@ public class MenuApi extends BaseApi<String, MenuEntity> {
     public ResponseResult update(@PathVariable("id") String primaryKey, @RequestBody MenuEntity entity) {
         ResponseResult result = super.updateEntity(primaryKey, entity);
         // 刷新权限控制的缓存
-        securityCacheManager.loadUrlAuthoritiesCache();
+        securityCacheService.loadUrlAuthoritiesCache();
         return result;
     }
 
@@ -61,7 +61,7 @@ public class MenuApi extends BaseApi<String, MenuEntity> {
     public ResponseResult delete(@PathVariable("id") String primaryKey) {
         ResponseResult result = super.deleteEntity(primaryKey);
         // 刷新权限控制的缓存
-        securityCacheManager.loadUrlAuthoritiesCache();
+        securityCacheService.loadUrlAuthoritiesCache();
         return result;
     }
 

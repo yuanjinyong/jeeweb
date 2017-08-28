@@ -44,13 +44,15 @@ CREATE TABLE `t_sys_user_role` (
 -- rollback DROP TABLE IF EXISTS t_sys_user;
 
 
--- changeset 袁进勇:20170501000402
+-- changeset 袁进勇:20170501000402 runOnChange:true
 -- comment: 预置用户
-/*Data for the table `t_sys_user` */
+DELETE FROM t_sys_user_role WHERE f_user_id IN (SELECT f_id FROM t_sys_user WHERE f_is_preset = 1);
+DELETE FROM t_sys_user WHERE f_is_preset = 1;
+
 insert  into `t_sys_user`(`f_id`,`f_tenant_id`,`f_account`,`f_password`,`f_name`,`f_telephone`,`f_department_id`,`f_creator_id`,`f_created_time`,`f_last_login_time`,`f_locked_time`,`f_unregister_time`,`f_is_can_login`,`f_is_preset`,`f_status`,`f_remark`) values (1,0,'SuperAdmin','$2a$10$o6R1D7JhRW7d56inhUm50eF5xy8fF1l3KPCc0kdgpKBMw6olsamiq','超级管理员',NULL,0,0,'1970-01-01 00:00:00','2017-07-10 11:29:52',NULL,NULL,1,1,1,'该账号是开发人员维护系统用，不能提供给客户使用。');
 insert  into `t_sys_user`(`f_id`,`f_tenant_id`,`f_account`,`f_password`,`f_name`,`f_telephone`,`f_department_id`,`f_creator_id`,`f_created_time`,`f_last_login_time`,`f_locked_time`,`f_unregister_time`,`f_is_can_login`,`f_is_preset`,`f_status`,`f_remark`) values (2,0,'admin','$2a$10$BtvvDJwfxzJP7TRGEoG6p.PQbW1hWC6wvqiDUqjvMrfLoMgHjvjBa','系统管理员',NULL,0,0,'1970-01-01 00:00:00','2017-06-25 07:20:38',NULL,NULL,1,1,1,'该账号用于维护系统设置和权限分配。');
 
-insert  into `t_sys_user_role`(`f_id`,`f_user_id`,`f_role_id`) values (2,2,1);
--- rollback DELETE FROM t_sys_user_role WHERE f_user_id IN (1,2);
--- rollback DELETE FROM t_sys_user WHERE f_id IN (1,2);
+insert  into `t_sys_user_role`(`f_user_id`,`f_role_id`) values (2,1);
+-- rollback DELETE FROM t_sys_user_role WHERE f_user_id IN (SELECT f_id FROM t_sys_user WHERE f_is_preset = 1);
+-- rollback DELETE FROM t_sys_user WHERE f_is_preset = 1;
 

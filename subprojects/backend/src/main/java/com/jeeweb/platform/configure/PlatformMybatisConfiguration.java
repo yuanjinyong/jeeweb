@@ -14,20 +14,16 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.util.ObjectUtils;
-
-import com.jeeweb.framework.configure.DefaultDataSourceConfiguration;
 
 /**
  * @author 袁进勇
  *
  */
 @Configuration
-@AutoConfigureAfter(DefaultDataSourceConfiguration.class)
 @MapperScan(basePackages = { "com.jeeweb.platform.**.mapper.**" }, sqlSessionTemplateRef = "platformSqlSessionTemplate")
 public class PlatformMybatisConfiguration {
     @Autowired(required = false)

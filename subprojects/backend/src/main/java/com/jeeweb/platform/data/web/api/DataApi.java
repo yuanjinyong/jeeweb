@@ -14,17 +14,17 @@ import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.platform.sys.service.DictService;
 
 @RestController
-@RequestMapping(value = "/api/platform/data")
+@RequestMapping(value = "/api/platform/data/dicts")
 public class DataApi extends SuperController {
     @Resource
     private DictService dictService;
 
-    @RequestMapping(value = "/dicts", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseResult getDicts() {
         return new ResponseResult(new Result(dictService.getDicts()), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/dicts/{dictCode}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{dictCode}", method = RequestMethod.GET)
     public ResponseResult getDict(@PathVariable("dictCode") String dictCode) {
         return new ResponseResult(new Result(dictService.getDictItemList(dictCode)), HttpStatus.OK);
     }

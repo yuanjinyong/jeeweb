@@ -23,12 +23,13 @@ CREATE TABLE `t_sys_role_menu` (
 -- rollback DROP TABLE IF EXISTS t_sys_role;
 
 
--- changeset 袁进勇:20170501000302
+-- changeset 袁进勇:20170501000302 runOnChange:true
 -- comment: 预置角色
-/*Data for the table `t_sys_role` */
+DELETE FROM t_sys_role WHERE f_is_preset = 1;
+
 insert  into `t_sys_role`(`f_id`,`f_name`,`f_desc`,`f_is_preset`,`f_remark`) values (1,'系统管理员角色','用于系统的运营维护。',1,'系统主要分为平台运维、施工企业、业主监督等子系统。');
 insert  into `t_sys_role`(`f_id`,`f_name`,`f_desc`,`f_is_preset`,`f_remark`) values (2,'普通用户角色',NULL,1,NULL);
 insert  into `t_sys_role`(`f_id`,`f_name`,`f_desc`,`f_is_preset`,`f_remark`) values (3,'平台管理员角色','用于平台的运营维护。',1,'注意：不能分配企业相关的功能给该角色。');
 insert  into `t_sys_role`(`f_id`,`f_name`,`f_desc`,`f_is_preset`,`f_remark`) values (4,'企业管理员角色','用于企业的运营维护，主要为企业的权限分配。',1,'注意：不能分配平台相关的功能给该角色。');
--- rollback DELETE FROM t_sys_role WHERE f_id IN (1,2,3,4);
+-- rollback DELETE FROM t_sys_role WHERE f_is_preset = 1;
 

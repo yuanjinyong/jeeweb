@@ -8,13 +8,16 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.jeeweb.framework.business.entity.BaseEntity;
 import com.jeeweb.framework.business.entity.TreeNodeEntity;
+import com.jeeweb.framework.business.model.IAttachment;
 import com.jeeweb.framework.business.service.BaseService;
 import com.jeeweb.framework.business.web.controller.SuperController;
 import com.jeeweb.framework.core.model.Page;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
+import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.framework.core.utils.TreeUtil;
+import com.jeeweb.platform.pub.entity.AttachmentEntity;
 
 public abstract class BaseApi<P, E extends BaseEntity<P>> extends SuperController {
     protected abstract BaseService<P, E> getService();
@@ -47,6 +50,8 @@ public abstract class BaseApi<P, E extends BaseEntity<P>> extends SuperControlle
 
     protected ResponseResult getEntity(P primaryKey) {
         E entity = getService().selectEntity(primaryKey);
+        fillAttachment(entity);
+
         return new ResponseResult(new Result(entity), HttpStatus.OK);
     }
 
@@ -76,5 +81,18 @@ public abstract class BaseApi<P, E extends BaseEntity<P>> extends SuperControlle
     protected ResponseResult auditEntity(P primaryKey, E entity) {
         getService().auditEntity(primaryKey, entity);
         return new ResponseResult(new Result(entity), HttpStatus.OK);
+    }
+
+    protected void fillAttachment(E entity) {
+        if (entity instanceof IAttachment) {
+            List<AttachmentEntity> attachmentList = ((IAttachment) entity).getAttachmentList();
+            if (!HelpUtil.isEmpty(attachmentList)) {
+                String url = buildUrl();
+                for (AttachmentEntity attachmentEntity : attachmentList) {
+                    attachmentEntity.setName(attachmentEntity.getF_name());
+                    attachmentEntity.setUrl(String.format(ATTACHMENT_URL_FORMAT, url, attachmentEntity.getF_id()));
+                }
+            }
+        }
     }
 }
