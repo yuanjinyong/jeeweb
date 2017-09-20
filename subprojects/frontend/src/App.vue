@@ -164,6 +164,7 @@
   .jw-grid .ag-ltr .ag-cell-no-focus {
     border-right: 1px solid transparent;
     border-left: 1px solid transparent;
+    outline-width: 0;
   }
 
   .jw-grid .ag-ltr .ag-cell-last-left-pinned {
@@ -178,7 +179,7 @@
     font-style: normal;
   }
 
-  .jw-grid #south {
+  .jw-grid .ag-paging-panel {
     text-align: right;
   }
 

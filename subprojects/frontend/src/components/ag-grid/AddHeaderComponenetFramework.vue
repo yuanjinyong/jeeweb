@@ -1,5 +1,5 @@
 <template>
-  <div class="ag-header-component" style="padding: 3px 5px;">
+  <div class="ag-header-component" style="margin-top: -1px;padding: 0px 5px;">
     <el-button size="mini"
                :type="operation.type"
                :title="operation.title"

@@ -13,8 +13,8 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
-    "ag-grid": "^10.1.0",
-    "ag-grid-vue": "^10.1.0",
+    "ag-grid": "^13.1.2",
+    "ag-grid-vue": "^13.1.0",
     "element-ui": "^1.4.4",
     "font-awesome": "^4.7.0",
     "font-awesome-webpack": "0.0.5-beta.2",
