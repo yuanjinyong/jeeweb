@@ -69,11 +69,22 @@
   .jw-grid {
     width: 100%;
     height: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f5f7f9;
+  }
+
+  .jw-grid .ag-root {
+    border: none;
+    border-bottom: 1px solid #eee;
+    -moz-user-select: text;
+    -webkit-user-select: text;
+    -ms-user-select: text;
   }
 
   .jw-grid .ag-header {
     background: #f5f7f9;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #eee;
   }
 
   .jw-grid .ag-body {
@@ -86,14 +97,6 @@
 
   .jw-grid .ag-row-selected {
     background-color: #b0e0e6;
-  }
-
-  .jw-grid .ag-root {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    -moz-user-select: text;
-    -webkit-user-select: text;
-    -ms-user-select: text;
   }
 
   .jw-grid .ag-menu {
@@ -131,33 +134,37 @@
   }
 
   .jw-grid .ag-ltr .ag-header-group-cell {
-    border-right: 1px solid #ddd;
+    border-right: 1px solid #eee;
     text-align: center;
   }
 
   .jw-grid .ag-ltr .ag-header-group-cell-with-group {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #eee;
   }
 
   .jw-grid .ag-ltr .ag-header-cell {
-    border-right: 1px solid #ddd;
+    border-right: 1px solid #eee;
+  }
+
+  .jw-grid .ag-ltr .ag-header-viewport .ag-header-cell:last-child {
+    border-right: 1px solid transparent;
   }
 
   .jw-grid .ag-ltr .ag-pinned-right-header {
-    border-left: 1px solid #ddd;
+    border-left: 1px solid #eee;
   }
 
   .jw-grid .ag-ltr .ag-cell-no-focus {
-    border-right: 1px dotted #ddd;
+    border-right: 1px solid transparent;
     border-left: 1px solid transparent;
   }
 
   .jw-grid .ag-ltr .ag-cell-last-left-pinned {
-    border-right: 1px solid #ddd;
+    border-right: 1px solid #eee;
   }
 
   .jw-grid .ag-ltr .ag-cell-first-right-pinned {
-    border-left: 1px solid #ddd;
+    border-left: 1px solid #eee;
   }
 
   .jw-grid .ag-group-cell {

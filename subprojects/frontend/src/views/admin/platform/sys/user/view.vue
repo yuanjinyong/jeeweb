@@ -159,6 +159,7 @@
         headerName: '备注',
         field: 'f_remark',
         tooltipField: 'f_remark',
+        suppressSizeToFit: false,
         width: 300
       }, {
         headerName: '操作',
@@ -223,6 +224,7 @@
             }
           }]
         },
+        suppressResize: true,
         width: 120
       }]
     },

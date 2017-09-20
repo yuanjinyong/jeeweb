@@ -45,6 +45,7 @@ var VueGrid = {
     maxConcurrentDatasourceRequests: 1,
     defaultColDef: {
       unSortIcon: true,
+      suppressSizeToFit: true,
       suppressSorting: true,
       suppressMenu: true,
       suppressFilter: true
@@ -99,8 +100,8 @@ var VueGrid = {
     },
     buildPage (gridParams) {
       let page = {
-        pageSize: gridParams.endRow - gridParams.startRow,
-        pageNo: gridParams.startRow / (gridParams.endRow - gridParams.startRow)
+        pageSize: gridParams.endRow ? (gridParams.endRow - gridParams.startRow) : null,
+        pageNo: gridParams.endRow ? (gridParams.startRow / (gridParams.endRow - gridParams.startRow)) : null
       }
       if (gridParams.sortModel && gridParams.sortModel.length > 0) {
         page.orderBy = ''
@@ -235,6 +236,7 @@ var VueGrid = {
       if (gridOptions.onGridReady) {
         gridOptions.onGridReady(e)
       }
+      e.api.sizeColumnsToFit()
     }
 
     // console.log('buildOptions', options)

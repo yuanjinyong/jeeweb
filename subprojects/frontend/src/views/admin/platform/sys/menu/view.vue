@@ -148,11 +148,13 @@
         headerName: '描述',
         field: 'f_desc',
         tooltipField: 'f_desc',
+        suppressSizeToFit: false,
         width: 200
       }, {
         headerName: '路由路径',
         field: 'f_route_path',
         tooltipField: 'f_route_path',
+        suppressSizeToFit: false,
         width: 350
       }, {
         headerName: '状态',
@@ -168,6 +170,7 @@
         headerName: '备注',
         field: 'f_remark',
         tooltipField: 'f_remark',
+        suppressSizeToFit: false,
         width: 350
       }, {
         headerName: '操作',
@@ -210,6 +213,7 @@
             }
           }]
         },
+        suppressResize: true,
         width: 96
       }]
     }

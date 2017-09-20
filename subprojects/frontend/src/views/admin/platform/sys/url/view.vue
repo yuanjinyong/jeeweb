@@ -100,7 +100,8 @@
         headerName: '后台处理方法',
         field: 'f_handler_method',
         tooltipField: 'f_handler_method',
-        width: 1800
+        suppressSizeToFit: false,
+        width: 300
       }]
     }
   }
