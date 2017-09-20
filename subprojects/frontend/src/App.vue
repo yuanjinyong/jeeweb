@@ -74,6 +74,13 @@
     background: #f5f7f9;
   }
 
+  .jw-grid .ag-overlay-no-rows-center {
+    background-color: #f5f7f9;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 6px;
+  }
+
   .jw-grid .ag-root {
     border: none;
     border-bottom: 1px solid #eee;
