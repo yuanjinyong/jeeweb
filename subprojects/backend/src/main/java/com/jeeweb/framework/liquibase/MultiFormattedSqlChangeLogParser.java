@@ -66,14 +66,10 @@ public class MultiFormattedSqlChangeLogParser extends AbstractSqlChangeLogParser
         BufferedReader reader = null;
         try {
             Resource[] resources = getResources(physicalChangeLogLocation);
-            if (!HelpUtil.isEmpty(resources)) {
-                String fileLocation = resources[0].getURL().toString();
-                if (fileLocation.endsWith(".sql")) {
-                    reader = new BufferedReader(
-                            new UtfBomAwareReader(openChangeLogFile(fileLocation, resourceAccessor)));
-                    String line = reader.readLine();
-                    return line != null && line.matches("\\-\\-\\s*liquibase formatted.*");
-                }
+            if (!HelpUtil.isEmpty(resources) && getFileLocation(resourceAccessor, resources[0]).endsWith(".sql")) {
+                reader = new BufferedReader(new UtfBomAwareReader(openFile(resourceAccessor, resources[0])));
+                String line = reader.readLine();
+                return line != null && line.matches("\\-\\-\\s*liquibase formatted.*");
             }
         } catch (ChangeLogParseException e) {
             LOG.debug("Exception reading " + physicalChangeLogLocation, e);
@@ -130,8 +126,7 @@ public class MultiFormattedSqlChangeLogParser extends AbstractSqlChangeLogParser
         ChangeLogParameters changeLogParameters = changeLog.getChangeLogParameters();
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(
-                    new UtfBomAwareReader(openChangeLogFile(resource.getURL().toString(), resourceAccessor)));
+            reader = new BufferedReader(new UtfBomAwareReader(openFile(resourceAccessor, resource)));
             StringBuffer currentSql = new StringBuffer();
             StringBuffer currentRollbackSql = new StringBuffer();
 

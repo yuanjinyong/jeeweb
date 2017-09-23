@@ -1,5 +1,7 @@
 package com.jeeweb.framework.core.utils;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.Timestamp;
 import java.text.Format;
 import java.text.ParseException;
@@ -222,6 +224,14 @@ public class HelpUtil extends StringUtils {
         }
 
         return format;
+    }
+
+    public static String exceptionToString(Throwable e) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        pw.close();
+        return sw.toString();
     }
 
     public static Throwable getRootCause(Throwable e) {

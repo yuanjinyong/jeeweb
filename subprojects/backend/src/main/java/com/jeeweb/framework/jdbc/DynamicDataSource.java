@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import com.atomikos.jdbc.AtomikosDataSourceBean;
@@ -17,20 +18,31 @@ import com.atomikos.jdbc.AtomikosDataSourceBean;
  * @author 袁进勇
  *
  */
-public abstract class DynamicDataSource extends AbstractRoutingDataSource {
+public abstract class DynamicDataSource extends AbstractRoutingDataSource implements DisposableBean {
     private static final Logger LOG = LoggerFactory.getLogger(DynamicDataSource.class);
 
-    private AtomikosDataSourceBean defaultDataSource;
-    private Map<Object, Object> dataSources;
+    // private AtomikosDataSourceBean defaultDataSource;
+    private Map<Object, Object> dataSources = new HashMap<>();
 
     @Override
     public void afterPropertiesSet() {
-        defaultDataSource = getDefaultDataSource();
-        dataSources = new HashMap<>();
-
-        super.setDefaultTargetDataSource(defaultDataSource);
+        // defaultDataSource = getDefaultDataSource();
+        // super.setDefaultTargetDataSource(defaultDataSource);
         super.setTargetDataSources(dataSources);
         super.afterPropertiesSet();
+    }
+
+    @Override
+    public void destroy() {
+        LOG.info("释放动态数据源连接池。");
+        for (Object value : dataSources.values()) {
+            AtomikosDataSourceBean dataSource = (AtomikosDataSourceBean) value;
+            try {
+                dataSource.close();
+            } catch (Exception e) {
+                LOG.error("释放数据源" + dataSource.getUniqueResourceName() + "连接失败！", e);
+            }
+        }
     }
 
     /*
@@ -41,6 +53,7 @@ public abstract class DynamicDataSource extends AbstractRoutingDataSource {
     protected Object determineCurrentLookupKey() {
         Integer dataSourceId = DataSourceHolder.getDataSourceId();
         if (dataSourceId == null) {
+            AtomikosDataSourceBean defaultDataSource = getDefaultDataSource();
             LOG.info("使用默认数据源{}。", defaultDataSource.getUniqueResourceName());
             return defaultDataSource.getUniqueResourceName();
         }
@@ -65,6 +78,6 @@ public abstract class DynamicDataSource extends AbstractRoutingDataSource {
 
     protected abstract AtomikosDataSourceBean getDefaultDataSource();
 
-    protected abstract AtomikosDataSourceBean createDataSource(IDataSourceProperties dataSourceProperties)
+    public abstract AtomikosDataSourceBean createDataSource(IDataSourceProperties dataSourceProperties)
             throws SQLException;
 }

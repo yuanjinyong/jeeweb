@@ -22,7 +22,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.framework.jdbc.DataSourceHolder;
-import com.jeeweb.platform.security.context.RestContext;
+import com.jeeweb.platform.security.context.TokenContextHolder;
 import com.jeeweb.platform.security.exception.RestException;
 import com.jeeweb.platform.security.exception.RestInvalidTokenException;
 import com.jeeweb.platform.security.service.RestTokenCacheService;
@@ -50,6 +50,7 @@ public class RestTokenProcessingFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         DataSourceHolder.clearDataSourceId();
+        TokenContextHolder.clearContext();
 
         String token = getToken(request);
         if (HelpUtil.isEmpty(token)) {
@@ -72,7 +73,7 @@ public class RestTokenProcessingFilter extends OncePerRequestFilter {
 
             // Set the authentication into the SecurityContext
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            RestContext.setToken(token);
+            TokenContextHolder.setContext(token);
         } catch (Exception e) {
             if (e instanceof AuthenticationException) {
                 restAuthenticationEntryPoint.commence(request, response, (AuthenticationException) e);

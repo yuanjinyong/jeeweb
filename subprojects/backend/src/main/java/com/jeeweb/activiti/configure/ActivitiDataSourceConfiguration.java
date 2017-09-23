@@ -29,9 +29,9 @@ public class ActivitiDataSourceConfiguration {
     @Value("${spring.datasource.activiti.password:#{null}}")
     private String password;
 
-    @Value("${spring.datasource.activiti.minPoolSize:5}")
+    @Value("${spring.datasource.activiti.minPoolSize:1}")
     private Integer minPoolSize;
-    @Value("${spring.datasource.activiti.maxPoolSize:25}")
+    @Value("${spring.datasource.activiti.maxPoolSize:15}")
     private Integer maxPoolSize;
     @Value("${spring.datasource.activiti.maxLifetime:120}")
     private Integer maxLifetime;

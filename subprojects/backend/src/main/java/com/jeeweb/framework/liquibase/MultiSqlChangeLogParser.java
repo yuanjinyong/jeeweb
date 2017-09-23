@@ -59,7 +59,7 @@ public class MultiSqlChangeLogParser extends AbstractSqlChangeLogParser {
         change.setStripComments(false);
 
         try {
-            change.setSql(StreamUtil.getStreamContents(openChangeLogFile(fileLocation, resourceAccessor), null));
+            change.setSql(StreamUtil.getStreamContents(openFile(resourceAccessor, fileLocation), null));
         } catch (IOException e) {
             throw new ChangeLogParseException(e);
         }

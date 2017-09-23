@@ -90,7 +90,7 @@ public class DefaultDataSourceConfiguration {
         SpringLiquibase liquibase = new SpringLiquibase();
         liquibase.setDataSource(dataSource);
         liquibase.setChangeLog("classpath:/com/jeeweb/**/mapper/*Liquibase.default.sql");
-        liquibase.setContexts("test, production");
+        liquibase.setContexts("dev, verify, test, mirror, production");
         return liquibase;
     }
 }

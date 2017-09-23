@@ -9,10 +9,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.stereotype.Component;
 
-import com.jeeweb.platform.security.context.RestContext;
+import com.jeeweb.platform.security.context.UserContextHolder;
 import com.jeeweb.platform.security.model.SecurityUser;
 
 /**
+ * 认证成功后，把用户设置到当前上下文中，方便后续取用
+ * 
  * @author 袁进勇
  *
  */
@@ -33,7 +35,7 @@ public class RestAuthorizationSuccessHandler implements AuthorizationSuccessHand
             Object principal = authentication.getPrincipal();
             if (principal instanceof SecurityUser) {
                 SecurityUser securityUser = (SecurityUser) principal;
-                RestContext.setCurUser(securityUser.getUser());
+                UserContextHolder.setContext(securityUser.getUser());
             }
         }
     }

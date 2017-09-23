@@ -19,7 +19,7 @@ import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.framework.core.utils.TreeUtil;
-import com.jeeweb.platform.security.context.RestContext;
+import com.jeeweb.platform.security.utils.SecurityUtil;
 import com.jeeweb.platform.sys.entity.MenuEntity;
 import com.jeeweb.platform.sys.entity.UserEntity;
 import com.jeeweb.platform.sys.service.MenuService;
@@ -39,7 +39,7 @@ public class IndexApi extends SuperController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseResult index() {
         Map<String, Object> data = new HashMap<>();
-        data.put("user", RestContext.getCurUser());
+        data.put("user", SecurityUtil.getCurUser());
 
         if (!HelpUtil.isEmpty(indexHandlers)) {
             for (IndexHandler handler : indexHandlers) {
@@ -56,7 +56,7 @@ public class IndexApi extends SuperController {
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public ResponseResult getUser() {
-        UserEntity user = RestContext.getCurUser();
+        UserEntity user = SecurityUtil.getCurUser(null);
         if (user != null) {
             return new ResponseResult(new Result(userService.selectEntity(user.getF_id())), HttpStatus.OK);
         } else {

@@ -16,7 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import com.jeeweb.platform.security.context.RestContext;
+import com.jeeweb.platform.security.context.TokenContextHolder;
 import com.jeeweb.platform.security.service.RestTokenCacheService;
 import com.jeeweb.platform.security.utils.ResponseUtil;
 
@@ -47,8 +47,8 @@ public class RestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
         clearAuthenticationAttributes(request);
 
         // 登录成功后，生成新的Token设置到响应头中
-        RestContext.setToken(restTokenCacheService.generateToken(authentication));
-        response.setHeader(RestTokenCacheService.REST_TOKEN, RestContext.getToken());
+        TokenContextHolder.setContext(restTokenCacheService.generateToken(authentication));
+        response.setHeader(RestTokenCacheService.REST_TOKEN, TokenContextHolder.getContext());
 
         ResponseUtil.success(response);
     }

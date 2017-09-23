@@ -22,7 +22,7 @@ import com.jeeweb.framework.business.mapper.BaseMapper;
 import com.jeeweb.framework.core.exception.BusinessException;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
-import com.jeeweb.platform.security.context.RestContext;
+import com.jeeweb.platform.security.utils.SecurityUtil;
 import com.jeeweb.platform.sys.entity.UserEntity;
 
 @Service
@@ -95,10 +95,8 @@ public class ProcessDefinitionService extends ActivitiService<String, ProcessDef
         LOG.info("启动[{}]流程：varables={}。", processDefinitionId, varables);
 
         // 设置流程发起人
-        UserEntity user = RestContext.getCurUser();
-        if (user != null) {
-            identityService.setAuthenticatedUserId(user.getF_id().toString());
-        }
+        UserEntity user = SecurityUtil.getCurUser();
+        identityService.setAuthenticatedUserId(user.getF_id().toString());
 
         ProcessInstance processInstance = formService.submitStartFormData(processDefinitionId, varables);
         ProcessDefinition processDefinition = repositoryService
@@ -121,10 +119,8 @@ public class ProcessDefinitionService extends ActivitiService<String, ProcessDef
         LOG.info("启动[{}]流程：varables={}。", processDefinitionKey, varables);
 
         // 设置流程发起人
-        UserEntity user = RestContext.getCurUser();
-        if (user != null) {
-            identityService.setAuthenticatedUserId(user.getF_id().toString());
-        }
+        UserEntity user = SecurityUtil.getCurUser();
+        identityService.setAuthenticatedUserId(user.getF_id().toString());
 
         // 找出租户部署的最高版本的流程定义
         ProcessDefinition processDefinition = getProcessDefinition(processDefinitionKey, tenantId);

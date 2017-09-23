@@ -34,7 +34,7 @@ import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.platform.pub.entity.AttachmentEntity;
 import com.jeeweb.platform.pub.service.AttachmentService;
-import com.jeeweb.platform.security.context.RestContext;
+import com.jeeweb.platform.security.utils.SecurityUtil;
 import com.jeeweb.platform.sys.utils.SysUtil;
 
 @RestController
@@ -152,7 +152,7 @@ public class AttachmentsApi extends SuperController {
 
     private AttachmentEntity buildAttachmentEntity(int index, FileItem fileItem) {
         String originalFileName = fileItem.getName();
-        Integer f_creator_id = RestContext.getCurUser().getF_id();
+        Integer f_creator_id = SecurityUtil.getCurUserId();
         Timestamp f_create_time = HelpUtil.getNowTime();
 
         StringBuffer tempFileName = new StringBuffer(HelpUtil.getNowTime("yyyyMM")).append('/')

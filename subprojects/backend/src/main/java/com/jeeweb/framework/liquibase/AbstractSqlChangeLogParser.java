@@ -3,6 +3,7 @@
  */
 package com.jeeweb.framework.liquibase;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -11,6 +12,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import liquibase.exception.ChangeLogParseException;
 import liquibase.parser.core.sql.SqlChangeLogParser;
+import liquibase.resource.FileSystemResourceAccessor;
 import liquibase.resource.ResourceAccessor;
 import liquibase.util.StreamUtil;
 
@@ -23,13 +25,31 @@ public abstract class AbstractSqlChangeLogParser extends SqlChangeLogParser {
 
     protected Resource[] getResources(String physicalChangeLogLocation) throws ChangeLogParseException {
         try {
+            File changeLogFile = new File(physicalChangeLogLocation);
+            if (changeLogFile.exists()) {
+                physicalChangeLogLocation = changeLogFile.toURI().toURL().toString();
+            }
+
             return resolver.getResources(physicalChangeLogLocation);
         } catch (IOException e) {
             throw new ChangeLogParseException("Resource does not exist: " + physicalChangeLogLocation, e);
         }
     }
 
-    protected InputStream openChangeLogFile(String fileLocation, ResourceAccessor resourceAccessor)
+    protected String getFileLocation(ResourceAccessor resourceAccessor, Resource resource) throws IOException {
+        if (resourceAccessor instanceof FileSystemResourceAccessor) {
+            return resource.getFile().getAbsolutePath();
+        } else {
+            return resource.getURL().toString();
+        }
+    }
+
+    protected InputStream openFile(ResourceAccessor resourceAccessor, Resource resource)
+            throws ChangeLogParseException, IOException {
+        return openFile(resourceAccessor, getFileLocation(resourceAccessor, resource));
+    }
+
+    protected InputStream openFile(ResourceAccessor resourceAccessor, String fileLocation)
             throws ChangeLogParseException {
         try {
             InputStream resourceAsStream = StreamUtil.singleInputStream(fileLocation, resourceAccessor);

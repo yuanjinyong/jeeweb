@@ -1,10 +1,15 @@
 package com.jeeweb.platform.sys.utils;
 
+import java.util.List;
+import java.util.Map;
+
 import com.jeeweb.framework.core.aware.SpringContextAware;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
-import com.jeeweb.platform.security.context.RestContext;
+import com.jeeweb.platform.security.utils.SecurityUtil;
+import com.jeeweb.platform.sys.entity.DictItemEntity;
 import com.jeeweb.platform.sys.entity.UserEntity;
+import com.jeeweb.platform.sys.service.DictService;
 import com.jeeweb.platform.sys.service.SettingService;
 
 public final class SysUtil {
@@ -12,7 +17,7 @@ public final class SysUtil {
     public static String P_EXPIRY_DATE = "ExpiryDate";
 
     public static void appendCurUserAndRoles(ParameterMap params) {
-        UserEntity user = RestContext.getCurUser();
+        UserEntity user = SecurityUtil.getCurUser(null);
         // 是否为超级管理员
         if (user != null && !user.isSuperAdmin()) {
             params.put("cur_user_id", user.getF_id());
@@ -30,13 +35,15 @@ public final class SysUtil {
         return value == null ? defaultValue : value;
     }
 
-    // public static List<DictItemEntity> getDictItemList(String dictCode) {
-    // return DictCache.getDictItemList(getTenantIdList(), dictCode);
-    // }
-    //
-    // public static Map<Object, Object> getDictItemMap(String dictCode) {
-    // return DictCache.getDictItemMap(getTenantIdList(), dictCode);
-    // }
+    public static List<DictItemEntity> getDictItemList(String dictCode) {
+        DictService dictService = SpringContextAware.getBean(DictService.class);
+        return dictService.getDictItemList(dictCode);
+    }
+
+    public static Map<Object, Object> getDictItemMap(String dictCode) {
+        DictService dictService = SpringContextAware.getBean(DictService.class);
+        return dictService.getDictItemMap(dictCode);
+    }
     //
     // public static Integer getTenantId() {
     // UserEntity user = getCurUser();

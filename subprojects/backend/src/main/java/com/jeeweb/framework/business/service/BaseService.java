@@ -21,7 +21,7 @@ import com.jeeweb.framework.core.service.SuperService;
 import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.platform.pub.entity.AttachmentEntity;
 import com.jeeweb.platform.pub.mapper.AttachmentMapper;
-import com.jeeweb.platform.security.context.RestContext;
+import com.jeeweb.platform.security.utils.SecurityUtil;
 import com.jeeweb.platform.sys.entity.UserEntity;
 
 public abstract class BaseService<P, E> extends SuperService {
@@ -125,24 +125,20 @@ public abstract class BaseService<P, E> extends SuperService {
 
     protected void fillModifier(E entity) {
         if (entity instanceof IModifier) {
-            UserEntity user = RestContext.getCurUser();
+            UserEntity user = SecurityUtil.getCurUser();
             IModifier modifier = (IModifier) entity;
-            if (user != null) {
-                modifier.setF_modifier_id(user.getF_id());
-                modifier.setF_modifier_name(user.getF_name());
-            }
+            modifier.setF_modifier_id(user.getF_id());
+            modifier.setF_modifier_name(user.getF_name());
             modifier.setF_modified_time(HelpUtil.getNowTime());
         }
     }
 
-    protected void fillCreator(E entity) {
+    protected <T> void fillCreator(T entity) {
         if (entity instanceof ICreator) {
-            UserEntity user = RestContext.getCurUser();
+            UserEntity user = SecurityUtil.getCurUser();
             ICreator creator = (ICreator) entity;
-            if (user != null) {
-                creator.setF_creator_id(user.getF_id());
-                creator.setF_creator_name(user.getF_name());
-            }
+            creator.setF_creator_id(user.getF_id());
+            creator.setF_creator_name(user.getF_name());
             creator.setF_created_time(HelpUtil.getNowTime());
         }
     }
@@ -202,9 +198,11 @@ public abstract class BaseService<P, E> extends SuperService {
     protected void deleteAttachmentList(P primaryKey, E entity) {
         if (entity instanceof IAttachment) {
             List<AttachmentEntity> attachmentList = selectAttachmentList(selectEntity(primaryKey));
-            for (AttachmentEntity attachmentEntity : attachmentList) {
-                attachmentEntity.setF_status(AttachmentEntity.STATUS_PREDELETE);
-                attachmentMapper.updateEntity(attachmentEntity);
+            if (!HelpUtil.isEmpty(attachmentList)) {
+                for (AttachmentEntity attachmentEntity : attachmentList) {
+                    attachmentEntity.setF_status(AttachmentEntity.STATUS_PREDELETE);
+                    attachmentMapper.updateEntity(attachmentEntity);
+                }
             }
         }
     }
@@ -244,11 +242,9 @@ public abstract class BaseService<P, E> extends SuperService {
         }
         checkAuditor(oldEntity);
 
-        UserEntity user = RestContext.getCurUser();
-        if (user != null) {
-            oldAuditor.setF_auditor_id(user.getF_id());
-            oldAuditor.setF_auditor_name(user.getF_name());
-        }
+        UserEntity user = SecurityUtil.getCurUser();
+        oldAuditor.setF_auditor_id(user.getF_id());
+        oldAuditor.setF_auditor_name(user.getF_name());
         oldAuditor.setF_audited_time(HelpUtil.getNowTime());
         oldAuditor.setF_status(auditor.getF_status());
         oldAuditor.setF_audited_comments(auditor.getF_audited_comments());

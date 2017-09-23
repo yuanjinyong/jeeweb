@@ -137,7 +137,7 @@ public class DictService extends BaseService<Integer, DictEntity> implements Ini
 
     // TODO 后续需要改为Redis缓存
     @Transactional(readOnly = true)
-    public Map<Object, Object> getDict(String dictCode) {
+    public Map<Object, Object> getDictItemMap(String dictCode) {
         Map<Object, Object> dictMap = new HashMap<>();
         List<RowMap> dictItemList = dictItemMapper.selectMapEntityListPage(new ParameterMap("f_dict_code", dictCode));
         for (RowMap dictItemMap : dictItemList) {
