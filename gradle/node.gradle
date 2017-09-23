@@ -1,13 +1,13 @@
 //plugins.withType(NodePlugin) {
     // configure gradle-node-plugin
     node {
-        version = '8.1.2'
-        npmVersion = '5.0.3' // 不需要指定，默认使用nodejs自带的。
+        version = '8.5.0'
+        //npmVersion = '5.3.0' // 不需要指定，默认使用nodejs自带的。
         //distBaseUrl = 'https://nodejs.org/dist'
         distBaseUrl = "${nexusUrl}/content/groups/public/download/nodejs"
         download = true
         workDir = file("${rootProject.projectDir}/.gradle/nodejs") // 把nodejs安装到Root Project的.gradle目录下
-        npmWorkDir = file("${rootProject.projectDir}/.gradle/nodejs/npm")
+        //npmWorkDir = file("${rootProject.projectDir}/.gradle/nodejs/npm")
     }
 
     task copyCfg(type: Copy) {
