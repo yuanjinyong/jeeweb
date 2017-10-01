@@ -2,7 +2,7 @@
  * Install plugin.
  */
 
-import Cfg from './cfg'
+import Cfg from '../cfg/cfg'
 
 const plugin = function (Vue) {
   if (plugin.installed) {

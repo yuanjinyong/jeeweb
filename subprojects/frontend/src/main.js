@@ -21,7 +21,7 @@ import 'element-ui/lib/theme-default/index.css'
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition' // collapse 展开折叠
 Vue.component(CollapseTransition.name, CollapseTransition)
 
-import VueCfg from './assets/js/vue-cfg'
+import VueCfg from './plugins/vue-cfg'
 
 import {AgGridVue} from 'ag-grid-vue'
 Vue.component('ag-grid', AgGridVue) // 注册全局组件
