@@ -13,7 +13,6 @@ var VueGrid = {
       getFeatureComponent: null,
       getPermissions: null,
       params: {
-        // tree: false, // true、false
         orderBy: null,
         totalCount: 0
       }
@@ -38,7 +37,7 @@ var VueGrid = {
     paginationFirstPage: 0,
     cacheOverflowSize: 2,
     infiniteInitialRowCount: 1,
-    cacheBlockSize: 30, // 启动自动每页条数时，一次向后台请求的条目数（即发给后台的每页条数）
+    cacheBlockSize: 20, // 启动自动每页条数时，一次向后台请求的条目数（即发给后台的每页条数）
     maxBlocksInCache: 2,
     maxConcurrentDatasourceRequests: 1,
     defaultColDef: {
@@ -46,7 +45,8 @@ var VueGrid = {
       suppressSizeToFit: true,
       suppressSorting: true,
       suppressMenu: true,
-      suppressFilter: true
+      suppressFilter: true,
+      minWidth: 33
     },
     columnDefs: [],
     getRowNodeId (item) {

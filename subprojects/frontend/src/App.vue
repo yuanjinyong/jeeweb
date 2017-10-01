@@ -167,11 +167,10 @@
     outline-width: 0;
   }
 
-  .jw-grid .ag-ltr .ag-cell-last-left-pinned {
+  .jw-grid .ag-ltr .ag-pinned-left-cols-viewport {
     border-right: 1px solid #eee;
   }
-
-  .jw-grid .ag-ltr .ag-cell-first-right-pinned {
+  .jw-grid .ag-ltr .ag-pinned-right-cols-viewport {
     border-left: 1px solid #eee;
   }
 
