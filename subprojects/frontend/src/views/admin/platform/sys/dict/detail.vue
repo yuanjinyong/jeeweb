@@ -312,14 +312,6 @@
           f_is_preset: 2
         })
         this.gridOptions.api.setRowData(this.entity.itemList)
-//        this.gridOptions.api.updateRowData({
-//          add: [{
-//            f_item_code: null,
-//            f_item_text: null,
-//            f_item_order: 10,
-//            f_is_preset: 2
-//          }]
-//        })
       },
       onRemoveItem (entity) {
         for (let i = 0; i < this.entity.itemList.length; i++) {
@@ -330,7 +322,6 @@
         }
 
         this.gridOptions.api.setRowData(this.entity.itemList)
-        // this.gridOptions.api.updateRowData({remove: [entity]})
       },
       onMoveUp (entity) {
         for (let i = 0; i < this.entity.itemList.length; i++) {

@@ -272,10 +272,6 @@
             this.$http.put(this.options.context.url + '/' + this.entity.f_id, this.entity, {params: this.options.queryString}).then((response) => {
               this._submitted(response.body)
             })
-//          } else if (this.options.operation === 'audit') {
-//            this.$http.put(this.options.context.url + '/' + this.entity.f_id + '/audit', this.entity, {params: this.options.queryString}).then((response) => {
-//              this._submitted(response.body)
-//            })
           } else {
             this._submitted({success: true, data: this.entity})
           }

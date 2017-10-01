@@ -86,7 +86,7 @@
         } else if (command === 'showUserInfo') {
           this.onShowUserInfo()
         } else {
-          alert(command)
+          // alert(command)
         }
       },
       onChangePassword () {

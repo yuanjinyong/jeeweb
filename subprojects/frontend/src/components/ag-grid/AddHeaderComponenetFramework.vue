@@ -64,7 +64,6 @@
             title: operation.title,
             params: this.entity
           })
-          return
         }
       }
     }
