@@ -70,7 +70,7 @@
           }
         },
         gridOptions: this.$grid.buildOptions({
-          rowModelType: 'normal',
+          rowModelType: 'inMemory',
           pagination: false,
           enableFilter: false,
           floatingFilter: false,

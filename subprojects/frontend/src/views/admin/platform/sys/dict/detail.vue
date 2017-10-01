@@ -80,7 +80,7 @@
         schematas: [],
         fields: [],
         gridOptions: this.$grid.buildOptions({
-          rowModelType: 'normal',
+          rowModelType: 'inMemory',
           rowData: [],
           pagination: false,
           enableFilter: false,

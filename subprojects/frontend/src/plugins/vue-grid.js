@@ -24,8 +24,6 @@ var VueGrid = {
     enableServerSideFilter: true,
     enableServerSideSorting: true,
     suppressContextMenu: true,
-    suppressMenuMainPanel: true,
-    suppressMenuColumnPanel: true,
     suppressCellSelection: true,
     enableColResize: true,
     headerHeight: 30, // default is 25px
@@ -246,11 +244,11 @@ var VueGrid = {
     let options = Vue.lodash.merge({}, this.defaultOptions, gridOptions)
     options.datasource.gridOptions = options
     if (options.context.params.tree) {
-      options.rowModelType = 'normal'
+      options.rowModelType = 'inMemory'
       options.pagination = false
       options.enableServerSideFilter = false
     }
-    if (options.rowModelType === 'normal') {
+    if (options.rowModelType === 'inMemory') {
       options.datasource = null
       options.rowData = []
     } else {
@@ -258,7 +256,7 @@ var VueGrid = {
       options.getNodeChildDetails = null // 服务端模式下不支持分组和树形结构，只有企业版的ag-grid才支持
     }
     options.onGridReady = (e) => {
-      if (options.rowModelType === 'normal') {
+      if (options.rowModelType === 'inMemory') {
         options.getRows4Normal()
       }
       if (gridOptions.onGridReady) {

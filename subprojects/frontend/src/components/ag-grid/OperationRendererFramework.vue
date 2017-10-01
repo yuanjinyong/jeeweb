@@ -115,7 +115,7 @@
       },
       _refreshGrid () {
         let gridOptions = this.params.api.gridOptionsWrapper.gridOptions
-        if (gridOptions.rowModelType === 'normal') {
+        if (gridOptions.rowModelType === 'inMemory') {
           gridOptions.getRows4Normal()
         } else {
           gridOptions.context.params.totalCount = 0

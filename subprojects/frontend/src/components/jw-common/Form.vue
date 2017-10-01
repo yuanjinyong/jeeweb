@@ -293,7 +293,7 @@
         let gridComponent = this.options.context.getGridComponent && this.options.context.getGridComponent.call(this, this.options)
         if (gridComponent) {
           let gridOptions = gridComponent.gridOptions
-          if (gridOptions.rowModelType === 'normal') {
+          if (gridOptions.rowModelType === 'inMemory') {
             gridOptions.getRows4Normal()
           } else {
             gridOptions.context.params.totalCount = 0
