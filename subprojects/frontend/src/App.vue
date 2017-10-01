@@ -10,7 +10,8 @@
     background-color: #324157;
     margin: 0px;
     padding: 0px;
-    overflow: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
     height: 100%;
   }
 
@@ -170,6 +171,7 @@
   .jw-grid .ag-ltr .ag-pinned-left-cols-viewport {
     border-right: 1px solid #eee;
   }
+
   .jw-grid .ag-ltr .ag-pinned-right-cols-viewport {
     border-left: 1px solid #eee;
   }
@@ -297,11 +299,11 @@
   }
 
   .jw-form .jw-field-col-2 {
-    width: 554px;
+    width: 554px; /* 200 + 4 + 350 */
   }
 
   .jw-form .jw-field-col-3 {
-    width: 908px;
+    width: 908px; /* 200 + 4 + 350 + 4 + 350 */
   }
 
   .jw-form label {
