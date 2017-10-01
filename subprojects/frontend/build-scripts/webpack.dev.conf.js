@@ -26,7 +26,7 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({ //根据模板插入css/js等生成最终HTML
-      favicon:'src/assets/favicon.ico', //favicon路径
+      favicon:'src/favicon.ico', //favicon路径
       title: config.build.title,
       filename: 'index.html', //生成的html存放路径，相对于 path
       template: 'src/index.html', //html模板路径

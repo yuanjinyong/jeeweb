@@ -42,7 +42,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({ //根据模板插入css/js等生成最终HTML
-      favicon:'src/assets/favicon.ico', //favicon路径
+      favicon:'src/favicon.ico', //favicon路径
       title: config.build.title,
       filename: process.env.NODE_ENV === 'testing' //生成的html存放路径，相对于 path
         ? 'index.html'
