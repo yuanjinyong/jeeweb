@@ -63,7 +63,7 @@
   <div style="height: 100%;" :style="{'background-color':layout.window.width < 768 ? '#fff' : '#324157'}">
     <div v-if="layout.window.width < 768">
       <!-- 顶部 -->
-      <jw-head id="layoutTop"></jw-head>
+      <jw-head id="layoutTop" :show-button="true"></jw-head>
 
       <!-- 中部 -->
       <div id="layoutMiddle" :style="{'width':layout.middle.width+'px', 'height':layout.middle.height+'px'}">
@@ -82,7 +82,7 @@
 
         <div style="background-color: #fff;overflow: auto;"
              :style="{'width':layout.right.width+'px', 'height':layout.right.height+'px'}">
-          <router-view></router-view>
+          <router-view :key="$route.path"></router-view>
         </div>
       </div>
 
@@ -93,7 +93,7 @@
 
     <div v-else>
       <!-- 顶部 -->
-      <jw-head id="layoutTop"></jw-head>
+      <jw-head id="layoutTop" :show-button="true"></jw-head>
 
       <!-- 中部 -->
       <div id="layoutMiddle" :style="{'width':layout.middle.width+'px', 'height':layout.middle.height+'px'}">
@@ -129,7 +129,7 @@
             </el-tabs>
             <div class="jw-view-tab-body"
                  :style="{'width':layout.viewTab.body.width+'px', 'height':layout.viewTab.body.height+'px'}">
-              <router-view></router-view>
+              <router-view :key="$route.path"></router-view>
             </div>
           </div>
         </div>
@@ -148,27 +148,32 @@
   export default {
     name: 'adminIndex',
     beforeRouteEnter (to, from, next) { // 在渲染该组件的对应路由被 confirm 前调用，不能获取组件实例`this`，因为当钩子执行前，组件实例还没被创建。
-      // console.log('beforeRouteEnter', from, to)
+//      console.log('beforeRouteEnter', from, to)
       Vue.store.commit('backupRoute', to)
-      let loading = Vue.prototype.$loading({text: '加载中……'})
-      Promise.all([
-        Vue.http.get('api/platform/data/dicts'),
-        Vue.http.get('api/admin/index/user')
-      ]).then((responses) => {
-        let response = responses[0]
-        Vue.store.commit('setDicts', response.body.success ? response.body.data : {})
 
-        response = responses[1]
-        Vue.store.commit('setUser', response.body.success ? response.body.data : null)
+      if (Vue.store.state.menuList.length > 0) {
+        next()
+      } else {
+        let loading = Vue.prototype.$loading({text: '加载中……'})
+        Promise.all([
+          Vue.http.get('api/admin/index'),
+          Vue.http.get('api/platform/data/dicts')
+        ]).then((responses) => {
+          let response = responses[0]
+          Vue.store.commit('index', response.body.success ? response.body.data : {})
 
-        loading.close()
-        next(vm =>
-          vm.loadMenus()
-        )
-      }).catch(e => loading.close())
+          response = responses[1]
+          Vue.store.commit('setDicts', response.body.success ? response.body.data : {})
+
+          loading.close()
+          next(false)
+          let menu = Vue.prototype.findMenuByRoutePath(to.path)
+          Vue.store.commit('openTab', {path: menu.f_route_path, params: menu})
+        }).catch(e => loading.close())
+      }
     },
     beforeRouteLeave (to, from, next) { // 导航离开该组件的对应路由时调用，可以访问组件实例 `this`。
-      // console.log('beforeRouteLeave', from, to)
+//      console.log('beforeRouteLeave', from, to)
       next()
     },
     data () {
@@ -192,26 +197,6 @@
       }
     },
     created () {
-      this.loadMenus = this.$lodash.debounce((company) => {
-        let loading = this.$loading({text: '加载中……', target: '#layoutMiddle'})
-        let url = 'api/admin/index/menus'
-        if (company) {
-          url = 'api/zkpms/workbench/menus'
-        }
-        Vue.http.get(url).then((response) => {
-          Vue.store.commit('setMenuList', {
-            route: this.$route,
-            menuList: response.body.success ? response.body.data.items : []
-          })
-
-          loading.close()
-          this.onResize()
-        }).catch(e => loading.close())
-      }, 300)
-
-      this.$root.$on('company-switched', (company) => {
-        this.loadMenus(company)
-      })
       window.addEventListener('resize', this.onResize)
       this.$nextTick(() => {
         this.onResize()
@@ -222,9 +207,10 @@
     },
     watch: {
       curUser (val, oldVal) {
-        // 1、首次打开页面时，在用户信息加载成功后，触发加载菜单
-        // 2、登出后，重新调用后台接口加载菜单，以便自动跳转到登录页面
-        this.loadMenus()
+        // 登出后，重新调用后台接口加载主页数据
+        if (!val) {
+          Vue.http.get('api/admin/index').catch(e => console && console.warn(e))
+        }
       }
     },
     methods: {

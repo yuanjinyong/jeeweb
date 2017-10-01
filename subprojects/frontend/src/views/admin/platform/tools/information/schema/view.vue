@@ -98,7 +98,6 @@
         field: 'COLUMN_COMMENT',
         tooltipField: 'COLUMN_COMMENT',
         suppressSizeToFit: false,
-        minWidth: 40,
         width: 300
       }]
     }

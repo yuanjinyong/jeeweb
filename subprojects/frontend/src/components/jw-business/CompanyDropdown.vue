@@ -3,7 +3,7 @@
 
 <template>
   <div>
-    <div v-if="companies.length === 0" style="margin: auto 20px;color: #fff;font-size: 22px;">
+    <div v-if="companyList.length === 0" style="margin: auto 20px;color: #fff;font-size: 22px;">
       您还没有有效企业，是否现在<a style="color:#ffff00;cursor: pointer;" @click="onJoinCompany">申请加入企业</a>？
     </div>
     <div v-else>
@@ -12,7 +12,7 @@
           {{company.f_name || '我的有效企业列表'}}<i class="el-icon-caret-bottom el-icon--right"></i>
         </el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="item in companies" :key="item.f_id" :command="'switchCompany_' + item.f_id">
+          <el-dropdown-item v-for="item in companyList" :key="item.f_id" :command="'switchCompany_' + item.f_id" :disabled="item.f_id === company.f_id">
             <i class="fa fa-copyright" style="min-width:14px;"></i> {{item.f_name}}
           </el-dropdown-item>
           <el-dropdown-item command="myCompanies" divided>
@@ -44,8 +44,6 @@
     name: 'jwCompanyDropdown',
     data () {
       return {
-        companies: [],
-        company: {},
         selectorOptions: {
           context: {
             name: '待加入的企业',
@@ -112,28 +110,21 @@
         })
       }
     },
-    computed: {},
-    created () {
-      this._loadMyCompanies()
+    computed: {
+      company () {
+        return this.$store.state.company
+      },
+      companyList () {
+        return this.$store.state.companyList
+      }
     },
     methods: {
-      _loadMyCompanies () {
-        this.$http.get('api/zkpms/workbench/my/companies', {
-          params: {
-            f_status: 2, // 只查询审核通过的
-            orderBy: 'f_last_login_time desc'
-          }
-        }).then((response) => {
-          this.companies = response.body.success ? response.body.data.items : []
-          if (this.companies.length > 0) {
-            this._switchCompany(this.companies[0].f_id)
-          }
-        })
-      },
       _switchCompany (companyId) {
         this.$http.post('api/zkpms/workbench/my/companies/' + companyId + '/switch', {}, {showSuccessMessage: false}).then((response) => {
-          this.company = response.body.success ? response.body.data : {}
-          this.$root.$emit('company-switched', this.company)
+          this.$store.commit('switch', response.body.success ? response.body.data : {})
+
+          let menu = this.$store.state.menuList[0]
+          this.$store.commit('openTab', {path: menu.f_route_path, params: menu})
         })
       },
       getSelectedRows () {
@@ -159,8 +150,8 @@
       },
       joinCompany (selectedRows, cb) {
         let selectedCompany = selectedRows[0]
-        for (let i in this.companies) {
-          if (selectedCompany.f_id === this.companies[i].f_id) {
+        for (let i in this.companyList) {
+          if (selectedCompany.f_id === this.companyList[i].f_id) {
             this.$alert('已经加入过该企业了，无需重复加入！', '错误', {
               confirmButtonText: '关闭',
               type: 'error'

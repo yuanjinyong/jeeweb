@@ -113,6 +113,9 @@ const store = new Vuex.Store({
         }
       }
     },
+    companyList: [],
+    company: {},
+    employee: {},
     user: null,
     menuList: [],
     findMenuById (menuId, menus) {
@@ -161,7 +164,7 @@ const store = new Vuex.Store({
         }
       }]
     },
-    _initTabs (tabs, menuList, routePath) {
+    _initTabs (tabs, menuList) {
       // console.log('_initTabs', tabs, menuList, routePath)
       // 仍旧保留原来已有的Tab页
       let routes = []
@@ -172,17 +175,6 @@ const store = new Vuex.Store({
         }
       })
       tabs.routes = routes
-
-      // 先打开首页的Tab，如果原来不是首页，则延时打开原来的Tab。
-      Vue.store.commit('openTab', tabs.routes[0])
-      if (routePath !== tabs.routes[0].path) {
-        let menu = this.findMenuByRoutePath(routePath, menuList)
-        if (menu) {
-          setTimeout(() => {
-            Vue.store.commit('openTab', {path: menu.f_route_path, params: menu})
-          }, 100)
-        }
-      }
     },
     findMenuByRoutePath (routePath, menus) {
       for (let i in menus) {
@@ -215,15 +207,6 @@ const store = new Vuex.Store({
     setUser (state, payload) {
       state.user = payload
     },
-    setMenuList (state, payload) {
-      // console.log('setMenuList', payload)
-      state.menuList = [].concat(state.menuHome, payload.menuList)
-
-      state.permissionList = []
-      state._addPermission(state.menuList, state.permissionList)
-
-      state._initTabs(state.tabs, state.menuList, payload.route.path)
-    },
     openTab (state, payload) {
       // console.log('openTab', state.tabs, payload)
       let route = payload
@@ -239,7 +222,9 @@ const store = new Vuex.Store({
       }
 
       state.tabs.activeName = route.params.f_id
-      Vue.router.push(route)
+      if (route.status !== 'afterRoute') {
+        Vue.router.push(route)
+      }
     },
     switchTab (state, payload) {
       // console.log('switchTab', state.tabs, payload)
@@ -272,9 +257,34 @@ const store = new Vuex.Store({
     backupRoute (state, payload) {
       if (payload) {
         state.originalRoute = payload
+        console && console.log('backupRoute', payload.path)
       }
     },
+    index (state, payload) {
+      // console && console.log('index', payload)
+      state.companyList = payload.companyList || []
+      state.company = payload.company || {}
+      state.employee = payload.employee || {}
+
+      state.user = payload.user || null
+      state.menuList = [].concat(state.menuHome, payload.menuList || [])
+      state.permissionList = []
+      state._addPermission(state.menuList, state.permissionList)
+    },
+    switch (state, payload) {
+      // console && console.log('switch', payload)
+      state.companyList = payload.companyList || []
+      state.company = payload.company || {}
+      state.employee = payload.employee || {}
+
+      state.menuList = [].concat(state.menuHome, payload.menuList || [])
+      state.permissionList = []
+      state._addPermission(state.menuList, state.permissionList)
+
+      state._initTabs(state.tabs, state.menuList)
+    },
     logout (state) {
+      state.originalRoute = null
       state.user = null
       state.menuList = []
       state.tabs.routes = state.tabs.routes.slice(0, 1)
@@ -293,7 +303,12 @@ Vue.prototype.hasPermission = function (f_menu_id) {
   return Vue.store.state.hasPermission(f_menu_id)
 }
 Vue.prototype.findMenuByRoutePath = function (routePath) {
-  return Vue.store.state.findMenuByRoutePath(routePath, Vue.store.state.menuList)
+  let menu = Vue.store.state.findMenuByRoutePath(routePath, Vue.store.state.menuList)
+  if (menu) {
+    return menu
+  }
+
+  return Vue.store.state.menuList[0]
 }
 Vue.prototype.findMenuById = function (menuId) {
   return Vue.store.state.findMenuById(menuId, Vue.store.state.menuList)

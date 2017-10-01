@@ -4,7 +4,7 @@
              :size="options.elDialogSize[options.size]" :custom-class="'jw-dialog jw-dialog-' + options.size">
     <el-collapse-transition>
       <div class="jw-dialog-body" :style="{'max-height': maxBodyHeight + 'px'}" v-if="visible">
-        <div class="jw-form">
+        <div class="jw-form" :class="options.formClass">
           <div class="jw-form-body">
             <el-form ref="form" :model="entity" :rules="rules" :inline="options.inline"
                      :label-width="options.labelWidth+'px'">
@@ -104,6 +104,7 @@
           top: 80, //
           size: 'small', // 可选值：mini（phones 1列）、small（tablets 2列）、middle（desktops 3列）、large（ larger desktops 4列）、full（全屏）
           elDialogSize: {mini: 'tiny', small: 'small', middle: 'small', large: 'large', full: 'full'},
+          formClass: '',
           inline: true,
           labelWidth: 150, // 单位px
           maxHeight: null,
@@ -221,11 +222,11 @@
         }
       },
       onApprove () {
-        this._doAudit(2)
+        this._doAudit(3)
       },
       onReject () {
         if (this.entity.f_audited_comments) {
-          this._doAudit(3)
+          this._doAudit(4)
         } else {
           this.$alert('请填写审核意见！', '错误', {
             confirmButtonText: '关闭',

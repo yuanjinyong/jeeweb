@@ -43,8 +43,8 @@
       </el-form-item>
       <el-form-item label="系统预置" prop="f_is_preset">
         <el-radio-group class="jw-field-col-1" v-model="entity.f_is_preset">
-          <el-radio :label="1" disabled>是</el-radio>
-          <el-radio :label="2" disabled>否</el-radio>
+          <el-radio :label="1" :disabled="!curUser.superAdmin">是</el-radio>
+          <el-radio :label="2" :disabled="!curUser.superAdmin">否</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="查询Where条件" prop="f_where_clause">
@@ -107,7 +107,7 @@
             let entity = {
               f_code: null,
               f_name: null,
-              f_db_name: 'zhuku_master',
+              f_db_name: 'defaultSqlMapper',
               f_table_name: 't_sys_dict_item',
               f_tenant_column: 0,
               f_code_column: 'f_item_code',
@@ -159,6 +159,11 @@
             {required: true, message: '请选择字典项排序字段', trigger: 'blur'}
           ]
         }
+      }
+    },
+    computed: {
+      curUser () {
+        return this.$store.state.user || {}
       }
     },
     created () {

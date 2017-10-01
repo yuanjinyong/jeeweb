@@ -10,8 +10,7 @@
     background-color: #324157;
     margin: 0px;
     padding: 0px;
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: auto;
     height: 100%;
   }
 
@@ -219,12 +218,20 @@
     width: 390px; /*36 + 354*/
   }
 
+  .jw-dialog.jw-dialog-mini .jw-form.jw-collapse-form, .jw-dialog-selector .jw-dialog.jw-dialog-mini .jw-form.jw-collapse-form {
+    width: 421px; /*多加31*/
+  }
+
   .jw-dialog.jw-dialog-small {
     width: auto;
   }
 
   .jw-dialog.jw-dialog-small .jw-form, .jw-dialog-selector .jw-dialog.jw-dialog-small .jw-form {
     width: 745px;
+  }
+
+  .jw-dialog.jw-dialog-small .jw-form.jw-collapse-form, .jw-dialog-selector .jw-dialog.jw-dialog-small .jw-form.jw-collapse-form {
+    width: 776px; /*多加31*/
   }
 
   .jw-dialog.jw-dialog-middle {
@@ -235,12 +242,20 @@
     width: 1100px;
   }
 
+  .jw-dialog.jw-dialog-middle .jw-form.jw-collapse-form, .jw-dialog-selector .jw-dialog.jw-dialog-middle .jw-form.jw-collapse-form {
+    width: 1131px; /*多加31*/
+  }
+
   .jw-dialog.jw-dialog-large {
     width: auto;
   }
 
   .jw-dialog.jw-dialog-large .jw-form, .jw-dialog-selector .jw-dialog.jw-dialog-large .jw-form {
     width: 1455px;
+  }
+
+  .jw-dialog.jw-dialog-large .jw-form.jw-collapse-form, .jw-dialog-selector .jw-dialog.jw-dialog-large .jw-form.jw-collapse-form {
+    width: 1486px; /*多加31*/
   }
 
   .jw-dialog.jw-dialog-full {

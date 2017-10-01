@@ -17,11 +17,6 @@ export * from './user'
 import {UserView} from './user'
 
 export default [{
-  path: '',
-  component: {
-    template: '<router-view></router-view>'
-  }
-}, {
   path: 'dict',
   component: DictView
 }, {

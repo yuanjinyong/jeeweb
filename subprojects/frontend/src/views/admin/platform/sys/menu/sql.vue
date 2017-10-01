@@ -12,6 +12,7 @@
 
 
 <script>
+  import Vue from 'vue'
   import {DetailMixin} from 'mixins'
 
   export default {
@@ -36,27 +37,37 @@
       _loadEntity (cb) {
         this.$http.get(this.options.context.url + '/' + this.options.params.f_id + '/sql').then((response) => {
           let data = response.body.success ? response.body.data : {}
-          let menuStr = '/*Data for the table `t_sys_menu` */\n'
+          let menuStr = ''
           menuStr += this._appendMenus(data.menuList)
 
-          let menuUrlStr = '/*Data for the table `t_sys_menu_url` */\n'
+          let menuUrlStr = ''
           if (data.menuUrlList && data.menuUrlList.length > 0) {
             data.menuUrlList.forEach((menuUrl) => {
-              menuUrlStr += 'insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values (\'' + menuUrl.f_menu_id + '\',\'' + menuUrl.f_url_id + '\');\n'
+              menuUrlStr += 'INSERT INTO `t_sys_menu_url`(`f_menu_id`,`f_url_id`) VALUES (\'' + menuUrl.f_menu_id + '\',\'' + menuUrl.f_url_id + '\');\n'
             })
           }
 
-          let roleMenuStr = '/*Data for the table `t_sys_role_menu` */\n'
+          let roleMenuStr = ''
           if (data.roleMenuList && data.roleMenuList.length > 0) {
             data.roleMenuList.forEach((roleMenu) => {
-              roleMenuStr += 'insert  into `t_sys_role_menu`(`f_role_id`,`f_menu_id`) values (' + roleMenu.f_role_id + ',\'' + roleMenu.f_menu_id + '\');\n'
+              roleMenuStr += 'INSERT INTO `t_sys_role_menu`(`f_role_id`,`f_menu_id`) VALUES (' + roleMenu.f_role_id + ',\'' + roleMenu.f_menu_id + '\');\n'
             })
           }
 
-          let sql = '-- ' + this.options.params.f_id + ' ' + this.options.params.f_name + '\n'
+          let sql = '-- changeset 请修改为自己的姓名:' + Vue.moment(new Date().getTime()).format('YYYYMMDDHHmmss') + ' runOnChange:true\n'
+          sql += '-- comment: ' + this.options.params.f_id + ' ' + this.options.params.f_name + '\n'
+          sql += 'DELETE FROM t_sys_role_menu WHERE f_menu_id LIKE \'' + this.options.params.f_id + '%\';\n'
+          sql += 'DELETE FROM t_sys_menu_url WHERE f_menu_id LIKE \'' + this.options.params.f_id + '%\';\n'
+          sql += 'DELETE FROM t_sys_menu WHERE f_id LIKE \'' + this.options.params.f_id + '%\';\n'
+
+          sql += '\n'
           sql += menuStr + '\n'
           sql += menuUrlStr + '\n'
           sql += roleMenuStr + '\n'
+          sql += '-- rollback DELETE FROM t_sys_role_menu WHERE f_menu_id LIKE \'' + this.options.params.f_id + '%\';\n'
+          sql += '-- rollback DELETE FROM t_sys_menu_url WHERE f_menu_id LIKE \'' + this.options.params.f_id + '%\';\n'
+          sql += '-- rollback DELETE FROM t_sys_menu WHERE f_id LIKE \'' + this.options.params.f_id + '%\';\n'
+          sql += '\n'
 
           // this.entity.sql = sql
           cb({sql: sql})
@@ -66,7 +77,7 @@
         let menuStr = ''
         if (menus && menus.length > 0) {
           menus.forEach((menu) => {
-            menuStr += 'insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) values '
+            menuStr += 'INSERT INTO `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) VALUES '
             menuStr += '(\'' + menu.f_id + '\''
             menuStr += ',\'' + menu.f_parent_id + '\''
             menuStr += ',\'' + menu.f_parent_path + '\''

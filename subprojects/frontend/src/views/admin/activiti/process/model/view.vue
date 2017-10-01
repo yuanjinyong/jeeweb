@@ -1,6 +1,6 @@
 <template>
   <div :style="contentStyle">
-    <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
+    <ag-grid ref="grid" id="processModelGrid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
     <process-model-detail ref="detail" :detail-options="detailOptions"></process-model-detail>
     <process-model-editor ref="editor" :detail-options="editorOptions"></process-model-editor>
@@ -14,8 +14,8 @@
   import {
     AddHeaderComponenetFramework,
     IndexRendererFramework,
-    LikeFilterFramework,
-    LikeFloatingFilterComponentFramework,
+//    LikeFilterFramework,
+//    LikeFloatingFilterComponentFramework,
     OperationRendererFramework,
     TimestampRendererFramework,
     ViewRendererFramework
@@ -68,6 +68,8 @@
     computed: {
       permission () {
         return {
+          export: true,
+          deploy: true,
           editor: this.hasPermission('GZLGL-LCMXGL-BJ'),
           add: this.hasPermission('GZLGL-LCMXGL-ZJ'),
           edit: this.hasPermission('GZLGL-LCMXGL-XG'),
@@ -91,57 +93,35 @@
         cellRendererFramework: IndexRendererFramework,
         width: 38
       }, {
-        headerName: 'ID',
-        field: 'f_id',
-        pinned: 'left',
-        suppressSorting: false,
-        suppressFilter: false,
-        filterFramework: LikeFilterFramework,
-        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
-        cellRendererFramework: ViewRendererFramework,
-        cellRendererParams: {
-          operation: {
-            title: '查看流程',
-            onClick (params, entity) {
-              let url = Vue.cfg.apiUrl + 'activiti/modeler.html?view=true&modelId=' + entity.f_id
-              window.open(url)
-            }
-          }
-        },
-        width: 80
-      }, {
         headerName: '编码',
         field: 'model.key',
         pinned: 'left',
-        suppressSorting: false,
-        suppressFilter: false,
-        filterFramework: LikeFilterFramework,
-        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
         cellRendererFramework: ViewRendererFramework,
         width: 150
       }, {
         headerName: '名称',
         field: 'model.name',
         pinned: 'left',
-        suppressSorting: false,
-        suppressFilter: false,
-        filterFramework: LikeFilterFramework,
-        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
+//        suppressFilter: false,
+//        filterFramework: LikeFilterFramework,
+//        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
         width: 160
       }, {
         headerName: '创建时间',
         field: 'model.createTime',
-        suppressSorting: false,
         cellStyle: {'text-align': 'center'},
         cellRendererFramework: TimestampRendererFramework,
         width: 140
       }, {
         headerName: '修改时间',
         field: 'model.lastUpdateTime',
-        suppressSorting: false,
         cellStyle: {'text-align': 'center'},
         cellRendererFramework: TimestampRendererFramework,
         width: 140
+      }, {
+        headerName: '部署批次',
+        field: 'model.deploymentId',
+        width: 80
       }, {
         headerName: '描述',
         field: 'description',
@@ -162,12 +142,61 @@
             id: 'remove',
             permission: 'remove',
             isDisabled (params, entity) {
-              return entity.f_is_preset === 1
+              return entity.model && typeof entity.model.deploymentId === 'string'
+            }
+          }, {
+            id: 'editor',
+            title: '编辑流程节点',
+            type: 'info',
+            icon: 'fa fa-sliders',
+            permission: 'editor',
+            isDisabled (params, entity) {
+              return entity.model && typeof entity.model.deploymentId === 'string'
+            },
+            onClick (params, entity) {
+              params.context.featureComponent.onEditor(entity)
+            }
+          }, {
+            id: 'deploy',
+            title: '发布流程模型',
+            type: 'warning',
+            icon: 'fa fa-cloud-upload',
+            permission: 'deploy',
+            isDisabled (params, entity) {
+              return entity.model && typeof entity.model.deploymentId === 'string'
+            },
+            onClick (params, entity) {
+              params.context.featureComponent.onDeploy(entity)
+            }
+          }, {
+            id: 'export',
+            title: '下载流程模型',
+            icon: 'fa fa-file-excel-o',
+            permission: 'export',
+            onClick (params, entity) {
+              params.context.featureComponent.onExport(entity)
             }
           }]
         },
-        width: 80
+        width: 120
       }]
+    },
+    methods: {
+      onEditor (entity) {
+        window.open(Vue.cfg.apiUrl + 'activiti/modeler.html?view=false&modelId=' + entity.f_id)
+      },
+      onDeploy (entity) {
+        let loading = this.$loading({text: '流程发布中……', target: '#processModelGrid'})
+        this.$http.post(this.gridOptions.context.url + '/' + entity.f_id + '/deploy').then(() => {
+          loading.close()
+          this.gridOptions.api.setDatasource(this.gridOptions.datasource)
+        }).catch(() => {
+          loading.close()
+        })
+      },
+      onExport (entity) {
+        window.open(Vue.cfg.apiUrl + this.gridOptions.context.url + '/' + entity.f_id + '/export')
+      }
     }
   }
 </script>

@@ -12,8 +12,12 @@ router.beforeEach((to, from, next) => {
   console && console.info('Route:', from.path, '=>', to.path)
   next()
 })
-router.afterEach((route) => { // 不知道哪里的问题，貌似这个没有调用进来
+router.afterEach((route) => {
   // console && console.log('afterEach', 'route', route)
+  let menu = Vue.prototype.findMenuByRoutePath(route.path)
+  if (menu) {
+    Vue.store.commit('openTab', {path: menu.f_route_path, params: menu, status: 'afterRoute'})
+  }
 })
 Vue.router = router
 

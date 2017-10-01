@@ -8,7 +8,8 @@
         <div style="display: inline-block;">
           <img src="assets/img/logo.png">
         </div>
-        <div style="position: absolute; right: 0px; bottom: 0px;padding: 20px;" v-if="curUser">
+        <div style="position: absolute; right: 0px; bottom: 0px;padding: 20px;" v-if="showButton && curUser">
+          <jw-company-dropdown style="display: inline-block;"></jw-company-dropdown>
           <el-dropdown @command="onCommand">
             <el-button>
               {{curUser.f_name}}<i class="el-icon-caret-bottom el-icon--right"></i>
@@ -44,6 +45,12 @@
     components: {
       UserDetail,
       ChangePasswordForm
+    },
+    props: {
+      showButton: {
+        type: Boolean,
+        default: false
+      }
     },
     data () {
       return {
@@ -101,8 +108,7 @@
           type: 'success'
         }).then(() => {
           this.$cookie.delete('X-REST-TOKEN')  // 服务器端token过期后会返回401，再重新登录前，清空本地cookie中的token
-          this.$store.commit('setUser', null)
-          this.$store.commit('backupRoute', this.$route)
+          this.$store.commit('logout')
           this.$router.push({path: '/admin/login'})
         })
       },
@@ -119,7 +125,6 @@
           this.result = response.body
           if (this.result.success) {
             this.$store.commit('logout')
-            // this.$router.push({path: '/'})
           } else {
             console && console.error(this.result.message)
           }

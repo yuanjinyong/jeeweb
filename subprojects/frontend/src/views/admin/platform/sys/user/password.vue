@@ -26,13 +26,14 @@
         options: {
           context: {
             name: '用户密码',
-            url: 'api/admin/index/user/change/password'
+            url: 'api/admin/index/user/change/password',
+            detailComponent: this
           },
           loadRemoteEntity (options, cb) {
             cb({oldPassword: null, newPassword: null, newPassword2: null})
           },
-          submitEntity (options) {
-            options.context.detailComponent._submitEntity()
+          submitEntity (options, cb) {
+            options.context.detailComponent._submitEntity(cb)
           }
         },
         entity: {oldPassword: null, newPassword: null, newPassword2: null},
@@ -74,10 +75,10 @@
       }
     },
     methods: {
-      _submitEntity () {
+      _submitEntity (cb) {
         this.$http.post(this.options.context.url, this.entity, {emulateJSON: true}).then((response) => {
           if (response.body.success) {
-            this.$refs['form'].submitted(response.body)
+            cb(response.body.data)
           }
         })
       }

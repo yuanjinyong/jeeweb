@@ -89,7 +89,6 @@
             }
           }).then((response) => {
             if (response.body.success) {
-              this.$store.commit('setUser', {user: response.body.data})
               this.$router.push(this.originalRoute)
             } else {
               this.errorMessage = response.body.message

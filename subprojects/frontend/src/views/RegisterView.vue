@@ -127,6 +127,8 @@
 
 
 <script>
+  import Vue from 'vue'
+
   export default {
     name: 'registerView',
     data () {
@@ -180,11 +182,13 @@
             return false
           }
 
+          let loading = Vue.prototype.$loading({text: '正在创建企业……'})
           this.$http.post('api/zkpms/register/company', this.company).then((response) => {
+            loading.close()
             if (response.body.success) {
               this.$router.push({path: '/', params: this.company.creator})
             }
-          })
+          }).catch(e => loading.close())
 
           return true
         })
