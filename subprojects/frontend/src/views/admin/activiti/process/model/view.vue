@@ -14,8 +14,6 @@
   import {
     AddHeaderComponenetFramework,
     IndexRendererFramework,
-//    LikeFilterFramework,
-//    LikeFloatingFilterComponentFramework,
     OperationRendererFramework,
     TimestampRendererFramework,
     ViewRendererFramework
@@ -102,9 +100,6 @@
         headerName: '名称',
         field: 'model.name',
         pinned: 'left',
-//        suppressFilter: false,
-//        filterFramework: LikeFilterFramework,
-//        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
         width: 160
       }, {
         headerName: '创建时间',

@@ -251,12 +251,6 @@
             return false
           }
 
-//          this.$http.post('api/zkpms/register/company', this.company).then((response) => {
-//            if (response.body.success) {
-//              this.$router.push({path: '/', params: this.company.creator})
-//            }
-//          })
-
           return true
         })
       }

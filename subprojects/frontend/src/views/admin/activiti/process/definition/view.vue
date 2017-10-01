@@ -12,8 +12,6 @@
   import {
     AddHeaderComponenetFramework,
     IndexRendererFramework,
-//    LikeFilterFramework,
-//    LikeFloatingFilterComponentFramework,
     OperationRendererFramework,
     ViewRendererFramework
   } from 'components/ag-grid'
