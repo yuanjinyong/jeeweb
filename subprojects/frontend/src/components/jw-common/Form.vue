@@ -9,7 +9,7 @@
              :custom-class="'jw-dialog jw-dialog-' + options.size">
     <el-collapse-transition>
       <div class="jw-dialog-body" :style="{'max-height': maxBodyHeight + 'px'}" v-if="visible">
-        <div :class="'jw-form jw-form-' + options.size + ' ' + options.formClass">
+        <div :class="'jw-form' + (options.operation === 'view' ? ' jw-form-view' : '') + ' jw-form-' + options.size + ' ' + options.formClass">
           <div class="jw-form-body">
             <el-form ref="form" :model="entity" :rules="rules" :inline="options.inline">
               <fieldset :disabled="options.operation === 'view' || options.operation === 'audit'">

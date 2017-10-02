@@ -83,6 +83,7 @@
           rowData: [],
           pagination: false,
           enableFilter: false,
+          floatingFilter: false,
           context: {
             name: '字典项',
             url: null,

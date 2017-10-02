@@ -347,7 +347,7 @@
 
     .jw-form .el-form--inline .jw-field.jw-field-3 .el-form-item__content,
     .jw-form.jw-form-full .el-form--inline .jw-field.jw-field-3 .el-form-item__content,
-    .jw-form.jw-form-middle .el-form--inline .jw-field.jw-field-4 .el-form-item__content{
+    .jw-form.jw-form-middle .el-form--inline .jw-field.jw-field-4 .el-form-item__content {
       width: 250px; /* 250 + 4 + 350 + 4 + 350 */
     }
 
@@ -391,6 +391,70 @@
   .jw-form .el-form-item__error {
     background: #fff;
     z-index: 9999999;
+  }
+
+  /********************************************************************************************************************/
+  /* jw-form-view */
+  /********************************************************************************************************************/
+  .jw-form-view .el-input__inner,
+  .jw-form-view .el-input.is-disabled .el-input__inner,
+  .jw-form-view .el-textarea__inner {
+    background: inherit;
+    border: none;
+    border-bottom: 1px solid #bfcbd9;
+    border-radius: 0;
+    color: #1f2d3d;
+    cursor: not-allowed;
+  }
+
+  .jw-form-view .el-radio__input.is-disabled.is-checked .el-radio__inner {
+    border-color: #20a0ff;
+    background: #20a0ff;
+  }
+
+  .jw-form-view .el-radio__input.is-disabled .el-radio__inner {
+    background: inherit;
+  }
+
+  .jw-form-view .el-radio__input.is-disabled + .el-radio__label {
+    color: #1f2d3d;
+  }
+
+  .jw-form-view .el-input-number__decrease,
+  .jw-form-view .el-input-number__increase {
+    display: none;
+  }
+
+  .jw-form-view .el-autocomplete .el-input__icon,
+  .jw-form-view .el-select .el-input__icon,
+  .jw-form-view .el-date-editor .el-input__icon {
+    display: none;
+  }
+
+  .jw-form-view .el-checkbox,
+  .jw-form-view .el-checkbox .el-checkbox__inner,
+  .jw-form-view .el-radio,
+  .jw-form-view .el-radio .el-radio__inner {
+    cursor: not-allowed;
+  }
+
+  .jw-form-view .el-checkbox .el-checkbox__inner:hover,
+  .jw-form-view .el-radio .el-radio__inner:hover {
+    border: 1px solid #bfcbd9;
+  }
+
+  .jw-form-view .el-select .el-input__inner:hover {
+    border-bottom: 1px solid #bfcbd9;
+  }
+
+  .jw-form-view .jw-grid .el-input__inner,
+  .jw-form-view .jw-grid .el-input.is-disabled .el-input__inner,
+  .jw-form-view .jw-grid .el-textarea__inner {
+    background: inherit;
+    border: none;
+    border-radius: 0;
+    color: #1f2d3d;
+    cursor: default;
   }
 
   /********************************************************************************************************************/
