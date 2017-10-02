@@ -8,28 +8,36 @@
     <jw-head slot="top"></jw-head>
 
     <div slot="middle" class="jw-dialog jw-dialog-mini" style="background-color: #fff;width:100%;height:100%;">
-      <div class="jw-form"
-           style="position: absolute;top: 0;left: 0;bottom: 0;right: 0;margin: auto;height:215px;">
+      <div class="jw-form jw-form-mini"
+           style="position: absolute;top: 0;left: 0;bottom: 0;right: 0;margin: auto;height:342px;">
         <div class="jw-form-body">
-          <el-form ref="form" :model="entity" :rules="rules" :label-width="'100px'">
+          <el-form ref="form" :model="entity" :rules="rules">
             <fieldset>
-              <el-form-item label="账号" prop="f_account">
-                <el-input class="jw-field-col-1" v-model="entity.f_account" type="text"></el-input>
+              <el-form-item class="jw-field jw-field-1" label="账号" prop="f_account">
+                <el-input v-model="entity.f_account" type="text"></el-input>
               </el-form-item>
-              <el-form-item label="密码" prop="f_password">
-                <el-input class="jw-field-col-1" v-model="entity.f_password" type="password"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="text" @click="$router.push('/register')">企业注册</el-button>
-                <el-button type="text">个人注册</el-button>
-                <el-button type="text">忘记密码</el-button>
+              <el-form-item class="jw-field jw-field-1" label="密码" prop="f_password">
+                <el-input v-model="entity.f_password" type="password"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="onSubmit">登 录</el-button>
+                <el-button-group style="width: 100%;">
+                  <el-button type="text" style="width: 33%;" @click="$router.push('/register')">企业注册</el-button>
+                  <el-button type="text" style="width: 33%;">个人注册</el-button>
+                  <el-button type="text" style="width: 33%;">忘记密码</el-button>
+                </el-button-group>
+              </el-form-item>
+              <el-form-item style="text-align: center;" v-if="layout.window.width < 768">
+                <el-button-group style="width: 100%;">
+                  <el-button type="warning" style="width: 50%;" @click="onReset">重 置</el-button>
+                  <el-button type="primary" style="width: 50%;" @click="onSubmit">登 录</el-button>
+                </el-button-group>
+              </el-form-item>
+              <el-form-item style="text-align: center;" v-else>
                 <el-button type="warning" @click="onReset">重 置</el-button>
+                <el-button type="primary" @click="onSubmit">登 录</el-button>
               </el-form-item>
 
-              <div class="jw-form-item">
+              <div class="jw-field jw-field-1">
                 <el-alert type="error" :closable="false" :title="errorMessage" v-if="errorMessage"></el-alert>
               </div>
             </fieldset>

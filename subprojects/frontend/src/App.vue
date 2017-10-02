@@ -7,7 +7,7 @@
 
   body {
     font-size: 14px;
-    background-color: #324157;
+    /*background-color: #324157;*/
     margin: 0px;
     padding: 0px;
     overflow: auto;
@@ -228,6 +228,10 @@
   /* jw-form */
   /********************************************************************************************************************/
   .jw-form {
+    padding: 20px;
+  }
+
+  .jw-form .jw-form-footer {
     padding: 20px;
   }
 
