@@ -1,13 +1,17 @@
 <template>
-  <el-dialog v-model="visible" :title="options.title" :top="options.top + 'px'" :modal="options.modal"
-             :close-on-click-modal="options.closeOnClickModal" :modal-append-to-body="options.modalAppendToBody"
-             :size="options.elDialogSize[options.size]" :custom-class="'jw-dialog jw-dialog-' + options.size">
+  <el-dialog v-model="visible"
+             :title="options.title"
+             :top="options.top + 'px'"
+             :modal="options.modal"
+             :modal-append-to-body="options.modalAppendToBody"
+             :close-on-click-modal="options.closeOnClickModal"
+             :size="options.elDialogSize[options.size]"
+             :custom-class="'jw-dialog jw-dialog-' + options.size">
     <el-collapse-transition>
       <div class="jw-dialog-body" :style="{'max-height': maxBodyHeight + 'px'}" v-if="visible">
-        <div class="jw-form" :class="options.formClass">
+        <div :class="'jw-form jw-form-' + options.size + ' ' + options.formClass">
           <div class="jw-form-body">
-            <el-form ref="form" :model="entity" :rules="rules" :inline="options.inline"
-                     :label-width="options.labelWidth+'px'">
+            <el-form ref="form" :model="entity" :rules="rules" :inline="options.inline">
               <fieldset :disabled="options.operation === 'view' || options.operation === 'audit'">
                 <slot name="fieldset"></slot>
               </fieldset>
@@ -106,7 +110,7 @@
           elDialogSize: {mini: 'tiny', small: 'small', middle: 'small', large: 'large', full: 'full'},
           formClass: '',
           inline: true,
-          labelWidth: 150, // 单位px
+          labelWidth: 100, // 单位px
           maxHeight: null,
           params: {},
           queryString: {},
@@ -124,7 +128,7 @@
     },
     computed: {
       maxBodyHeight () {
-        return this.options.maxHeight ? (this.options.maxHeight - 59 - 76) : (this.$store.state.layout.window.height - this.options.top - 59 - 76 - 35)
+        return this.options.maxHeight ? (this.options.maxHeight - 40 - 56) : (this.$store.state.layout.window.height - this.options.top - 40 - 56 - 35)
       }
     },
     methods: {

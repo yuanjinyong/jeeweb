@@ -1,10 +1,15 @@
 <template>
-  <el-dialog v-model="visible" :title="options.title" :top="'30px'" :modal="options.modal"
-             :close-on-click-modal="options.closeOnClickModal" :modal-append-to-body="options.modalAppendToBody"
-             :size="options.elDialogSize[options.size]" :custom-class="'jw-dialog jw-dialog-selector'">
+  <el-dialog v-model="visible"
+             :title="options.title"
+             :top="'30px'"
+             :modal="options.modal"
+             :modal-append-to-body="options.modalAppendToBody"
+             :close-on-click-modal="options.closeOnClickModal"
+             :size="options.elDialogSize[options.size]"
+             :custom-class="'jw-dialog jw-dialog-selector'">
     <el-collapse-transition>
-      <div class="jw-dialog-body" v-if="visible">
-        <div class="jw-selector" :style="{'height': options.height + 'px', 'max-height': maxBodyHeight + 'px'}">
+      <div class="jw-dialog-body" :style="{'max-height': maxBodyHeight + 'px'}" v-if="visible">
+        <div :class="'jw-selector jw-selector-' + options.size" :style="{'height': options.height + 'px'}">
           <slot></slot>
         </div>
       </div>
@@ -48,9 +53,9 @@
           modal: false, // 是否为模态对话框
           closeOnClickModal: false, // 点击遮罩层是否关闭对话框
           modalAppendToBody: true, // 遮罩层是否插入至 body 元素上，若为 false，则遮罩层会插入至 Dialog 的父元素上
-          size: 'large', // 可选值：mini（phones 1列）、small（tablets 2列）、middle（desktops 3列）、large（ larger desktops 4列）、full（全屏）
+          size: 'small', // 可选值：mini（phones 1列）、small（tablets 2列）、middle（desktops 3列）、large（ larger desktops 4列）、full（全屏）
           elDialogSize: {mini: 'tiny', small: 'small', middle: 'small', large: 'large', full: 'full'},
-          height: 457, // 默认10行的高度
+          height: 447, // 默认10行的高度
           params: {},
           beforeOpen: null,
           opened: null,
@@ -62,7 +67,7 @@
     },
     computed: {
       maxBodyHeight () {
-        return this.$store.state.layout.window.height - 80 - 30 - 59 - 76 - 30 - 35
+        return this.$store.state.layout.window.height - 80 - 30 - 40 - 56 - 30 - 35
       }
     },
     methods: {
@@ -79,6 +84,7 @@
         }
         this.options.params = {}
         this.$lodash.merge(this.options, this.selectorOptions, options)
+        console.log('this.options', this.options)
         if (this.options.beforeOpen) {
           this.options.beforeOpen.call(this, this.options, () => {
             this._open()

@@ -66,6 +66,9 @@
     background-color: #fff;
   }
 
+  /********************************************************************************************************************/
+  /* jw-grid */
+  /********************************************************************************************************************/
   .jw-grid {
     width: 100%;
     height: 100%;
@@ -188,17 +191,21 @@
     margin-right: 20px;
   }
 
+  /********************************************************************************************************************/
+  /* jw-dialog */
+  /********************************************************************************************************************/
   .jw-dialog {
     margin-bottom: 0px;
+    width: auto;
   }
 
   .jw-dialog .el-dialog__header {
-    padding: 20px;
+    padding: 10px 20px;
     background-color: #f1f1f1;
   }
 
   .jw-dialog .el-dialog__footer {
-    padding: 20px;
+    padding: 10px 20px;
     background-color: #f1f1f1;
   }
 
@@ -210,174 +217,163 @@
     overflow-y: auto;
   }
 
-  .jw-dialog.jw-dialog-mini {
-    width: auto;
-  }
-
-  .jw-dialog.jw-dialog-mini .jw-form, .jw-dialog-selector .jw-dialog.jw-dialog-mini .jw-form {
-    width: 390px; /*36 + 354*/
-  }
-
-  .jw-dialog.jw-dialog-mini .jw-form.jw-collapse-form, .jw-dialog-selector .jw-dialog.jw-dialog-mini .jw-form.jw-collapse-form {
-    width: 421px; /*多加31*/
-  }
-
-  .jw-dialog.jw-dialog-small {
-    width: auto;
-  }
-
-  .jw-dialog.jw-dialog-small .jw-form, .jw-dialog-selector .jw-dialog.jw-dialog-small .jw-form {
-    width: 745px;
-  }
-
-  .jw-dialog.jw-dialog-small .jw-form.jw-collapse-form, .jw-dialog-selector .jw-dialog.jw-dialog-small .jw-form.jw-collapse-form {
-    width: 776px; /*多加31*/
-  }
-
-  .jw-dialog.jw-dialog-middle {
-    width: auto;
-  }
-
-  .jw-dialog.jw-dialog-middle .jw-form, .jw-dialog-selector .jw-dialog.jw-dialog-middle .jw-form {
-    width: 1100px;
-  }
-
-  .jw-dialog.jw-dialog-middle .jw-form.jw-collapse-form, .jw-dialog-selector .jw-dialog.jw-dialog-middle .jw-form.jw-collapse-form {
-    width: 1131px; /*多加31*/
-  }
-
-  .jw-dialog.jw-dialog-large {
-    width: auto;
-  }
-
-  .jw-dialog.jw-dialog-large .jw-form, .jw-dialog-selector .jw-dialog.jw-dialog-large .jw-form {
-    width: 1455px;
-  }
-
-  .jw-dialog.jw-dialog-large .jw-form.jw-collapse-form, .jw-dialog-selector .jw-dialog.jw-dialog-large .jw-form.jw-collapse-form {
-    width: 1486px; /*多加31*/
-  }
-
-  .jw-dialog.jw-dialog-full {
-    top: 0px;
-  }
-
-  .jw-dialog.jw-sub-dialog {
-    width: auto;
-  }
-
+  /********************************************************************************************************************/
+  /* jw-form */
+  /********************************************************************************************************************/
   .jw-form {
-    margin: 0px;
-    padding: 0px;
-  }
-
-  .jw-form .jw-form-body {
-    padding: 20px 20px 10px 20px;
-  }
-
-  .jw-form .jw-form-footer {
     padding: 20px;
-    background-color: #f1f1f1;
-    text-align: right;
   }
 
-  .jw-form .jw-form-item {
-    margin-bottom: 10px;
+  .jw-form .el-form--inline {
+    margin-bottom: -10px;
   }
 
-  .jw-form .el-form-item {
-    margin-bottom: 10px;
-  }
-
-  .jw-form .el-form--inline .el-form-item {
+  .jw-form .el-form--inline .jw-field {
     margin-right: 0px;
+    margin-bottom: 10px;
+    min-height: 36px;
   }
 
-  .jw-form .el-form--inline .el-form-item .el-form-item__content {
-    line-height: 20px;
+  .jw-form .el-form--inline .jw-field .el-form-item__label {
+    width: 100px;
+    padding: 10px 5px 0px 0;
   }
 
-  .jw-form .jw-field-col-1, .jw-form .jw-field-col-2, .jw-form .jw-field-col-3, .jw-form .jw-field-col-4 {
-    min-width: 200px;
+  /* large 1470 -  */
+  .jw-form-mini {
+    width: 390px; /* 20 + 350 + 20 */
   }
 
-  .jw-dialog-mini .jw-form .jw-field-col-1, .jw-dialog-mini .jw-form .jw-field-col-2, .jw-dialog-mini .jw-form .jw-field-col-3, .jw-dialog-mini .jw-form .jw-field-col-4 {
-    width: 200px;
+  .jw-form-small {
+    width: 745px; /* 20 + 350 + 4 + 350 + 20 + 1 */
   }
 
-  .jw-sub-dialog .jw-form .jw-field-col-1, .jw-sub-dialog .jw-form .jw-field-col-2, jw-sub-dialog .jw-form .jw-field-col-3, jw-sub-dialog .jw-form .jw-field-col-4 {
-    width: 200px;
+  .jw-form-middle {
+    width: 1099px; /* 20 + 350 + 4 + 350 + 4 + 350 + 20 + 1 */
   }
 
-  .jw-form .jw-field-col-1 {
-    width: 200px;
+  .jw-form-large {
+    width: 1453px; /* 20 + 350 + 4 + 350 + 4 + 350 + 4 + 350 + 20 + 1 */
   }
 
-  .jw-form .jw-field-col-2 {
-    width: 554px; /* 200 + 4 + 350 */
+  .jw-form .el-form--inline .jw-field.jw-field-1 .el-form-item__content,
+  .jw-form.jw-form-mini .el-form--inline .jw-field.jw-field-2 .el-form-item__content,
+  .jw-form.jw-form-mini .el-form--inline .jw-field.jw-field-3 .el-form-item__content,
+  .jw-form.jw-form-mini .el-form--inline .jw-field.jw-field-4 .el-form-item__content {
+    width: 250px;
   }
 
-  .jw-form .jw-field-col-3 {
-    width: 908px; /* 200 + 4 + 350 + 4 + 350 */
+  .jw-form .el-form--inline .jw-field.jw-field-2 .el-form-item__content,
+  .jw-form.jw-form-small .el-form--inline .jw-field.jw-field-3 .el-form-item__content,
+  .jw-form.jw-form-small .el-form--inline .jw-field.jw-field-4 .el-form-item__content {
+    width: 604px; /* 250 + 4 + 350 */
   }
 
-  .jw-form label {
-    margin-bottom: 0px;
+  .jw-form .el-form--inline .jw-field.jw-field-3 .el-form-item__content,
+  .jw-form.jw-form-middle .el-form--inline .jw-field.jw-field-4 .el-form-item__content {
+    width: 958px; /* 250 + 4 + 350 + 4 + 350 */
   }
 
-  .jw-form .el-checkbox {
-    color: inherit;
-    line-height: 36px;
+  .jw-form .el-form--inline .jw-field.jw-field-4 .el-form-item__content {
+    width: 1312px; /* 250 + 4 + 350 + 4 + 350 + 4 + 350 */
   }
 
-  .jw-form .el-date-editor.el-input {
-    min-width: 200px;
-    width: 200px;
+  /* middle 1116 -  1470 */
+  @media (max-width: 1470px) {
+    .jw-form-large {
+      width: 1099px; /* 20 + 350 + 4 + 350 + 4 + 350 + 4 + 350 + 20 + 1 */
+    }
+
+    .jw-form .el-form--inline .jw-field.jw-field-4 .el-form-item__content {
+      width: 958px; /* 250 + 4 + 350 + 4 + 350 */
+    }
   }
 
-  .jw-form .el-form-item__error {
-    background: #fff;
-    z-index: 9999999;
+  /* small 762 - 1116 */
+  @media (max-width: 1116px) {
+    .jw-form-middle {
+      width: 745px; /* 20 + 350 + 4 + 350 + 4 + 350 + 20 + 1 */
+    }
+
+    .jw-form-large {
+      width: 745px; /* 20 + 350 + 4 + 350 + 4 + 350 + 4 + 350 + 20 + 1 */
+    }
+
+    .jw-form .el-form--inline .jw-field.jw-field-3 .el-form-item__content,
+    .jw-form.jw-form-middle .el-form--inline .jw-field.jw-field-4 .el-form-item__content {
+      width: 704px; /* 250 + 4 + 350 + 4 + 350 */
+    }
+
+    .jw-form .el-form--inline .jw-field.jw-field-4 .el-form-item__content {
+      width: 704px; /* 250 + 4 + 350 + 4 + 350 + 4 + 350 */
+    }
   }
 
-  .jw-form .el-input-number {
-    min-width: 200px;
+  /* mini 0 - 762 */
+  @media (max-width: 762px) {
+    .jw-form-small {
+      width: 390px; /* 20 + 350 + 4 + 350 + 20 + 1 */
+    }
+
+    .jw-form-middle {
+      width: 390px; /* 20 + 350 + 4 + 350 + 4 + 350 + 20 + 1 */
+    }
+
+    .jw-form-large {
+      width: 390px; /* 20 + 350 + 4 + 350 + 4 + 350 + 4 + 350 + 20 + 1 */
+    }
+
+    .jw-form .el-form--inline .jw-field.jw-field-2 .el-form-item__content,
+    .jw-form.jw-form-small .el-form--inline .jw-field.jw-field-3 .el-form-item__content,
+    .jw-form.jw-form-small .el-form--inline .jw-field.jw-field-4 .el-form-item__content {
+      width: 250px; /* 250 + 4 + 350 */
+    }
+
+    .jw-form .el-form--inline .jw-field.jw-field-3 .el-form-item__content,
+    .jw-form.jw-form-middle .el-form--inline .jw-field.jw-field-4 .el-form-item__content {
+      width: 250px; /* 250 + 4 + 350 + 4 + 350 */
+    }
+
+    .jw-form .el-form--inline .jw-field.jw-field-4 .el-form-item__content {
+      width: 250px; /* 250 + 4 + 350 + 4 + 350 + 4 + 350 */
+    }
   }
 
-  .jw-form .el-input-number__decrease, .el-input-number__increase {
-    line-height: 35px;
-  }
-
-  .jw-form .el-radio {
-    color: inherit;
-  }
-
-  .jw-form .el-radio-group {
-    min-width: 200px;
-    line-height: 36px;
-    height: 36px;
+  .jw-form .el-form--inline .jw-field .el-form-item__content .jw-grid {
+    border: 1px solid #bfcbd9;
   }
 
   .jw-form .el-select {
-    min-width: 200px;
+    width: 100%;
   }
 
-  .jw-form .el-textarea {
-    line-height: 36px;
+  .jw-form .el-radio-group {
+    width: 100%;
+  }
+
+  .jw-form .el-date-editor.el-input {
+    width: 100%;
+  }
+
+  .jw-form .el-input-number {
+    width: 100%;
   }
 
   .jw-form .el-textarea__inner {
     min-height: 36px;
   }
 
-  .jw-form .jw-textarea-full-width {
-    width: 100%;
+  /********************************************************************************************************************/
+  /* jw-selector */
+  /********************************************************************************************************************/
+  .jw-selector {
   }
 
-  .jw-form .jw-textarea-nowrap .el-textarea__inner {
-    white-space: nowrap;
+  .jw-selector-small {
+    width: 705px;
   }
 </style>
+
 
 <template>
   <div id="app">
