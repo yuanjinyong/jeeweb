@@ -15,7 +15,7 @@
 <template>
   <jw-form ref="form" :form-options="options" :entity="entity">
     <template slot="fieldset">
-      <div class="jw-form-item">
+      <div class="jw-field jw-field-2">
         <el-tree ref="menuTree"
                  :style="{'overflow-y': 'auto', 'max-height': maxTreeHeight + 'px'}"
                  show-checkbox
@@ -69,7 +69,7 @@
     },
     computed: {
       maxTreeHeight () {
-        return this.$store.state.layout.window.height - 80 - 59 - 76 - 35 - 40
+        return this.$store.state.layout.window.height - 80 - 40 - 56 - 35 - 40
       }
     },
     methods: {

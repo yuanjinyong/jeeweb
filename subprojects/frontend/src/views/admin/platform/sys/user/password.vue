@@ -1,13 +1,13 @@
 <template>
   <jw-form ref="form" :form-options="options" :entity="entity" :rules="rules">
     <template slot="fieldset">
-      <el-form-item label="旧密码" prop="oldPassword">
+      <el-form-item class="jw-field jw-field-1" label="旧密码" prop="oldPassword">
         <el-input type="password" v-model="entity.oldPassword"></el-input>
       </el-form-item>
-      <el-form-item label="新密码" prop="newPassword">
+      <el-form-item class="jw-field jw-field-1" label="新密码" prop="newPassword">
         <el-input type="password" v-model="entity.newPassword"></el-input>
       </el-form-item>
-      <el-form-item label="确认新密码" prop="newPassword2">
+      <el-form-item class="jw-field jw-field-1" label="确认新密码" prop="newPassword2">
         <el-input type="password" v-model="entity.newPassword2"></el-input>
       </el-form-item>
     </template>

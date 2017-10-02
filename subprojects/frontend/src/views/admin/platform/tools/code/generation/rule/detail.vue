@@ -1,14 +1,14 @@
 <template>
   <jw-form ref="form" :form-options="options" :entity="entity" :rules="rules">
     <template slot="fieldset">
-      <el-form-item label="规则编码" prop="f_code">
-        <el-input class="jw-field-col-1" v-model="entity.f_code"></el-input>
+      <el-form-item class="jw-field jw-field-1" label="规则编码" prop="f_code">
+        <el-input v-model="entity.f_code"></el-input>
       </el-form-item>
-      <el-form-item label="规则名称" prop="f_name">
-        <el-input class="jw-field-col-1" v-model="entity.f_name"></el-input>
+      <el-form-item class="jw-field jw-field-1" label="规则名称" prop="f_name">
+        <el-input v-model="entity.f_name"></el-input>
       </el-form-item>
-      <el-form-item label="父级菜单" prop="f_menu_parent_id">
-        <el-select class="jw-field-col-1" v-model="entity.f_menu_parent_id" @change="onParentMenuChange">
+      <el-form-item class="jw-field jw-field-1" label="父级菜单" prop="f_menu_parent_id">
+        <el-select v-model="entity.f_menu_parent_id" @change="onParentMenuChange">
           <el-option v-for="menu in menuList"
                      :key="menu.f_id"
                      :value="menu.f_id"
@@ -17,31 +17,32 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="菜单路径" prop="f_menu_parent_path">
-        <el-input class="jw-field-col-1" v-model="entity.f_menu_parent_path" disabled></el-input>
+      <el-form-item class="jw-field jw-field-1" label="菜单路径" prop="f_menu_parent_path">
+        <el-input v-model="entity.f_menu_parent_path" disabled></el-input>
       </el-form-item>
-      <el-form-item label="菜单编码" prop="f_menu_id">
-        <el-input class="jw-field-col-1" v-model="entity.f_menu_id"></el-input>
+      <el-form-item class="jw-field jw-field-1" label="菜单编码" prop="f_menu_id">
+        <el-input v-model="entity.f_menu_id"></el-input>
       </el-form-item>
-      <el-form-item label="菜单名称" prop="f_menu_name">
-        <el-input class="jw-field-col-1" v-model="entity.f_menu_name"></el-input>
+      <el-form-item class="jw-field jw-field-1" label="菜单名称" prop="f_menu_name">
+        <el-input v-model="entity.f_menu_name"></el-input>
       </el-form-item>
-      <el-form-item label="菜单描述" prop="f_menu_remark">
-        <el-input class="jw-field-col-1" v-model="entity.f_menu_remark"></el-input>
+      <el-form-item class="jw-field jw-field-1" label="菜单描述" prop="f_menu_remark">
+        <el-input v-model="entity.f_menu_remark"></el-input>
       </el-form-item>
-      <el-form-item label="排序" prop="f_menu_order">
-        <el-input-number class="jw-field-col-1" v-model="entity.f_menu_order" :step="5"></el-input-number>
+      <el-form-item class="jw-field jw-field-1" label="排序" prop="f_menu_order">
+        <el-input-number v-model="entity.f_menu_order" :step="5"></el-input-number>
       </el-form-item>
-      <el-form-item label="URL" prop="f_request_url">
-        <el-input class="jw-field-col-2" v-model="entity.f_request_url"></el-input>
+      <el-form-item class="jw-field jw-field-2" label="URL" prop="f_request_url">
+        <el-input v-model="entity.f_request_url"></el-input>
       </el-form-item>
-      <el-form-item label="模块包名" prop="f_package_name">
-        <el-input class="jw-field-col-2" v-model="entity.f_package_name"></el-input>
+      <el-form-item class="jw-field jw-field-2" label="模块包名" prop="f_package_name">
+        <el-input v-model="entity.f_package_name"></el-input>
+      </el-form-item>
+      <el-form-item class="jw-field jw-field-4" label="数据库表">
+        <generation-rule-table-view style="height: 500px;" :operation="options.operation" :generate-rule="entity">
+        </generation-rule-table-view>
       </el-form-item>
     </template>
-    <generation-rule-table-view class="jw-form-item" style="height: 500px;" :operation="options.operation"
-                                :generate-rule="entity">
-    </generation-rule-table-view>
   </jw-form>
 </template>
 

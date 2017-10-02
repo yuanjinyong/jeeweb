@@ -1,62 +1,61 @@
 <template>
   <jw-form ref="form" :form-options="options" :entity="entity" :rules="rules">
     <template slot="fieldset">
-      <el-form-item label="数据库名" prop="f_db_name">
-        <el-select class="jw-field-col-1" v-model="entity.f_db_name">
+      <el-form-item class="jw-field jw-field-1" label="数据库名" prop="f_db_name">
+        <el-select v-model="entity.f_db_name">
           <el-option v-for="item in schematas" :key="item.SCHEMA_NAME" :value="item.SCHEMA_NAME"
                      :label="item.SCHEMA_NAME">
             {{item.SCHEMA_NAME}}
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="数据库表名" prop="f_table_name">
-        <el-autocomplete class="jw-field-col-1" v-model="entity.f_table_name" icon="search"
-                         :fetch-suggestions="loadTables" @select="loadFields">
+      <el-form-item class="jw-field jw-field-1" label="数据库表名" prop="f_table_name">
+        <el-autocomplete v-model="entity.f_table_name" icon="search" :fetch-suggestions="loadTables"
+                         @select="loadFields">
         </el-autocomplete>
       </el-form-item>
-      <el-form-item label="排序" prop="f_order">
-        <el-input-number class="jw-field-col-1" v-model="entity.f_order" :step="1"></el-input-number>
+      <el-form-item class="jw-field jw-field-1" label="排序" prop="f_order">
+        <el-input-number v-model="entity.f_order" :step="1"></el-input-number>
       </el-form-item>
-      <el-form-item label="主表" prop="f_is_main">
-        <el-radio-group class="jw-field-col-1" v-model="entity.f_is_main" @change="onIsMainChange">
+      <el-form-item class="jw-field jw-field-1" label="主表" prop="f_is_main">
+        <el-radio-group v-model="entity.f_is_main" @change="onIsMainChange">
           <el-radio :label="1">是</el-radio>
           <el-radio :label="2">否</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="父类" prop="f_entity_base_class">
-        <el-select class="jw-field-col-1" v-model="entity.f_entity_base_class">
+      <el-form-item class="jw-field jw-field-1" label="父类" prop="f_entity_base_class">
+        <el-select v-model="entity.f_entity_base_class">
           <el-option v-for="baseClass in baseClasses" :key="baseClass.fullName" :value="baseClass.fullName"
                      :label="baseClass.name">
             {{baseClass.fullName}}
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="接口" prop="f_entity_interfaces">
-        <el-select class="jw-field-col-3" v-model="f_entity_interfaces" multiple>
+      <el-form-item class="jw-field jw-field-3" label="接口" prop="f_entity_interfaces">
+        <el-select v-model="f_entity_interfaces" multiple>
           <el-option v-for="interface in interfaces" :key="interface.fullName" :value="interface.fullName"
                      :label="interface.name">
             {{interface.fullName}}
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="Entity" prop="f_entity_class">
-        <el-input class="jw-field-col-2" v-model="entity.f_entity_class"
+      <el-form-item class="jw-field jw-field-2" label="Entity" prop="f_entity_class">
+        <el-input v-model="entity.f_entity_class"
                   placeholder="Map类型请填写“com.jeeweb.framework.core.model.RowMap”。">
         </el-input>
       </el-form-item>
-      <el-form-item label="Mapper" prop="f_mapper_class">
-        <el-input class="jw-field-col-2" v-model="entity.f_mapper_class"></el-input>
+      <el-form-item class="jw-field jw-field-2" label="Mapper" prop="f_mapper_class">
+        <el-input v-model="entity.f_mapper_class"></el-input>
       </el-form-item>
-      <el-form-item label="Service" prop="f_service_class">
-        <el-input class="jw-field-col-2" v-model="entity.f_service_class"></el-input>
+      <el-form-item class="jw-field jw-field-2" label="Service" prop="f_service_class">
+        <el-input v-model="entity.f_service_class"></el-input>
       </el-form-item>
-      <el-form-item label="Api" prop="f_rest_class">
-        <el-input class="jw-field-col-2" v-model="entity.f_rest_class"></el-input>
+      <el-form-item class="jw-field jw-field-2" label="Api" prop="f_rest_class">
+        <el-input v-model="entity.f_rest_class"></el-input>
       </el-form-item>
-
-      <div class="jw-form-item" style="height: 449px;">
-        <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
-      </div>
+      <el-form-item class="jw-field jw-field-4" label="字段">
+        <ag-grid ref="grid" class="ag-fresh jw-grid" style="height: 449px;" :grid-options="gridOptions"></ag-grid>
+      </el-form-item>
     </template>
   </jw-form>
 </template>

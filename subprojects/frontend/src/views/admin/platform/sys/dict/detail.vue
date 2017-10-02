@@ -1,62 +1,61 @@
 <template>
   <jw-form ref="form" :form-options="options" :entity="entity" :rules="rules">
     <template slot="fieldset">
-      <el-form-item label="编码" prop="f_code">
-        <el-input class="jw-field-col-1" v-model="entity.f_code"></el-input>
+      <el-form-item class="jw-field jw-field-1" label="编码" prop="f_code">
+        <el-input v-model="entity.f_code"></el-input>
       </el-form-item>
-      <el-form-item label="名称" prop="f_name">
-        <el-input class="jw-field-col-1" v-model="entity.f_name"></el-input>
+      <el-form-item class="jw-field jw-field-1" label="名称" prop="f_name">
+        <el-input v-model="entity.f_name"></el-input>
       </el-form-item>
-      <el-form-item label="数据库名" prop="f_db_name">
-        <el-select class="jw-field-col-1" v-model="entity.f_db_name">
+      <el-form-item class="jw-field jw-field-1" label="数据库名" prop="f_db_name">
+        <el-select v-model="entity.f_db_name">
           <el-option v-for="item in schematas" :key="item.SCHEMA_NAME" :value="item.SCHEMA_NAME"
                      :label="item.SCHEMA_NAME">
             {{item.SCHEMA_NAME}}
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="数据库表名" prop="f_table_name">
-        <el-autocomplete class="jw-field-col-1" v-model="entity.f_table_name" icon="search"
-                         :fetch-suggestions="loadTables" @select="loadFields">
+      <el-form-item class="jw-field jw-field-1" label="数据库表名" prop="f_table_name">
+        <el-autocomplete v-model="entity.f_table_name" icon="search" :fetch-suggestions="loadTables"
+                         @select="loadFields">
         </el-autocomplete>
       </el-form-item>
-      <el-form-item label="字典项编码字段" prop="f_code_column">
-        <el-select class="jw-field-col-1" v-model="entity.f_code_column">
+      <el-form-item class="jw-field jw-field-1" label="字典项编码字段" prop="f_code_column">
+        <el-select v-model="entity.f_code_column">
           <el-option v-for="item in fields" :key="item.COLUMN_NAME" :value="item.COLUMN_NAME" :label="item.COLUMN_NAME">
             {{item.COLUMN_NAME}}
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="字典项名称字段" prop="f_name_column">
-        <el-select class="jw-field-col-1" v-model="entity.f_name_column">
+      <el-form-item class="jw-field jw-field-1" label="字典项名称字段" prop="f_name_column">
+        <el-select v-model="entity.f_name_column">
           <el-option v-for="item in fields" :key="item.COLUMN_NAME" :value="item.COLUMN_NAME" :label="item.COLUMN_NAME">
             {{item.COLUMN_NAME}}
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="字典项排序字段" prop="f_order_column">
-        <el-select class="jw-field-col-1" v-model="entity.f_order_column">
+      <el-form-item class="jw-field jw-field-1" label="字典项排序字段" prop="f_order_column">
+        <el-select v-model="entity.f_order_column">
           <el-option v-for="item in fields" :key="item.COLUMN_NAME" :value="item.COLUMN_NAME" :label="item.COLUMN_NAME">
             {{item.COLUMN_NAME}}
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="系统预置" prop="f_is_preset">
-        <el-radio-group class="jw-field-col-1" v-model="entity.f_is_preset">
+      <el-form-item class="jw-field jw-field-1" label="系统预置" prop="f_is_preset">
+        <el-radio-group v-model="entity.f_is_preset">
           <el-radio :label="1" :disabled="!curUser.superAdmin">是</el-radio>
           <el-radio :label="2" :disabled="!curUser.superAdmin">否</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="查询Where条件" prop="f_where_clause">
-        <el-input class="jw-field-col-2" v-model="entity.f_where_clause" type="textarea" autosize></el-input>
+      <el-form-item class="jw-field jw-field-2" label="查询Where条件" prop="f_where_clause">
+        <el-input v-model="entity.f_where_clause" type="textarea" autosize></el-input>
       </el-form-item>
-      <el-form-item label="备注" prop="f_remark">
-        <el-input class="jw-field-col-2" v-model="entity.f_remark" type="textarea" autosize></el-input>
+      <el-form-item class="jw-field jw-field-2" label="备注" prop="f_remark">
+        <el-input v-model="entity.f_remark" type="textarea" autosize></el-input>
       </el-form-item>
-
-      <div class="jw-form-item" style="height: 320px;">
-        <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
-      </div>
+      <el-form-item class="jw-field jw-field-2" label="字典项列表">
+        <ag-grid ref="grid" class="ag-fresh jw-grid" style="height: 320px;" :grid-options="gridOptions"></ag-grid>
+      </el-form-item>
     </template>
   </jw-form>
 </template>
@@ -181,6 +180,7 @@
           }
         },
         field: 'f_item_order',
+        pinned: 'left',
         cellStyle: {'text-align': 'right'},
         cellRendererFramework: IndexRendererFramework,
         width: 38
@@ -200,11 +200,13 @@
             }
           }
         },
+        suppressSizeToFit: false,
         width: 200
       }, {
         headerName: '名称',
         field: 'f_item_text',
         cellRendererFramework: TextEditorFramework,
+        suppressSizeToFit: false,
         width: 300
       }, {
         headerName: '是否预置',
@@ -224,10 +226,11 @@
             }
           }
         },
-        width: 75
+        width: 70
       }, {
         headerName: '操作',
         field: '',
+        pinned: 'right',
         cellStyle: {'text-align': 'center'},
         cellRendererFramework: OperationRendererFramework,
         cellRendererParams: {
@@ -265,6 +268,7 @@
             }
           }]
         },
+        suppressResize: true,
         width: 70
       }]
     },

@@ -1,32 +1,32 @@
 <template>
   <jw-form ref="form" :form-options="options" :entity="entity" :rules="rules">
     <template slot="fieldset">
-      <el-form-item label="编码" prop="f_code">
-        <el-input class="jw-field-col-1" v-model="entity.f_code"></el-input>
+      <el-form-item class="jw-field jw-field-2" label="编码" prop="f_code">
+        <el-input v-model="entity.f_code"></el-input>
       </el-form-item>
-      <el-form-item label="名称" prop="f_name">
-        <el-input class="jw-field-col-1" v-model="entity.f_name"></el-input>
+      <el-form-item class="jw-field jw-field-2" label="名称" prop="f_name">
+        <el-input v-model="entity.f_name"></el-input>
       </el-form-item>
-      <el-form-item label="描述" prop="f_desc">
-        <el-input class="jw-field-col-2" v-model="entity.f_desc" type="textarea" autosize></el-input>
+      <el-form-item class="jw-field jw-field-2" label="描述" prop="f_desc">
+        <el-input v-model="entity.f_desc" type="textarea" autosize></el-input>
       </el-form-item>
-      <el-form-item label="排序" prop="f_order">
-        <el-input-number class="jw-field-col-1" v-model="entity.f_order" :step="1"></el-input-number>
+      <el-form-item class="jw-field jw-field-1" label="排序" prop="f_order">
+        <el-input-number v-model="entity.f_order" :step="1"></el-input-number>
       </el-form-item>
-      <el-form-item label="显示" prop="f_is_editable">
-        <el-radio-group class="jw-field-col-1" v-model="entity.f_is_editable">
+      <el-form-item class="jw-field jw-field-1" label="显示" prop="f_is_editable">
+        <el-radio-group v-model="entity.f_is_editable">
           <el-radio :label="1">是</el-radio>
           <el-radio :label="2">否</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="出厂值" prop="f_init_value">
-        <el-input class="jw-field-col-1" v-model="entity.f_init_value"></el-input>
+      <el-form-item class="jw-field jw-field-1" label="出厂值" prop="f_init_value">
+        <el-input v-model="entity.f_init_value"></el-input>
       </el-form-item>
-      <el-form-item label="当前值" prop="f_value">
-        <el-input class="jw-field-col-1" v-model="entity.f_value"></el-input>
+      <el-form-item class="jw-field jw-field-1" label="当前值" prop="f_value">
+        <el-input v-model="entity.f_value"></el-input>
       </el-form-item>
-      <el-form-item label="备注" prop="f_remark">
-        <el-input class="jw-field-col-2" v-model="entity.f_remark" type="textarea" autosize></el-input>
+      <el-form-item class="jw-field jw-field-2" label="备注" prop="f_remark">
+        <el-input v-model="entity.f_remark" type="textarea" autosize></el-input>
       </el-form-item>
     </template>
   </jw-form>

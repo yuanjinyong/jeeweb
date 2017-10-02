@@ -1,57 +1,55 @@
 <template>
   <jw-form ref="form" :form-options="options" :entity="entity" :rules="rules">
     <template slot="fieldset">
-      <el-form-item label="父菜单编码" prop="f_parent_id">
-        <el-input class="jw-field-col-1" v-model="entity.f_parent_id" :disabled="true"></el-input>
+      <el-form-item class="jw-field jw-field-1" label="父菜单编码" prop="f_parent_id">
+        <el-input v-model="entity.f_parent_id" :disabled="true"></el-input>
       </el-form-item>
-      <el-form-item label="父菜单名称" prop="f_parent_name">
-        <el-input class="jw-field-col-1" v-model="entity.f_parent_name" :disabled="true"></el-input>
+      <el-form-item class="jw-field jw-field-1" label="父菜单名称" prop="f_parent_name">
+        <el-input v-model="entity.f_parent_name" :disabled="true"></el-input>
       </el-form-item>
-      <el-form-item label="编码" prop="f_id">
-        <el-input class="jw-field-col-1" v-model="entity.f_id" :disabled="options.operation !== 'add'"></el-input>
+      <el-form-item class="jw-field jw-field-1" label="编码" prop="f_id">
+        <el-input v-model="entity.f_id" :disabled="options.operation !== 'add'"></el-input>
       </el-form-item>
-      <el-form-item label="名称" prop="f_name">
-        <el-input class="jw-field-col-1" v-model="entity.f_name"></el-input>
+      <el-form-item class="jw-field jw-field-1" label="名称" prop="f_name">
+        <el-input v-model="entity.f_name"></el-input>
       </el-form-item>
-      <el-form-item label="描述" prop="f_desc">
-        <el-input class="jw-field-col-2" v-model="entity.f_desc" type="textarea" autosize></el-input>
-      </el-form-item>
-      <el-form-item label="类型" prop="f_type">
-        <el-select class="jw-field-col-1" v-model="entity.f_type" :disabled="options.operation !== 'add'">
+      <el-form-item class="jw-field jw-field-1" label="类型" prop="f_type">
+        <el-select v-model="entity.f_type" :disabled="options.operation !== 'add'">
           <el-option v-for="type in menuTypes" :key="type.f_item_code" :value="type.f_item_code"
                      :label="type.f_item_text" :disabled="type.f_item_code === 0">
             {{type.f_item_text}}
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="排序" prop="f_order">
-        <el-input-number class="jw-field-col-1" v-model="entity.f_order" :step="5"></el-input-number>
+      <el-form-item class="jw-field jw-field-1" label="描述" prop="f_desc">
+        <el-input v-model="entity.f_desc" type="textarea" autosize></el-input>
       </el-form-item>
-      <el-form-item label="图标" prop="f_icon">
-        <el-input class="jw-field-col-1" v-model="entity.f_icon"></el-input>
+      <el-form-item class="jw-field jw-field-1" label="排序" prop="f_order">
+        <el-input-number v-model="entity.f_order" :step="5"></el-input-number>
       </el-form-item>
-      <el-form-item label="状态" prop="f_status">
-        <el-radio-group class="jw-field-col-1" v-model="entity.f_status">
+      <el-form-item class="jw-field jw-field-1" label="图标" prop="f_icon">
+        <el-input v-model="entity.f_icon"></el-input>
+      </el-form-item>
+      <el-form-item class="jw-field jw-field-1" label="状态" prop="f_status">
+        <el-radio-group v-model="entity.f_status">
           <el-radio :label="1">启用</el-radio>
           <el-radio :label="2">禁用</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="适用平台">
-        <div class="jw-field-col-2">
-          <el-checkbox v-model="entity.f_is_web" :true-label="1" :false-label="2">Web</el-checkbox>
-          <el-checkbox v-model="entity.f_is_android" :true-label="1" :false-label="2">Android</el-checkbox>
-          <el-checkbox v-model="entity.f_is_ios" :true-label="1" :false-label="2">IOS</el-checkbox>
-        </div>
+      <el-form-item class="jw-field jw-field-1" label="适用平台">
+        <el-checkbox v-model="entity.f_is_web" :true-label="1" :false-label="2">Web</el-checkbox>
+        <el-checkbox v-model="entity.f_is_android" :true-label="1" :false-label="2">Android</el-checkbox>
+        <el-checkbox v-model="entity.f_is_ios" :true-label="1" :false-label="2">IOS</el-checkbox>
       </el-form-item>
-      <el-form-item label="路由路径" prop="f_route_path" v-show="entity.f_type === 2">
-        <el-input class="jw-field-col-2" v-model="entity.f_route_path"></el-input>
+      <el-form-item class="jw-field jw-field-3" label="路由路径" prop="f_route_path" v-show="entity.f_type === 2">
+        <el-input v-model="entity.f_route_path"></el-input>
       </el-form-item>
-      <el-form-item label="备注" prop="f_remark">
-        <el-input class="jw-field-col-2" v-model="entity.f_remark" type="textarea" autosize></el-input>
+      <el-form-item class="jw-field jw-field-2" label="备注" prop="f_remark">
+        <el-input v-model="entity.f_remark" type="textarea" autosize></el-input>
       </el-form-item>
-      <div class="jw-form-item" style="height: 200px;" v-show="entity.f_type === 2 || entity.f_type === 3">
-        <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
-      </div>
+      <el-form-item class="jw-field jw-field-2" label="授权的URL" v-show="entity.f_type === 2 || entity.f_type === 3">
+        <ag-grid ref="grid" class="ag-fresh jw-grid" style="height: 200px;" :grid-options="gridOptions"></ag-grid>
+      </el-form-item>
     </template>
 
     <template slot="other">
@@ -183,20 +181,24 @@
             }
           }
         },
+        pinned: 'left',
         cellStyle: {'text-align': 'right'},
         cellRendererFramework: IndexRendererFramework,
         width: 38
       }, {
         headerName: 'URL',
         field: 'f_url',
-        width: 535 - 15
+        tooltipField: 'f_url',
+        suppressSizeToFit: false,
+        width: 300
       }, {
         headerName: '提交方式',
         field: 'f_methods',
-        width: 92
+        width: 80
       }, {
         headerName: '操作',
         field: '',
+        pinned: 'right',
         cellStyle: {'text-align': 'center'},
         cellRendererFramework: OperationRendererFramework,
         cellRendererParams: {
@@ -211,7 +213,8 @@
             }
           }]
         },
-        width: 48
+        suppressResize: true,
+        width: 36
       }]
     },
     methods: {

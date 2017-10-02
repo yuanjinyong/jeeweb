@@ -53,9 +53,12 @@
           <el-button type="danger" @click="onReject">驳 回</el-button>
           <el-button type="success" @click="onApprove">同 意</el-button>
         </template>
+        <template v-else-if="options.operation === 'view'">
+          <el-button @click="onCancel">关 闭</el-button>
+        </template>
         <template v-else>
           <el-button @click="onCancel">取 消</el-button>
-          <el-button type="primary" @click="onSubmit" :disabled="options.operation === 'view'">确 定</el-button>
+          <el-button type="primary" @click="onSubmit">保 存</el-button>
         </template>
       </slot>
     </div>
