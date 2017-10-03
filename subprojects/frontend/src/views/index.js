@@ -7,6 +7,7 @@ export default [{
   path: '/',
   redirect: '/admin'
 }, {
+  name: 'register',
   path: '/register',
   component: RegisterView
 }, {

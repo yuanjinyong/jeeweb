@@ -231,11 +231,14 @@
     padding: 20px;
   }
 
+  .jw-form .jw-form-body {
+  }
+
   .jw-form .jw-form-footer {
     padding: 20px;
   }
 
-  .jw-form .el-form--inline {
+  .jw-form .el-form--inline fieldset {
     margin-bottom: -10px;
   }
 
