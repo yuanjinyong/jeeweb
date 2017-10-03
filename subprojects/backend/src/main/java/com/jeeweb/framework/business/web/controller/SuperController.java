@@ -27,8 +27,6 @@ import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.framework.core.utils.HelpUtil;
 
 public abstract class SuperController {
-    public static final String ATTACHMENT_API = "/api/platform/data/attachments";
-    public static final String ATTACHMENT_URL_FORMAT = "%s/api/platform/data/attachments/%d/download";
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
     @InitBinder
@@ -158,20 +156,51 @@ public abstract class SuperController {
         return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
     }
 
+    protected static String getFullContextPath() {
+        HttpServletRequest request = getRequest();
+        return new StringBuffer().append(request.getScheme()).append("://").append(request.getServerName()).append(':')
+                .append(request.getServerPort()).append(request.getContextPath()).toString();
+    }
+
     protected static ServletContext getServletContext() {
         return getRequest().getSession().getServletContext();
     }
 
-    protected static String buildUrl() {
-        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        return new StringBuffer(req.getScheme()).append("://").append(req.getServerName()).append(':')
-                .append(req.getServerPort()).append(req.getContextPath()).toString();
-    }
+    protected String getIpAddress() {
+        HttpServletRequest request = getRequest();
 
-    protected static String buildUrl(String url) {
-        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        return new StringBuffer(req.getScheme()).append("://").append(req.getServerName()).append(':')
-                .append(req.getServerPort()).append(req.getContextPath()).append(url).toString();
+        // 获取请求主机IP地址，如果通过代理进来，则透过防火墙获取真实IP地址
+        String ip = request.getHeader("X-Forwarded-For");
+        if (HelpUtil.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
+            if (HelpUtil.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getHeader("Proxy-Client-IP");
+            }
+            if (HelpUtil.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getHeader("WL-Proxy-Client-IP");
+            }
+            if (HelpUtil.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getHeader("HTTP_CLIENT_IP");
+            }
+            if (HelpUtil.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+            }
+            if (HelpUtil.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getRemoteAddr();
+            }
+        } else {
+            if (ip.length() > 15) {
+                String[] ips = ip.split(",");
+                for (int index = 0; index < ips.length; index++) {
+                    String strIp = ips[index];
+                    if (!("unknown".equalsIgnoreCase(strIp))) {
+                        ip = strIp;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return ip;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -199,6 +228,6 @@ public abstract class SuperController {
         }
         log.error(e.getMessage(), e);
 
-        return new ResponseResult(new Result(errorMsg), HttpStatus.OK);
+        return new ResponseResult(new Result(errorMsg), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

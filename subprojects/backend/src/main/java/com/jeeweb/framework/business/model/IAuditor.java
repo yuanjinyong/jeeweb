@@ -9,10 +9,32 @@ import java.sql.Timestamp;
  * @author 袁进勇
  *
  */
-public interface IAuditor {
-    public static final Integer STATUS_NEW = 1; // 待审核
-    public static final Integer STATUS_NORMAL = 2; // 正常、已审核、审核通过
-    public static final Integer STATUS_REJECTED = 3; // 拒绝、审核未通过
+public interface IAuditor extends ICancel {
+
+    /**
+     * 1 新建
+     */
+    public static final Integer STATUS_NEW = 1;
+
+    /**
+     * 2 待审核
+     */
+    public static final Integer STATUS_PENDING = 2;
+
+    /**
+     * 3 正常、已审核、审核通过
+     */
+    public static final Integer STATUS_APPROVED = 3;
+
+    /**
+     * 4 拒绝、审核未通过
+     */
+    public static final Integer STATUS_REJECTED = 4;
+
+    /**
+     * 5 取消
+     */
+    public static final Integer STATUS_CANCEL = 5;
 
     Integer getF_auditor_id();
 

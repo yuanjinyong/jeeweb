@@ -15,7 +15,7 @@ import com.jeeweb.platform.sys.service.DictService;
 
 @RestController
 @RequestMapping(value = "/api/platform/data/dicts")
-public class DataApi extends SuperController {
+public class DictDataApi extends SuperController {
     @Resource
     private DictService dictService;
 

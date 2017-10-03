@@ -28,6 +28,10 @@ public class HelpUtil extends StringUtils {
     public static boolean isEmpty(String string) {
         return string == null || string.trim().length() == 0;
     }
+    
+    public static boolean isEmpty(StringBuffer sb) {
+    	return sb == null || sb.toString().trim().length() == 0;
+    }
 
     public static boolean isEmpty(Object[] array) {
         return array == null || array.length == 0;

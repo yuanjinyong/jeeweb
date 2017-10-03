@@ -6,9 +6,26 @@ import com.jeeweb.framework.business.entity.BaseEntity;
 import com.jeeweb.framework.business.model.ICreator;
 
 public class AttachmentEntity extends BaseEntity<Integer> implements ICreator {
+    public static final String DOWNLOAD_URL = "api/zkpms/attachments/%d/download";
+
+    /**
+     * 1、待归档
+     */
     public static final Integer STATUS_INIT = 1;
+
+    /**
+     * 2、已归档
+     */
     public static final Integer STATUS_ARCHIVED = 2;
+
+    /**
+     * 3、已上传
+     */
     public static final Integer STATUS_UPLOADED = 3;
+
+    /**
+     * 4、待删除
+     */
     public static final Integer STATUS_PREDELETE = 4;
 
     private static final long serialVersionUID = 1L;

@@ -1,11 +1,10 @@
 package com.jeeweb.platform.data.web.api;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -17,7 +16,6 @@ import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -25,8 +23,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.jeeweb.framework.business.web.controller.SuperController;
+import com.jeeweb.framework.business.web.view.AttachmentView;
 import com.jeeweb.framework.core.exception.BusinessException;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.ResponseResult;
@@ -38,9 +38,9 @@ import com.jeeweb.platform.security.utils.SecurityUtil;
 import com.jeeweb.platform.sys.utils.SysUtil;
 
 @RestController
-@RequestMapping(value = SuperController.ATTACHMENT_API)
-public class AttachmentsApi extends SuperController {
-    private static final Logger LOG = LoggerFactory.getLogger(AttachmentsApi.class);
+@RequestMapping(value = "/api/platform/data/attachments")
+public class AttachmentDataApi extends SuperController {
+    private static final Logger LOG = LoggerFactory.getLogger(AttachmentDataApi.class);
     @Resource
     private AttachmentService attachmentService;
 
@@ -50,7 +50,9 @@ public class AttachmentsApi extends SuperController {
         params.put("f_tenant_id", 0);
 
         List<AttachmentEntity> entities = attachmentService.selectEntityListPage(params);
-        fillUrl(entities);
+        for (AttachmentEntity entity : entities) {
+            fillFileInfo(entity);
+        }
 
         return new ResponseResult(new Result(params.page(entities)), HttpStatus.OK);
     }
@@ -60,7 +62,9 @@ public class AttachmentsApi extends SuperController {
         List<AttachmentEntity> entityList = saveAttachmentList(request);
         try {
             attachmentService.insertEntities(entityList);
-            fillUrl(entityList);
+            for (AttachmentEntity entity : entityList) {
+                fillFileInfo(entity);
+            }
             return new ResponseResult(new Result(entityList), HttpStatus.OK);
         } catch (BusinessException e) {
             deleteTempFile(entityList);
@@ -191,63 +195,31 @@ public class AttachmentsApi extends SuperController {
         // throw new BusinessException("附件不存在！");
         // }
 
-        fillUrl(entity, buildUrl());
+        fillFileInfo(entity);
 
         return new ResponseResult(new Result(entity), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}/download", method = RequestMethod.GET)
-    public void download(@PathVariable("id") Integer primaryKey, HttpServletResponse response) {
+    public ModelAndView download(@PathVariable("id") Integer primaryKey, HttpServletResponse response) {
         AttachmentEntity entity = attachmentService.selectEntity(primaryKey);
         // TODO
         // if (CompanyContext.getCompanyId(0) != entity.getF_company_id()) {
         // throw new BusinessException("附件不存在！");
         // }
 
-        // 重置输出流
-        response.reset();
-        response.setContentType(entity.getF_type()); // 设置文件类型
-        response.setContentLengthLong(entity.getF_size());
-
-        InputStream in = null;
-        try {
-            response.setHeader("Content-Disposition",
-                    "attachment; filename=" + new String(entity.getF_name().getBytes("GB2312"), "ISO_8859_1")); // 中文文件名需要转为GB2312编码
-
-            if (entity.getF_status() == AttachmentEntity.STATUS_INIT
-                    || entity.getF_status() == AttachmentEntity.STATUS_ARCHIVED) {
-                in = new FileInputStream(new File(getAttachmentDir(), entity.getF_local_path()));
-            } else {
-                LOG.error("下载附件失败，文件状态不为已归档！id={}", primaryKey);
-                throw new BusinessException("下载附件失败，文件状态不为已归档！");
-            }
-
-            IOUtils.copy(in, response.getOutputStream());
-
-            response.flushBuffer();
-        } catch (IOException e) {
-            LOG.error("下载附件失败！id={}", primaryKey, e);
-            throw new BusinessException("下载附件失败！", e);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    LOG.error("关闭文件输入流失败}", e);
-                }
-            }
+        if (entity.getF_status() == AttachmentEntity.STATUS_INIT
+                || entity.getF_status() == AttachmentEntity.STATUS_ARCHIVED) {
+            return new ModelAndView(new AttachmentView(new File(getAttachmentDir(), entity.getF_local_path()),
+                    entity.getF_size(), entity.getF_type(), entity.getF_name()), new HashMap<>());
+        } else {
+            LOG.error("下载附件失败，文件状态不为已归档！id={}", primaryKey);
+            throw new BusinessException("下载附件失败，文件状态不为已归档！");
         }
     }
 
-    private void fillUrl(List<AttachmentEntity> entityList) {
-        String url = buildUrl();
-        for (AttachmentEntity entity : entityList) {
-            fillUrl(entity, url);
-        }
-    }
-
-    private void fillUrl(AttachmentEntity entity, String url) {
+    private void fillFileInfo(AttachmentEntity entity) {
         entity.setName(entity.getF_name());
-        entity.setUrl(String.format(ATTACHMENT_URL_FORMAT, url, entity.getF_id()));
+        entity.setUrl(String.format(AttachmentEntity.DOWNLOAD_URL, entity.getF_id()));
     }
 }

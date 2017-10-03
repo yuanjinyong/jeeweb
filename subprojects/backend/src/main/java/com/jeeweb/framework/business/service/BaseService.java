@@ -11,6 +11,7 @@ import com.jeeweb.framework.business.entity.TreeNodeEntity;
 import com.jeeweb.framework.business.mapper.BaseMapper;
 import com.jeeweb.framework.business.model.IAttachment;
 import com.jeeweb.framework.business.model.IAuditor;
+import com.jeeweb.framework.business.model.ICancel;
 import com.jeeweb.framework.business.model.ICreator;
 import com.jeeweb.framework.business.model.IModifier;
 import com.jeeweb.framework.business.model.IPreset;
@@ -73,8 +74,10 @@ public abstract class BaseService<P, E> extends SuperService {
     }
 
     public void deleteEntity(P primaryKey) {
-        E entity = getMapper().selectEntity(primaryKey);
+        this.deleteEntity(primaryKey, getMapper().selectEntity(primaryKey));
+    }
 
+    public void deleteEntity(P primaryKey, E entity) {
         validateDeleteEntity(entity);
         if (getMapper().isCanDeleteEntity(primaryKey) > 0) {
             throw new BusinessException("存在关联数据，不能删除！");
@@ -95,8 +98,8 @@ public abstract class BaseService<P, E> extends SuperService {
     }
 
     protected void validateDeleteEntity(E entity) {
-        checkTreeRootNode(entity);
-        checkPreset(entity);
+        checkTreeRootNodeForDelete(entity);
+        checkPresetForDelete(entity);
     }
 
     protected void beforeDeleteEntity(E entity) {
@@ -207,7 +210,7 @@ public abstract class BaseService<P, E> extends SuperService {
         }
     }
 
-    protected void checkTreeRootNode(E entity) {
+    protected void checkTreeRootNodeForDelete(E entity) {
         if (entity instanceof TreeNodeEntity) {
             @SuppressWarnings("rawtypes")
             TreeNodeEntity treeNode = (TreeNodeEntity) entity;
@@ -217,7 +220,7 @@ public abstract class BaseService<P, E> extends SuperService {
         }
     }
 
-    protected void checkPreset(E entity) {
+    protected void checkPresetForDelete(E entity) {
         if (entity instanceof IPreset) {
             IPreset preset = (IPreset) entity;
             if (preset.getF_is_preset() == IPreset.YES) {
@@ -234,11 +237,12 @@ public abstract class BaseService<P, E> extends SuperService {
         E oldEntity = getMapper().selectEntity(primaryKey);
         IAuditor auditor = (IAuditor) entity;
         IAuditor oldAuditor = (IAuditor) oldEntity;
-        if (oldAuditor.getF_status() != IAuditor.STATUS_NEW && oldAuditor.getF_status() != IAuditor.STATUS_REJECTED) {
-            throw new BusinessException("只有未审核和审核未通过的记录才可进行审核！");
+        if (oldAuditor.getF_status() != IAuditor.STATUS_PENDING
+                && oldAuditor.getF_status() != IAuditor.STATUS_REJECTED) {
+            throw new BusinessException("只有待审批和驳回的申请才可进行审批！");
         }
         if (auditor.getF_status() == IAuditor.STATUS_REJECTED && HelpUtil.isEmpty(auditor.getF_audited_comments())) {
-            throw new BusinessException("审不通过时，必须填写审核意见！");
+            throw new BusinessException("驳回时，必须填写审批意见！");
         }
         checkAuditor(oldEntity);
 
@@ -252,5 +256,31 @@ public abstract class BaseService<P, E> extends SuperService {
     }
 
     protected void checkAuditor(E oldEntity) {
+    }
+
+    public void cancelEntity(P primaryKey) {
+        cancelEntity(primaryKey, getMapper().selectEntity(primaryKey));
+    }
+
+    public void cancelEntity(P primaryKey, E entity) {
+        if (!(entity instanceof ICancel)) {
+            return;
+        }
+
+        if (entity instanceof IAuditor) {
+            IAuditor auditor = (IAuditor) entity;
+            if (!(IAuditor.STATUS_PENDING == auditor.getF_status()
+                    || IAuditor.STATUS_REJECTED == auditor.getF_status())) {
+                throw new BusinessException("只有待审核和审核未通过的记录才可以取消！");
+            }
+        }
+
+        ICancel cancel = (ICancel) entity;
+        if (cancel.getStatusCancel() == cancel.getF_status()) {
+            throw new BusinessException("已经取消的记录无需再次取消！");
+        }
+
+        cancel.setF_status(cancel.getStatusCancel());
+        getMapper().updateEntity(entity);
     }
 }

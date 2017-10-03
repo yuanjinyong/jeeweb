@@ -1,6 +1,8 @@
 package com.jeeweb.platform.sys.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -102,6 +104,18 @@ public class MenuService extends BaseService<String, MenuEntity> {
         roleMenuList.addAll(sqlMapper.selectListPage(
                 "SELECT * FROM `t_sys_role_menu` WHERE  f_role_id < 1000 AND f_menu_id IN (SELECT f_id FROM `t_sys_menu` WHERE f_parent_path LIKE CONCAT('%', #{f_parent_path_like}, '%'))",
                 new ParameterMap("f_parent_path_like", menu.getF_full_path()).setOrderBy("f_role_id,f_menu_id")));
+        Collections.sort(roleMenuList, new Comparator<Map<String, Object>>() {
+            @Override
+            public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                Integer r1 = (Integer) o1.get("f_role_id");
+                Integer r2 = (Integer) o2.get("f_role_id");
+                if (r1 == r2) {
+                    return ((String) o1.get("f_menu_id")).compareTo((String) o2.get("f_menu_id"));
+                }
+
+                return r1.compareTo(r2);
+            }
+        });
 
         RowMap data = new RowMap();
         data.put("menuList", TreeUtil.listToTree(menuList));

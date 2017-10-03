@@ -4,6 +4,7 @@
 
 -- changeset 袁进勇:20170705010000 runOnChange:true
 -- comment: 数据库管理
+DELETE FROM t_sys_role_menu WHERE f_menu_id LIKE 'KFGJ-SJKGL%';
 DELETE FROM t_sys_menu_url WHERE f_menu_id LIKE 'KFGJ-SJKGL%';
 DELETE FROM t_sys_menu WHERE f_id LIKE 'KFGJ-SJKGL%';
 
@@ -12,6 +13,7 @@ insert  into `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-SJKGL','5cf851af135d49453d13f68313176112');
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-SJKGL','b6f804b70de1d791ed057678b9748b4e');
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-SJKGL','bace82089e32ac0b0c43288a83bd02ac');
+-- rollback DELETE FROM t_sys_role_menu WHERE f_menu_id LIKE 'KFGJ-SJKGL%';
 -- rollback DELETE FROM t_sys_menu_url WHERE f_menu_id LIKE 'KFGJ-SJKGL%';
 -- rollback DELETE FROM t_sys_menu WHERE f_id LIKE 'KFGJ-SJKGL%';
 
@@ -19,6 +21,7 @@ insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-SJKGL','bace
 
 -- changeset 袁进勇:20170705010001 runOnChange:true
 -- comment: 代码生成
+DELETE FROM t_sys_role_menu WHERE f_menu_id LIKE 'KFGJ-DMSC%';
 DELETE FROM t_sys_menu_url WHERE f_menu_id LIKE 'KFGJ-DMSC%';
 DELETE FROM t_sys_menu WHERE f_id LIKE 'KFGJ-DMSC%';
 
@@ -34,6 +37,7 @@ insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-DMSC-SC','4f
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-DMSC-SCDM','ce3da5c6e39ce2e43fef92bc659f909e');
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-DMSC-XG','f9505ca328c81c026890995a61218838');
 insert  into `t_sys_menu_url`(`f_menu_id`,`f_url_id`) values ('KFGJ-DMSC-ZJ','acb254d89b6dbc46d6e6ab944a16292b');
+-- rollback DELETE FROM t_sys_role_menu WHERE f_menu_id LIKE 'KFGJ-DMSC%';
 -- rollback DELETE FROM t_sys_menu_url WHERE f_menu_id LIKE 'KFGJ-DMSC%';
 -- rollback DELETE FROM t_sys_menu WHERE f_id LIKE 'KFGJ-DMSC%';
 

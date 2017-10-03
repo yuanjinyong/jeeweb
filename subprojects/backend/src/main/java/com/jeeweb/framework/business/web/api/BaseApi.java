@@ -83,16 +83,24 @@ public abstract class BaseApi<P, E extends BaseEntity<P>> extends SuperControlle
         return new ResponseResult(new Result(entity), HttpStatus.OK);
     }
 
+    protected ResponseResult cancelEntity(P primaryKey) {
+        getService().cancelEntity(primaryKey);
+        return new ResponseResult(new Result(), HttpStatus.OK);
+    }
+
     protected void fillAttachment(E entity) {
-        if (entity instanceof IAttachment) {
-            List<AttachmentEntity> attachmentList = ((IAttachment) entity).getAttachmentList();
-            if (!HelpUtil.isEmpty(attachmentList)) {
-                String url = buildUrl();
-                for (AttachmentEntity attachmentEntity : attachmentList) {
-                    attachmentEntity.setName(attachmentEntity.getF_name());
-                    attachmentEntity.setUrl(String.format(ATTACHMENT_URL_FORMAT, url, attachmentEntity.getF_id()));
-                }
-            }
+        if (!(entity instanceof IAttachment)) {
+            return;
+        }
+
+        List<AttachmentEntity> attachmentList = ((IAttachment) entity).getAttachmentList();
+        if (HelpUtil.isEmpty(attachmentList)) {
+            return;
+        }
+
+        for (AttachmentEntity attachmentEntity : attachmentList) {
+            attachmentEntity.setName(attachmentEntity.getF_name());
+            attachmentEntity.setUrl(String.format(AttachmentEntity.DOWNLOAD_URL, entity.getF_id()));
         }
     }
 }
