@@ -14,12 +14,9 @@
         <el-input v-model="entity.f_name"></el-input>
       </el-form-item>
       <el-form-item class="jw-field jw-field-1" label="类型" prop="f_type">
-        <el-select v-model="entity.f_type" :disabled="options.operation !== 'add'">
-          <el-option v-for="type in menuTypes" :key="type.f_item_code" :value="type.f_item_code"
-                     :label="type.f_item_text" :disabled="type.f_item_code === 0">
-            {{type.f_item_text}}
-          </el-option>
-        </el-select>
+        <jw-dict v-model="entity.f_type" :dict-code="'MenuType'" :dict-options="typeDictOptions"
+                 :disabled="options.operation !== 'add'">
+        </jw-dict>
       </el-form-item>
       <el-form-item class="jw-field jw-field-1" label="描述" prop="f_desc">
         <el-input v-model="entity.f_desc" type="textarea" autosize></el-input>
@@ -69,25 +66,41 @@
     OperationRendererFramework
   } from 'components/ag-grid'
   import UrlView from 'views/admin/platform/sys/url/view'
-  import JwSelector from '../../../../../components/jw-common/Selector'
   // import {UrlView} from 'views' // 想使用这种引入方式，规避掉需要写死绝对路径或者相对路径，从而提高代码的可维护性
 
   export default {
     name: 'menuDetail',
     mixins: [DetailMixin],
     components: {
-      JwSelector,
       UrlView
     },
     data () {
       return {
-        menuTypes: [
-          {f_item_code: 0, f_item_text: '根'},
-          {f_item_code: 1, f_item_text: '目录'},
-          {f_item_code: 2, f_item_text: '页面'},
-          {f_item_code: 3, f_item_text: '按钮'},
-          {f_item_code: 4, f_item_text: '令牌'}
-        ],
+        typeDictOptions: {
+          context: {
+            featureComponent: this
+          },
+          isDisabled (item) {
+            let vm = this.options.context.featureComponent
+            if (item.f_item_code === '0') {
+              return true
+            }
+
+            if (vm.options.params.f_type < 2) {
+              // 父级为根和目录时，下面只能挂目录和页面
+              if (!(item.f_item_code === '1' || item.f_item_code === '2')) {
+                return true
+              }
+            } else if (vm.options.params.f_type === 2) {
+              // 父级为页面时，下面只能挂按钮和令牌
+              if (!(item.f_item_code === '3' || item.f_item_code === '4')) {
+                return true
+              }
+            }
+
+            return false
+          }
+        },
         selectorOptions: {
           context: {
             name: '授权的URL',

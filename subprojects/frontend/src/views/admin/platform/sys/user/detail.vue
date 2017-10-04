@@ -27,11 +27,7 @@
         <el-date-picker v-model="entity.f_last_login_time" type="datetime" disabled></el-date-picker>
       </el-form-item>
       <el-form-item class="jw-field jw-field-1" label="状态" prop="f_status">
-        <el-select v-model="entity.f_status" disabled>
-          <el-option :value="1" :label="'正常'">正常</el-option>
-          <el-option :value="2" :label="'锁定'">锁定</el-option>
-          <el-option :value="3" :label="'注销'">注销</el-option>
-        </el-select>
+        <jw-dict v-model="entity.f_status" :dict-code="'UserStatus'" disabled></jw-dict>
       </el-form-item>
       <el-form-item class="jw-field jw-field-1" label="锁定时间" prop="f_locked_time">
         <el-date-picker v-model="entity.f_locked_time" type="datetime" disabled>

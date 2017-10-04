@@ -1,5 +1,5 @@
 <template>
-  <a @click.prevent="onClick(operation)" :title="operation.title" style="cursor: pointer;" v-html="render()"></a>
+  <a @click.stop="onClick(operation)" :title="operation.title" style="cursor: pointer;" v-html="render()"></a>
 </template>
 
 <script>

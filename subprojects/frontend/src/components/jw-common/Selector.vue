@@ -84,7 +84,7 @@
         }
         this.options.params = {}
         this.$lodash.merge(this.options, this.selectorOptions, options)
-        console.log('this.options', this.options)
+
         if (this.options.beforeOpen) {
           this.options.beforeOpen.call(this, this.options, () => {
             this._open()
