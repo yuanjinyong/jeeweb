@@ -57,28 +57,51 @@ Vue.http.interceptors.push(function (request, next) {
         Vue.store.commit('backupRoute', vm.$route)
         Vue.router.push({path: '/admin/login'})
       }
+    } else if (response.status === 403) {
+      vm.errorMessage = response.body.message || '无访问 [' + request.method + '][' + response.url + '] 的权限，请联系系统管理人员！'
+      Vue.prototype.$alert(vm.errorMessage, '错误', {
+        confirmButtonText: '关闭',
+        type: 'error'
+      })
+    } else if (response.status === 404) {
+      vm.errorMessage = '访问 [' + request.method + ']' + response.url + '] 失败，请联系系统技术支持人员！'
+      Vue.prototype.$alert(vm.errorMessage, '错误', {
+        confirmButtonText: '关闭',
+        type: 'error'
+      })
+    } else if (response.status === 501) {
+      console && console.error('response', response)
+      new Promise((resolve, reject) => {
+        if (response.config.responseType === 'blob') {
+          if (response.body.type === 'application/json') {
+            let fr = new FileReader()
+            fr.onload = function (event) {
+              resolve(JSON.parse(event.target.result))
+            }
+            fr.readAsText(response.data)
+          } else {
+            reject(new Error('解析返回结果失败！'))
+          }
+        } else {
+          resolve(response.body)
+        }
+      }).then(result => {
+        vm.errorMessage = result.message
+        Vue.prototype.$alert(vm.errorMessage, '错误', {
+          confirmButtonText: '关闭',
+          type: 'error'
+        })
+      })
+    } else if (response.status === 504) {
+      vm.errorMessage = '请求超时，请稍后重试！'
+      Vue.prototype.$alert(vm.errorMessage, '错误', {
+        confirmButtonText: '关闭',
+        type: 'error'
+      })
     } else {
       console && console.error('response', response)
       if (response.status === 0) {
-        vm.errorMessage = '访问 [' + response.url + '] 失败，请联系系统技术支持人员！'
-        Vue.prototype.$alert(vm.errorMessage, '错误', {
-          confirmButtonText: '关闭',
-          type: 'error'
-        })
-      } else if (response.status === 403) {
-        vm.errorMessage = response.body.message || '无访问 [' + response.url + '] 的权限，请联系系统管理人员！'
-        Vue.prototype.$alert(vm.errorMessage, '错误', {
-          confirmButtonText: '关闭',
-          type: 'error'
-        })
-      } else if (response.status === 404) {
-        vm.errorMessage = '访问 [' + response.url + '] 失败，请联系系统技术支持人员！'
-        Vue.prototype.$alert(vm.errorMessage, '错误', {
-          confirmButtonText: '关闭',
-          type: 'error'
-        })
-      } else if (response.status === 504) {
-        vm.errorMessage = '请求超时，请稍后重试！'
+        vm.errorMessage = '访问 [' + request.method + ']' + response.url + '] 失败，请联系系统技术支持人员！'
         Vue.prototype.$alert(vm.errorMessage, '错误', {
           confirmButtonText: '关闭',
           type: 'error'

@@ -14,8 +14,8 @@
   export default Vue.extend({
     data () {
       return {
-        options: [],
         floatingModel: null,
+        options: [],
         value: null
       }
     },
@@ -76,8 +76,12 @@
         }
       },
       setModel (model) {
-        this.floatingModel = model
-        this.value = model ? model.filter : (this.multiple ? [] : null)
+        if (model) {
+          this.floatingModel = model.floating ? model : null
+          this.value = model ? model.filter : (this.multiple ? [] : null)
+        } else {
+          this.value = null
+        }
       },
       onChange (val) {
         if (this.floatingModel) {

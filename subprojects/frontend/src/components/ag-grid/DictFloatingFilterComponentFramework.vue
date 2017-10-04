@@ -16,6 +16,7 @@
   export default Vue.extend({
     data () {
       return {
+        parentModel: null,
         options: [],
         value: null
       }
@@ -53,10 +54,20 @@
     },
     methods: {
       onParentModelChanged (parentModel) {
-        this.value = parentModel ? parentModel.filter : (this.multiple ? [] : null)
+        let newValue = parentModel ? parentModel.filter : (this.multiple ? [] : null)
+        if (this.value === newValue) {
+          this.parentModel = null
+        } else {
+          this.parentModel = parentModel
+          this.value = newValue
+        }
       },
       onChange (val) {
-        this.params.onFloatingFilterChanged({filter: val})
+        if (this.parentModel) {
+          this.parentModel = null
+        } else {
+          this.params.onFloatingFilterChanged({filter: val, floating: true})
+        }
       }
     }
   })

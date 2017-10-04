@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 var VueJw = {
   vm: null,
   buildPickerOptionsShortcuts (shortcutIds) {
@@ -107,6 +109,32 @@ var VueJw = {
     })
 
     return pickerOptionsShortcuts
+  },
+  download (url, params) {
+    Vue.http.get(url, {
+      responseType: 'blob',
+      params: params
+    }).then((response) => {
+      let downloadLink = document.getElementById('____downloadLink')
+      if (!downloadLink) {
+        downloadLink = document.createElement('a')
+        document.body.appendChild(downloadLink)
+
+        downloadLink.setAttribute('id', '____downloadLink')
+        downloadLink.setAttribute('href', '')
+        downloadLink.setAttribute('download', '')
+      }
+
+      let url = (window.URL || window.webkitURL).createObjectURL(response.data) // 创建对象超链接
+      downloadLink.setAttribute('href', url)
+      let fileName = response.headers['content-disposition']
+      downloadLink.setAttribute('download', decodeURIComponent(fileName.substring('attachment; filename="'.length, fileName.length - 1)))
+
+      downloadLink.click() // 模拟点击实现下载
+      setTimeout(() => { // 延时释放
+        (window.URL || window.webkitURL).revokeObjectURL(url) // 用URL.revokeObjectURL()来释放这个object URL
+      }, 100)
+    })
   }
 }
 

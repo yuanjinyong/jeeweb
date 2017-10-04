@@ -141,16 +141,13 @@
             }
 
             cb(entity)
-            let vm = options.context.detailComponent
-            vm.$nextTick(() => {
-              vm.gridOptions.api.setRowData(entity.urlList || [])
-            })
+            options.context.detailComponent.gridOptions.setData(entity.urlList)
           },
           loadRemoteEntity (options, cb) {
             this.$http.get(options.context.url + '/' + options.params.f_id).then((response) => {
               let entity = response.body.success ? response.body.data : {urlList: []}
               cb(entity)
-              options.context.detailComponent.gridOptions.api.setRowData(entity.urlList || [])
+              options.context.detailComponent.gridOptions.setData(entity.urlList)
             })
           }
         },

@@ -213,6 +213,10 @@ var VueGrid = {
             gridParams.context.params.totalCount = 0
             gridParams.successCallback([], 0)
           }
+        }, (response) => {
+          // gridParams.failCallback()
+          gridParams.context.params.totalCount = 0
+          gridParams.successCallback([], 0)
         })
       } else {
         gridParams.context.params.totalCount = 0
@@ -236,11 +240,38 @@ var VueGrid = {
             gridOptions.context.params.totalCount = 0
             gridOptions.api.setRowData([])
           }
+        }, (response) => {
+          gridOptions.context.params.totalCount = 0
+          gridOptions.api.setRowData([])
         })
+      }
+    },
+    setData (data) {
+      let gridOptions = this
+      if (gridOptions.rowModelType === 'inMemory') {
+        if (gridOptions.api) {
+          gridOptions.api.setRowData(data || [])
+        } else {
+          console.warn('ag-grid还未初始化完成')
+          gridOptions.rowData = data || []
+        }
+      }
+    },
+    reload (params) {
+      let gridOptions = this
+      Vue.lodash.merge(gridOptions.context.params, params, {totalCount: 0})
+      if (gridOptions.rowModelType === 'inMemory') {
+        gridOptions.getRows4Normal()
+      } else {
+        if (gridOptions.api) {
+          gridOptions.api.setDatasource(gridOptions.datasource)
+        } else {
+          console.warn('ag-grid还未初始化完成')
+        }
       }
     }
   },
-  buildOptions: function (gridOptions) {
+  buildOptions (gridOptions) {
     let options = Vue.lodash.merge({}, this.defaultOptions, gridOptions)
     options.datasource.gridOptions = options
     if (options.context.params.tree) {

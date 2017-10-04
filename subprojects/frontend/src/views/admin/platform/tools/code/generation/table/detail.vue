@@ -138,17 +138,13 @@
             }
 
             cb(entity)
-            vm.$nextTick(() => {
-              vm.gridOptions.api.setRowData(entity.fieldList || [])
-            })
+            vm.gridOptions.setData(entity.fieldList)
           },
           loadLocalEntity (options, cb) {
             let vm = options.context.detailComponent
             let entity = vm.$lodash.cloneDeep(options.params)
             cb(entity)
-            vm.$nextTick(() => {
-              vm.gridOptions.api.setRowData(entity.fieldList || [])
-            })
+            vm.gridOptions.setData(entity.fieldList)
           }
         },
         entity: {fieldList: []},

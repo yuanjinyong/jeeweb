@@ -6,7 +6,7 @@ import com.jeeweb.framework.business.entity.BaseEntity;
 import com.jeeweb.framework.business.model.ICreator;
 
 public class AttachmentEntity extends BaseEntity<Integer> implements ICreator {
-    public static final String DOWNLOAD_URL = "api/zkpms/attachments/%d/download";
+    public static final String DOWNLOAD_URL = "api/platform/data/attachments/%d/download";
 
     /**
      * 1、待归档
