@@ -9,6 +9,7 @@
 
 
 <script>
+  import Vue from 'vue'
   import {ViewlMixin} from 'mixins'
   import {
     AddHeaderComponenetFramework,
@@ -163,6 +164,31 @@
         width: 300
       }, {
         headerName: '操作',
+        headerComponentFramework: Vue.extend({
+          template: `
+            <div class="ag-header-component" style="margin-top: -1px;padding: 0px 5px;">
+              <el-button size="mini" title="导出Excel" @click.stop="onExport">
+                <i class="fa fa-file-text-o" style="min-width: 12px;"></i>
+              </el-button>
+            </div>
+            `,
+          methods: {
+            onExport () {
+              let gridOptions = this.params.api.gridOptionsWrapper.gridOptions
+              let params = {
+                startRow: null,
+                endRow: null,
+                filterModel: gridOptions.api.getFilterModel(),
+                sortModel: gridOptions.api.getSortModel(),
+                context: gridOptions.context
+              }
+              let page = gridOptions.buildPage(params)
+              let filters = gridOptions.buildFilter(params)
+
+              this.$jw.download(gridOptions.context.url + '/export', Object.assign({}, params.context.params, page, filters))
+            }
+          }
+        }),
         field: '',
         pinned: 'right',
         hide: this.mode === 'selector',

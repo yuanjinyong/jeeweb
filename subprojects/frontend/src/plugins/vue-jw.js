@@ -125,10 +125,11 @@ var VueJw = {
         downloadLink.setAttribute('download', '')
       }
 
-      let url = (window.URL || window.webkitURL).createObjectURL(response.data) // 创建对象超链接
+      let url = (window.URL || window.webkitURL).createObjectURL(response.bodyBlob) // 创建对象超链接
       downloadLink.setAttribute('href', url)
-      let fileName = response.headers['content-disposition']
-      downloadLink.setAttribute('download', decodeURIComponent(fileName.substring('attachment; filename="'.length, fileName.length - 1)))
+      let fileName = response.headers.get('Content-Disposition')
+      let attachmentName = decodeURIComponent(fileName.substring('attachment; filename="'.length, fileName.length - 1))
+      downloadLink.setAttribute('download', attachmentName)
 
       downloadLink.click() // 模拟点击实现下载
       setTimeout(() => { // 延时释放
