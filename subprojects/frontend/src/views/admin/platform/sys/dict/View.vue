@@ -19,16 +19,13 @@
     OperationRendererFramework,
     ViewRendererFramework
   } from 'components/ag-grid'
-//  import DictDetail from './Detail'
-//  import DictSqlDetail from './Sql'
-  //  import {DictDetail, DictSqlDetail} from 'views'
 
   export default {
     name: 'dictView',
     mixins: [ViewlMixin],
     components: {
-      DictDetail: r => require.ensure([], () => r(require('./DictDetail')), 'sys-dict'),
-      DictSqlDetail: r => require.ensure([], () => r(require('./DictSql')), 'sys-dict')
+      DictDetail: r => require.ensure([], () => r(require('./Detail')), 'sys-dict'),
+      DictSqlDetail: r => require.ensure([], () => r(require('./Sql')), 'sys-dict')
     },
     data () {
       return {

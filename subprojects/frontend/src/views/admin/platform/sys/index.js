@@ -12,7 +12,7 @@ import {UrlView} from './url'
 
 export default [{
   path: 'dict',
-  component: r => require.ensure([], () => r(require('./dict/DictView')), 'sys-dict')
+  component: r => require.ensure([], () => r(require('./dict/View')), 'sys-dict')
 }, {
   path: 'menu',
   component: MenuView

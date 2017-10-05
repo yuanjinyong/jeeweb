@@ -25,8 +25,6 @@
     TimestampRendererFramework,
     ViewRendererFramework
   } from 'components/ag-grid'
-  // import UserDetail from './detail'
-  // import {UserDetail} from 'views'
 
   export default {
     name: 'userView',
