@@ -1,4 +1,3 @@
-export * from './process'
 import process from './process'
 
 export default [{

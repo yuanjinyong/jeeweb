@@ -19,16 +19,13 @@
     OperationRendererFramework,
     ViewRendererFramework
   } from 'components/ag-grid'
-  import MenuDetail from './detail'
-  import MenuSqlDetail from './sql'
-  //  import {MenuDetail, MenuSqlDetail} from 'views'
 
   export default {
     name: 'menuView',
     mixins: [ViewlMixin],
     components: {
-      MenuDetail,
-      MenuSqlDetail
+      MenuDetail: r => require.ensure([], () => r(require('./Detail')), 'platform-sys-menu'),
+      MenuSqlDetail: r => require.ensure([], () => r(require('./Sql')), 'platform-sys-menu')
     },
     data () {
       return {

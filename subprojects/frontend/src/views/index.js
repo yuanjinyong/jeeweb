@@ -1,4 +1,3 @@
-export * from './admin'
 import admin from './admin'
 
 export default [{

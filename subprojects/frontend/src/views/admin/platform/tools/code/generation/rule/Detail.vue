@@ -49,13 +49,12 @@
 
 <script>
   import {DetailMixin} from 'mixins'
-  import GenerationRuleTableView from '../table/view'
 
   export default {
     name: 'generationRuleDetail',
     mixins: [DetailMixin],
     components: {
-      GenerationRuleTableView
+      GenerationRuleTableView: r => require.ensure([], () => r(require('../table/View')), 'platform-tools-code-generation')
     },
     data () {
       return {

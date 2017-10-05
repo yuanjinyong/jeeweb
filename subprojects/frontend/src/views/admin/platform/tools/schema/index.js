@@ -1,7 +1,4 @@
-export * from './table'
-import {SchemaTableView} from './table'
-
 export default [{
   path: 'table',
-  component: SchemaTableView
+  component: r => require.ensure([], () => r(require('./table/View')), 'platform-tools-schema-table')
 }]

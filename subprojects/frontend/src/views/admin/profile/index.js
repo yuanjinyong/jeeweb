@@ -1,7 +1,4 @@
-export * from './company'
-import {MyCompanyView} from './company'
-
 export default [{
   path: 'company',
-  component: MyCompanyView
+  component: r => require.ensure([], () => r(require('./company/View')), 'profile-company')
 }]

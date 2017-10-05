@@ -16,14 +16,12 @@
     OperationRendererFramework,
     ViewRendererFramework
   } from 'components/ag-grid'
-  import GenerationRuleTableDetail from './detail'
-  //  import {GenerationRuleTableDetail} from 'views'
 
   export default {
     name: 'generationRuleTableView',
     mixins: [ViewlMixin],
     components: {
-      GenerationRuleTableDetail
+      GenerationRuleTableDetail: r => require.ensure([], () => r(require('./Detail')), 'platform-tools-code-generation')
     },
     props: {
       operation: {

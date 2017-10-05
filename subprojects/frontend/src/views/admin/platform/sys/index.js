@@ -1,31 +1,19 @@
-export * from './menu'
-import {MenuView} from './menu'
-
-export * from './role'
-import {RoleView} from './role'
-
-export * from './setting'
-import {SettingView} from './setting'
-
-export * from './url'
-import {UrlView} from './url'
-
 export default [{
   path: 'dict',
-  component: r => require.ensure([], () => r(require('./dict/View')), 'sys-dict')
+  component: r => require.ensure([], () => r(require('./dict/View')), 'platform-sys-dict')
 }, {
   path: 'menu',
-  component: MenuView
+  component: r => require.ensure([], () => r(require('./menu/View')), 'platform-sys-menu')
 }, {
   path: 'role',
-  component: RoleView
+  component: r => require.ensure([], () => r(require('./role/View')), 'platform-sys-role')
 }, {
   path: 'setting',
-  component: SettingView
+  component: r => require.ensure([], () => r(require('./setting/View')), 'platform-sys-setting')
 }, {
   path: 'url',
-  component: UrlView
+  component: r => require.ensure([], () => r(require('./url/View')), 'platform-sys-url')
 }, {
   path: 'user',
-  component: r => require.ensure([], () => r(require('./user/View')), 'sys-user')
+  component: r => require.ensure([], () => r(require('./user/View')), 'platform-sys-user')
 }]

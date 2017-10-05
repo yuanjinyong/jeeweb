@@ -20,14 +20,12 @@
     TimestampRendererFramework,
     ViewRendererFramework
   } from 'components/ag-grid'
-  import SchemaTableDetail from './detail'
-  //  import {SchemaTableDetail} from 'views'
 
   export default {
     name: 'schemaTableView',
     mixins: [ViewlMixin],
     components: {
-      SchemaTableDetail
+      SchemaTableDetail: r => require.ensure([], () => r(require('./Detail')), 'platform-tools-schema-table')
     },
     data () {
       return {

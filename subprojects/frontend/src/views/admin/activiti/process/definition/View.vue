@@ -1,44 +1,31 @@
 <template>
   <div :style="contentStyle">
-    <ag-grid ref="grid" id="processInstanceGrid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
+    <ag-grid ref="grid" id="processDefinitionGrid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
-    <process-instance-detail ref="detail" :detail-options="detailOptions"></process-instance-detail>
+    <process-definition-detail ref="detail" :detail-options="detailOptions"></process-definition-detail>
   </div>
 </template>
 
 
 <script>
-  import Vue from 'vue'
   import {ViewlMixin} from 'mixins'
   import {
     AddHeaderComponenetFramework,
     IndexRendererFramework,
-    LikeFilterFramework,
-    LikeFloatingFilterComponentFramework,
     OperationRendererFramework,
     ViewRendererFramework
   } from 'components/ag-grid'
-  import ProcessInstanceDetail from './detail'
-  //  import {ProcessInstanceDetail} from 'views'
 
   export default {
-    name: 'processInstanceView',
+    name: 'processDefinitionView',
     mixins: [ViewlMixin],
     components: {
-      ProcessInstanceDetail
+      ProcessDefinitionDetail: r => require.ensure([], () => r(require('./Detail')), 'activiti-process-definition')
     },
     data () {
       return {
-        editorOptions: {
-          size: 'full',
-          context: {
-            featureComponent: this,
-            getGridComponent (options) {
-              return options.context.featureComponent.$refs['grid']
-            }
-          }
-        },
         detailOptions: {
+          size: 'middle',
           context: {
             featureComponent: this,
             getGridComponent (options) {
@@ -49,7 +36,7 @@
         gridOptions: this.$grid.buildOptions({
           context: {
             name: '流程模型',
-            url: 'api/activiti/process/instances',
+            url: 'api/activiti/process/definitions',
             featureComponent: this,
             getPermissions (params, operation) {
               return params.context.featureComponent.permission
@@ -64,10 +51,7 @@
     computed: {
       permission () {
         return {
-          start: true,
-          add: this.hasPermission('GZLGL-LCMXGL-ZJ'),
-          edit: this.hasPermission('GZLGL-LCMXGL-XG'),
-          remove: this.hasPermission('GZLGL-LCMXGL-SC')
+          start: true
         }
       }
     },
@@ -90,30 +74,12 @@
         headerName: '编码',
         field: 'f_key',
         pinned: 'left',
-        suppressSorting: false,
-        suppressFilter: false,
-        filterFramework: LikeFilterFramework,
-        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
         cellRendererFramework: ViewRendererFramework,
-        cellRendererParams: {
-          operation: {
-            title: '编辑流程配置',
-            onClick (params, entity) {
-              let url = Vue.cfg.apiUrl + 'activiti/modeler.html?view=true&modelId=' + entity.f_id
-              window.open(url)
-            }
-          }
-        },
         width: 150
       }, {
         headerName: '名称',
         field: 'f_name',
         pinned: 'left',
-        suppressSorting: false,
-        suppressFilter: false,
-        filterFramework: LikeFilterFramework,
-        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
-        cellRendererFramework: ViewRendererFramework,
         width: 160
       }, {
         headerName: '版本',
@@ -148,6 +114,14 @@
         cellRendererFramework: OperationRendererFramework,
         cellRendererParams: {
           operations: [{
+            id: 'diagram',
+            title: '查看流程图',
+            icon: 'fa fa-picture-o',
+            permission: '',
+            onClick (params, entity) {
+              params.context.featureComponent.onDiagram(entity)
+            }
+          }, {
             id: 'start',
             title: '启动流程',
             type: 'info',
@@ -162,6 +136,8 @@
       }]
     },
     methods: {
+      onDiagram (entity) {
+      },
       onStart (entity) {
         let loading = this.$loading({text: '流程启动中……', target: '#processDefinitionGrid'})
         this.$http.post(this.gridOptions.context.url + '/' + entity.f_id + '/start').then(() => {

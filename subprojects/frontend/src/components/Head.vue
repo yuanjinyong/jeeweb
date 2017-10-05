@@ -40,8 +40,8 @@
   export default {
     name: 'jwHead',
     components: {
-      UserDetail: r => require.ensure([], () => r(require('views/admin/platform/sys/user/Detail')), 'sys-user'),
-      ChangePasswordForm: r => require.ensure([], () => r(require('views/admin/platform/sys/user/Password')), 'sys-user-password')
+      UserDetail: r => require.ensure([], () => r(require('views/admin/platform/sys/user/Detail')), 'platform-sys-user'),
+      ChangePasswordForm: r => require.ensure([], () => r(require('views/admin/platform/sys/user/Password')), 'platform-sys-user-password')
     },
     props: {
       showButton: {

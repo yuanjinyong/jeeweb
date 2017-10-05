@@ -18,16 +18,13 @@
     TimestampRendererFramework,
     ViewRendererFramework
   } from 'components/ag-grid'
-  import ProcessModelDetail from './detail'
-  import ProcessModelEditor from './editor'
-  //  import {ProcessModelDetail, ProcessModelEditor} from 'views'
 
   export default {
     name: 'processModelView',
     mixins: [ViewlMixin],
     components: {
-      ProcessModelDetail,
-      ProcessModelEditor
+      ProcessModelDetail: r => require.ensure([], () => r(require('./Detail')), 'activiti-process-model'),
+      ProcessModelEditor: r => require.ensure([], () => r(require('./Detail')), 'activiti-process-model')
     },
     data () {
       return {

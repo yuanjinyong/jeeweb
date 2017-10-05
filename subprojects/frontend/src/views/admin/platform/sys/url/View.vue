@@ -18,14 +18,12 @@
     IndexRendererFramework,
     ViewRendererFramework
   } from 'components/ag-grid'
-  import UrlDetail from './detail'
-  //  import {UrlDetail} from 'views'
 
   export default {
     name: 'urlView',
     mixins: [ViewlMixin],
     components: {
-      UrlDetail
+      UrlDetail: r => require.ensure([], () => r(require('./Detail')), 'platform-sys-url')
     },
     data () {
       return {

@@ -24,8 +24,8 @@
     name: 'dictView',
     mixins: [ViewlMixin],
     components: {
-      DictDetail: r => require.ensure([], () => r(require('./Detail')), 'sys-dict'),
-      DictSqlDetail: r => require.ensure([], () => r(require('./Sql')), 'sys-dict')
+      DictDetail: r => require.ensure([], () => r(require('./Detail')), 'platform-sys-dict'),
+      DictSqlDetail: r => require.ensure([], () => r(require('./Sql')), 'platform-sys-dict')
     },
     data () {
       return {

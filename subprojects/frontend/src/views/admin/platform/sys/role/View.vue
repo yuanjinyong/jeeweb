@@ -2,8 +2,8 @@
   <div :style="contentStyle">
     <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
-    <dict-detail ref="detail" :detail-options="detailOptions"></dict-detail>
-    <dict-sql-detail ref="sql" :detail-options="sqlOptions"></dict-sql-detail>
+    <role-detail ref="detail" :detail-options="detailOptions"></role-detail>
+    <jw-authorize ref="authorize" :detail-options="authorizeOptions"></jw-authorize>
   </div>
 </template>
 
@@ -12,27 +12,25 @@
   import {ViewlMixin} from 'mixins'
   import {
     AddHeaderComponenetFramework,
+    DictRendererFramework,
     LikeFilterFramework,
     LikeFloatingFilterComponentFramework,
+    IndexRendererFramework,
     OperationRendererFramework,
     ViewRendererFramework
   } from 'components/ag-grid'
-  import DictDetail from './detail'
-  import DictSqlDetail from './sql'
-  //  import {DictDetail, DictSqlDetail} from 'views'
 
   export default {
-    name: 'settingView',
+    name: 'roleView',
     mixins: [ViewlMixin],
     components: {
-      DictDetail,
-      DictSqlDetail
+      RoleDetail: r => require.ensure([], () => r(require('./Detail')), 'platform-sys-role')
     },
     data () {
       return {
-        sqlOptions: {
-          size: 'middle',
+        authorizeOptions: {
           context: {
+            url: 'api/platform/sys/roles',
             featureComponent: this,
             getGridComponent (options) {
               return options.context.featureComponent.$refs['grid']
@@ -49,8 +47,8 @@
         },
         gridOptions: this.$grid.buildOptions({
           context: {
-            name: '系统设置项',
-            url: 'api/platform/sys/settings',
+            name: '角色',
+            url: 'api/platform/sys/roles',
             featureComponent: this,
             getPermissions (params, operation) {
               return params.context.featureComponent.permission
@@ -59,69 +57,68 @@
               return params.context.featureComponent.$refs['detail']
             },
             params: {
-              orderBy: 'f_order'
+              orderBy: 'f_is_preset,f_name'
             }
           }
         })
       }
     },
     computed: {
+      curUser () {
+        return this.$store.state.user || {}
+      },
       permission () {
         return {
-          sql: this.hasPermission('XTGL-XTSZ-DCSQL'),
-          add: this.hasPermission('XTGL-XTSZ-ZJ'),
-          edit: this.hasPermission('XTGL-XTSZ-XG'),
-          remove: this.hasPermission('XTGL-XTSZ-SC')
+          authorize: this.hasPermission('XTGL-JSGL-SQ'),
+          add: this.hasPermission('XTGL-JSGL-ZJ'),
+          edit: this.hasPermission('XTGL-JSGL-XG'),
+          remove: this.hasPermission('XTGL-JSGL-SC')
         }
       }
     },
     created () {
       this.gridOptions.columnDefs = [{
+        headerName: '',
+        pinned: 'left',
+        hide: this.mode !== 'selector',
+        checkboxSelection: this.mode === 'selector',
+        cellStyle: {'text-align': 'center'},
+        width: 24
+      }, {
         headerName: '#',
-        field: 'f_order',
         pinned: 'left',
         headerComponentFramework: this.mode !== 'selector' ? AddHeaderComponenetFramework : null,
         cellStyle: {'text-align': 'right'},
+        cellRendererFramework: IndexRendererFramework,
         width: 38
       }, {
-        headerName: '编码',
-        field: 'f_code',
-        tooltipField: 'f_code',
+        headerName: '角色名称',
+        field: 'f_name',
         pinned: 'left',
         suppressSorting: false,
         suppressFilter: false,
         filterFramework: LikeFilterFramework,
         floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
         cellRendererFramework: ViewRendererFramework,
-        width: 350
-      }, {
-        headerName: '名称',
-        field: 'f_name',
-        tooltipField: 'f_name',
-        pinned: 'left',
-        suppressSorting: false,
-        suppressFilter: false,
-        filterFramework: LikeFilterFramework,
-        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
         width: 160
       }, {
-        headerName: '取值',
-        field: 'f_value',
-        tooltipField: 'f_value',
-        // cellRendererFramework: TextEditorFramework,
-        width: 150
-      }, {
-        headerName: '描述',
+        headerName: '角色描述',
         field: 'f_desc',
         tooltipField: 'f_desc',
-        suppressSizeToFit: false,
-        width: 200
+        width: 300
+      }, {
+        headerName: '是否预置',
+        field: 'f_is_preset',
+        cellStyle: {'text-align': 'center'},
+        cellRendererFramework: DictRendererFramework,
+        cellRendererParams: {dict: 'YesNo2'},
+        width: 75
       }, {
         headerName: '备注',
         field: 'f_remark',
         tooltipField: 'f_remark',
         suppressSizeToFit: false,
-        width: 200
+        width: 300
       }, {
         headerName: '操作',
         field: '',
@@ -131,6 +128,23 @@
         cellRendererFramework: OperationRendererFramework,
         cellRendererParams: {
           operations: [{
+            id: 'authorize',
+            title: '授权可以操作的功能',
+            type: 'warning',
+            icon: 'fa fa-key',
+            permission: 'authorize',
+            isDisabled (params, entity) {
+              let user = params.context.featureComponent.curUser
+              return entity.f_id === 1 && !user.superAdmin // 只有超级管理员账号才能给系统管理员角色授权
+            },
+            onClick (params, entity) {
+              params.context.featureComponent.$refs['authorize'].open({
+                operation: 'authorize',
+                title: '授权可以操作的功能',
+                params: entity
+              })
+            }
+          }, {
             id: 'edit',
             permission: 'edit'
           }, {
@@ -138,18 +152,6 @@
             permission: 'remove',
             isDisabled (params, entity) {
               return entity.f_is_preset === 1
-            }
-          }, {
-            id: 'sql',
-            title: 'SQL脚本',
-            icon: 'fa fa-file-code-o',
-            permission: 'sql',
-            onClick (params, entity) {
-              params.context.featureComponent.$refs['sql'].open({
-                operation: 'sql',
-                title: 'SQL脚本',
-                params: entity
-              })
             }
           }]
         },

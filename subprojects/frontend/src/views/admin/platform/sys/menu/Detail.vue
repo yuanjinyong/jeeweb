@@ -65,14 +65,12 @@
     IndexRendererFramework,
     OperationRendererFramework
   } from 'components/ag-grid'
-  import UrlView from 'views/admin/platform/sys/url/view'
-  // import {UrlView} from 'views' // 想使用这种引入方式，规避掉需要写死绝对路径或者相对路径，从而提高代码的可维护性
 
   export default {
     name: 'menuDetail',
     mixins: [DetailMixin],
     components: {
-      UrlView
+      UrlView: r => require.ensure([], () => r(require('views/admin/platform/sys/url/View')), 'platform-sys-url')
     },
     data () {
       return {

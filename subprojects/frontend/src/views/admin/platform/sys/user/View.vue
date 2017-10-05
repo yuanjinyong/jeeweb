@@ -30,7 +30,7 @@
     name: 'userView',
     mixins: [ViewlMixin],
     components: {
-      UserDetail: r => require.ensure([], () => r(require('./Detail')), 'sys-user')
+      UserDetail: r => require.ensure([], () => r(require('./Detail')), 'platform-sys-user')
     },
     data () {
       return {
