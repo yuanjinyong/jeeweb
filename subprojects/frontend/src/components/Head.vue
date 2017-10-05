@@ -31,7 +31,7 @@
       </el-col>
     </el-row>
 
-    <user-detail ref="userDetail" :detail-options="userDetailOptions" v-if="showUserDetail"></user-detail>
+    <user-detail ref="userDetail" :detail-options="userDetailOptions"></user-detail>
     <change-password-form ref="changePassword" :detail-options="changePasswordOptions"></change-password-form>
   </div>
 </template>
@@ -41,7 +41,7 @@
     name: 'jwHead',
     components: {
       UserDetail: r => require.ensure([], () => r(require('views/admin/platform/sys/user/Detail')), 'platform-sys-user'),
-      ChangePasswordForm: r => require.ensure([], () => r(require('views/admin/platform/sys/user/Password')), 'platform-sys-user-password')
+      ChangePasswordForm: r => require.ensure([], () => r(require('views/admin/platform/sys/user/Password')), 'platform-sys-user')
     },
     props: {
       showButton: {
@@ -51,16 +51,12 @@
     },
     data () {
       return {
-        showUserDetail: false,
         userDetailOptions: {
           title: '修改个人信息',
           operation: 'edit',
           subOperation: 'change',
           context: {
             featureComponent: this
-          },
-          closed () {
-            this.options.context.featureComponent.showUserDetail = false
           }
         },
         changePasswordOptions: {
@@ -110,11 +106,8 @@
         })
       },
       onShowUserInfo () {
-        this.showUserDetail = true
-        this.$nextTick(() => {
-          this.$refs['userDetail'].open({
-            params: this.curUser
-          })
+        this.$refs['userDetail'].open({
+          params: this.curUser
         })
       },
       onLogout () {

@@ -50,15 +50,15 @@
       <slot name="buttons"></slot>
       <slot name="defaultButtons">
         <template v-if="options.operation === 'audit'">
-          <el-button type="danger" @click="onReject">驳 回</el-button>
-          <el-button type="success" @click="onApprove">同 意</el-button>
+          <el-button type="danger" :loading="loading" @click="onReject">驳 回</el-button>
+          <el-button type="success" :loading="loading" @click="onApprove">同 意</el-button>
         </template>
         <template v-else-if="options.operation === 'view'">
           <el-button @click="onCancel">关 闭</el-button>
         </template>
         <template v-else>
           <el-button @click="onCancel">取 消</el-button>
-          <el-button type="primary" @click="onSubmit">保 存</el-button>
+          <el-button type="primary" :loading="loading" @click="onSubmit">保 存</el-button>
         </template>
       </slot>
     </div>
@@ -92,6 +92,7 @@
     data () {
       return {
         visible: false,
+        loading: false, // 这里没有对它进行设为true，而是在vue-resource的拦截器中做的
         bus: new Vue(),
         titles: {add: '新增', edit: '修改', view: '查看', audit: '审核'},
         options: {
