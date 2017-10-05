@@ -55,7 +55,7 @@
           modalAppendToBody: true, // 遮罩层是否插入至 body 元素上，若为 false，则遮罩层会插入至 Dialog 的父元素上
           size: 'small', // 可选值：mini（phones 1列）、small（tablets 2列）、middle（desktops 3列）、large（ larger desktops 4列）、full（全屏）
           elDialogSize: {mini: 'tiny', small: 'small', middle: 'small', large: 'large', full: 'full'},
-          height: 447, // 默认10行的高度
+          height: 429, // 默认10行的高度
           params: {},
           beforeOpen: null,
           opened: null,
@@ -67,7 +67,7 @@
     },
     computed: {
       maxBodyHeight () {
-        return this.$store.state.layout.window.height - 80 - 30 - 40 - 56 - 30 - 35
+        return this.$store.state.layout.window.height - 80 - 30 - 56 - 56 - 30 - 35
       }
     },
     methods: {

@@ -131,7 +131,7 @@
     },
     computed: {
       maxBodyHeight () {
-        return this.options.maxHeight ? (this.options.maxHeight - 40 - 56) : (this.$store.state.layout.window.height - this.options.top - 40 - 56 - 35)
+        return this.options.maxHeight ? (this.options.maxHeight - 56 - 56) : (this.$store.state.layout.window.height - this.options.top - 56 - 56 - 35)
       }
     },
     methods: {

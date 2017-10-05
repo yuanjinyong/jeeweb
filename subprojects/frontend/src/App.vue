@@ -205,7 +205,7 @@
   }
 
   .jw-dialog .el-dialog__header {
-    padding: 10px 20px;
+    padding: 18px 20px;
     background-color: #f1f1f1;
     line-height: initial;
   }
@@ -434,6 +434,7 @@
 
   .jw-form-view .el-autocomplete .el-input__icon,
   .jw-form-view .el-select .el-input__icon,
+  .jw-form-view .el-select .el-tag .el-icon-close,
   .jw-form-view .el-date-editor .el-input__icon {
     display: none;
   }
@@ -441,6 +442,7 @@
   .jw-form-view .el-checkbox,
   .jw-form-view .el-checkbox .el-checkbox__inner,
   .jw-form-view .el-radio,
+  .jw-form-view .el-select .el-tag,
   .jw-form-view .el-radio .el-radio__inner {
     cursor: not-allowed;
   }

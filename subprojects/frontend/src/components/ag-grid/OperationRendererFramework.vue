@@ -1,5 +1,13 @@
 <template>
-  <el-button-group>
+  <el-button v-if="operations.length === 1"
+             size="mini"
+             :type="operations[0].type"
+             :title="operations[0].title"
+             :disabled="!hasPermission(operations[0]) || isDisabled(operations[0])"
+             @click.stop="onClick(operations[0])">
+    <i :class="operations[0].icon" style="min-width:12px;"></i>{{operations[0].text ? (' ' + operations[0].text) : ''}}
+  </el-button>
+  <el-button-group v-else>
     <el-button v-for="(operation, index) in operations" :key="operation.id"
                size="mini"
                :type="operation.type"
