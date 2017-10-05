@@ -27,12 +27,12 @@
             </el-dropdown-menu>
           </el-dropdown>
           <el-button type="warning" @click="onLogout"><i class="fa fa-sign-out"></i>&nbsp;退 出</el-button>
+
+          <user-detail ref="userDetail" :detail-options="userDetailOptions"></user-detail>
+          <change-password-form ref="changePassword" :detail-options="changePasswordOptions"></change-password-form>
         </div>
       </el-col>
     </el-row>
-
-    <user-detail ref="userDetail" :detail-options="userDetailOptions"></user-detail>
-    <change-password-form ref="changePassword" :detail-options="changePasswordOptions"></change-password-form>
   </div>
 </template>
 

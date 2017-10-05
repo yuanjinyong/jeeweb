@@ -69,7 +69,15 @@
         options: {
           context: {
             name: '用户',
-            url: 'api/platform/sys/users'
+            url: 'api/platform/sys/users',
+            detailComponent: this
+          },
+          beforeOpen (options, cb) {
+            let vm = options.context.detailComponent
+            vm.$http.get('api/platform/sys/roles?orderBy=f_is_preset,f_name').then((response) => {
+              vm.roleList = response.body.success ? response.body.data.items : []
+              cb()
+            })
           },
           createEntity (options, cb) {
             cb({
@@ -92,16 +100,6 @@
             {max: 32, message: '长度在32个字符以内', trigger: 'blur'}
           ]
         }
-      }
-    },
-    mounted () {
-      this._loadRoleList()
-    },
-    methods: {
-      _loadRoleList () {
-        this.$http.get('api/platform/sys/roles?orderBy=f_is_preset,f_name').then((response) => {
-          this.roleList = response.body.success ? response.body.data.items : []
-        })
       }
     }
   }
