@@ -1,6 +1,3 @@
-export * from './dict'
-import {DictView} from './dict'
-
 export * from './menu'
 import {MenuView} from './menu'
 
@@ -13,12 +10,9 @@ import {SettingView} from './setting'
 export * from './url'
 import {UrlView} from './url'
 
-export * from './user'
-import {UserView} from './user'
-
 export default [{
   path: 'dict',
-  component: DictView
+  component: r => require.ensure([], () => r(require('./dict/DictView')), 'sys-dict')
 }, {
   path: 'menu',
   component: MenuView
@@ -33,5 +27,5 @@ export default [{
   component: UrlView
 }, {
   path: 'user',
-  component: UserView
+  component: r => require.ensure([], () => r(require('./user/View')), 'sys-user')
 }]

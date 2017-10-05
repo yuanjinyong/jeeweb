@@ -37,14 +37,11 @@
 </template>
 
 <script>
-  import UserDetail from 'views/admin/platform/sys/user/detail'
-  import ChangePasswordForm from 'views/admin/platform/sys/user/password'
-
   export default {
     name: 'jwHead',
     components: {
-      UserDetail,
-      ChangePasswordForm
+      UserDetail: r => require.ensure([], () => r(require('views/admin/platform/sys/user/Detail')), 'sys-user'),
+      ChangePasswordForm: r => require.ensure([], () => r(require('views/admin/platform/sys/user/Password')), 'sys-user-password')
     },
     props: {
       showButton: {

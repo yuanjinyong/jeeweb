@@ -1,15 +1,13 @@
 export * from './admin'
 import admin from './admin'
 
-import RegisterView from './RegisterView'
-
 export default [{
   path: '/',
   redirect: '/admin'
 }, {
   name: 'register',
   path: '/register',
-  component: RegisterView
+  component: r => require.ensure([], () => r(require('./RegisterView')), 'register')
 }, {
   path: '/admin',
   component: {
