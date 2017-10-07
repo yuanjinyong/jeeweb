@@ -77,26 +77,33 @@
 <script>
   export default {
     name: 'home',
-    components: {
-      RoleDetail: r => require.ensure([], () => r(require('views/admin/platform/sys/role/Detail')), 'platform-sys-role'),
-      UserDetail: r => require.ensure([], () => r(require('views/admin/platform/sys/user/Detail')), 'platform-sys-user'),
-      DictDetail: r => require.ensure([], () => r(require('views/admin/platform/sys/dict/Detail')), 'platform-sys-dict')
-    },
     data () {
       return {
         currentApplication: null,
         applicationList: [{
           id: 'RoleDetail',
           title: '新增角色',
-          icon: 'fa fa-flag'
+          icon: 'fa fa-flag',
+          name: 'platform-sys-role',
+          path: 'admin/platform/sys/role/Detail'
         }, {
           id: 'UserDetail',
           title: '新增用户',
-          icon: 'fa fa-user'
+          icon: 'fa fa-user',
+          name: 'platform-sys-user',
+          path: 'admin/platform/sys/user/Detail'
         }, {
           id: 'DictDetail',
           title: '新增字典组',
-          icon: 'fa fa-book'
+          icon: 'fa fa-book',
+          name: 'platform-sys-dict',
+          path: 'admin/platform/sys/dict/Detail'
+        }, {
+          id: 'SettingDetail',
+          title: '新增系统设置项',
+          icon: 'fa fa-wrench',
+          name: 'platform-sys-setting',
+          path: 'admin/platform/sys/setting/Detail'
         }, {
           id: 'more',
           title: '更多',
@@ -109,6 +116,14 @@
         }
       }
     },
+    created () {
+      // console.log('created', this.$options.components)
+      this.applicationList.forEach((application) => {
+        // this.$options.components[application.id] = r => require.ensure([], () => r(require('views/' + application.path + '.vue')))
+        this.$options.components[application.id] = r => require.ensure([], () => r(require('views/' + application.path + '.vue')), 'application')
+        // this.$options.components[application.id] = r => require.ensure([], () => r(require('views/' + application.path + '.vue')), application.name)
+      })
+    },
     methods: {
       onApplicationClicked (application) {
         if (application.id !== 'more') {
@@ -117,7 +132,7 @@
           this.currentApplication = application.id
 
           setTimeout(() => {
-            console.log(this.$refs['detail'])
+            // console.log(this.$refs['detail'])
             this.$refs['detail'].open(this.detailOptions)
           }, 100)
           /*
