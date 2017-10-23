@@ -13,6 +13,7 @@ import com.jeeweb.framework.core.exception.BusinessException;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
+import com.jeeweb.framework.core.utils.TreeUtil;
 import com.jeeweb.platform.security.utils.SecurityUtil;
 import com.jeeweb.platform.sys.entity.RoleEntity;
 import com.jeeweb.platform.sys.mapper.RoleMapper;
@@ -44,7 +45,8 @@ public class RoleService extends BaseService<Integer, RoleEntity> {
     @Override
     public void deleteEntities(ParameterMap params) {
         // 删除角色下关联的菜单
-        roleMenuMapper.deleteEntities(new ParameterMap("f_role_id_in", params.getString("f_id_in")));
+        roleMenuMapper.deleteDistMenus(new ParameterMap("f_role_id_in", params.getString("f_id_in")));
+        roleMenuMapper.deleteAuthMenus(new ParameterMap("f_role_id_in", params.getString("f_id_in")));
 
         getMapper().deleteEntities(params);
     }
@@ -53,16 +55,18 @@ public class RoleService extends BaseService<Integer, RoleEntity> {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Transactional(readOnly = true)
-    public List<RowMap> selectRoleMenuListPage(Integer roleId) {
+    public RowMap selectRoleMenuList(Integer roleId) {
         ParameterMap params = new ParameterMap();
         params.put("f_role_id", roleId);
         params.put("f_status", 1);
         params.put("orderBy", "f_parent_path,f_order");
         SysUtil.appendCurUserAndRoles(params);
-        return roleMenuMapper.selectRoleMenuListPage(params);
+        List<RowMap> distMenus = TreeUtil.listToTree(roleMenuMapper.selectDistMenuListPage(params), "f_id");
+        List<RowMap> authMenus = TreeUtil.listToTree(roleMenuMapper.selectAuthMenuListPage(params), "f_id");
+        return new RowMap("distMenus", distMenus).put("authMenus", authMenus);
     }
 
-    public void updateRoleMenuList(Integer f_role_id, List<String> f_menu_ids) {
+    public void updateRoleMenuList(Integer f_role_id, List<String> distMenuIds, List<String> authMenuIds) {
         // 只有超级管理员账号才能给系统管理员角色授权
         if (f_role_id == RoleEntity.ID_ADMIN_SYS && !SecurityUtil.getCurUser().isSuperAdmin()) {
             throw new BusinessException("系统管理员角色的授权不能被修改！");
@@ -72,25 +76,38 @@ public class RoleService extends BaseService<Integer, RoleEntity> {
         deleteRoleMenu(f_role_id);
 
         // 在重新插入角色下关联的菜单
-        insertRoleMenu(f_role_id, f_menu_ids);
+        insertRoleMenu(f_role_id, distMenuIds, authMenuIds);
     }
 
-    private void insertRoleMenu(Integer f_role_id, List<String> f_menu_ids) {
-        if (!HelpUtil.isEmpty(f_menu_ids)) {
+    private void insertRoleMenu(Integer f_role_id, List<String> distMenuIds, List<String> authMenuIds) {
+        if (!HelpUtil.isEmpty(distMenuIds)) {
             List<RowMap> roleMenuList = new ArrayList<>();
-            for (String f_menu_id : f_menu_ids) {
+            for (String f_menu_id : distMenuIds) {
                 RowMap roleMenu = new RowMap();
                 roleMenuList.add(roleMenu);
 
                 roleMenu.put("f_role_id", f_role_id);
                 roleMenu.put("f_menu_id", f_menu_id);
             }
-            roleMenuMapper.insertEntities(roleMenuList);
+            roleMenuMapper.insertDistMenus(roleMenuList);
+        }
+
+        if (!HelpUtil.isEmpty(authMenuIds)) {
+            List<RowMap> roleMenuList = new ArrayList<>();
+            for (String f_menu_id : authMenuIds) {
+                RowMap roleMenu = new RowMap();
+                roleMenuList.add(roleMenu);
+
+                roleMenu.put("f_role_id", f_role_id);
+                roleMenu.put("f_menu_id", f_menu_id);
+            }
+            roleMenuMapper.insertAuthMenus(roleMenuList);
         }
     }
 
     private void deleteRoleMenu(Integer f_role_id) {
         // 删除角色下关联的菜单
-        roleMenuMapper.deleteEntities(new ParameterMap("f_role_id", f_role_id));
+        roleMenuMapper.deleteDistMenus(new ParameterMap("f_role_id", f_role_id));
+        roleMenuMapper.deleteAuthMenus(new ParameterMap("f_role_id", f_role_id));
     }
 }

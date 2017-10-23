@@ -29,7 +29,6 @@ import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
-import com.jeeweb.framework.core.utils.TreeUtil;
 import com.jeeweb.platform.sys.entity.UserEntity;
 import com.jeeweb.platform.sys.service.UserService;
 
@@ -115,13 +114,14 @@ public class UserApi extends BaseApi<Integer, UserEntity> {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @RequestMapping(value = "/{id}/menus", method = RequestMethod.GET)
     public ResponseResult listMenu(@PathVariable("id") Integer primaryKey) {
-        List<RowMap> menuList = userService.selectUserMenuListPage(primaryKey);
-        return new ResponseResult(new Result(TreeUtil.listToTree(menuList, "f_id")), HttpStatus.OK);
+        RowMap menuMap = userService.selectUserMenuList(primaryKey);
+        return new ResponseResult(new Result(menuMap), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}/menus", method = RequestMethod.POST)
     public ResponseResult saveMenu(@PathVariable("id") Integer primaryKey) {
-        userService.updateUserMenuList(primaryKey, HelpUtil.splitToList($("f_menu_ids")));
+        userService.updateUserMenuList(primaryKey, HelpUtil.splitToList($("distMenuIds")),
+                HelpUtil.splitToList($("authMenuIds")));
         return new ResponseResult(new Result(), HttpStatus.OK);
     }
 

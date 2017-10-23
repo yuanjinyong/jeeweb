@@ -50,7 +50,6 @@
         this.expandedMenuIds = []
         this.checkedMenuIds = []
         this._updateCheckedNode(this.nodes)
-        console.log('setData', this.nodes)
       },
       _updateCheckedNode (nodes) {
         nodes.forEach((node) => {

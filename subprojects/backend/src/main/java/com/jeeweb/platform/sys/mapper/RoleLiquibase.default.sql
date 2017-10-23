@@ -19,6 +19,22 @@ CREATE TABLE `t_sys_role_menu` (
   `f_menu_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT '权限ID',
   PRIMARY KEY (`f_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='角色权限表';
+
+CREATE TABLE `t_sys_role_menu_authorization` (
+  `f_id` int(11) NOT NULL AUTO_INCREMENT,
+  `f_role_id` int(11) NOT NULL COMMENT '角色ID',
+  `f_menu_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT '权限ID',
+  PRIMARY KEY (`f_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='角色已授权限表';
+
+CREATE TABLE `t_sys_role_menu_distribution` (
+  `f_id` int(11) NOT NULL AUTO_INCREMENT,
+  `f_role_id` int(11) NOT NULL COMMENT '角色ID',
+  `f_menu_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT '权限ID',
+  PRIMARY KEY (`f_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='角色可配权限表';
+-- rollback DROP TABLE IF EXISTS t_sys_role_menu_distribution;
+-- rollback DROP TABLE IF EXISTS t_sys_role_menu_authorization;
 -- rollback DROP TABLE IF EXISTS t_sys_role_menu;
 -- rollback DROP TABLE IF EXISTS t_sys_role;
 

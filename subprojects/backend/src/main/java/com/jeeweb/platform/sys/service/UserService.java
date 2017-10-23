@@ -14,6 +14,7 @@ import com.jeeweb.framework.core.exception.BusinessException;
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
+import com.jeeweb.framework.core.utils.TreeUtil;
 import com.jeeweb.platform.security.service.PasswordService;
 import com.jeeweb.platform.security.utils.SecurityUtil;
 import com.jeeweb.platform.sys.entity.UserEntity;
@@ -72,6 +73,7 @@ public class UserService extends BaseService<Integer, UserEntity> {
 
     @Override
     public void deleteEntity(Integer primaryKey) {
+        deleteUserMenu(primaryKey);
         deleteRoleList(primaryKey);
 
         // 最后在删除自己
@@ -82,40 +84,55 @@ public class UserService extends BaseService<Integer, UserEntity> {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Transactional(readOnly = true)
-    public List<RowMap> selectUserMenuListPage(Integer f_user_id) {
+    public RowMap selectUserMenuList(Integer f_user_id) {
         ParameterMap params = new ParameterMap();
         params.put("f_user_id", f_user_id);
         params.put("f_status", 1);
         params.put("orderBy", "f_parent_path,f_order");
         SysUtil.appendCurUserAndRoles(params);
-        return userMenuMapper.selectUserMenuListPage(params);
+        List<RowMap> distMenus = TreeUtil.listToTree(userMenuMapper.selectDistMenuListPage(params), "f_id");
+        List<RowMap> authMenus = TreeUtil.listToTree(userMenuMapper.selectAuthMenuListPage(params), "f_id");
+        return new RowMap("distMenus", distMenus).put("authMenus", authMenus);
     }
 
-    public void updateUserMenuList(Integer f_user_id, List<String> f_menu_ids) {
-        // 先删除角色下关联的菜单
+    public void updateUserMenuList(Integer f_user_id, List<String> distMenuIds, List<String> authMenuIds) {
+        // 先删除用户下关联的菜单
         deleteUserMenu(f_user_id);
 
-        // 在重新插入角色下关联的菜单
-        insertUserMenu(f_user_id, f_menu_ids);
+        // 在重新插入用户下关联的菜单
+        insertUserMenu(f_user_id, distMenuIds, authMenuIds);
     }
 
-    private void insertUserMenu(Integer f_user_id, List<String> f_menu_ids) {
-        if (!HelpUtil.isEmpty(f_menu_ids)) {
+    private void insertUserMenu(Integer f_user_id, List<String> distMenuIds, List<String> authMenuIds) {
+        if (!HelpUtil.isEmpty(distMenuIds)) {
             List<RowMap> userMenuList = new ArrayList<>();
-            for (String f_menu_id : f_menu_ids) {
+            for (String f_menu_id : distMenuIds) {
                 RowMap userMenu = new RowMap();
                 userMenuList.add(userMenu);
 
                 userMenu.put("f_user_id", f_user_id);
                 userMenu.put("f_menu_id", f_menu_id);
             }
-            userMenuMapper.insertEntities(userMenuList);
+            userMenuMapper.insertDistMenus(userMenuList);
+        }
+
+        if (!HelpUtil.isEmpty(authMenuIds)) {
+            List<RowMap> userMenuList = new ArrayList<>();
+            for (String f_menu_id : authMenuIds) {
+                RowMap userMenu = new RowMap();
+                userMenuList.add(userMenu);
+
+                userMenu.put("f_user_id", f_user_id);
+                userMenu.put("f_menu_id", f_menu_id);
+            }
+            userMenuMapper.insertAuthMenus(userMenuList);
         }
     }
 
     private void deleteUserMenu(Integer f_user_id) {
-        // 删除角色下关联的菜单
-        userMenuMapper.deleteEntities(new ParameterMap("f_user_id", f_user_id));
+        // 删除用户下关联的菜单
+        userMenuMapper.deleteDistMenus(new ParameterMap("f_user_id", f_user_id));
+        userMenuMapper.deleteAuthMenus(new ParameterMap("f_user_id", f_user_id));
     }
 
     private void fillUserEntity(UserEntity user) {

@@ -1,7 +1,5 @@
 package com.jeeweb.platform.sys.web.api;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import org.springframework.http.HttpStatus;
@@ -18,7 +16,6 @@ import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
-import com.jeeweb.framework.core.utils.TreeUtil;
 import com.jeeweb.platform.sys.entity.RoleEntity;
 import com.jeeweb.platform.sys.service.RoleService;
 
@@ -68,13 +65,14 @@ public class RoleApi extends BaseApi<Integer, RoleEntity> {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @RequestMapping(value = "/{id}/menus", method = RequestMethod.GET)
     public ResponseResult listMenu(@PathVariable("id") Integer primaryKey) {
-        List<RowMap> menuList = roleService.selectRoleMenuListPage(primaryKey);
-        return new ResponseResult(new Result(TreeUtil.listToTree(menuList, "f_id")), HttpStatus.OK);
+        RowMap menuMap = roleService.selectRoleMenuList(primaryKey);
+        return new ResponseResult(new Result(menuMap), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}/menus", method = RequestMethod.POST)
     public ResponseResult saveMenu(@PathVariable("id") Integer primaryKey) {
-        roleService.updateRoleMenuList(primaryKey, HelpUtil.splitToList($("f_menu_ids")));
+        roleService.updateRoleMenuList(primaryKey, HelpUtil.splitToList($("distMenuIds")),
+                HelpUtil.splitToList($("authMenuIds")));
         return new ResponseResult(new Result(), HttpStatus.OK);
     }
 }

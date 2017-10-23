@@ -47,24 +47,40 @@
             })
           }
 
-          let roleMenuStr = ''
-          if (data.roleMenuList && data.roleMenuList.length > 0) {
-            data.roleMenuList.forEach((roleMenu) => {
-              roleMenuStr += 'INSERT INTO `t_sys_role_menu`(`f_role_id`,`f_menu_id`) VALUES (' + roleMenu.f_role_id + ',\'' + roleMenu.f_menu_id + '\');\n'
+          let roleAuthMenuStr = ''
+          if (data.roleAuthMenuList && data.roleAuthMenuList.length > 0) {
+            data.roleAuthMenuList.forEach((roleMenu) => {
+              roleAuthMenuStr += 'INSERT INTO `t_sys_role_menu_authorization`(`f_role_id`,`f_menu_id`) VALUES (' + roleMenu.f_role_id + ',\'' + roleMenu.f_menu_id + '\');\n'
+            })
+          }
+
+          let roleDistMenuStr = ''
+          if (data.roleDistMenuList && data.roleDistMenuList.length > 0) {
+            data.roleDistMenuList.forEach((roleMenu) => {
+              roleDistMenuStr += 'INSERT INTO `t_sys_role_menu_distribution`(`f_role_id`,`f_menu_id`) VALUES (' + roleMenu.f_role_id + ',\'' + roleMenu.f_menu_id + '\');\n'
             })
           }
 
           let sql = '-- changeset 请修改为自己的姓名:' + Vue.moment(new Date().getTime()).format('YYYYMMDDHHmmss') + ' runOnChange:true\n'
           sql += '-- comment: ' + this.options.params.f_id + ' ' + this.options.params.f_name + '\n'
-          sql += 'DELETE FROM t_sys_role_menu WHERE f_menu_id LIKE \'' + this.options.params.f_id + '%\';\n'
+          sql += 'DELETE FROM t_sys_role_menu_authorization WHERE f_menu_id LIKE \'' + this.options.params.f_id + '%\';\n'
+          sql += 'DELETE FROM t_sys_role_menu_distribution WHERE f_menu_id LIKE \'' + this.options.params.f_id + '%\';\n'
           sql += 'DELETE FROM t_sys_menu_url WHERE f_menu_id LIKE \'' + this.options.params.f_id + '%\';\n'
           sql += 'DELETE FROM t_sys_menu WHERE f_id LIKE \'' + this.options.params.f_id + '%\';\n'
 
           sql += '\n'
           sql += menuStr + '\n'
-          sql += menuUrlStr + '\n'
-          sql += roleMenuStr + '\n'
-          sql += '-- rollback DELETE FROM t_sys_role_menu WHERE f_menu_id LIKE \'' + this.options.params.f_id + '%\';\n'
+          if (menuUrlStr.length > 0) {
+            sql += menuUrlStr + '\n'
+          }
+          if (roleAuthMenuStr.length > 0) {
+            sql += roleAuthMenuStr + '\n'
+          }
+          if (roleDistMenuStr.length > 0) {
+            sql += roleDistMenuStr + '\n'
+          }
+          sql += '-- rollback DELETE FROM t_sys_role_menu_distribution WHERE f_menu_id LIKE \'' + this.options.params.f_id + '%\';\n'
+          sql += '-- rollback DELETE FROM t_sys_role_menu_authorization WHERE f_menu_id LIKE \'' + this.options.params.f_id + '%\';\n'
           sql += '-- rollback DELETE FROM t_sys_menu_url WHERE f_menu_id LIKE \'' + this.options.params.f_id + '%\';\n'
           sql += '-- rollback DELETE FROM t_sys_menu WHERE f_id LIKE \'' + this.options.params.f_id + '%\';\n'
           sql += '\n'

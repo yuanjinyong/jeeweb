@@ -97,14 +97,34 @@ public class MenuService extends BaseService<String, MenuEntity> {
                 "SELECT * FROM `t_sys_menu_url` WHERE f_menu_id IN (SELECT f_id FROM `t_sys_menu` WHERE f_parent_path LIKE CONCAT('%', #{f_parent_path_like}, '%'))",
                 new ParameterMap("f_parent_path_like", menu.getF_full_path()).setOrderBy("f_menu_id,f_url_id")));
 
-        List<Map<String, Object>> roleMenuList = new ArrayList<>();
-        roleMenuList.addAll(sqlMapper.selectListPage(
-                "SELECT * FROM `t_sys_role_menu` WHERE f_role_id < 1000 AND f_menu_id = #{f_menu_id}",
+        List<Map<String, Object>> roleDistMenuList = new ArrayList<>();
+        roleDistMenuList.addAll(sqlMapper.selectListPage(
+                "SELECT * FROM `t_sys_role_menu_distribution` WHERE f_role_id < 1000 AND f_menu_id = #{f_menu_id}",
                 new ParameterMap("f_menu_id", menu.getF_id()).setOrderBy("f_role_id,f_menu_id")));
-        roleMenuList.addAll(sqlMapper.selectListPage(
-                "SELECT * FROM `t_sys_role_menu` WHERE  f_role_id < 1000 AND f_menu_id IN (SELECT f_id FROM `t_sys_menu` WHERE f_parent_path LIKE CONCAT('%', #{f_parent_path_like}, '%'))",
+        roleDistMenuList.addAll(sqlMapper.selectListPage(
+                "SELECT * FROM `t_sys_role_menu_distribution` WHERE  f_role_id < 1000 AND f_menu_id IN (SELECT f_id FROM `t_sys_menu` WHERE f_parent_path LIKE CONCAT('%', #{f_parent_path_like}, '%'))",
                 new ParameterMap("f_parent_path_like", menu.getF_full_path()).setOrderBy("f_role_id,f_menu_id")));
-        Collections.sort(roleMenuList, new Comparator<Map<String, Object>>() {
+        Collections.sort(roleDistMenuList, new Comparator<Map<String, Object>>() {
+            @Override
+            public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                Integer r1 = (Integer) o1.get("f_role_id");
+                Integer r2 = (Integer) o2.get("f_role_id");
+                if (r1 == r2) {
+                    return ((String) o1.get("f_menu_id")).compareTo((String) o2.get("f_menu_id"));
+                }
+
+                return r1.compareTo(r2);
+            }
+        });
+
+        List<Map<String, Object>> roleAuthMenuList = new ArrayList<>();
+        roleAuthMenuList.addAll(sqlMapper.selectListPage(
+                "SELECT * FROM `t_sys_role_menu_authorization` WHERE f_role_id < 1000 AND f_menu_id = #{f_menu_id}",
+                new ParameterMap("f_menu_id", menu.getF_id()).setOrderBy("f_role_id,f_menu_id")));
+        roleAuthMenuList.addAll(sqlMapper.selectListPage(
+                "SELECT * FROM `t_sys_role_menu_authorization` WHERE  f_role_id < 1000 AND f_menu_id IN (SELECT f_id FROM `t_sys_menu` WHERE f_parent_path LIKE CONCAT('%', #{f_parent_path_like}, '%'))",
+                new ParameterMap("f_parent_path_like", menu.getF_full_path()).setOrderBy("f_role_id,f_menu_id")));
+        Collections.sort(roleAuthMenuList, new Comparator<Map<String, Object>>() {
             @Override
             public int compare(Map<String, Object> o1, Map<String, Object> o2) {
                 Integer r1 = (Integer) o1.get("f_role_id");
@@ -120,7 +140,8 @@ public class MenuService extends BaseService<String, MenuEntity> {
         RowMap data = new RowMap();
         data.put("menuList", TreeUtil.listToTree(menuList));
         data.put("menuUrlList", menuUrlList);
-        data.put("roleMenuList", roleMenuList);
+        data.put("roleDistMenuList", roleDistMenuList);
+        data.put("roleAuthMenuList", roleAuthMenuList);
         return data;
     }
 
