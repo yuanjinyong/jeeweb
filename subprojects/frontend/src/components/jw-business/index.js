@@ -1,6 +1,9 @@
 import Vue from 'vue'
 
 // 注册全局组件
+import MenuSelector from './MenuSelector'
+Vue.component(MenuSelector.name, MenuSelector)
+
 import Authorize from './Authorize'
 Vue.component(Authorize.name, Authorize)
 
