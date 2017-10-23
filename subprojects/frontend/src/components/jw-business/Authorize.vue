@@ -69,7 +69,7 @@
     },
     computed: {
       maxTreeHeight () {
-        return this.$store.state.layout.window.height - 80 - 40 - 56 - 35 - 40
+        return this.$store.state.layout.window.height - 80 - 56 - 56 - 35 - 40
       }
     },
     methods: {
