@@ -1,14 +1,14 @@
 <template>
   <el-dialog v-model="visible"
              :title="options.title"
-             :top="'30px'"
+             :top="'20px'"
              :modal="options.modal"
              :modal-append-to-body="options.modalAppendToBody"
              :close-on-click-modal="options.closeOnClickModal"
              :size="options.elDialogSize[options.size]"
              :custom-class="'jw-dialog jw-dialog-selector'">
     <el-collapse-transition>
-      <div class="jw-dialog-body" :style="{'max-height': maxBodyHeight + 'px'}" v-if="visible">
+      <div class="jw-dialog-body" :style="{'min-height': '76px', 'max-height': maxBodyHeight + 'px'}" v-if="visible">
         <div :class="'jw-selector jw-selector-' + options.size" :style="{'height': options.height + 'px'}">
           <slot></slot>
         </div>
@@ -55,7 +55,7 @@
           modalAppendToBody: true, // 遮罩层是否插入至 body 元素上，若为 false，则遮罩层会插入至 Dialog 的父元素上
           size: 'small', // 可选值：mini（phones 1列）、small（tablets 2列）、middle（desktops 3列）、large（ larger desktops 4列）、full（全屏）
           elDialogSize: {mini: 'tiny', small: 'small', middle: 'small', large: 'large', full: 'full'},
-          height: 429, // 默认10行的高度
+          height: 449, // 默认10行的高度
           params: {},
           beforeOpen: null,
           opened: null,
@@ -67,7 +67,7 @@
     },
     computed: {
       maxBodyHeight () {
-        return this.$store.state.layout.window.height - 80 - 30 - 56 - 56 - 30 - 35
+        return this.$store.state.layout.middle.height - 20 - this.$store.state.dialog.header.height - this.$store.state.dialog.footer.height - 20
       }
     },
     methods: {

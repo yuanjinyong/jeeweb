@@ -46,6 +46,14 @@ const store = new Vuex.Store({
         }
       }
     },
+    dialog: {
+      header: {
+        height: 56
+      },
+      footer: {
+        height: 56
+      }
+    },
     menuHome: {
       f_id: 'AdminHome',
       f_name: '首页',

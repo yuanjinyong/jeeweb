@@ -1,14 +1,14 @@
 <template>
   <el-dialog v-model="visible"
              :title="options.title"
-             :top="options.top + 'px'"
+             :top="dialogTop + 'px'"
              :modal="options.modal"
              :modal-append-to-body="options.modalAppendToBody"
              :close-on-click-modal="options.closeOnClickModal"
              :size="options.elDialogSize[options.size]"
              :custom-class="'jw-dialog jw-dialog-' + options.size">
     <el-collapse-transition>
-      <div class="jw-dialog-body" :style="{'max-height': maxBodyHeight + 'px'}" v-if="visible">
+      <div class="jw-dialog-body" :style="{'min-height': '76px', 'max-height': maxBodyHeight + 'px'}" v-if="visible">
         <div :class="'jw-form' + (options.operation === 'view' ? ' jw-form-view' : '') + ' jw-form-' + options.size + ' ' + options.formClass">
           <div class="jw-form-body">
             <el-form ref="form" :model="entity" :rules="rules" :inline="options.inline">
@@ -109,7 +109,7 @@
           modal: true, // 是否为模态对话框
           closeOnClickModal: false, // 点击遮罩层是否关闭对话框
           modalAppendToBody: true, // 遮罩层是否插入至 body 元素上，若为 false，则遮罩层会插入至 Dialog 的父元素上
-          top: 80, //
+          top: null, // this.$store.state.layout.top.height
           size: 'small', // 可选值：mini（phones 1列）、small（tablets 2列）、middle（desktops 3列）、large（ larger desktops 4列）、full（全屏）
           elDialogSize: {mini: 'tiny', small: 'small', middle: 'small', large: 'large', full: 'full'},
           formClass: '',
@@ -131,8 +131,12 @@
       }
     },
     computed: {
+      dialogTop () {
+        return this.options.top === null ? this.$store.state.layout.top.height : this.options.top
+      },
       maxBodyHeight () {
-        return this.options.maxHeight ? (this.options.maxHeight - 56 - 56) : (this.$store.state.layout.window.height - this.options.top - 56 - 56 - 35)
+        let maxBodyHeight = this.options.maxHeight === null ? this.$store.state.layout.middle.height : this.options.maxHeight
+        return maxBodyHeight - this.$store.state.dialog.header.height - this.$store.state.dialog.footer.height
       }
     },
     methods: {

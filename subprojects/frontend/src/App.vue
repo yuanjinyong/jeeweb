@@ -207,12 +207,14 @@
   .jw-dialog .el-dialog__header {
     padding: 18px 20px;
     background-color: #f1f1f1;
+    height: 56px;
     line-height: initial;
   }
 
   .jw-dialog .el-dialog__footer {
     padding: 10px 20px;
     background-color: #f1f1f1;
+    height: 56px;
     line-height: initial;
   }
 

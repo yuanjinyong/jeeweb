@@ -11,7 +11,8 @@ export default {
       detailOptions: {
         size: this.mode === 'selector' ? 'mini' : 'small',
         modal: this.mode !== 'selector',
-        maxHeight: this.mode === 'selector' ? 535 : null
+        top: this.mode === 'selector' ? 0 : null,
+        maxHeight: this.mode === 'selector' ? (this.$store.state.layout.middle.height - 20 - 20 - 4) : null
       }
     }
   },
