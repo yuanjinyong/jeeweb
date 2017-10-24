@@ -156,6 +156,15 @@
     border-right: 1px solid #eee;
   }
 
+  .jw-grid .ag-ltr .ag-header-cell .ag-header-cell-label {
+    display: block;
+    text-align: center;
+  }
+
+  .jw-grid .ag-ltr .ag-header-cell .ag-header-cell-label > span {
+    float: none;
+  }
+
   .jw-grid .ag-ltr .ag-header-viewport .ag-header-cell:last-child {
     border-right: 1px solid transparent;
   }

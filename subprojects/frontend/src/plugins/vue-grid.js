@@ -56,6 +56,7 @@ var VueGrid = {
       menu: '<i class="fa fa-bars"/>',
       filter: '<i class="fa fa-filter"/>',
       columns: '<i class="fa fa-handshake-o"/>',
+      sortUnSort: '<i class="fa fa-arrows-v"/>',
       sortAscending: '<i class="fa fa-long-arrow-down"/>',
       sortDescending: '<i class="fa fa-long-arrow-up"/>',
       groupExpanded: '<i class="fa fa-minus-square-o"/>',
