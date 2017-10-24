@@ -79,11 +79,10 @@ public class IndexApi extends SuperController {
     }
 
     private List<MenuEntity> getMenuList() {
-        ParameterMap params = new ParameterMap();
-        params.put("f_status", 1);
+        ParameterMap params = new ParameterMap("f_status", MenuEntity.STATUS_ENABLE);
         // params.put("f_is_web", 1); // TODO 等移动端开始开发时，再来完善代码，暂时直接写死只查询Web端的功能列表。
-        params.put("f_type_in", "1,2,3,4");
-        params.put("f_parent_path_like", MenuEntity.ROOT_PATH);
+        params.put("f_type_in", HelpUtil.joinToInString(MenuEntity.TYPE_FOLDER, MenuEntity.TYPE_PAGE,
+                MenuEntity.TYPE_BUTTON, MenuEntity.TYPE_TOKEN));
         params.put("orderBy", "f_parent_path,f_order");
         SysUtil.appendCurUserAndRoles(params);
         List<MenuEntity> menuList = menuService.selectEntityListPage(params);

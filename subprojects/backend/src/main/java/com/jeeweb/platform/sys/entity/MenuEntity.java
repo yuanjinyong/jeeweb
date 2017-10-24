@@ -9,6 +9,15 @@ public class MenuEntity extends TreeNodeEntity<String, MenuEntity> {
     public static final String ROOT_ID = "ROOT";
     public static final String ROOT_PATH = "/ROOT/";
 
+    public static final Integer TYPE_ROOT = 0;
+    public static final Integer TYPE_FOLDER = 1;
+    public static final Integer TYPE_PAGE = 2;
+    public static final Integer TYPE_BUTTON = 3;
+    public static final Integer TYPE_TOKEN = 4;
+
+    public static final Integer STATUS_ENABLE = 1;
+    public static final Integer STATUS_DISABLE = 2;
+
     private static final long serialVersionUID = -8736669826481868926L;
 
     private String f_name; // 菜单名称

@@ -7,6 +7,7 @@ import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -66,6 +67,10 @@ public class HelpUtil extends StringUtils {
             }
         }
         return sb.substring(1);
+    }
+
+    public static <O> String joinToInString(Integer... item) {
+        return joinToInString(Arrays.asList(item));
     }
 
     public static <O> String joinToInString(List<O> list) {

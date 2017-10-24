@@ -93,5 +93,8 @@
         WHERE 1=1
         <if test="f_status != null and f_status != ''">AND m.f_status = #{f_status}</if>
         <if test="f_type_in != null and f_type_in != ''">AND m.f_type IN(${f_type_in})</if>
+        <if test="f_is_web != null and f_is_web != ''">AND m.f_is_web = #{f_is_web}</if>
+        <if test="f_is_android != null and f_is_android != ''">AND m.f_is_android = #{f_is_android}</if>
+        <if test="f_is_ios != null and f_is_ios != ''">AND m.f_is_ios = #{f_is_ios}</if>
     </select>
 </mapper>

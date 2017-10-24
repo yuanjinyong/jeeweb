@@ -24,6 +24,7 @@ import org.springframework.web.util.UrlPathHelper;
 
 import com.jeeweb.framework.core.model.ParameterMap;
 import com.jeeweb.framework.core.model.RowMap;
+import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.platform.security.model.SecurityAuthority;
 import com.jeeweb.platform.security.model.SecurityUser;
 import com.jeeweb.platform.security.utils.RequestUtil;
@@ -139,7 +140,9 @@ public class SecurityCacheService {
             roleIdList.add(role.getInteger("f_role_id", null));
         }
 
-        ParameterMap params = new ParameterMap("f_status", 1);
+        ParameterMap params = new ParameterMap("f_status", MenuEntity.STATUS_ENABLE);
+        params.put("f_type_in",
+                HelpUtil.joinToInString(MenuEntity.TYPE_PAGE, MenuEntity.TYPE_BUTTON, MenuEntity.TYPE_TOKEN));
         if (!user.isSuperAdmin()) {
             params.put("f_user_id", user.getF_id());
         }
