@@ -11,20 +11,6 @@
 <script>
   import Vue from 'vue'
   import {ViewlMixin} from 'mixins'
-  import {
-    AddHeaderComponenetFramework,
-    DictFilterFramework,
-    DictFloatingFilterComponentFramework,
-    DictRendererFramework,
-    LikeFilterFramework,
-    LikeFloatingFilterComponentFramework,
-    IndexRendererFramework,
-    OperationRendererFramework,
-    TimestampFilterFramework,
-    TimestampFloatingFilterComponentFramework,
-    TimestampRendererFramework,
-    ViewRendererFramework
-  } from 'components/ag-grid'
 
   export default {
     name: 'userView',
@@ -83,48 +69,29 @@
     },
     created () {
       this.gridOptions.columnDefs = [{
-        headerName: '',
-        pinned: 'left',
         hide: this.mode !== 'selector',
-        checkboxSelection: this.mode === 'selector',
-        cellStyle: {'text-align': 'center'},
-        width: 24
+        type: 'Checkbox'
       }, {
-        headerName: '#',
-        pinned: 'left',
-        headerComponentFramework: this.mode !== 'selector' ? AddHeaderComponenetFramework : null,
-        cellStyle: {'text-align': 'right'},
-        cellRendererFramework: IndexRendererFramework,
-        width: 38
+        type: ['IndexRender', this.mode !== 'selector' ? 'AddHeader' : 'Null']
       }, {
         headerName: '账号',
         field: 'f_account',
         pinned: 'left',
         suppressSorting: false,
-        suppressFilter: false,
-        filterFramework: LikeFilterFramework,
-        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
-        cellRendererFramework: ViewRendererFramework,
+        type: ['ViewRender', 'LikeFilter'],
         width: 100
       }, {
         headerName: '姓名',
         field: 'f_name',
         pinned: 'left',
         suppressSorting: false,
-        suppressFilter: false,
-        filterFramework: LikeFilterFramework,
-        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
+        type: 'LikeFilter',
         width: 100
       }, {
         headerName: '创建时间',
         field: 'f_created_time',
         suppressSorting: false,
-        suppressFilter: false,
-        filterFramework: TimestampFilterFramework,
-        floatingFilterComponentFramework: TimestampFloatingFilterComponentFramework,
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: TimestampRendererFramework,
-        width: 190 // 有filter的为190，没有的为140
+        type: ['TimestampRender', 'TimestampFilter']
       }, {
         headerName: '创建人',
         field: 'f_creator_name',
@@ -133,26 +100,20 @@
         headerName: '最近登录时间',
         field: 'f_last_login_time',
         suppressSorting: false,
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: TimestampRendererFramework,
-        width: 140
+        type: 'TimestampRender'
       }, {
         headerName: '系统预置',
         field: 'f_is_preset',
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: DictRendererFramework,
         cellRendererParams: {dict: 'YesNo2'},
+        type: 'DictRender',
         width: 75
       }, {
         headerName: '状态',
         field: 'f_status',
         suppressFilter: false,
         filterParams: {type: 'in'},
-        filterFramework: DictFilterFramework,
-        floatingFilterComponentFramework: DictFloatingFilterComponentFramework,
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: DictRendererFramework,
         cellRendererParams: {dict: 'UserStatus'},
+        type: ['DictRender', 'DictFilter'],
         width: 88
       }, {
         headerName: '备注',
@@ -161,7 +122,6 @@
         suppressSizeToFit: false,
         width: 300
       }, {
-        headerName: '操作',
         headerComponentFramework: Vue.extend({
           template: `
             <div class="ag-header-component" style="margin-top: -1px;padding: 0px 5px;">
@@ -187,11 +147,8 @@
             }
           }
         }),
-        field: '',
-        pinned: 'right',
         hide: this.mode === 'selector',
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: OperationRendererFramework,
+        type: 'OperationRender',
         cellRendererParams: {
           operations: [{
             id: 'authorize',
@@ -248,7 +205,6 @@
             }
           }]
         },
-        suppressResize: true,
         width: 120
       }]
     },

@@ -60,11 +60,6 @@
 
 <script>
   import {DetailMixin} from 'mixins'
-  import {
-    AddHeaderComponenetFramework,
-    IndexRendererFramework,
-    OperationRendererFramework
-  } from 'components/ag-grid'
 
   export default {
     name: 'menuDetail',
@@ -177,8 +172,6 @@
     },
     created () {
       this.gridOptions.columnDefs = [{
-        headerName: '序号',
-        headerComponentFramework: AddHeaderComponenetFramework,
         headerComponentParams: {
           operation: {
             isDisabled (params, entity) {
@@ -189,26 +182,19 @@
             }
           }
         },
-        pinned: 'left',
-        cellStyle: {'text-align': 'right'},
-        cellRendererFramework: IndexRendererFramework,
-        width: 38
+        type: ['IndexRender', 'AddHeader']
       }, {
         headerName: 'URL',
         field: 'f_url',
         tooltipField: 'f_url',
         suppressSizeToFit: false,
-        width: 300
+        width: 200
       }, {
         headerName: '提交方式',
         field: 'f_methods',
         width: 80
       }, {
-        headerName: '操作',
-        field: '',
-        pinned: 'right',
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: OperationRendererFramework,
+        type: 'OperationRender',
         cellRendererParams: {
           operations: [{
             id: 'remove',
@@ -221,7 +207,6 @@
             }
           }]
         },
-        suppressResize: true,
         width: 36
       }]
     },

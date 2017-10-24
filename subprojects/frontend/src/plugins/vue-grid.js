@@ -2,6 +2,20 @@
  * Install plugin.
  */
 import Vue from 'vue'
+import {
+  AddHeaderComponenetFramework,
+  DictFilterFramework,
+  DictFloatingFilterComponentFramework,
+  DictRendererFramework,
+  LikeFilterFramework,
+  LikeFloatingFilterComponentFramework,
+  IndexRendererFramework,
+  OperationRendererFramework,
+  TimestampFilterFramework,
+  TimestampFloatingFilterComponentFramework,
+  TimestampRendererFramework,
+  ViewRendererFramework
+} from 'components/ag-grid'
 
 var VueGrid = {
   defaultOptions: {
@@ -40,6 +54,64 @@ var VueGrid = {
     cacheBlockSize: 20, // 启动自动每页条数时，一次向后台请求的条目数（即发给后台的每页条数）
     maxBlocksInCache: 2,
     maxConcurrentDatasourceRequests: 1,
+    columnTypes: {
+      'Null': {
+      },
+      'AddHeader': {
+        headerComponentFramework: AddHeaderComponenetFramework
+      },
+      'Checkbox': {
+        headerName: '',
+        pinned: 'left',
+        suppressResize: true,
+        hide: true,
+        checkboxSelection: true,
+        cellStyle: {'text-align': 'center'},
+        width: 24
+      },
+      'DictFilter': {
+        suppressFilter: false,
+        filterFramework: DictFilterFramework,
+        floatingFilterComponentFramework: DictFloatingFilterComponentFramework
+      },
+      'DictRender': {
+        cellStyle: {'text-align': 'center'},
+        cellRendererFramework: DictRendererFramework
+      },
+      'IndexRender': {
+        headerName: '#',
+        pinned: 'left',
+        cellStyle: {'text-align': 'right'},
+        cellRendererFramework: IndexRendererFramework,
+        width: 38
+      },
+      'LikeFilter': {
+        suppressFilter: false,
+        filterFramework: LikeFilterFramework,
+        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework
+      },
+      'OperationRender': {
+        headerName: '操作',
+        pinned: 'right',
+        suppressResize: true,
+        cellStyle: {'text-align': 'center'},
+        cellRendererFramework: OperationRendererFramework
+      },
+      'TimestampFilter': {
+        suppressFilter: false,
+        filterFramework: TimestampFilterFramework,
+        floatingFilterComponentFramework: TimestampFloatingFilterComponentFramework,
+        width: 190 // 有filter的为190，没有的为140
+      },
+      'TimestampRender': {
+        cellStyle: {'text-align': 'center'},
+        cellRendererFramework: TimestampRendererFramework,
+        width: 140 // 有filter的为190，没有的为140
+      },
+      'ViewRender': {
+        cellRendererFramework: ViewRendererFramework
+      }
+    },
     defaultColDef: {
       unSortIcon: true,
       suppressSizeToFit: true,

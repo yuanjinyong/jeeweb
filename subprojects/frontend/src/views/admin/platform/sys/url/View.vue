@@ -9,15 +9,6 @@
 
 <script>
   import {ViewlMixin} from 'mixins'
-  import {
-    DictFilterFramework,
-    DictFloatingFilterComponentFramework,
-    DictRendererFramework,
-    LikeFilterFramework,
-    LikeFloatingFilterComponentFramework,
-    IndexRendererFramework,
-    ViewRendererFramework
-  } from 'components/ag-grid'
 
   export default {
     name: 'urlView',
@@ -52,47 +43,30 @@
     },
     created () {
       this.gridOptions.columnDefs = [{
-        headerName: '',
-        pinned: 'left',
         hide: this.mode !== 'selector',
-        checkboxSelection: this.mode === 'selector',
-        cellStyle: {'text-align': 'center'},
-        width: 24
+        type: 'Checkbox'
       }, {
-        headerName: '#',
-        pinned: 'left',
-        cellStyle: {'text-align': 'right'},
-        cellRendererFramework: IndexRendererFramework,
-        width: 38
+        type: ['IndexRender']
       }, {
         headerName: 'URL',
         field: 'f_url',
         tooltipField: 'f_url',
         pinned: 'left',
         suppressSorting: false,
-        suppressFilter: false,
-        filterFramework: LikeFilterFramework,
-        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
-        cellRendererFramework: ViewRendererFramework,
+        type: ['ViewRender', 'LikeFilter'],
         width: 300
       }, {
         headerName: '提交方式',
         field: 'f_methods',
         suppressSorting: false,
-        suppressFilter: false,
         filterParams: {dict: 'HttpMethods', filterType: 'String'},
-        filterFramework: DictFilterFramework,
-        floatingFilterComponentFramework: DictFloatingFilterComponentFramework,
+        type: ['DictFilter'],
         width: 110
       }, {
         headerName: '记录日志',
         field: 'f_is_log',
-        suppressFilter: false,
-        filterFramework: DictFilterFramework,
-        floatingFilterComponentFramework: DictFloatingFilterComponentFramework,
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: DictRendererFramework,
         cellRendererParams: {dict: 'YesNo2'},
+        type: ['DictRender', 'DictFilter'],
         width: 75
       }, {
         headerName: '后台处理方法',
