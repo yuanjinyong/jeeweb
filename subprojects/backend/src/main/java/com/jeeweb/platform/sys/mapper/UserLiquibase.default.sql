@@ -26,13 +26,6 @@ CREATE TABLE `t_sys_user` (
   KEY `IDX_USER_DEPARTMENT` (`f_department_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户（操作员）表';
 
-CREATE TABLE `t_sys_user_menu` (
-  `f_id` int(11) NOT NULL AUTO_INCREMENT,
-  `f_user_id` int(11) NOT NULL COMMENT '用户ID',
-  `f_menu_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT '权限ID',
-  PRIMARY KEY (`f_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户权限表';
-
 CREATE TABLE `t_sys_user_menu_authorization` (
   `f_id` int(11) NOT NULL AUTO_INCREMENT,
   `f_user_id` int(11) NOT NULL COMMENT '用户ID',
@@ -56,7 +49,6 @@ CREATE TABLE `t_sys_user_role` (
 -- rollback DROP TABLE IF EXISTS t_sys_user_role;
 -- rollback DROP TABLE IF EXISTS t_sys_user_menu_distribution;
 -- rollback DROP TABLE IF EXISTS t_sys_user_menu_authorization;
--- rollback DROP TABLE IF EXISTS t_sys_user_menu;
 -- rollback DROP TABLE IF EXISTS t_sys_user;
 
 
