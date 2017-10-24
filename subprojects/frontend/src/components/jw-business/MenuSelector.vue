@@ -1,13 +1,19 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+  /* Firefox下有bug，需要把overflow-x重新设置下*/
+  .el-tree-node > .el-tree-node__children {
+    overflow: initial;
+  }
+
   .jw-tree-tooltip {
     float: right;
     margin-right: 20px;
-    color: #fff;
+    display: none;
+    color: #20a0ff;
   }
 
   .el-tree-node__content:hover .jw-tree-tooltip {
-    color: #20a0ff;
+    display: inline-block;
   }
 </style>
 
