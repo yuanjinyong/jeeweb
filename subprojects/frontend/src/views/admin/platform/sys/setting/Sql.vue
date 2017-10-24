@@ -2,8 +2,9 @@
   <jw-form ref="form" :form-options="options" :entity="entity">
     <template slot="fieldset">
       <div class="jw-field jw-field-4">
-        <el-input v-model="entity.sql" type="textarea" class="jw-textarea-nowrap"
-                  :autosize="{minRows: 4, maxRows: 18}">
+        <el-input v-model="entity.sql" class="jw-textarea jw-textarea-nowrap" type="textarea"
+                  :autosize="{minRows: 4, maxRows: 18}" @focus="$clipboard.copy('.jw-textarea');"
+                  :data-clipboard-text="entity.sql">
         </el-input>
       </div>
     </template>
@@ -12,6 +13,7 @@
 
 
 <script>
+  import Vue from 'vue'
   import {DetailMixin} from 'mixins'
 
   export default {
@@ -36,9 +38,12 @@
       _loadEntity (cb) {
         this.$http.get(this.options.context.url + '/' + this.options.params.f_id).then((response) => {
           let entity = response.body.success ? response.body.data : {}
-          let sql = '-- ' + entity.f_code + ' ' + entity.f_name + '\n'
-          sql += '/*Data for the table `t_sys_setting` */\n'
-          sql += 'insert  into `t_sys_setting`(`f_code`,`f_name`,`f_desc`,`f_order`,`f_is_editable`,`f_field_type`,`f_field_cfg`,`f_init_value`,`f_value`,`f_remark`) values '
+          let sql = '-- changeset 请修改为自己的姓名:' + Vue.moment(new Date().getTime()).format('YYYYMMDDHHmmss') + ' runOnChange:true'
+          sql += '\n-- comment: 系统设置 ' + entity.f_code + ' ' + entity.f_name
+          sql += '\n-- ' + entity.f_code + ' ' + entity.f_name + ' BEGIN ************************'
+          sql += '\nDELETE FROM `t_sys_setting` WHERE f_code = \'' + entity.f_code + '\';'
+          sql += '\n'
+          sql += '\nINSERT INTO `t_sys_setting`(`f_code`,`f_name`,`f_desc`,`f_order`,`f_is_editable`,`f_field_type`,`f_field_cfg`,`f_init_value`,`f_value`,`f_remark`) VALUES '
           sql += '(' + (entity.f_code ? ('\'' + entity.f_code.replace(/'/g, "\\'") + '\'') : 'NULL')
           sql += ',' + (entity.f_name ? ('\'' + entity.f_name.replace(/'/g, "\\'") + '\'') : 'NULL')
           sql += ',' + (entity.f_desc ? ('\'' + entity.f_desc.replace(/'/g, "\\'") + '\'') : 'NULL')
@@ -49,7 +54,10 @@
           sql += ',' + (entity.f_init_value ? ('\'' + entity.f_init_value.replace(/'/g, "\\'") + '\'') : 'NULL')
           sql += ',' + (entity.f_value ? ('\'' + entity.f_value.replace(/'/g, "\\'") + '\'') : 'NULL')
           sql += ',' + (entity.f_remark ? ('\'' + entity.f_remark.replace(/'/g, "\\'") + '\'') : 'NULL')
-          sql += ');\n'
+          sql += ');'
+
+          sql += '\n-- rollback DELETE FROM `t_sys_setting` WHERE f_code = \'' + entity.f_code + '\';'
+          sql += '\n-- ' + entity.f_code + ' ' + entity.f_name + ' END **************************'
 
           cb({sql: sql})
         })

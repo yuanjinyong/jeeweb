@@ -22,6 +22,7 @@ import CollapseTransition from 'element-ui/lib/transitions/collapse-transition' 
 Vue.component(CollapseTransition.name, CollapseTransition)
 
 import VueCfg from './plugins/vue-cfg'
+import VueClipboard from './plugins/vue-clipboard'
 
 import {AgGridVue} from 'ag-grid-vue'
 Vue.component('ag-grid', AgGridVue) // 注册全局组件
@@ -49,6 +50,7 @@ window.devMode = process.env.NODE_ENV === 'development'
 window.devMode && console && console.warn('调试模式开启')
 
 Vue.use(VueCfg)
+Vue.use(VueClipboard)
 Vue.use(VueGrid)
 Vue.use(VueJw)
 
