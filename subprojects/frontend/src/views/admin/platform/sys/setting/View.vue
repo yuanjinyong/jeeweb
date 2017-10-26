@@ -10,13 +10,6 @@
 
 <script>
   import {ViewlMixin} from 'mixins'
-  import {
-    AddHeaderComponenetFramework,
-    LikeFilterFramework,
-    LikeFloatingFilterComponentFramework,
-    OperationRendererFramework,
-    ViewRendererFramework
-  } from 'components/ag-grid'
 
   export default {
     name: 'settingView',
@@ -74,22 +67,14 @@
     },
     created () {
       this.gridOptions.columnDefs = [{
-        headerName: '#',
-        field: 'f_order',
-        pinned: 'left',
-        headerComponentFramework: this.mode !== 'selector' ? AddHeaderComponenetFramework : null,
-        cellStyle: {'text-align': 'right'},
-        width: 38
+        type: ['IndexRender', this.mode !== 'selector' ? 'AddHeader' : 'Null']
       }, {
         headerName: '编码',
         field: 'f_code',
         tooltipField: 'f_code',
         pinned: 'left',
         suppressSorting: false,
-        suppressFilter: false,
-        filterFramework: LikeFilterFramework,
-        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
-        cellRendererFramework: ViewRendererFramework,
+        type: ['ViewRender', 'LikeFilter'],
         width: 350
       }, {
         headerName: '名称',
@@ -97,15 +82,13 @@
         tooltipField: 'f_name',
         pinned: 'left',
         suppressSorting: false,
-        suppressFilter: false,
-        filterFramework: LikeFilterFramework,
-        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
+        sortColId: 'convert(f_name USING gbk)',
+        type: 'LikeFilter',
         width: 160
       }, {
         headerName: '取值',
         field: 'f_value',
         tooltipField: 'f_value',
-        // cellRendererFramework: TextEditorFramework,
         width: 150
       }, {
         headerName: '描述',
@@ -120,12 +103,8 @@
         suppressSizeToFit: false,
         width: 200
       }, {
-        headerName: '操作',
-        field: '',
-        pinned: 'right',
         hide: this.mode === 'selector',
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: OperationRendererFramework,
+        type: 'OperationRender',
         cellRendererParams: {
           operations: [{
             id: 'edit',
@@ -150,7 +129,6 @@
             }
           }]
         },
-        suppressResize: true,
         width: 80
       }]
     }

@@ -55,8 +55,7 @@ var VueGrid = {
     maxBlocksInCache: 2,
     maxConcurrentDatasourceRequests: 1,
     columnTypes: {
-      'Null': {
-      },
+      'Null': {},
       'AddHeader': {
         headerComponentFramework: AddHeaderComponenetFramework
       },
@@ -265,6 +264,10 @@ var VueGrid = {
           if (where.type === 'between') {
             filters[key + '_begin'] = filterValue[0]
             filters[key + '_end'] = filterValue[1]
+          } else if (where.type === 'begin') {
+            filters[key + '_begin'] = filterValue
+          } else if (where.type === 'end') {
+            filters[key + '_end'] = filterValue
           } else {
             filters[key] = filterValue
           }
@@ -276,8 +279,11 @@ var VueGrid = {
       return filters
     },
     getRows4Infinite (gridParams, page, filters) {
+      let gridOptions = this
       if (gridParams.context.url) {
+        gridOptions.api.showLoadingOverlay()
         Vue.http.get(gridParams.context.url, {params: Object.assign({}, gridParams.context.params, page, filters)}).then((response) => {
+          gridOptions.api.hideOverlay()
           if (response.body.success) {
             gridParams.context.params.totalCount = response.body.data.totalCount
             gridParams.successCallback(response.body.data.items, gridParams.context.params.totalCount)
@@ -286,14 +292,19 @@ var VueGrid = {
             gridParams.context.params.totalCount = 0
             gridParams.successCallback([], 0)
           }
+          if (gridParams.context.params.totalCount === 0) {
+            gridOptions.api.showNoRowsOverlay()
+          }
         }, (response) => {
           // gridParams.failCallback()
           gridParams.context.params.totalCount = 0
           gridParams.successCallback([], 0)
+          gridOptions.api.showNoRowsOverlay()
         })
       } else {
         gridParams.context.params.totalCount = 0
         gridParams.successCallback([], 0)
+        gridOptions.api.showNoRowsOverlay()
         Vue.prototype.$alert('请通过gridOptions.context.url配置项设置加载数据的URL地址！', '错误', {
           confirmButtonText: '关闭',
           type: 'error'
@@ -305,7 +316,9 @@ var VueGrid = {
       let gridOptions = this
       if (gridOptions.context.url) {
         gridOptions.context.params.totalCount = 0
+        gridOptions.api.showLoadingOverlay()
         Vue.http.get(gridOptions.context.url, {params: Object.assign({}, gridOptions.context.params)}).then((response) => {
+          gridOptions.api.hideOverlay()
           if (response.body.success) {
             gridOptions.context.params.totalCount = response.body.data.totalCount
             gridOptions.api.setRowData(response.body.data.items)
@@ -314,6 +327,7 @@ var VueGrid = {
             gridOptions.api.setRowData([])
           }
         }, (response) => {
+          gridOptions.api.hideOverlay()
           gridOptions.context.params.totalCount = 0
           gridOptions.api.setRowData([])
         })
