@@ -2,6 +2,12 @@ import Vue from 'vue'
 
 var VueJw = {
   vm: null,
+  dateEqual (date1, date2) {
+    if ((date1 === null && date2 === null) || (date1 && date2 && date1.getTime() === date2.getTime())) {
+      return true
+    }
+    return false
+  },
   buildPickerOptionsShortcuts (shortcutIds) {
     var shortcuts = {
       today: {

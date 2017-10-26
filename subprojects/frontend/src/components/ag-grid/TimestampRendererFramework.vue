@@ -1,11 +1,8 @@
-<style scoped>
-</style>
-
 <template>
   <span>{{ params.value | timestamp(options.format || 'YYYY-MM-DD HH:mm:ss') }}</span>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import Vue from 'vue'
 
   export default Vue.extend({
