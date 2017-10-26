@@ -100,12 +100,12 @@ var VueGrid = {
         suppressFilter: false,
         filterFramework: TimestampFilterFramework,
         floatingFilterComponentFramework: TimestampFloatingFilterComponentFramework,
-        width: 190 // 有filter的为190，没有的为140
+        width: 200 // 有filter的为200，没有的为140
       },
       'TimestampRender': {
         cellStyle: {'text-align': 'center'},
         cellRendererFramework: TimestampRendererFramework,
-        width: 140 // 有filter的为190，没有的为140
+        width: 140 // 有filter的为200，没有的为140
       },
       'ViewRender': {
         cellRendererFramework: ViewRendererFramework
