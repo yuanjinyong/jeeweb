@@ -85,6 +85,7 @@
         field: 'f_name',
         pinned: 'left',
         suppressSorting: false,
+        sortColId: 'convert(f_name USING gbk)',
         type: 'LikeFilter',
         width: 100
       }, {
