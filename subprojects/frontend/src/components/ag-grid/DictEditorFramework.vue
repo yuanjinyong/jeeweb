@@ -1,7 +1,7 @@
 <template>
-  <el-select :ref="'input'" v-model="value" size="mini" :clearable="false" :disabled="isDisabled()" @change="onChange"
+  <el-select ref="input" v-model="value" size="mini" :clearable="false" :disabled="isDisabled()" @change="onChange"
              style="min-width:10px;width:100%;">
-    <el-option v-for="item in options" :key="item.f_item_code" :label="item.f_item_text" :value="item.f_item_code">
+    <el-option v-for="item in dictItems" :key="item.f_item_code" :label="item.f_item_text" :value="item.f_item_code">
       {{item.f_item_text}}
     </el-option>
   </el-select>
@@ -13,8 +13,8 @@
   export default Vue.extend({
     data () {
       return {
-        options: [],
-        editorOptions: {rule: [], isDisabled: null},
+        dictItems: [],
+        options: {rule: [], isDisabled: null},
         value: null
       }
     },
@@ -24,10 +24,10 @@
       }
     },
     created () {
-      Vue.lodash.merge(this.editorOptions, this.params.editorOptions)
+      Vue.lodash.merge(this.options, this.params.options || {})
 
       this.getDictItems(this.params.dict || this.filterParams.dictOptions, (items) => {
-        this.options = items
+        this.dictItems = items
       })
 
       this.$nextTick(() => {
@@ -36,8 +36,8 @@
     },
     methods: {
       isDisabled () {
-        if (this.editorOptions.isDisabled) {
-          return this.editorOptions.isDisabled.call(this, this.params, this.entity)
+        if (this.options.isDisabled) {
+          return this.options.isDisabled.call(this, this.params, this.entity)
         }
         return false
       },

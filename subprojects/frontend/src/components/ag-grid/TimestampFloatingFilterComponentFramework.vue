@@ -18,6 +18,9 @@
   export default Vue.extend({
     data () {
       return {
+        defaultFloatingFilterComponentParams: {
+          suppressFilterButton: true
+        },
         defaultFilterParams: {
           type: 'between',
           datePickerOptions: {
@@ -44,9 +47,6 @@
             }
           }
         },
-        defaultFloatingFilterComponentParams: {
-          suppressFilterButton: true
-        },
         parentModel: null,
         value: null
       }
@@ -60,8 +60,12 @@
       }
     },
     created () {
-      this.params.column.colDef.filterParams = this.$lodash.merge({}, this.defaultFilterParams, this.params.column.colDef.filterParams || {})
-      this.params.column.colDef.floatingFilterComponentParams = this.$lodash.merge({}, this.defaultFloatingFilterComponentParams, this.params.column.colDef.floatingFilterComponentParams || {})
+      this.params.column.colDef.filterParams = this.$lodash.merge({},
+        this.defaultFilterParams,
+        this.params.column.colDef.filterParams || {})
+      this.params.column.colDef.floatingFilterComponentParams = this.$lodash.merge({},
+        this.defaultFloatingFilterComponentParams,
+        this.params.column.colDef.floatingFilterComponentParams || {})
 
       if (this.filterParams.type === 'between') {
         this.value = [null, null]

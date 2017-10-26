@@ -188,7 +188,7 @@
         field: 'f_item_code',
         cellRendererFramework: TextEditorFramework,
         cellRendererParams: {
-          editorOptions: {
+          options: {
             rule: [],
             isDisabled (params, entity) {
               if (entity.f_id && entity.f_is_preset === '1') {
@@ -214,7 +214,7 @@
         cellRendererFramework: DictEditorFramework,
         cellRendererParams: {
           dict: 'YesNo2',
-          editorOptions: {
+          options: {
             rule: [],
             isDisabled (params, entity) {
               if (entity.f_id) {

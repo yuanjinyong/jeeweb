@@ -1,21 +1,22 @@
-<style scoped>
-</style>
-
 <template>
-  <el-select :ref="'input'" v-model="value" clearable :multiple="multiple" @change="onChange">
-    <el-option v-for="item in options" :key="item.f_item_code" :label="item.f_item_text" :value="item.f_item_code">
+  <el-select ref="input" v-model="value" clearable :multiple="multiple" @change="onChange">
+    <el-option v-for="item in dictItems" :key="item.f_item_code" :label="item.f_item_text" :value="item.f_item_code">
     </el-option>
   </el-select>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import Vue from 'vue'
 
   export default Vue.extend({
     data () {
       return {
+        defaultFilterParams: {
+          type: 'equal',
+          filterType: 'Integer'
+        },
+        dictItems: [],
         floatingModel: null,
-        options: [],
         value: null
       }
     },
@@ -28,15 +29,13 @@
       }
     },
     created () {
-      if (!this.params.column.colDef.filterParams) {
-        this.params.column.colDef.filterParams = {}
-      }
-      if (!this.params.column.colDef.filterParams.dict && this.params.column.colDef.cellRendererParams) {
-        this.params.column.colDef.filterParams.dict = this.params.column.colDef.cellRendererParams.dict
-      }
+      this.params.column.colDef.filterParams = this.$lodash.merge({},
+        this.defaultFilterParams,
+        this.params.column.colDef.cellRendererParams || {},
+        this.params.column.colDef.filterParams || {})
 
       this.getDictItems(this.filterParams.dict || this.filterParams.dictOptions, (items) => {
-        this.options = items
+        this.dictItems = items
       })
 
       if (this.multiple) {
@@ -71,8 +70,8 @@
       getModel () {
         return {
           filter: this.value,
-          filterType: this.filterParams.filterType ? this.filterParams.filterType : 'Integer',
-          type: this.filterParams.type ? this.filterParams.type : null
+          filterType: this.filterParams.filterType,
+          type: this.filterParams.type
         }
       },
       setModel (model) {

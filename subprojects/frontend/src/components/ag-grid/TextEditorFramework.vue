@@ -1,5 +1,5 @@
 <template>
-  <el-input :ref="'input'" v-model="value" size="mini" :disabled="isDisabled()" @change="onChange" placeholder="请输入文本">
+  <el-input ref="input" v-model="value" size="mini" :disabled="isDisabled()" @change="onChange" placeholder="请输入文本">
   </el-input>
 </template>
 
@@ -9,7 +9,7 @@
   export default Vue.extend({
     data () {
       return {
-        editorOptions: {rule: [], isDisabled: null},
+        options: {rule: [], isDisabled: null},
         value: null
       }
     },
@@ -19,13 +19,16 @@
       }
     },
     created () {
-      Vue.lodash.merge(this.editorOptions, this.params.editorOptions)
-      this.value = this.params.value
+      Vue.lodash.merge(this.options, this.params.options || {})
+
+      this.$nextTick(() => {
+        this.value = this.params.value
+      })
     },
     methods: {
       isDisabled () {
-        if (this.editorOptions.isDisabled) {
-          return this.editorOptions.isDisabled.call(this, this.params, this.entity)
+        if (this.options.isDisabled) {
+          return this.options.isDisabled.call(this, this.params, this.entity)
         }
         return false
       },

@@ -1,13 +1,10 @@
-<style scoped>
-</style>
-
 <template>
-  <el-checkbox :ref="'input'" v-model="value" :true-label="1" :false-label="2" @change="onChange"
+  <el-checkbox ref="input" v-model="value" :true-label="1" :false-label="2" @change="onChange"
     style="line-height: 24px;">
   </el-checkbox>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import Vue from 'vue'
 
   export default Vue.extend({
@@ -17,7 +14,9 @@
       }
     },
     created () {
-      this.value = this.params.value
+      this.$nextTick(() => {
+        this.value = this.params.value
+      })
     },
     methods: {
       onChange (event) {

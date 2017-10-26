@@ -17,6 +17,7 @@
       return {
         defaultFilterParams: {
           type: 'between',
+          filterType: 'Timestamp',
           datePickerOptions: {
             type: 'daterange',
             format: 'yyyy-MM-dd',
@@ -54,7 +55,9 @@
       }
     },
     created () {
-      this.params.column.colDef.filterParams = this.$lodash.merge({}, this.defaultFilterParams, this.params.column.colDef.filterParams || {})
+      this.params.column.colDef.filterParams = this.$lodash.merge({},
+        this.defaultFilterParams,
+        this.params.column.colDef.filterParams || {})
 
       if (this.filterParams.type === 'between') {
         this.value = [null, null]
@@ -90,17 +93,19 @@
 
         return {
           filter: filterValue,
-          filterType: 'Timestamp',
+          filterType: this.filterParams.filterType,
           type: this.filterParams.type
         }
       },
       setModel (model) {
-        this.floatingModel = model
-        let filterValue = model.filter
-        if (this.filterParams.type === 'between') {
-          this.value = [filterValue[0] ? Vue.moment(filterValue[0]).toDate() : null, filterValue[1] ? Vue.moment(filterValue[1]).toDate() : null]
-        } else {
-          this.value = filterValue ? Vue.moment(filterValue).toDate() : null
+        if (model) {
+          this.floatingModel = model
+          let filterValue = model.filter
+          if (this.filterParams.type === 'between') {
+            this.value = [filterValue[0] ? Vue.moment(filterValue[0]).toDate() : null, filterValue[1] ? Vue.moment(filterValue[1]).toDate() : null]
+          } else {
+            this.value = filterValue ? Vue.moment(filterValue).toDate() : null
+          }
         }
       },
       onChange (val) { // 这里的val是格式化后的字符串，即和看到的输入框中的文本一致
