@@ -74,7 +74,7 @@ dependencies {
     compile "commons-io:commons-io:2.5"
 
     // 添加适用于生产环境的功能，如性能指标和监测等功能
-    runtime "org.springframework.boot:spring-boot-starter-actuator"
+    compile "org.springframework.boot:spring-boot-starter-actuator"
 
     // testing
     testCompile "org.springframework.boot:spring-boot-starter-test"
