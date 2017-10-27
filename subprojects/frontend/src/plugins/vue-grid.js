@@ -4,6 +4,7 @@
 import Vue from 'vue'
 import {
   AddHeaderComponenetFramework,
+  DictEditorFramework,
   DictFilterFramework,
   DictFloatingFilterComponentFramework,
   DictRendererFramework,
@@ -11,6 +12,7 @@ import {
   LikeFloatingFilterComponentFramework,
   IndexRendererFramework,
   OperationRendererFramework,
+  TextEditorFramework,
   TimestampFilterFramework,
   TimestampFloatingFilterComponentFramework,
   TimestampRendererFramework,
@@ -68,6 +70,10 @@ var VueGrid = {
         cellStyle: {'text-align': 'center'},
         width: 24
       },
+      'DictEditor': {
+        cellStyle: {'text-align': 'center'},
+        cellRendererFramework: DictEditorFramework
+      },
       'DictFilter': {
         suppressFilter: false,
         filterFramework: DictFilterFramework,
@@ -95,6 +101,9 @@ var VueGrid = {
         suppressResize: true,
         cellStyle: {'text-align': 'center'},
         cellRendererFramework: OperationRendererFramework
+      },
+      'TextEditor': {
+        cellRendererFramework: TextEditorFramework
       },
       'TimestampFilter': {
         suppressFilter: false,

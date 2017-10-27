@@ -63,10 +63,6 @@
 
 <script>
   import {DetailMixin} from 'mixins'
-  import {
-    DictEditorFramework,
-    TextEditorFramework
-  } from 'components/ag-grid'
 
   export default {
     name: 'dictDetail',
@@ -178,10 +174,10 @@
       }, {
         headerName: '编码',
         field: 'f_item_code',
-        cellRendererFramework: TextEditorFramework,
+        suppressSizeToFit: false,
+        type: 'TextEditor',
         cellRendererParams: {
           options: {
-            rule: [],
             isDisabled (params, entity) {
               if (entity.f_id && entity.f_is_preset === '1') {
                 return true
@@ -191,26 +187,23 @@
             }
           }
         },
-        suppressSizeToFit: false,
         width: 200
       }, {
         headerName: '名称',
         field: 'f_item_text',
-        cellRendererFramework: TextEditorFramework,
         suppressSizeToFit: false,
+        type: 'TextEditor',
         width: 300
       }, {
         headerName: '是否预置',
         field: 'f_is_preset',
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: DictEditorFramework,
+        type: 'DictEditor',
         cellRendererParams: {
           dict: 'YesNo2',
           options: {
-            rule: [],
             isDisabled (params, entity) {
               if (entity.f_id) {
-                return true
+                return !params.context.featureComponent.curUser.superAdmin
               } else {
                 return false
               }
@@ -255,7 +248,6 @@
             }
           }]
         },
-        suppressResize: true,
         width: 70
       }]
     },
