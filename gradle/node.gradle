@@ -1,8 +1,8 @@
 //plugins.withType(NodePlugin) {
     // configure gradle-node-plugin
     node {
-        version = '8.5.0'
-        //npmVersion = '5.3.0' // 不需要指定，默认使用nodejs自带的。
+        version = '8.8.1'
+        //npmVersion = '5.4.2' // 不需要指定，默认使用nodejs自带的。
         //distBaseUrl = 'https://nodejs.org/dist'
         distBaseUrl = "${nexusUrl}/content/groups/public/download/nodejs"
         download = true
