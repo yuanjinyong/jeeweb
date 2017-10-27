@@ -105,15 +105,15 @@
       }, {
         headerName: '系统预置',
         field: 'f_is_preset',
-        cellRendererParams: {dict: 'YesNo2'},
         type: 'DictRender',
+        cellRendererParams: {dict: 'YesNo2'},
         width: 75
       }, {
         headerName: '状态',
         field: 'f_status',
+        type: ['DictRender', 'DictFilter'],
         filterParams: {type: 'in'},
         cellRendererParams: {dict: 'UserStatus'},
-        type: ['DictRender', 'DictFilter'],
         width: 88
       }, {
         headerName: '备注',

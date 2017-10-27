@@ -13,14 +13,6 @@
 
 <script>
   import {ViewlMixin} from 'mixins'
-  import {
-    AddHeaderComponenetFramework,
-    LikeFilterFramework,
-    LikeFloatingFilterComponentFramework,
-    IndexRendererFramework,
-    OperationRendererFramework,
-    ViewRendererFramework
-  } from 'components/ag-grid'
 
   export default {
     name: 'generationRuleView',
@@ -69,30 +61,20 @@
     },
     created () {
       this.gridOptions.columnDefs = [{
-        headerName: '#',
-        field: 'f_id',
-        pinned: 'left',
-        headerComponentFramework: AddHeaderComponenetFramework,
-        cellStyle: {'text-align': 'right'},
-        cellRendererFramework: IndexRendererFramework,
-        width: 38
+        type: ['IndexRender', 'AddHeader']
       }, {
         headerName: '规则编码',
         field: 'f_code',
         pinned: 'left',
         suppressSorting: false,
-        suppressFilter: false,
-        filterFramework: LikeFilterFramework,
-        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
-        cellRendererFramework: ViewRendererFramework,
+        type: ['ViewRender', 'LikeFilter'],
         width: 150
       }, {
         headerName: '规则名称',
         field: 'f_name',
         suppressSorting: false,
-        suppressFilter: false,
-        filterFramework: LikeFilterFramework,
-        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
+        sortColId: 'convert(f_name USING gbk)',
+        type: 'LikeFilter',
         width: 120
       }, {
         headerName: '菜单编码',
@@ -123,11 +105,7 @@
         tooltipField: 'f_request_url',
         width: 300
       }, {
-        headerName: '操作',
-        field: '',
-        pinned: 'right',
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: OperationRendererFramework,
+        type: 'OperationRender',
         cellRendererParams: {
           operations: [{
             id: 'edit',

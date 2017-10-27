@@ -9,17 +9,6 @@
 
 <script>
   import {ViewlMixin} from 'mixins'
-  import {
-    AddHeaderComponenetFramework,
-    DictFilterFramework,
-    DictFloatingFilterComponentFramework,
-    LikeFilterFramework,
-    LikeFloatingFilterComponentFramework,
-    IndexRendererFramework,
-    OperationRendererFramework,
-    TimestampRendererFramework,
-    ViewRendererFramework
-  } from 'components/ag-grid'
 
   export default {
     name: 'schemaTableView',
@@ -58,26 +47,17 @@
     },
     created () {
       this.gridOptions.columnDefs = [{
-        headerName: '',
-        pinned: 'left',
         hide: this.mode !== 'selector',
-        checkboxSelection: this.mode === 'selector',
-        cellStyle: {'text-align': 'center'},
-        width: 24
+        type: 'Checkbox'
       }, {
-        headerName: '#',
-        pinned: 'left',
-        headerComponentFramework: this.mode !== 'selector' ? AddHeaderComponenetFramework : null,
-        cellStyle: {'text-align': 'right'},
-        cellRendererFramework: IndexRendererFramework,
-        width: 38
+        type: ['IndexRender', this.mode !== 'selector' ? 'AddHeader' : 'Null']
       }, {
         headerName: '数据库',
         field: 'TABLE_SCHEMA',
         tooltipField: 'TABLE_SCHEMA',
         pinned: 'left',
         suppressSorting: false,
-        suppressFilter: false,
+        type: 'DictFilter',
         filterParams: {
           dictOptions: {
             url: 'api/schema/information/schematas',
@@ -85,8 +65,6 @@
             textFiled: 'SCHEMA_NAME'
           }
         },
-        filterFramework: DictFilterFramework,
-        floatingFilterComponentFramework: DictFloatingFilterComponentFramework,
         width: 120
       }, {
         headerName: '数据库表',
@@ -94,16 +72,13 @@
         tooltipField: 'TABLE_NAME',
         pinned: 'left',
         suppressSorting: false,
-        suppressFilter: false,
-        filterFramework: LikeFilterFramework,
-        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
-        cellRendererFramework: ViewRendererFramework,
+        type: ['ViewRender', 'LikeFilter'],
         width: 200
       }, {
         headerName: '类型',
         field: 'TABLE_TYPE',
         tooltipField: 'TABLE_TYPE',
-        suppressFilter: false,
+        type: 'DictFilter',
         filterParams: {
           dict: {
             'BASE TABLE': '表',
@@ -111,8 +86,6 @@
             'SYSTEM VIEW': '系统视图'
           }
         },
-        filterFramework: DictFilterFramework,
-        floatingFilterComponentFramework: DictFloatingFilterComponentFramework,
         width: 100
       }, {
         headerName: '引擎',
@@ -130,31 +103,21 @@
       }, {
         headerName: '创建时间',
         field: 'CREATE_TIME',
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: TimestampRendererFramework,
-        width: 140 // 有filter的为190，没有的为140
+        type: 'TimestampRenderer'
       }, {
         headerName: '修改时间',
         field: 'UPDATE_TIME',
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: TimestampRendererFramework,
-        width: 140 // 有filter的为190，没有的为140
+        type: 'TimestampRenderer'
       }, {
         headerName: '描述',
         pinned: 'right',
         field: 'TABLE_COMMENT',
         tooltipField: 'TABLE_COMMENT',
-        suppressFilter: false,
-        filterFramework: LikeFilterFramework,
-        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
+        type: 'LikeFilter',
         width: 180
       }, {
-        headerName: '操作',
-        field: '',
-        pinned: 'right',
         hide: this.mode === 'selector',
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: OperationRendererFramework,
+        type: 'OperationRender',
         cellRendererParams: {
           operations: [{
             id: 'rows',

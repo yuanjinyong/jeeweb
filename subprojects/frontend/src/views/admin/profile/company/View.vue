@@ -7,15 +7,6 @@
 
 <script>
   import {ViewlMixin} from 'mixins'
-  import {
-    DictFilterFramework,
-    DictFloatingFilterComponentFramework,
-    DictRendererFramework,
-    LikeFilterFramework,
-    LikeFloatingFilterComponentFramework,
-    IndexRendererFramework,
-    TimestampRendererFramework
-  } from 'components/ag-grid'
 
   export default {
     name: 'myCompanyView',
@@ -36,38 +27,27 @@
     },
     created () {
       this.gridOptions.columnDefs = [{
-        headerName: '#',
-        pinned: 'left',
-        cellStyle: {'text-align': 'right'},
-        cellRendererFramework: IndexRendererFramework,
-        width: 38
+        type: 'IndexRender'
       }, {
         headerName: '名称',
         field: 'f_name',
         tooltipField: 'f_name',
         pinned: 'left',
-        // suppressSorting: false,
-        suppressFilter: false,
-        filterFramework: LikeFilterFramework,
-        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
+        suppressSorting: false,
+        sortColId: 'convert(f_name USING gbk)',
+        type: 'LikeFilter',
         width: 250
       }, {
         headerName: '申请状态',
         field: 'f_joined_status',
         colId: 'f_status',
-        suppressFilter: false,
-        filterFramework: DictFilterFramework,
-        floatingFilterComponentFramework: DictFloatingFilterComponentFramework,
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: DictRendererFramework,
+        type: ['DictRender', 'DictFilter'],
         cellRendererParams: {dict: 'CompayUserStatus'},
         width: 84
       }, {
         headerName: '申请加入时间',
         field: 'f_joined_time',
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: TimestampRendererFramework,
-        width: 140
+        type: 'TimestampRenderer'
       }, {
         headerName: '申请说明',
         field: 'f_joined_remark',
@@ -76,9 +56,7 @@
       }, {
         headerName: '最近登录时间',
         field: 'f_last_login_time',
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: TimestampRendererFramework,
-        width: 140
+        type: 'TimestampRenderer'
       }, {
         headerName: '审核人',
         field: 'f_joined_auditor_name',
@@ -86,9 +64,7 @@
       }, {
         headerName: '审核时间',
         field: 'f_joined_audited_time',
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: TimestampRendererFramework,
-        width: 140
+        type: 'TimestampRenderer'
       }, {
         headerName: '审核意见',
         field: 'f_joined_audited_comments',

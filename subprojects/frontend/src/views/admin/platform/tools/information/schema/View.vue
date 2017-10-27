@@ -7,13 +7,6 @@
 
 <script>
   import {ViewlMixin} from 'mixins'
-  import {
-    DictFilterFramework,
-    DictFloatingFilterComponentFramework,
-    LikeFilterFramework,
-    LikeFloatingFilterComponentFramework,
-    IndexRendererFramework
-  } from 'components/ag-grid'
 
   export default {
     name: 'informationSchemaView',
@@ -34,25 +27,17 @@
     },
     created () {
       this.gridOptions.columnDefs = [{
-        headerName: '',
-        pinned: 'left',
         hide: this.mode !== 'selector',
-        checkboxSelection: this.mode === 'selector',
-        cellStyle: {'text-align': 'center'},
-        width: 24
+        type: 'Checkbox'
       }, {
-        headerName: '#',
-        pinned: 'left',
-        cellStyle: {'text-align': 'right'},
-        cellRendererFramework: IndexRendererFramework,
-        width: 38
+        type: 'IndexRender'
       }, {
         headerName: '数据库名',
         field: 'TABLE_SCHEMA',
         tooltipField: 'TABLE_SCHEMA',
         pinned: 'left',
         suppressSorting: false,
-        suppressFilter: false,
+        type: 'DictFilter',
         filterParams: {
           dictOptions: {
             url: 'api/schema/information/schematas',
@@ -60,8 +45,6 @@
             textFiled: 'SCHEMA_NAME'
           }
         },
-        filterFramework: DictFilterFramework,
-        floatingFilterComponentFramework: DictFloatingFilterComponentFramework,
         width: 120
       }, {
         headerName: '表名',
@@ -69,9 +52,7 @@
         tooltipField: 'TABLE_NAME',
         pinned: 'left',
         suppressSorting: false,
-        suppressFilter: false,
-        filterFramework: LikeFilterFramework,
-        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
+        type: 'LikeFilter',
         width: 240
       }, {
         headerName: '列名',

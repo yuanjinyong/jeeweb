@@ -59,14 +59,14 @@
         headerName: '提交方式',
         field: 'f_methods',
         suppressSorting: false,
-        filterParams: {dict: 'HttpMethods', filterType: 'String'},
         type: ['DictFilter'],
+        filterParams: {dict: 'HttpMethods', filterType: 'String'},
         width: 110
       }, {
         headerName: '记录日志',
         field: 'f_is_log',
-        cellRendererParams: {dict: 'YesNo2'},
         type: ['DictRender', 'DictFilter'],
+        cellRendererParams: {dict: 'YesNo2'},
         width: 75
       }, {
         headerName: '后台处理方法',

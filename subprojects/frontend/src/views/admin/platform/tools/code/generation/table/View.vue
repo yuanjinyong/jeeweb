@@ -10,12 +10,6 @@
 
 <script>
   import {ViewlMixin} from 'mixins'
-  import {
-    AddHeaderComponenetFramework,
-    DictRendererFramework,
-    OperationRendererFramework,
-    ViewRendererFramework
-  } from 'components/ag-grid'
 
   export default {
     name: 'generationRuleTableView',
@@ -97,10 +91,7 @@
     },
     created () {
       this.gridOptions.columnDefs = [{
-        headerName: '#',
-        field: 'f_order',
-        pinned: 'left',
-        headerComponentFramework: AddHeaderComponenetFramework,
+        type: ['IndexRender', 'AddHeader'],
         headerComponentParams: {
           operation: {
             permission: '',
@@ -108,9 +99,7 @@
               return params.context.featureComponent.operation === 'view'
             }
           }
-        },
-        cellStyle: {'text-align': 'right'},
-        width: 38
+        }
       }, {
         headerName: '数据库名',
         field: 'f_db_name',
@@ -120,13 +109,12 @@
         headerName: '表名',
         field: 'f_table_name',
         pinned: 'left',
-        cellRendererFramework: ViewRendererFramework,
+        type: 'ViewRender',
         width: 180
       }, {
         headerName: '主表',
         field: 'f_is_main',
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: DictRendererFramework,
+        type: ['DictRender', 'DictFilter'],
         cellRendererParams: {dict: 'YesNo2'},
         width: 60
       }, {
@@ -140,11 +128,7 @@
         tooltipField: 'f_rest_class',
         width: 400
       }, {
-        headerName: '操作',
-        field: '',
-        pinned: 'right',
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: OperationRendererFramework,
+        type: 'OperationRender',
         cellRendererParams: {
           operations: [{
             id: 'edit',

@@ -73,11 +73,6 @@
 
 <script>
   import {DetailMixin} from 'mixins'
-  import {
-    AddHeaderComponenetFramework,
-    IndexRendererFramework,
-    OperationRendererFramework
-  } from 'components/ag-grid'
 
   export default {
     name: 'schemaTableDetail',
@@ -159,9 +154,8 @@
     },
     created () {
       this.gridOptions.columnDefs = [{
-        headerName: '序号',
         field: 'ORDINAL_POSITION',
-        headerComponentFramework: AddHeaderComponenetFramework,
+        type: ['IndexRender', 'AddHeader'],
         headerComponentParams: {
           operation: {
             isDisabled (params, entity) {
@@ -172,8 +166,6 @@
             }
           }
         },
-        cellStyle: {'text-align': 'right'},
-        cellRendererFramework: IndexRendererFramework,
         width: 38
       }, {
         headerName: '列名',
@@ -213,10 +205,7 @@
         field: 'COLUMN_COMMENT',
         width: 300
       }, {
-        headerName: '操作',
-        field: '',
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: OperationRendererFramework,
+        type: 'OperationRender',
         cellRendererParams: {
           operations: [{
             id: 'remove',
