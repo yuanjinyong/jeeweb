@@ -5,16 +5,18 @@
  * In a single project build this file can be empty or even removed.
  *
  * Detailed information about configuring a multi-project build in Gradle can be found
- * in the user guide at https://docs.gradle.org/3.4.1/userguide/multi_project_builds.html
+ * in the user guide at https://docs.gradle.org/4.2.1/userguide/multi_project_builds.html
  */
 
 // As the first statement of the settings.gradle file we can define pluginRepositories:
-pluginRepositories {
-    maven { url 'http://121.43.163.28:28080/nexus/content/repositories/plugins/' }
-    gradlePluginPortal() // Include public Gradle plugin portal
+pluginManagement {
+  repositories {
+      maven { url 'http://121.43.163.28:28080/nexus/content/repositories/plugins/' }
+      gradlePluginPortal()
+  }
 }
 
-
+// To declare projects as part of a multi-project build use the 'include' method
 // Begin of include
 include 'backend'
 include 'frontend'
