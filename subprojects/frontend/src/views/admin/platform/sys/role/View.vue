@@ -10,15 +10,6 @@
 
 <script>
   import {ViewlMixin} from 'mixins'
-  import {
-    AddHeaderComponenetFramework,
-    DictRendererFramework,
-    LikeFilterFramework,
-    LikeFloatingFilterComponentFramework,
-    IndexRendererFramework,
-    OperationRendererFramework,
-    ViewRendererFramework
-  } from 'components/ag-grid'
 
   export default {
     name: 'roleView',
@@ -78,28 +69,17 @@
     },
     created () {
       this.gridOptions.columnDefs = [{
-        headerName: '',
-        pinned: 'left',
         hide: this.mode !== 'selector',
-        checkboxSelection: this.mode === 'selector',
-        cellStyle: {'text-align': 'center'},
-        width: 24
+        type: 'Checkbox'
       }, {
-        headerName: '#',
-        pinned: 'left',
-        headerComponentFramework: this.mode !== 'selector' ? AddHeaderComponenetFramework : null,
-        cellStyle: {'text-align': 'right'},
-        cellRendererFramework: IndexRendererFramework,
-        width: 38
+        type: ['IndexRender', this.mode !== 'selector' ? 'AddHeader' : 'Null']
       }, {
         headerName: '角色名称',
         field: 'f_name',
         pinned: 'left',
         suppressSorting: false,
-        suppressFilter: false,
-        filterFramework: LikeFilterFramework,
-        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
-        cellRendererFramework: ViewRendererFramework,
+        sortColId: 'convert(f_name USING gbk)',
+        type: ['ViewRender', 'LikeFilter'],
         width: 160
       }, {
         headerName: '角色描述',
@@ -109,8 +89,7 @@
       }, {
         headerName: '是否预置',
         field: 'f_is_preset',
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: DictRendererFramework,
+        type: 'DictRender',
         cellRendererParams: {dict: 'YesNo2'},
         width: 75
       }, {
@@ -120,12 +99,8 @@
         suppressSizeToFit: false,
         width: 300
       }, {
-        headerName: '操作',
-        field: '',
-        pinned: 'right',
         hide: this.mode === 'selector',
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: OperationRendererFramework,
+        type: 'OperationRender',
         cellRendererParams: {
           operations: [{
             id: 'authorize',
@@ -155,7 +130,6 @@
             }
           }]
         },
-        suppressResize: true,
         width: 80
       }]
     }

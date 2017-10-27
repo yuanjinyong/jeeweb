@@ -111,7 +111,6 @@
       }, {
         headerName: '状态',
         field: 'f_status',
-        suppressFilter: false,
         filterParams: {type: 'in'},
         cellRendererParams: {dict: 'UserStatus'},
         type: ['DictRender', 'DictFilter'],

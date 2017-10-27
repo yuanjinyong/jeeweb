@@ -10,15 +10,6 @@
 
 <script>
   import {ViewlMixin} from 'mixins'
-  import {
-    DictFilterFramework,
-    DictFloatingFilterComponentFramework,
-    DictRendererFramework,
-    LikeFilterFramework,
-    LikeFloatingFilterComponentFramework,
-    OperationRendererFramework,
-    ViewRendererFramework
-  } from 'components/ag-grid'
 
   export default {
     name: 'menuView',
@@ -93,19 +84,14 @@
         headerName: '编码',
         field: 'f_id',
         pinned: 'left',
-        suppressFilter: false,
-        filterFramework: LikeFilterFramework,
-        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
         cellRenderer: 'group',
+        type: 'LikeFilter',
         width: 200
       }, {
         headerName: '名称',
         field: 'f_name',
         pinned: 'left',
-        suppressFilter: true,
-        filterFramework: LikeFilterFramework,
-        floatingFilterComponentFramework: LikeFloatingFilterComponentFramework,
-        cellRendererFramework: ViewRendererFramework,
+        type: ['ViewRender', 'LikeFilter'],
         cellRendererParams: {
           operation: {
             render (params, entity) {
@@ -122,19 +108,9 @@
       }, {
         headerName: '类型',
         field: 'f_type',
-        suppressFilter: true,
-        filterFramework: DictFilterFramework,
-        filterParams: {
-          type: 'in',
-          doesFilterPass (params, value, filterPassParams) {
-            console && console.info('类型 doesFilterPass', filterPassParams.data.f_name, filterPassParams.node)
-            return true
-          }
-        },
-        floatingFilterComponentFramework: DictFloatingFilterComponentFramework,
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: DictRendererFramework,
+        type: ['DictRender', 'DictFilter'],
         cellRendererParams: {dict: 'MenuType'},
+        filterParams: {type: 'in'},
         width: 80
       }, {
         headerName: '排序',
@@ -156,11 +132,7 @@
       }, {
         headerName: '状态',
         field: 'f_status',
-        suppressFilter: false,
-        filterFramework: DictFilterFramework,
-        floatingFilterComponentFramework: DictFloatingFilterComponentFramework,
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: DictRendererFramework,
+        type: ['DictRender', 'DictFilter'],
         cellRendererParams: {dict: 'YesNo2'},
         width: 64
       }, {
@@ -170,12 +142,8 @@
         suppressSizeToFit: false,
         width: 350
       }, {
-        headerName: '操作',
-        field: '',
-        pinned: 'right',
         hide: this.mode === 'selector',
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: OperationRendererFramework,
+        type: 'OperationRender',
         cellRendererParams: {
           operations: [{
             id: 'add',

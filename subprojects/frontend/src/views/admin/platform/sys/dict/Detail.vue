@@ -64,10 +64,7 @@
 <script>
   import {DetailMixin} from 'mixins'
   import {
-    AddHeaderComponenetFramework,
     DictEditorFramework,
-    IndexRendererFramework,
-    OperationRendererFramework,
     TextEditorFramework
   } from 'components/ag-grid'
 
@@ -166,8 +163,8 @@
     },
     created () {
       this.gridOptions.columnDefs = [{
-        headerName: '排序',
-        headerComponentFramework: AddHeaderComponenetFramework,
+        pinned: 'left',
+        type: ['IndexRender', 'AddHeader'],
         headerComponentParams: {
           operation: {
             isDisabled (params, entity) {
@@ -177,12 +174,7 @@
               params.context.featureComponent.onAddItem()
             }
           }
-        },
-        field: 'f_item_order',
-        pinned: 'left',
-        cellStyle: {'text-align': 'right'},
-        cellRendererFramework: IndexRendererFramework,
-        width: 38
+        }
       }, {
         headerName: '编码',
         field: 'f_item_code',
@@ -227,11 +219,7 @@
         },
         width: 70
       }, {
-        headerName: '操作',
-        field: '',
-        pinned: 'right',
-        cellStyle: {'text-align': 'center'},
-        cellRendererFramework: OperationRendererFramework,
+        type: 'OperationRender',
         cellRendererParams: {
           operations: [{
             id: 'up',
