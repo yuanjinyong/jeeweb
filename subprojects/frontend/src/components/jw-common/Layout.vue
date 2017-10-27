@@ -72,7 +72,7 @@
         let topHeight = top.clientHeight
         let bottomHeight = bottom.clientHeight
         let middleHeight = window.innerHeight - topHeight - bottomHeight - 1
-        let leftWidth = 260
+        let leftWidth = window.innerWidth < 768 ? 0 : 260
         let rightWidth = window.innerWidth - leftWidth
         let sideMenuHeaderHeight = sideMenu ? sideMenu.firstChild.clientHeight : 0
         let sideMenuBodyHeight = middleHeight - sideMenuHeaderHeight

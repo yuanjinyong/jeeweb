@@ -46,6 +46,8 @@ import './filters'
 import './components'
 import App from './App'
 
+Vue.prototype.$devMode = process.env.NODE_ENV === 'development'
+Vue.devMode = process.env.NODE_ENV === 'development'
 window.devMode = process.env.NODE_ENV === 'development'
 window.devMode && console && console.warn('调试模式开启')
 

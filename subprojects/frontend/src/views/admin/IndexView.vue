@@ -61,17 +61,18 @@
 
 <template>
   <div style="height: 100%;" :style="{'background-color':layout.window.width < 768 ? '#fff' : '#324157'}">
-    <div v-if="layout.window.width < 768">
+    <jw-layout v-if="layout.window.width < 768">
       <!-- 顶部 -->
-      <jw-head id="layoutTop" :show-button="true"></jw-head>
+      <jw-head slot="top" :show-button="true"></jw-head>
 
       <!-- 中部 -->
-      <div id="layoutMiddle" :style="{'width':layout.middle.width+'px', 'height':layout.middle.height+'px'}">
+      <div slot="middle">
         <el-row id="topMenu" class="jw-menu jw-top-menu">
           <div class="jw-menu-header jw-top-menu-header">
             <el-button class="jw-menu-switch" type="text" @click="onshowMenu">
               <i class="fa fa-bars" aria-hidden="true"></i>
             </el-button>
+            <span style="float: right;" v-if="$devMode">{{layout.window.width}} &times; {{layout.window.height}}</span>
           </div>
           <el-col style="float: left;position: absolute;" :span="16">
             <jw-menu class="jw-menu-body jw-top-menu-body" :default-active="tabs.activeName" :menu-list="menuList"
@@ -87,19 +88,18 @@
       </div>
 
       <!-- 底部 -->
-      <jw-foot id="layoutBottom" v-show="false"></jw-foot>
-    </div>
+      <jw-foot slot="bottom" v-show="false"></jw-foot>
+    </jw-layout>
 
 
-    <div v-else>
+    <jw-layout v-else>
       <!-- 顶部 -->
-      <jw-head id="layoutTop" :show-button="true"></jw-head>
+      <jw-head slot="top" :show-button="true"></jw-head>
 
       <!-- 中部 -->
-      <div id="layoutMiddle" :style="{'width':layout.middle.width+'px', 'height':layout.middle.height+'px'}">
+      <template>
         <!-- 左部 -->
-        <div id="layoutLeft" style="float: left;"
-             :style="{'width':layout.left.width+'px', 'height':layout.left.height+'px'}">
+        <div slot="left">
           <div id="sideMenu" class="jw-menu jw-side-menu">
             <div class="jw-menu-header jw-side-menu-header">
               系统菜单
@@ -115,8 +115,7 @@
         </div>
 
         <!-- 右部 -->
-        <div id="layoutRight" style="background-color: #fff;"
-             :style="{'width':layout.right.width+'px', 'height':layout.right.height+'px', 'margin-left':layout.left.width+'px'}">
+        <div slot="center" style="background-color: #fff;">
           <div id="viewTab" class="jw-view-tab">
             <el-tabs type="card" class="jw-card-tabs jw-view-tab-header" v-model="tabs.activeName"
                      @tab-remove="onCloseTab" @tab-click="onClickTab">
@@ -133,11 +132,11 @@
             </div>
           </div>
         </div>
-      </div>
+      </template>
 
       <!-- 底部 -->
-      <jw-foot id="layoutBottom"></jw-foot>
-    </div>
+      <jw-foot slot="bottom"></jw-foot>
+    </jw-layout>
   </div>
 </template>
 
@@ -194,15 +193,6 @@
         return this.$store.state.tabs
       }
     },
-    created () {
-      window.addEventListener('resize', this.onResize)
-      this.$nextTick(() => {
-        this.onResize()
-      })
-    },
-    beforeDestroy () {
-      window.removeEventListener('resize', this.onResize)
-    },
     watch: {
       curUser (val, oldVal) {
         // 登出后，重新调用后台接口加载主页数据
@@ -212,74 +202,6 @@
       }
     },
     methods: {
-      onResize () {
-        var vm = this
-        if (vm.resizeTimer) {
-          clearTimeout(vm.resizeTimer)
-        }
-
-        vm.resizeTimer = setTimeout(() => {
-          let top = document.getElementById('layoutTop')
-          let bottom = document.getElementById('layoutBottom')
-          let sideMenu = document.getElementById('sideMenu')
-          let topMenu = document.getElementById('topMenu')
-          if (!top) {
-            return
-          }
-
-          let topHeight = top.clientHeight
-          let bottomHeight = bottom.clientHeight
-          let middleHeight = window.innerHeight - topHeight - bottomHeight - 1
-          let topMenuHeaderHeight = topMenu ? topMenu.firstChild.clientHeight : 0
-          let leftWidth = window.innerWidth < 768 ? 0 : 260
-          let leftHeight = middleHeight - topMenuHeaderHeight
-          let sideMenuHeaderHeight = sideMenu ? sideMenu.firstChild.clientHeight : 0
-          let sideMenuBodyHeight = leftHeight - sideMenuHeaderHeight
-          let rightWidth = window.innerWidth - leftWidth
-          let rightHeight = middleHeight - topMenuHeaderHeight
-
-          vm.$store.commit('updateLayout', {
-            window: {
-              width: window.innerWidth, height: window.innerHeight
-            },
-            top: {
-              width: window.innerWidth, height: topHeight
-            },
-            middle: {
-              width: window.innerWidth, height: middleHeight
-            },
-            left: {
-              width: leftWidth, height: leftHeight
-            },
-            right: {
-              width: rightWidth, height: rightHeight
-            },
-            bottom: {
-              width: window.innerWidth, height: bottomHeight
-            },
-            topMenu: {
-              width: window.innerWidth, height: topMenuHeaderHeight
-            },
-            sideMenu: {
-              header: {
-                width: leftWidth, height: sideMenuHeaderHeight
-              },
-              body: {
-                width: leftWidth, height: sideMenuBodyHeight
-              }
-            },
-            viewTab: {
-              header: {
-                width: rightWidth, height: sideMenuHeaderHeight
-              },
-              body: {
-                width: rightWidth, height: sideMenuBodyHeight
-              }
-            }
-          })
-          vm.resizeTimer = null
-        }, 50)
-      },
       onshowMenu () {
         this.showMenu = !this.showMenu
       },
