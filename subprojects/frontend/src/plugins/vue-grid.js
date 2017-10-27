@@ -212,8 +212,9 @@ var VueGrid = {
       }
       if (gridParams.sortModel && gridParams.sortModel.length > 0) {
         page.orderBy = ''
-        gridParams.sortModel.forEach(function (order, idx, orders) {
-          page.orderBy += page.orderBy + order.colId + ' ' + order.sort + ', '
+        gridParams.sortModel.forEach((order, idx, orders) => {
+          let colDef = this.columnApi.getColumn(order.colId).colDef
+          page.orderBy += page.orderBy + (colDef.sortColId || order.colId) + ' ' + order.sort + ', '
         })
         page.orderBy = page.orderBy.substr(0, page.orderBy.length - 2)
       }

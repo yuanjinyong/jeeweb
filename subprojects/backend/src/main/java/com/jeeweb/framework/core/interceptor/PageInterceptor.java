@@ -211,7 +211,8 @@ public class PageInterceptor implements Interceptor {
 
         StringBuffer pageSql = new StringBuffer();
         if (DB_PRODUCT_NAME_MYSQL.equals(databaseProductName)) {
-            pageSql.append(buildOrderBySql(sql, params.getOrderBy()));
+            pageSql.append(HelpUtil.isEmpty(params.getOrderBy()) ? sql
+                    : ("SELECT * FROM (\n" + sql + "\n) TEMP_TB\nORDER BY " + params.getOrderBy()));
             if (params.hasPagenation()) {
                 pageSql.append(" \nLIMIT " + params.getBeginRowNo() + "," + params.getPageSize());
             }
@@ -229,21 +230,25 @@ public class PageInterceptor implements Interceptor {
                         .append(beginRow + params.getPageSize());
             }
         } else if ("oracle".equals(databaseProductName)) {
-            pageSql.append("SELECT * FROM (SELECT TMP_TB.*, ROWNUM ROW_ID FROM (\n");
-            pageSql.append(buildOrderBySql(sql, params.getOrderBy()));
-            if (params.hasPagenation()) {
-                Integer beginRow = params.getBeginRowNo();
-                pageSql.append("\n) AS TMP_TB WHERE ROWNUM <= ").append(beginRow + params.getPageSize())
-                        .append(") WHERE ROW_ID > ").append(beginRow);
-            }
+            // pageSql.append("SELECT * FROM (SELECT TMP_TB.*, ROWNUM ROW_ID FROM (\n");
+            // pageSql.append(buildOrderBySql(sql, params.getOrderBy()));
+            // if (params.hasPagenation()) {
+            // Integer beginRow = params.getBeginRowNo();
+            // pageSql.append("\n) AS TMP_TB WHERE ROWNUM <= ").append(beginRow + params.getPageSize())
+            // .append(") WHERE ROW_ID > ").append(beginRow);
+            // }
         }
 
         return pageSql.toString();
     }
 
-    private String buildOrderBySql(String sql, String orderBy) {
-        return HelpUtil.isEmpty(orderBy) ? sql : (sql + "\nORDER BY " + orderBy);
-    }
+    // private String buildOrderBySql(String sql, String orderBy) {
+    // if (HelpUtil.isEmpty(orderBy)) {
+    // return sql;
+    // }
+    //
+    // return "SELECT * FROM (\n" + sql + "\n) temp\nORDER BY " + orderBy;
+    // }
 
     @Override
     public Object plugin(Object target) {
