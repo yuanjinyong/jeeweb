@@ -29,9 +29,9 @@ public class HelpUtil extends StringUtils {
     public static boolean isEmpty(String string) {
         return string == null || string.trim().length() == 0;
     }
-    
+
     public static boolean isEmpty(StringBuffer sb) {
-    	return sb == null || sb.toString().trim().length() == 0;
+        return sb == null || sb.toString().trim().length() == 0;
     }
 
     public static boolean isEmpty(Object[] array) {
@@ -187,6 +187,39 @@ public class HelpUtil extends StringUtils {
      */
     public static String getMonthBeginTime() {
         return getSimpleDateFormat(DATETIME_PATTERN_MONTHBEGIN).format(Calendar.getInstance().getTime());
+    }
+
+    public static Timestamp getBeginTimeOfDay(Timestamp time) {
+        return Timestamp.valueOf(getSimpleDateFormat("yyyy-MM-dd 00:00:00.000000000").format(time.getTime()));
+    }
+
+    public static Timestamp getEndTimeOfDay(Timestamp time) {
+        return Timestamp.valueOf(getSimpleDateFormat("yyyy-MM-dd 23:59:59.999999999").format(time.getTime()));
+    }
+
+    public static Timestamp getBeginTimeOfMonth(Timestamp time) {
+        return Timestamp.valueOf(getSimpleDateFormat("yyyy-MM-01 00:00:00.000000000").format(time.getTime()));
+    }
+
+    public static Timestamp getEndTimeOfMonth(Timestamp time) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(time);
+        c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return Timestamp.valueOf(getSimpleDateFormat("yyyy-MM-dd 23:59:59.999999999").format(time.getTime()));
+    }
+
+    public static Timestamp addDays(Timestamp time, int amount) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(time);
+        c.add(Calendar.DATE, amount);
+        return new Timestamp(c.getTimeInMillis());
+    }
+
+    public static Timestamp addMonths(Timestamp time, int amount) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(time);
+        c.add(Calendar.MONTH, amount);
+        return new Timestamp(c.getTimeInMillis());
     }
 
     public static String formatDatetime(Date date) {
