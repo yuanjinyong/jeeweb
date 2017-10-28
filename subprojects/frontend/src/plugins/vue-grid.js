@@ -366,6 +366,20 @@ var VueGrid = {
           console.warn('ag-grid还未初始化完成')
         }
       }
+    },
+    export (params, config) {
+      let gridOptions = this
+      let gridParams = {
+        startRow: null,
+        endRow: null,
+        filterModel: gridOptions.api.getFilterModel(),
+        sortModel: gridOptions.api.getSortModel(),
+        context: gridOptions.context
+      }
+      let page = gridOptions.buildPage(gridParams)
+      let filters = gridOptions.buildFilter(gridParams)
+
+      Vue.jw.export(gridOptions.context.url, {params: Object.assign({}, gridOptions.context.params, page, filters, params)}, config)
     }
   },
   buildOptions (gridOptions) {
