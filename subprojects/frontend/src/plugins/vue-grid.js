@@ -82,13 +82,19 @@ var VueGrid = {
       },
       'DictRender': {
         cellStyle: {'text-align': 'center'},
-        cellRendererFramework: DictRendererFramework
+        cellRendererFramework: DictRendererFramework,
+        exportFormatter (exportFormatterParams) {
+          return Vue.prototype.getDictValue(exportFormatterParams.value, exportFormatterParams.colDef.cellRendererParams.dict)
+        }
       },
       'IndexRender': {
         headerName: '#',
         pinned: 'left',
         cellStyle: {'text-align': 'right'},
         cellRendererFramework: IndexRendererFramework,
+        exportFormatter (exportFormatterParams) {
+          return exportFormatterParams.rowIndex + 1
+        },
         width: 38
       },
       'LikeFilter': {
@@ -116,6 +122,15 @@ var VueGrid = {
       'TimestampRender': {
         cellStyle: {'text-align': 'center'},
         cellRendererFramework: TimestampRendererFramework,
+        exportFormatter (exportFormatterParams) {
+          let params = Vue.lodash.merge({colDef: {cellRendererParams: {options: {format: 'YYYY-MM-DD HH:mm:ss'}}}}, exportFormatterParams)
+          let timestamp = parseInt(params.value)
+          if (!timestamp) {
+            return ''
+          } else {
+            return Vue.moment(timestamp).format(params.colDef.cellRendererParams.options.format)
+          }
+        },
         width: 140 // 有filter的为200，没有的为140
       },
       'ViewRender': {
@@ -128,7 +143,10 @@ var VueGrid = {
       suppressSorting: true,
       suppressMenu: true,
       suppressFilter: true,
-      suppressExport: false, // 导出时，导出该列。自己扩展的属性，不是ag-grid的。
+      suppressExport: false, // 导出时，不导出该列。自己扩展的属性，不是ag-grid的。
+      exportFormatter (params) {
+        return params.value || ''
+      },
       minWidth: 33
     },
     columnDefs: [],
@@ -396,18 +414,31 @@ var VueGrid = {
               .map((columnDef, colIdx) => { // 列头的单元格位置和内容，数组
                 return {
                   position: String.fromCharCode(65 + colIdx) + 1,
-                  value: columnDef.headerName
+                  value: columnDef.headerName || ''
                 }
               })
               .reduce((result, item) => { // 数组转换成 worksheet 需要的结构
-                return Object.assign({}, result, {[item.position]: {v: item.value || ''}})
+                return Object.assign({}, result, {[item.position]: {v: item.value}})
               }, {})
             let dataCells = data.items
               .map((entity, rowIdx) => { // 表体的单元格位置和内容，二维数组
                 return cfg.columnDefs.map((columnDef, colIdx) => {
+                  let value = entity[columnDef.field]
+                  if (typeof columnDef.exportFormatter === 'function') {
+                    value = columnDef.exportFormatter({
+                      rowIndex: rowIdx,
+                      value: entity[columnDef.field],
+                      data: entity,
+                      colDef: columnDef,
+                      api: gridOptions.api, // the grid API
+                      columnApi: gridOptions.columnApi, // the grid Column API
+                      context: gridOptions.context
+                    })
+                  }
+
                   return {
                     position: String.fromCharCode(65 + colIdx) + (1 + rowIdx + 1),
-                    value: entity[columnDef.field]
+                    value: value || ''
                   }
                 })
               })
@@ -415,7 +446,7 @@ var VueGrid = {
                 return result.concat(item)
               })
               .reduce((result, item) => { // 数组转换成 worksheet 需要的结构
-                return Object.assign({}, result, {[item.position]: {v: item.value || ''}})
+                return Object.assign({}, result, {[item.position]: {v: item.value}})
               }, {})
 
             let cells = Object.assign({}, headerCells, dataCells) // 合并 header 和 data
