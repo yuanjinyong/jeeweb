@@ -117,42 +117,30 @@ var VueJw = {
 
     return pickerOptionsShortcuts
   },
-  export (url, params, config) {
+  exportToXlsx (url, params, config) {
     let cfg = Vue.lodash.merge({
-      serverSide: true,
-      sheetNames: ['sheet1'],
-      worksheets (data, cfg) {
-        return [XLSX.utils.json_to_sheet(data.items)]
+      serverSide: false,
+      sheet: {
+        name: 'sheet1',
+        json (data, cfg, sheet, idx) {
+          return data.items
+        },
+        worksheet (data, cfg, sheet, idx) {
+          return XLSX.utils.json_to_sheet((typeof this.json === 'function') ? this.json(data, cfg, sheet, idx) : this.json)
+        }
       },
       fileName: Vue.moment().format('YYYYMMDDHHmmss'),
       workbook (data, cfg) {
         let workbook = {SheetNames: [], Sheets: {}}
-
-        let worksheets = cfg.worksheets
-        if (typeof cfg.worksheets === 'function') {
-          worksheets = cfg.worksheets(data, cfg)
-        }
-
-        let sheetNames = cfg.sheetNames
-        if (typeof cfg.sheetNames === 'string') {
-          sheetNames = [cfg.sheetNames]
-        }
-        if (worksheets.length === undefined) {
-          worksheets = [worksheets]
-        }
-
-        sheetNames.forEach((sheetName, idx) => {
-          workbook.SheetNames.push(sheetName)
-          workbook.Sheets[sheetName] = worksheets[idx]
+        let sheets = cfg.sheet.length === undefined ? [cfg.sheet] : cfg.sheet
+        sheets.forEach((sheet, idx) => {
+          workbook.Sheets[sheet.name] = (typeof sheet.worksheet === 'function') ? sheet.worksheet(data, cfg, sheet, idx) : sheet.worksheet
+          workbook.SheetNames.push(sheet.name)
         })
-
         return workbook
       },
       blob (data, cfg) {
-        let workbook = cfg.workbook
-        if (typeof cfg.workbook === 'function') {
-          workbook = cfg.workbook(data, cfg)
-        }
+        let workbook = (typeof cfg.workbook === 'function') ? cfg.workbook(data, cfg) : cfg.workbook
         let binaryStr = XLSX.write(workbook, {bookType: 'xlsx', bookSST: false, type: 'binary'})
 
         // 字符串数组转字节数组

@@ -65,6 +65,7 @@ var VueGrid = {
         headerName: '',
         pinned: 'left',
         suppressResize: true,
+        suppressExport: true,
         hide: true,
         checkboxSelection: true,
         cellStyle: {'text-align': 'center'},
@@ -99,6 +100,7 @@ var VueGrid = {
         headerName: '操作',
         pinned: 'right',
         suppressResize: true,
+        suppressExport: true,
         cellStyle: {'text-align': 'center'},
         cellRendererFramework: OperationRendererFramework
       },
@@ -126,6 +128,7 @@ var VueGrid = {
       suppressSorting: true,
       suppressMenu: true,
       suppressFilter: true,
+      suppressExport: false, // 导出时，导出该列。自己扩展的属性，不是ag-grid的。
       minWidth: 33
     },
     columnDefs: [],
@@ -379,7 +382,49 @@ var VueGrid = {
       let page = gridOptions.buildPage(gridParams)
       let filters = gridOptions.buildFilter(gridParams)
 
-      Vue.jw.export(gridOptions.context.url, {params: Object.assign({}, gridOptions.context.params, page, filters, params)}, config)
+      if (!config.columnDefs) {
+        config.columnDefs = gridOptions.columnApi.getAllGridColumns().map((item, idex) => item.getColDef()).filter((item, idex) => !item.suppressExport)
+      }
+
+      Vue.jw.exportToXlsx(gridOptions.context.url, {
+        params: Object.assign({}, gridOptions.context.params, page, filters, params)
+      }, Vue.lodash.merge({}, {
+        fileName: gridOptions.context.name + Vue.moment().format('YYYYMMDDHHmmss'),
+        sheet: {
+          worksheet (data, cfg, sheet, idx) {
+            let headerCells = cfg.columnDefs
+              .map((columnDef, colIdx) => { // 列头的单元格位置和内容，数组
+                return {
+                  position: String.fromCharCode(65 + colIdx) + 1,
+                  value: columnDef.headerName
+                }
+              })
+              .reduce((result, item) => { // 数组转换成 worksheet 需要的结构
+                return Object.assign({}, result, {[item.position]: {v: item.value || ''}})
+              }, {})
+            let dataCells = data.items
+              .map((entity, rowIdx) => { // 表体的单元格位置和内容，二维数组
+                return cfg.columnDefs.map((columnDef, colIdx) => {
+                  return {
+                    position: String.fromCharCode(65 + colIdx) + (1 + rowIdx + 1),
+                    value: entity[columnDef.field]
+                  }
+                })
+              })
+              .reduce((result, item) => { // 对刚才的结果进行降维处理（二维数组变成一维数组）
+                return result.concat(item)
+              })
+              .reduce((result, item) => { // 数组转换成 worksheet 需要的结构
+                return Object.assign({}, result, {[item.position]: {v: item.value || ''}})
+              }, {})
+
+            let cells = Object.assign({}, headerCells, dataCells) // 合并 header 和 data
+            let cellPos = Object.keys(cells) // 获取所有单元格的位置
+            let ref = cellPos[0] + ':' + cellPos[cellPos.length - 1] // 计算出范围
+            return Object.assign({}, cells, {'!ref': ref})
+          }
+        }
+      }, config))
     }
   },
   buildOptions (gridOptions) {
