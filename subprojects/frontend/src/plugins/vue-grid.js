@@ -128,7 +128,21 @@ var VueGrid = {
           if (!timestamp) {
             return ''
           } else {
-            return Vue.moment(timestamp).format(params.colDef.cellRendererParams.options.format)
+            // return Vue.moment(timestamp).format(params.colDef.cellRendererParams.options.format)
+            return {
+              v: params.value,
+              t: 'd',
+              s: {
+                fill: {
+                  fgColor: {
+                    rgb: '33000000'
+                  }
+                },
+                alignment: {
+                  horizontal: 'center'
+                }
+              }
+            }
           }
         },
         width: 140 // 有filter的为200，没有的为140
@@ -410,6 +424,11 @@ var VueGrid = {
         fileName: gridOptions.context.name + Vue.moment().format('YYYYMMDDHHmmss'),
         sheet: {
           worksheet (data, cfg, sheet, idx) {
+            let colDefs = cfg.columnDefs.map((columnDef, colIdx) => { // 设置列宽，数组
+              console.log('column ', columnDef.headerName, columnDef)
+              return {wch: 19} // {wpx: columnDef.width || 40}
+            })
+
             let headerCells = cfg.columnDefs
               .map((columnDef, colIdx) => { // 列头的单元格位置和内容，数组
                 return {
@@ -418,7 +437,7 @@ var VueGrid = {
                 }
               })
               .reduce((result, item) => { // 数组转换成 worksheet 需要的结构
-                return Object.assign({}, result, {[item.position]: {v: item.value}})
+                return Object.assign({}, result, {[item.position]: typeof item.value === 'string' ? {v: item.value} : item.value})
               }, {})
             let dataCells = data.items
               .map((entity, rowIdx) => { // 表体的单元格位置和内容，二维数组
@@ -446,13 +465,13 @@ var VueGrid = {
                 return result.concat(item)
               })
               .reduce((result, item) => { // 数组转换成 worksheet 需要的结构
-                return Object.assign({}, result, {[item.position]: {v: item.value}})
+                return Object.assign({}, result, {[item.position]: typeof item.value === 'string' ? {v: item.value} : item.value})
               }, {})
 
             let cells = Object.assign({}, headerCells, dataCells) // 合并 header 和 data
             let cellPos = Object.keys(cells) // 获取所有单元格的位置
             let ref = cellPos[0] + ':' + cellPos[cellPos.length - 1] // 计算出范围
-            return Object.assign({}, cells, {'!ref': ref})
+            return Object.assign({}, cells, {'!ref': ref}, {'!cols': colDefs})
           }
         }
       }, config))
