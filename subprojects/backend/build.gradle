@@ -2,9 +2,9 @@
 plugins {
     id "org.springframework.boot" version "1.5.4.RELEASE"
 }
-apply plugin: 'war'
+apply plugin: 'java'
 apply from: "${gradleDir}/java.gradle"
-apply plugin: 'eclipse-wtp'
+// apply plugin: 'eclipse-wtp'
 
 
 description = 'J2EE Web管理系统 - 后台工程'
@@ -12,7 +12,7 @@ description = 'J2EE Web管理系统 - 后台工程'
 
 configurations {
     dev
-    compile.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat' // 不使用内嵌的Tomcat
+    // compile.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat' // 不使用内嵌的Tomcat
     all*.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
 }
 
@@ -23,8 +23,8 @@ dependencies {
 
     // spring-mvc，支持 Web 应用开发，这里不使用内嵌的Tomcat
     compile "org.springframework.boot:spring-boot-starter-web"
-    providedCompile "org.springframework.boot:spring-boot-starter-tomcat"
-    providedCompile "javax.servlet:javax.servlet-api:3.1.0"
+    // providedCompile "org.springframework.boot:spring-boot-starter-tomcat"
+    // providedCompile "javax.servlet:javax.servlet-api:3.1.0"
     compile "org.springframework.boot:spring-boot-starter-security"
     // 用于生成spring-configuration-metadata.json文件
     compile "org.springframework.boot:spring-boot-configuration-processor"

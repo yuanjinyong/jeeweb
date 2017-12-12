@@ -36,7 +36,7 @@ buildscript {
         maven {
             url "${nexusUrl}/content/groups/public"
         }
-
+        mavenCentral()
         jcenter()
     }
 
@@ -55,15 +55,6 @@ description = 'J2EE Web管理系统'
 
 
 allprojects {
-    repositories {
-        maven {
-            url "${nexusUrl}/content/groups/public"
-        }
-
-        mavenCentral()
-        jcenter()
-    }
-
     apply from: "${gradleDir}/maven.gradle"
 }
 
