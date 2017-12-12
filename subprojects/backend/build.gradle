@@ -13,6 +13,7 @@ description = 'J2EE Web管理系统 - 后台工程'
 configurations {
     dev
     compile.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat' // 不使用内嵌的Tomcat
+    all*.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
 }
 
 
