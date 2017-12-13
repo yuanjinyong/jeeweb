@@ -11,6 +11,7 @@ import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.executor.ExecutorException;
 import org.apache.ibatis.executor.statement.RoutingStatementHandler;
 import org.apache.ibatis.executor.statement.StatementHandler;
+import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ParameterMapping;
@@ -42,13 +43,11 @@ import com.jeeweb.framework.core.utils.MetaUtil;
 @Intercepts({
         @Signature(type = StatementHandler.class, method = "prepare", args = { Connection.class, Integer.class }) })
 public class PageInterceptor implements Interceptor {
-    // private static final Logger LOG = LoggerFactory.getLogger(PageInterceptor.class);
     private static final String DB_PRODUCT_NAME_MYSQL = "MySQL";
     private static final String DB_PRODUCT_NAME_SQLSERVER = "Microsoft SQL Server";
 
     @Value("${mybatis.page.sqlIdRegex:.*ListPage$}")
     private String sqlIdRegex;
-    private String databaseProductName;
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
@@ -60,57 +59,52 @@ public class PageInterceptor implements Interceptor {
         MetaObject metaObject = MetaUtil.getMetaObject(invocation.getTarget());
         MappedStatement mappedStatement = (MappedStatement) metaObject.getValue("delegate.mappedStatement");
         BoundSql boundSql = (BoundSql) metaObject.getValue("delegate.boundSql");
-        mappedStatement.getStatementLog()
-                .trace(new StringBuffer("\n执行SQL：").append(mappedStatement.getId()).append("\n对应XML：")
-                        .append(mappedStatement.getResource()).append("\n原始的SQL如下：\n    ").append(boundSql.getSql())
-                        .toString());
+        Log log = mappedStatement.getStatementLog();
+        if (log.isTraceEnabled()) {
+            log.trace(new StringBuffer("\n执行SQL：").append(mappedStatement.getId()).append("\n对应XML：")
+                    .append(mappedStatement.getResource()).append("\n原始的SQL如下：\n    ").append(boundSql.getSql())
+                    .toString());
+        }
+
+        if (!mappedStatement.getId().matches(sqlIdRegex)) {
+            return invocation.proceed();
+        }
+
+        // 如果没有传入任何参数或者入参不是统一的ParamsMap，则不进行总记录数和翻页数据的处理
+        Object parameterObject = boundSql.getParameterObject();
+        if (parameterObject == null || !(parameterObject instanceof ParamsMap)) {
+            return invocation.proceed();
+        }
+
         try {
-            doPageIntercept(metaObject, invocation.getArgs());
+            Connection connection = (Connection) invocation.getArgs()[0];
+            processTotalCount(connection, mappedStatement, boundSql);
+            processPagenation(connection, mappedStatement, boundSql, metaObject);
             return invocation.proceed();
         } catch (Exception e) {
             if (e instanceof SQLException) {
-                mappedStatement.getStatementLog()
-                        .error(new StringBuffer("\n执行SQL：").append(mappedStatement.getId()).append("\n对应XML：")
-                                .append(mappedStatement.getResource()).append("\n原始的SQL如下：\n    ")
-                                .append(boundSql.getSql()).toString());
+                log.error(new StringBuffer("\n执行SQL：").append(mappedStatement.getId()).append("\n对应XML：")
+                        .append(mappedStatement.getResource()).append("\n原始的SQL如下：\n    ").append(boundSql.getSql())
+                        .toString());
             }
 
             throw e;
         }
     }
 
-    private void doPageIntercept(MetaObject metaObject, Object[] args) throws SQLException, Exception {
-        MappedStatement mappedStatement = (MappedStatement) metaObject.getValue("delegate.mappedStatement");
-        BoundSql boundSql = (BoundSql) metaObject.getValue("delegate.boundSql");
-        // 如果没有传入任何参数或者入参不是统一的MapEntity，则不进行翻页数据的处理
-        Object parameterObject = boundSql.getParameterObject();
-        if (parameterObject != null && parameterObject instanceof ParamsMap) {
-            ParamsMap params = (ParamsMap) parameterObject;
-            // 要传入了pageSize或orderBy且SqlId以“ListPage”结尾，才进行翻页数据的处理
-            if (params.hasPagenation() || !HelpUtil.isEmpty(params.getOrderBy())) {
-                if (mappedStatement.getId().matches(sqlIdRegex)) {
-                    Connection connection = (Connection) args[0];
-                    databaseProductName = connection.getMetaData().getDatabaseProductName();
-                    // 如果入参中已经传入了totalCount，则不需要再去查询出总数了
-                    if (params.hasPagenation() && (params.getTotalCount() == null || params.getTotalCount() == 0)) {
-                        processTotalCount(connection, mappedStatement, boundSql);
-                    }
-
-                    String pageSql = generatePageSql(boundSql);
-                    metaObject.setValue("delegate.boundSql.sql", pageSql);
-                    mappedStatement.getStatementLog()
-                            .trace(new StringBuffer("\n重写分页和排序后的SQL如下：\n").append(pageSql).toString());
-                }
-            }
-        }
-    }
-
     private void processTotalCount(Connection connection, MappedStatement mappedStatement, BoundSql boundSql)
             throws Exception, SQLException {
+        Log log = mappedStatement.getStatementLog();
+        ParamsMap params = (ParamsMap) boundSql.getParameterObject();
+        // 如果入参中已经传入了totalCount，则不需要再去查询出总数了
+        if (params.getTotalCount() == null || params.getTotalCount() >= 0) {
+            log.trace("无需查询总记录数。");
+            return;
+        }
+
         PreparedStatement countStmt = null;
         ResultSet resultSet = null;
         try {
-            ParamsMap params = (ParamsMap) boundSql.getParameterObject();
             String countSql = generatCountSql(mappedStatement, boundSql);
             countStmt = connection.prepareStatement(countSql);
             BoundSql countBoundSql = new BoundSql(mappedStatement.getConfiguration(), countSql,
@@ -121,8 +115,10 @@ public class PageInterceptor implements Interceptor {
             resultSet = countStmt.executeQuery();
             if (resultSet.next()) {
                 params.setTotalCount(resultSet.getInt(1));
-                mappedStatement.getStatementLog().trace(new StringBuffer("\n重写分页参数里的总记录数：totalCount=")
-                        .append(params.getTotalCount()).append("\n").append(countSql).toString());
+                if (log.isDebugEnabled()) {
+                    log.debug(new StringBuffer("\n设置总记录数：").append(ParamsMap.TOTAL_COUNT).append('=')
+                            .append(params.getTotalCount()).append("\n").append(countSql).toString());
+                }
             }
         } finally {
             try {
@@ -144,8 +140,70 @@ public class PageInterceptor implements Interceptor {
 
             return countMappedStatement.getBoundSql(boundSql.getParameterObject()).getSql();
         } else {
-            return "SELECT COUNT(1) TOTAL_COUNT FROM (" + boundSql.getSql() + ") temp ";
+            return "SELECT COUNT(1) TOTAL_COUNT FROM (" + boundSql.getSql() + ") _TEMP_C ";
         }
+    }
+
+    private void processPagenation(Connection connection, MappedStatement mappedStatement, BoundSql boundSql,
+            MetaObject metaObject) throws SQLException, Exception {
+        Log log = mappedStatement.getStatementLog();
+        ParamsMap params = (ParamsMap) boundSql.getParameterObject();
+        if (!(params.hasPageSize() || params.hasOrderBy())) {
+            log.trace("无需分页或排序。");
+            return;
+        }
+
+        if (params.getPageNo() == null) {
+            params.defaultPageNo();
+            if (log.isDebugEnabled()) {
+                log.debug(new StringBuffer("\n设置当前页号：").append(ParamsMap.PAGE_NO).append("=").append(params.getPageNo())
+                        .toString());
+            }
+        }
+
+        String pageSql = generatePageSql(connection.getMetaData().getDatabaseProductName(), boundSql.getSql(), params);
+        metaObject.setValue("delegate.boundSql.sql", pageSql);
+        if (log.isDebugEnabled()) {
+            log.debug(new StringBuffer("\n重写分页和排序后的SQL如下：\n").append(pageSql).toString());
+        }
+    }
+
+    private String generatePageSql(String databaseProductName, String sql, ParamsMap params) {
+        StringBuffer pageSql = new StringBuffer();
+        if (DB_PRODUCT_NAME_MYSQL.equals(databaseProductName)) {
+            if (params.hasOrderBy()) {
+                pageSql.append("SELECT * FROM (\n" + sql + "\n) _TEMP_O\nORDER BY " + params.getOrderBy());
+            } else {
+                pageSql.append(sql);
+            }
+
+            if (params.hasPageSize()) {
+                pageSql.append(" \nLIMIT " + params.getBeginRowNo() + "," + params.getPageSize());
+            }
+        } else if (DB_PRODUCT_NAME_SQLSERVER.equals(databaseProductName)) {
+            pageSql.append("SELECT * FROM (\n");
+            pageSql.append("    SELECT *, ROW_NUMBER() OVER(ORDER BY ")
+                    .append(HelpUtil.isEmpty(params.getOrderBy()) ? "(SELECT 0)" : params.getOrderBy())
+                    .append(") RowNumber FROM (\n");
+            pageSql.append(sql);
+            pageSql.append("\n    ) _TEMP_O\n");
+            pageSql.append(") _TEMP_P ");
+            if (params.hasPageSize()) {
+                Integer beginRow = params.getBeginRowNo();
+                pageSql.append(" WHERE _TEMP_P.RowNumber > ").append(beginRow).append(" AND _TEMP_P.RowNumber <= ")
+                        .append(beginRow + params.getPageSize());
+            }
+        } else if ("oracle".equals(databaseProductName)) {
+            // pageSql.append("SELECT * FROM (SELECT TMP_TB.*, ROWNUM ROW_ID FROM (\n");
+            // pageSql.append(buildOrderBySql(sql, params.getOrderBy()));
+            // if (params.hasPagenation()) {
+            // Integer beginRow = params.getBeginRowNo();
+            // pageSql.append("\n) AS TMP_TB WHERE ROWNUM <= ").append(beginRow + params.getPageSize())
+            // .append(") WHERE ROW_ID > ").append(beginRow);
+            // }
+        }
+
+        return pageSql.toString();
     }
 
     /**
@@ -198,57 +256,6 @@ public class PageInterceptor implements Interceptor {
             }
         }
     }
-
-    /**
-     * 根据数据库方言，生成特定的分页sql
-     * 
-     * @param boundSql
-     * @return
-     */
-    private String generatePageSql(BoundSql boundSql) {
-        String sql = boundSql.getSql();
-        ParamsMap params = (ParamsMap) boundSql.getParameterObject();
-
-        StringBuffer pageSql = new StringBuffer();
-        if (DB_PRODUCT_NAME_MYSQL.equals(databaseProductName)) {
-            pageSql.append(HelpUtil.isEmpty(params.getOrderBy()) ? sql
-                    : ("SELECT * FROM (\n" + sql + "\n) TEMP_TB\nORDER BY " + params.getOrderBy()));
-            if (params.hasPagenation()) {
-                pageSql.append(" \nLIMIT " + params.getBeginRowNo() + "," + params.getPageSize());
-            }
-        } else if (DB_PRODUCT_NAME_SQLSERVER.equals(databaseProductName)) {
-            pageSql.append("SELECT * FROM (\n");
-            pageSql.append("    SELECT *, ROW_NUMBER() OVER(order by ")
-                    .append(HelpUtil.isEmpty(params.getOrderBy()) ? "(select 0)" : params.getOrderBy())
-                    .append(") RowNumber FROM (\n");
-            pageSql.append(sql);
-            pageSql.append("\n    ) TMP_TB\n");
-            pageSql.append(") TEMP_TB ");
-            if (params.hasPagenation()) {
-                Integer beginRow = params.getBeginRowNo();
-                pageSql.append(" WHERE TEMP_TB.RowNumber > ").append(beginRow).append(" AND TEMP_TB.RowNumber <= ")
-                        .append(beginRow + params.getPageSize());
-            }
-        } else if ("oracle".equals(databaseProductName)) {
-            // pageSql.append("SELECT * FROM (SELECT TMP_TB.*, ROWNUM ROW_ID FROM (\n");
-            // pageSql.append(buildOrderBySql(sql, params.getOrderBy()));
-            // if (params.hasPagenation()) {
-            // Integer beginRow = params.getBeginRowNo();
-            // pageSql.append("\n) AS TMP_TB WHERE ROWNUM <= ").append(beginRow + params.getPageSize())
-            // .append(") WHERE ROW_ID > ").append(beginRow);
-            // }
-        }
-
-        return pageSql.toString();
-    }
-
-    // private String buildOrderBySql(String sql, String orderBy) {
-    // if (HelpUtil.isEmpty(orderBy)) {
-    // return sql;
-    // }
-    //
-    // return "SELECT * FROM (\n" + sql + "\n) temp\nORDER BY " + orderBy;
-    // }
 
     @Override
     public Object plugin(Object target) {

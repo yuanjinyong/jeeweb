@@ -309,7 +309,7 @@
           if (gridOptions.rowModelType === 'inMemory') {
             gridOptions.getRows4Normal()
           } else {
-            gridOptions.context.params.totalCount = 0
+            gridOptions.context.params.totalCount = -1
             gridOptions.api.setDatasource(gridOptions.datasource)
           }
         }
