@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.jeeweb.activiti.entity.ProcessModelEntity;
 import com.jeeweb.framework.business.mapper.BaseMapper;
 import com.jeeweb.framework.core.exception.BusinessException;
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
 
 @Service
@@ -45,16 +45,16 @@ public class ProcessModelService extends ActivitiService<String, ProcessModelEnt
 
     @Override
     @Transactional(readOnly = true)
-    public List<ProcessModelEntity> selectEntityListPage(ParameterMap params) {
+    public List<ProcessModelEntity> selectEntityListPage(ParamsMap params) {
         ModelQuery query = repositoryService.createModelQuery();
-        if (!HelpUtil.isEmpty(params.getString("f_tenant_id", ""))) {
-            query.modelTenantId(params.getString("f_tenant_id"));
+        if (!HelpUtil.isEmpty(params.$("f_tenant_id", ""))) {
+            query.modelTenantId(params.$("f_tenant_id"));
         }
-        if (!HelpUtil.isEmpty(params.getString("f_tenant_id_in", ""))) {
-            query.modelTenantId(params.getString("f_tenant_id_in"));
+        if (!HelpUtil.isEmpty(params.$("f_tenant_id_in", ""))) {
+            query.modelTenantId(params.$("f_tenant_id_in"));
         }
-        if (!HelpUtil.isEmpty(params.getString("f_name_like", ""))) {
-            query.modelNameLike(params.getString("f_name_like"));
+        if (!HelpUtil.isEmpty(params.$("f_name_like", ""))) {
+            query.modelNameLike(params.$("f_name_like"));
         }
         query.orderByModelKey().asc().orderByModelVersion().desc();
         params.setTotalCount((int) query.count());
@@ -94,8 +94,8 @@ public class ProcessModelService extends ActivitiService<String, ProcessModelEnt
     }
 
     @Override
-    public void deleteEntities(ParameterMap params) {
-        List<String> modelIdList = HelpUtil.splitToList(params.getString("f_id_in"));
+    public void deleteEntities(ParamsMap params) {
+        List<String> modelIdList = HelpUtil.splitToList(params.$("f_id_in"));
         for (String modelId : modelIdList) {
             deleteEntity(modelId);
         }

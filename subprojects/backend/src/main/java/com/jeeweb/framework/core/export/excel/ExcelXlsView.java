@@ -166,10 +166,10 @@ public class ExcelXlsView extends AbstractXlsView {
                     } else if (value instanceof Date) {
                         cell.setCellValue((Date) value); // 设置单元格的值
                     } else {
-                        cell.setCellValue(data.getDouble(column.getId(), null)); // 设置单元格的值
+                        cell.setCellValue(data.$double(column.getId(), null)); // 设置单元格的值
                     }
                 } else {
-                    cell.setCellValue(data.getString(column.getId(), "")); // 设置单元格的值
+                    cell.setCellValue(data.$(column.getId(), "")); // 设置单元格的值
                 }
             }
         }

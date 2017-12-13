@@ -17,7 +17,7 @@ import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 
 /**
  * @author 袁进勇
@@ -31,7 +31,7 @@ public abstract class AbstractSqlMapper implements SqlMapper {
     }
 
     @Override
-    public Map<String, Object> selectOne(String sql, ParameterMap parameter) {
+    public Map<String, Object> selectOne(String sql, ParamsMap parameter) {
         return getOne(selectListPage(sql, parameter));
     }
 
@@ -41,17 +41,17 @@ public abstract class AbstractSqlMapper implements SqlMapper {
     }
 
     @Override
-    public <T> T selectOne(String sql, ParameterMap parameter, Class<T> resultType) {
+    public <T> T selectOne(String sql, ParamsMap parameter, Class<T> resultType) {
         return getOne(selectListPage(sql, parameter, resultType));
     }
 
     @Override
     public List<Map<String, Object>> selectListPage(String sql) {
-        return selectListPage(sql, (ParameterMap) null);
+        return selectListPage(sql, (ParamsMap) null);
     }
 
     @Override
-    public List<Map<String, Object>> selectListPage(String sql, ParameterMap parameter) {
+    public List<Map<String, Object>> selectListPage(String sql, ParamsMap parameter) {
         SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
         String id = getSqlId(SqlCommandType.SELECT, sqlSessionFactory.getConfiguration(), sql, parameter, Map.class,
                 ".ListPage");

@@ -3,7 +3,7 @@
  */
 package com.jeeweb.framework.business.mapper;
 
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
 
 /**
@@ -11,14 +11,14 @@ import com.jeeweb.framework.core.utils.HelpUtil;
  *
  */
 public class SqlBuilder {
-    private ParameterMap params;
+    private ParamsMap params;
     private StringBuffer sql;
 
     public SqlBuilder() {
         this(null, new StringBuffer());
     }
 
-    public SqlBuilder(ParameterMap params) {
+    public SqlBuilder(ParamsMap params) {
         this(params, new StringBuffer());
     }
 
@@ -26,11 +26,11 @@ public class SqlBuilder {
         this(null, new StringBuffer(sql));
     }
 
-    public SqlBuilder(ParameterMap params, String sql) {
+    public SqlBuilder(ParamsMap params, String sql) {
         this(params, new StringBuffer(sql));
     }
 
-    public SqlBuilder(ParameterMap params, StringBuffer sql) {
+    public SqlBuilder(ParamsMap params, StringBuffer sql) {
         this.params = params;
         this.sql = sql;
     }
@@ -49,7 +49,7 @@ public class SqlBuilder {
             return this;
         }
 
-        if (HelpUtil.isEmpty(params.getString(paramId))) {
+        if (HelpUtil.isEmpty(params.$(paramId))) {
             return this;
         }
 

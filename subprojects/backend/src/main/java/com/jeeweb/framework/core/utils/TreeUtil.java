@@ -76,7 +76,7 @@ public final class TreeUtil {
             nodeMap.put(node.get(f_id), node);
 
             // RowMap parentNode = nodeMap.get(node.get(f_parent_id));
-            RowMap parentNode = getParentNode(nodeMap, node.get(f_parent_id), node.getString(f_parent_path));
+            RowMap parentNode = getParentNode(nodeMap, node.get(f_parent_id), node.$(f_parent_path));
             if (parentNode == null) {
                 nodeTree.add(node);
             } else {

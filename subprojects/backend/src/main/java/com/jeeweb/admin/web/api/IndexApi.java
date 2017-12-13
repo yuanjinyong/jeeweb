@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jeeweb.framework.business.web.controller.SuperController;
 import com.jeeweb.framework.core.model.Page;
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.framework.core.utils.HelpUtil;
@@ -79,7 +79,7 @@ public class IndexApi extends SuperController {
     }
 
     private List<MenuEntity> getMenuList() {
-        ParameterMap params = new ParameterMap("f_status", MenuEntity.STATUS_ENABLE);
+        ParamsMap params = new ParamsMap("f_status", MenuEntity.STATUS_ENABLE);
         // params.put("f_is_web", 1); // TODO 等移动端开始开发时，再来完善代码，暂时直接写死只查询Web端的功能列表。
         params.put("f_type_in", HelpUtil.joinToInString(MenuEntity.TYPE_FOLDER, MenuEntity.TYPE_PAGE,
                 MenuEntity.TYPE_BUTTON, MenuEntity.TYPE_TOKEN));

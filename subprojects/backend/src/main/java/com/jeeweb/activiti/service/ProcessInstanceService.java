@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jeeweb.activiti.entity.ProcessInstanceEntity;
 import com.jeeweb.framework.business.mapper.BaseMapper;
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
 
 @Service
@@ -36,27 +36,27 @@ public class ProcessInstanceService extends ActivitiService<String, ProcessInsta
     }
 
     @Override
-    public List<ProcessInstanceEntity> selectEntityListPage(ParameterMap params) {
+    public List<ProcessInstanceEntity> selectEntityListPage(ParamsMap params) {
         HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery();
-        if (!HelpUtil.isEmpty(params.getString("f_tenant_id", ""))) {
-            query.processInstanceTenantId(params.getString("f_tenant_id"));
+        if (!HelpUtil.isEmpty(params.$("f_tenant_id", ""))) {
+            query.processInstanceTenantId(params.$("f_tenant_id"));
         }
-        if (!HelpUtil.isEmpty(params.getString("f_tenant_id_in", ""))) {
-            query.processInstanceTenantId(params.getString("f_tenant_id_in"));
+        if (!HelpUtil.isEmpty(params.$("f_tenant_id_in", ""))) {
+            query.processInstanceTenantId(params.$("f_tenant_id_in"));
         }
-        if (!HelpUtil.isEmpty(params.getString("f_name_like", ""))) {
-            query.processInstanceNameLike("%" + params.getString("f_name_like") + "%");
+        if (!HelpUtil.isEmpty(params.$("f_name_like", ""))) {
+            query.processInstanceNameLike("%" + params.$("f_name_like") + "%");
         }
-        if (!HelpUtil.isEmpty(params.getString("f_start_time_begin", ""))) {
-            query.startedAfter(HelpUtil.parseDatetime(params.getString("f_start_time_begin")));
+        if (!HelpUtil.isEmpty(params.$("f_start_time_begin", ""))) {
+            query.startedAfter(HelpUtil.parseDatetime(params.$("f_start_time_begin")));
         }
-        if (!HelpUtil.isEmpty(params.getString("f_start_time_end", ""))) {
-            query.startedBefore(HelpUtil.parseDatetime(params.getString("f_start_time_end")));
+        if (!HelpUtil.isEmpty(params.$("f_start_time_end", ""))) {
+            query.startedBefore(HelpUtil.parseDatetime(params.$("f_start_time_end")));
         }
-        if (!HelpUtil.isEmpty(params.getString("f_status", ""))) {
-            if ("finished".equals(params.getString("f_status", ""))) {
+        if (!HelpUtil.isEmpty(params.$("f_status", ""))) {
+            if ("finished".equals(params.$("f_status", ""))) {
                 query.finished();
-            } else if ("unfinished".equals(params.getString("f_status", ""))) {
+            } else if ("unfinished".equals(params.$("f_status", ""))) {
                 query.unfinished();
             }
         }
@@ -86,7 +86,7 @@ public class ProcessInstanceService extends ActivitiService<String, ProcessInsta
     }
 
     @Override
-    public void deleteEntities(ParameterMap params) {
+    public void deleteEntities(ParamsMap params) {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -47,12 +47,12 @@
         <include refid="From_Clause" />
         WHERE t.f_id = #{f_id}
     </select>
-    <select id="selectEntityListPage" parameterType="com.jeeweb.framework.core.model.ParameterMap" resultType="com.jeeweb.framework.core.model.RowMap">
+    <select id="selectEntityListPage" parameterType="com.jeeweb.framework.core.model.ParamsMap" resultType="com.jeeweb.framework.core.model.RowMap">
         <include refid="Select_Clause" />
         <include refid="From_Clause" />
         <include refid="Where_Clause" />
     </select>
-    <select id="selectMapEntityListPage" parameterType="com.jeeweb.framework.core.model.ParameterMap" resultType="com.jeeweb.framework.core.model.RowMap">
+    <select id="selectMapEntityListPage" parameterType="com.jeeweb.framework.core.model.ParamsMap" resultType="com.jeeweb.framework.core.model.RowMap">
         <include refid="Select_Clause" />
         <include refid="From_Clause" />
         <include refid="Where_Clause" />
@@ -87,7 +87,7 @@
     <delete id="deleteEntity" parameterType="java.lang.Integer">
         DELETE FROM t_sys_user_role WHERE f_id=#{f_id}
     </delete>
-    <delete id="deleteEntities" parameterType="com.jeeweb.framework.core.model.ParameterMap">
+    <delete id="deleteEntities" parameterType="com.jeeweb.framework.core.model.ParamsMap">
         DELETE FROM t_sys_user_role WHERE 1=1
         <if test="f_id_in != null and f_id_in != ''">AND f_id IN(${f_id_in})</if>
         <if test="f_user_id != null">AND f_user_id = #{f_user_id}</if>

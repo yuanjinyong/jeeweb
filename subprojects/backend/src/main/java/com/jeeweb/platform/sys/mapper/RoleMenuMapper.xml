@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jeeweb.platform.sys.mapper.RoleMenuMapper">
     <!-- 其他SQL -->
-    <select id="selectDistMenuListPage" parameterType="com.jeeweb.framework.core.model.ParameterMap" resultType="com.jeeweb.framework.core.model.RowMap">
+    <select id="selectDistMenuListPage" parameterType="com.jeeweb.framework.core.model.ParamsMap" resultType="com.jeeweb.framework.core.model.RowMap">
         SELECT
         m.*,
         r.f_menu_id,
@@ -16,7 +16,7 @@
         <if test="cur_user_id != null and cur_role_id_in == null">AND m.f_id IN(SELECT f_menu_id FROM t_sys_user_menu_distribution WHERE f_user_id=#{cur_user_id})</if>
         <if test="cur_user_id != null and cur_role_id_in != null">AND m.f_id IN(SELECT f_menu_id FROM t_sys_user_menu_distribution WHERE f_user_id=#{cur_user_id} UNION SELECT f_menu_id FROM t_sys_role_menu_distribution WHERE f_role_id IN(${cur_role_id_in}))</if>
     </select>
-    <select id="selectAuthMenuListPage" parameterType="com.jeeweb.framework.core.model.ParameterMap" resultType="com.jeeweb.framework.core.model.RowMap">
+    <select id="selectAuthMenuListPage" parameterType="com.jeeweb.framework.core.model.ParamsMap" resultType="com.jeeweb.framework.core.model.RowMap">
         SELECT
         m.*,
         r.f_menu_id,
@@ -57,13 +57,13 @@
         </foreach>
     </insert>
 
-    <delete id="deleteDistMenus" parameterType="com.jeeweb.framework.core.model.ParameterMap">
+    <delete id="deleteDistMenus" parameterType="com.jeeweb.framework.core.model.ParamsMap">
         DELETE FROM t_sys_role_menu_distribution WHERE 1=1
         <if test="f_id_in != null and f_id_in != ''">AND f_id IN(${f_id_in})</if>
         <if test="f_role_id != null">AND f_role_id = #{f_role_id}</if>
         <if test="f_role_id_in != null and f_role_id_in != ''">AND f_role_id IN(${f_role_id_in})</if>
     </delete>
-    <delete id="deleteAuthMenus" parameterType="com.jeeweb.framework.core.model.ParameterMap">
+    <delete id="deleteAuthMenus" parameterType="com.jeeweb.framework.core.model.ParamsMap">
         DELETE FROM t_sys_role_menu_authorization WHERE 1=1
         <if test="f_id_in != null and f_id_in != ''">AND f_id IN(${f_id_in})</if>
         <if test="f_role_id != null">AND f_role_id = #{f_role_id}</if>

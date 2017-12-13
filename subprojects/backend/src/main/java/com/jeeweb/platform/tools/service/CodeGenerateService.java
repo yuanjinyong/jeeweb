@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jeeweb.framework.business.mapper.BaseMapper;
 import com.jeeweb.framework.business.service.BaseService;
 import com.jeeweb.framework.core.exception.BusinessException;
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
@@ -55,7 +55,7 @@ public class CodeGenerateService extends BaseService<Integer, GenerateRuleEntity
     public GenerateRuleEntity selectEntity(Integer primaryKey) {
         GenerateRuleEntity entity = super.selectEntity(primaryKey);
 
-        entity.setTableList(selectTableEntities(new ParameterMap("f_rule_id", entity.getF_id()).setOrderBy("f_order")));
+        entity.setTableList(selectTableEntities(new ParamsMap("f_rule_id", entity.getF_id()).setOrderBy("f_order")));
         for (GenerateRuleTableEntity table : entity.getTableList()) {
             if (table.getF_is_main() == 1) {
                 entity.setMainTable(table);
@@ -87,8 +87,8 @@ public class CodeGenerateService extends BaseService<Integer, GenerateRuleEntity
     }
 
     @Override
-    public void deleteEntities(ParameterMap params) {
-        ParameterMap deleteParams = new ParameterMap("f_rule_id_in", params.get("f_id_in"));
+    public void deleteEntities(ParamsMap params) {
+        ParamsMap deleteParams = new ParamsMap("f_rule_id_in", params.get("f_id_in"));
         generateRuleFieldMapper.deleteEntities(deleteParams);
         generateRuleTableMapper.deleteEntities(deleteParams);
 
@@ -98,11 +98,11 @@ public class CodeGenerateService extends BaseService<Integer, GenerateRuleEntity
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    private List<GenerateRuleTableEntity> selectTableEntities(ParameterMap params) {
+    private List<GenerateRuleTableEntity> selectTableEntities(ParamsMap params) {
         List<GenerateRuleTableEntity> tableList = generateRuleTableMapper.selectEntityListPage(params);
         for (GenerateRuleTableEntity table : tableList) {
             table.setFieldList(generateRuleFieldMapper
-                    .selectEntityListPage(new ParameterMap("f_table_id", table.getF_id()).setOrderBy("f_order")));
+                    .selectEntityListPage(new ParamsMap("f_table_id", table.getF_id()).setOrderBy("f_order")));
             for (GenerateRuleFieldEntity field : table.getFieldList()) {
                 if (field.getF_is_primary() == 1) {
                     table.setPrimaryField(field);
@@ -140,7 +140,7 @@ public class CodeGenerateService extends BaseService<Integer, GenerateRuleEntity
     }
 
     public void deleteTableEntities(Integer f_rule_id) {
-        ParameterMap deleteParams = new ParameterMap("f_rule_id", f_rule_id);
+        ParamsMap deleteParams = new ParamsMap("f_rule_id", f_rule_id);
         generateRuleFieldMapper.deleteEntities(deleteParams);
         generateRuleTableMapper.deleteEntities(deleteParams);
     }
@@ -175,7 +175,7 @@ public class CodeGenerateService extends BaseService<Integer, GenerateRuleEntity
             Map<String, Object> tplParams = new HashMap<>();
             tplParams.put("rule", rule);
             tplParams.put("ResponseResult_class", ResponseResult.class.getName());
-            tplParams.put("ParameterMap_class", ParameterMap.class.getName());
+            tplParams.put("ParameterMap_class", ParamsMap.class.getName());
             tplParams.put("RowMap_class", RowMap.class.getName());
 
             for (GenerateRuleTableEntity table : rule.getTableList()) {

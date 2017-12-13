@@ -21,7 +21,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.jeeweb.framework.core.exception.BusinessException;
 import com.jeeweb.framework.core.model.Page;
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.framework.core.utils.HelpUtil;
@@ -95,18 +95,18 @@ public abstract class SuperController {
         return HelpUtil.isEmpty(value) ? defaultValue : Double.parseDouble(value);
     }
 
-    public static ParameterMap $params() {
+    public static ParamsMap $params() {
         return $params(null);
     }
 
     public static <T> Page<T> $page() {
-        Page<T> page = new Page<>($int(ParameterMap.PAGE_SIZE, 0), $int(ParameterMap.PAGE_NO, 0));
-        page.setOrderBy($(ParameterMap.ORDER_BY, null));
+        Page<T> page = new Page<>($int(ParamsMap.PAGE_SIZE, 0), $int(ParamsMap.PAGE_NO, 0));
+        page.setOrderBy($(ParamsMap.ORDER_BY, null));
         return page;
     }
 
-    public static ParameterMap $params(String prefix) {
-        ParameterMap params = new ParameterMap();
+    public static ParamsMap $params(String prefix) {
+        ParamsMap params = new ParamsMap();
 
         int prefixLength = prefix == null ? 0 : prefix.length();
         HttpServletRequest request = getRequest();

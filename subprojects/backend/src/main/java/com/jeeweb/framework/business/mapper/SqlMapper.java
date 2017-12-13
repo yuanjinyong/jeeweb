@@ -9,7 +9,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 
 /**
  * MyBatis执行sql语句的工具
@@ -39,7 +39,7 @@ public interface SqlMapper extends InitializingBean {
      *            参数
      * @return
      */
-    Map<String, Object> selectOne(String sql, ParameterMap parameter);
+    Map<String, Object> selectOne(String sql, ParamsMap parameter);
 
     /**
      * 查询返回一个结果，多个结果时抛出异常
@@ -67,7 +67,7 @@ public interface SqlMapper extends InitializingBean {
      *            泛型类型
      * @return
      */
-    <T> T selectOne(String sql, ParameterMap parameter, Class<T> resultType);
+    <T> T selectOne(String sql, ParamsMap parameter, Class<T> resultType);
 
     /**
      * 查询返回List<Map<String, Object>>
@@ -87,7 +87,7 @@ public interface SqlMapper extends InitializingBean {
      *            参数
      * @return
      */
-    List<Map<String, Object>> selectListPage(String sql, ParameterMap parameter);
+    List<Map<String, Object>> selectListPage(String sql, ParamsMap parameter);
 
     /**
      * 查询返回指定的结果类型

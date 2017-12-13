@@ -11,7 +11,7 @@ import com.jeeweb.framework.business.mapper.BaseMapper;
 import com.jeeweb.framework.business.model.IPreset;
 import com.jeeweb.framework.business.service.BaseService;
 import com.jeeweb.framework.core.exception.BusinessException;
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.framework.core.utils.TreeUtil;
@@ -85,7 +85,7 @@ public class UserService extends BaseService<Integer, UserEntity> {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Transactional(readOnly = true)
     public RowMap selectUserMenuList(Integer f_user_id) {
-        ParameterMap params = new ParameterMap();
+        ParamsMap params = new ParamsMap();
         params.put("f_user_id", f_user_id);
         params.put("f_status", 1);
         params.put("orderBy", "f_parent_path,f_order");
@@ -131,8 +131,8 @@ public class UserService extends BaseService<Integer, UserEntity> {
 
     private void deleteUserMenu(Integer f_user_id) {
         // 删除用户下关联的菜单
-        userMenuMapper.deleteDistMenus(new ParameterMap("f_user_id", f_user_id));
-        userMenuMapper.deleteAuthMenus(new ParameterMap("f_user_id", f_user_id));
+        userMenuMapper.deleteDistMenus(new ParamsMap("f_user_id", f_user_id));
+        userMenuMapper.deleteAuthMenus(new ParamsMap("f_user_id", f_user_id));
     }
 
     private void fillUserEntity(UserEntity user) {
@@ -145,10 +145,10 @@ public class UserService extends BaseService<Integer, UserEntity> {
     }
 
     private List<Integer> selectRoleIdList(Integer f_user_id) {
-        List<RowMap> roleList = userRoleMapper.selectEntityListPage(new ParameterMap("f_user_id", f_user_id));
+        List<RowMap> roleList = userRoleMapper.selectEntityListPage(new ParamsMap("f_user_id", f_user_id));
         List<Integer> roleIdList = new ArrayList<>();
         for (RowMap role : roleList) {
-            roleIdList.add(role.getInteger("f_role_id", null));
+            roleIdList.add(role.$int("f_role_id", null));
         }
 
         return roleIdList;
@@ -170,7 +170,7 @@ public class UserService extends BaseService<Integer, UserEntity> {
     }
 
     private void deleteRoleList(Integer f_user_id) {
-        userRoleMapper.deleteEntities(new ParameterMap("f_user_id", f_user_id));
+        userRoleMapper.deleteEntities(new ParamsMap("f_user_id", f_user_id));
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

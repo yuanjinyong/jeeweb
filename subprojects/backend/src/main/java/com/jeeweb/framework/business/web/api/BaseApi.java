@@ -12,7 +12,7 @@ import com.jeeweb.framework.business.model.IAttachment;
 import com.jeeweb.framework.business.service.BaseService;
 import com.jeeweb.framework.business.web.controller.SuperController;
 import com.jeeweb.framework.core.model.Page;
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.framework.core.utils.HelpUtil;
@@ -24,7 +24,7 @@ public abstract class BaseApi<P, E extends BaseEntity<P>> extends SuperControlle
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected ResponseResult treeEntities() {
-        ParameterMap params = $params();
+        ParamsMap params = $params();
         List entities = getService().selectEntityListPage(params);
         Page<TreeNodeEntity> page = params.page(entities);
         page.setItems(TreeUtil.listToTree(entities));
@@ -35,7 +35,7 @@ public abstract class BaseApi<P, E extends BaseEntity<P>> extends SuperControlle
     }
 
     protected ResponseResult listEntities() {
-        ParameterMap params = $params();
+        ParamsMap params = $params();
         List<E> entities = getService().selectEntityListPage(params);
         return new ResponseResult(new Result(params.page(entities)), HttpStatus.OK);
     }
@@ -70,7 +70,7 @@ public abstract class BaseApi<P, E extends BaseEntity<P>> extends SuperControlle
     }
 
     protected ResponseResult deleteEntities() {
-        getService().deleteEntities(new ParameterMap("f_id_in", $("f_id_in")));
+        getService().deleteEntities(new ParamsMap("f_id_in", $("f_id_in")));
 
         // 这里我们把执行结果通过state和msg字段返回给客户端，所以返回的状态码从204改为200。
         // 返回码具体意义请参考HTTP协议：https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html

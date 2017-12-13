@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.util.UrlPathHelper;
 
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.platform.security.model.SecurityAuthority;
@@ -80,20 +80,20 @@ public class SecurityCacheService {
 
     public void loadUrlAuthoritiesCache() {
         List<RowMap> menuUrlMapList = menuUrlMapper
-                .selectMapEntityListPage(new ParameterMap("f_status", 1).setOrderBy("f_patterns, f_methods"));
+                .selectMapEntityListPage(new ParamsMap("f_status", 1).setOrderBy("f_patterns, f_methods"));
 
         urlAuthoritiesCache.clear();
 
         // 应当是资源为key， 权限为value。 资源通常为url， 权限就是那些以ROLE_为前缀的角色。 一个资源可以由多个权限来访问。
         for (RowMap menuUrlMap : menuUrlMapList) {
-            String urlId = menuUrlMap.getString("f_url_id");
+            String urlId = menuUrlMap.$("f_url_id");
             Collection<ConfigAttribute> authorityList = urlAuthoritiesCache.get(urlId);
             if (authorityList == null) {
                 authorityList = new ArrayList<>();
                 urlAuthoritiesCache.put(urlId, authorityList);
             }
 
-            authorityList.add(getAuthority(menuUrlMap.getString("f_menu_id")));
+            authorityList.add(getAuthority(menuUrlMap.$("f_menu_id")));
         }
     }
 
@@ -133,14 +133,14 @@ public class SecurityCacheService {
     }
 
     private List<GrantedAuthority> getUserAuthorities(UserEntity user) {
-        List<RowMap> roleList = userRoleMapper.selectEntityListPage(new ParameterMap("f_user_id", user.getF_id()));
+        List<RowMap> roleList = userRoleMapper.selectEntityListPage(new ParamsMap("f_user_id", user.getF_id()));
         List<Integer> roleIdList = new ArrayList<>();
         user.setRoleIdList(roleIdList);
         for (RowMap role : roleList) {
-            roleIdList.add(role.getInteger("f_role_id", null));
+            roleIdList.add(role.$int("f_role_id", null));
         }
 
-        ParameterMap params = new ParameterMap("f_status", MenuEntity.STATUS_ENABLE);
+        ParamsMap params = new ParamsMap("f_status", MenuEntity.STATUS_ENABLE);
         params.put("f_type_in",
                 HelpUtil.joinToInString(MenuEntity.TYPE_PAGE, MenuEntity.TYPE_BUTTON, MenuEntity.TYPE_TOKEN));
         if (!user.isSuperAdmin()) {

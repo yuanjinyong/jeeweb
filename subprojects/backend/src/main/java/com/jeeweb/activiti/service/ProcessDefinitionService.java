@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jeeweb.activiti.entity.ProcessDefinitionEntity;
 import com.jeeweb.framework.business.mapper.BaseMapper;
 import com.jeeweb.framework.core.exception.BusinessException;
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.platform.security.utils.SecurityUtil;
 import com.jeeweb.platform.sys.entity.UserEntity;
@@ -44,16 +44,16 @@ public class ProcessDefinitionService extends ActivitiService<String, ProcessDef
 
     @Override
     @Transactional(readOnly = true)
-    public List<ProcessDefinitionEntity> selectEntityListPage(ParameterMap params) {
+    public List<ProcessDefinitionEntity> selectEntityListPage(ParamsMap params) {
         ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery();
-        if (!HelpUtil.isEmpty(params.getString("f_tenant_id", ""))) {
-            query.processDefinitionTenantId(params.getString("f_tenant_id"));
+        if (!HelpUtil.isEmpty(params.$("f_tenant_id", ""))) {
+            query.processDefinitionTenantId(params.$("f_tenant_id"));
         }
-        if (!HelpUtil.isEmpty(params.getString("f_tenant_id_in", ""))) {
-            query.processDefinitionTenantId(params.getString("f_tenant_id_in"));
+        if (!HelpUtil.isEmpty(params.$("f_tenant_id_in", ""))) {
+            query.processDefinitionTenantId(params.$("f_tenant_id_in"));
         }
-        if (!HelpUtil.isEmpty(params.getString("f_name_like", ""))) {
-            query.processDefinitionNameLike("%" + params.getString("f_name_like") + "%");
+        if (!HelpUtil.isEmpty(params.$("f_name_like", ""))) {
+            query.processDefinitionNameLike("%" + params.$("f_name_like") + "%");
         }
         query.orderByProcessDefinitionKey().asc().orderByProcessDefinitionVersion().desc();
         params.setTotalCount((int) query.count());
@@ -81,7 +81,7 @@ public class ProcessDefinitionService extends ActivitiService<String, ProcessDef
     }
 
     @Override
-    public void deleteEntities(ParameterMap params) {
+    public void deleteEntities(ParamsMap params) {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jeeweb.framework.core.aware.SpringContextAware;
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.platform.security.utils.SecurityUtil;
 import com.jeeweb.platform.sys.entity.DictItemEntity;
@@ -16,7 +16,7 @@ public final class SysUtil {
     public static String P_DEFAULT_PASSWORD = "DefaultPassword";
     public static String P_EXPIRY_DATE = "ExpiryDate";
 
-    public static void appendCurUserAndRoles(ParameterMap params) {
+    public static void appendCurUserAndRoles(ParamsMap params) {
         UserEntity user = SecurityUtil.getCurUser(null);
         // 是否为超级管理员
         if (user != null && !user.isSuperAdmin()) {

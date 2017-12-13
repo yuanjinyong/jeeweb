@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jeeweb.framework.business.mapper.BaseMapper;
 import com.jeeweb.framework.business.service.BaseService;
 import com.jeeweb.framework.core.exception.BusinessException;
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.framework.core.utils.TreeUtil;
@@ -43,10 +43,10 @@ public class RoleService extends BaseService<Integer, RoleEntity> {
     }
 
     @Override
-    public void deleteEntities(ParameterMap params) {
+    public void deleteEntities(ParamsMap params) {
         // 删除角色下关联的菜单
-        roleMenuMapper.deleteDistMenus(new ParameterMap("f_role_id_in", params.getString("f_id_in")));
-        roleMenuMapper.deleteAuthMenus(new ParameterMap("f_role_id_in", params.getString("f_id_in")));
+        roleMenuMapper.deleteDistMenus(new ParamsMap("f_role_id_in", params.$("f_id_in")));
+        roleMenuMapper.deleteAuthMenus(new ParamsMap("f_role_id_in", params.$("f_id_in")));
 
         getMapper().deleteEntities(params);
     }
@@ -56,7 +56,7 @@ public class RoleService extends BaseService<Integer, RoleEntity> {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Transactional(readOnly = true)
     public RowMap selectRoleMenuList(Integer roleId) {
-        ParameterMap params = new ParameterMap();
+        ParamsMap params = new ParamsMap();
         params.put("f_role_id", roleId);
         params.put("f_status", 1);
         params.put("orderBy", "f_parent_path,f_order");
@@ -107,7 +107,7 @@ public class RoleService extends BaseService<Integer, RoleEntity> {
 
     private void deleteRoleMenu(Integer f_role_id) {
         // 删除角色下关联的菜单
-        roleMenuMapper.deleteDistMenus(new ParameterMap("f_role_id", f_role_id));
-        roleMenuMapper.deleteAuthMenus(new ParameterMap("f_role_id", f_role_id));
+        roleMenuMapper.deleteDistMenus(new ParamsMap("f_role_id", f_role_id));
+        roleMenuMapper.deleteAuthMenus(new ParamsMap("f_role_id", f_role_id));
     }
 }

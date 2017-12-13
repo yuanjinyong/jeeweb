@@ -16,7 +16,7 @@ import com.jeeweb.framework.business.model.ICreator;
 import com.jeeweb.framework.business.model.IModifier;
 import com.jeeweb.framework.business.model.IPreset;
 import com.jeeweb.framework.core.exception.BusinessException;
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.service.SuperService;
 import com.jeeweb.framework.core.utils.HelpUtil;
@@ -41,12 +41,12 @@ public abstract class BaseService<P, E> extends SuperService {
     }
 
     @Transactional(readOnly = true)
-    public List<E> selectEntityListPage(ParameterMap params) {
+    public List<E> selectEntityListPage(ParamsMap params) {
         return getMapper().selectEntityListPage(params);
     }
 
     @Transactional(readOnly = true)
-    public List<RowMap> selectMapEntityListPage(ParameterMap params) {
+    public List<RowMap> selectMapEntityListPage(ParamsMap params) {
         return getMapper().selectMapEntityListPage(params);
     }
 
@@ -88,7 +88,7 @@ public abstract class BaseService<P, E> extends SuperService {
         if (entity instanceof TreeNodeEntity) {
             // 删除孩子
             TreeNodeEntity<?, ?> node = (TreeNodeEntity<?, ?>) entity;
-            getMapper().deleteEntities(new ParameterMap("f_parent_path_like", node.getF_full_path()));
+            getMapper().deleteEntities(new ParamsMap("f_parent_path_like", node.getF_full_path()));
         }
 
         deleteAttachmentList(primaryKey, entity);
@@ -108,7 +108,7 @@ public abstract class BaseService<P, E> extends SuperService {
     protected void afterDeleteEntity(E entity) {
     }
 
-    public void deleteEntities(ParameterMap params) {
+    public void deleteEntities(ParamsMap params) {
         validateDeleteEntities(params);
         beforeDeleteEntities(params);
 
@@ -117,13 +117,13 @@ public abstract class BaseService<P, E> extends SuperService {
         afterDeleteEntities(params);
     }
 
-    protected void validateDeleteEntities(ParameterMap params) {
+    protected void validateDeleteEntities(ParamsMap params) {
     }
 
-    protected void beforeDeleteEntities(ParameterMap params) {
+    protected void beforeDeleteEntities(ParamsMap params) {
     }
 
-    protected void afterDeleteEntities(ParameterMap params) {
+    protected void afterDeleteEntities(ParamsMap params) {
     }
 
     protected void fillModifier(E entity) {
@@ -158,7 +158,7 @@ public abstract class BaseService<P, E> extends SuperService {
             IAttachment attachment = (IAttachment) entity;
             String f_id_in = attachment.getF_attachment_ids();
             if (!HelpUtil.isEmpty(f_id_in)) {
-                ParameterMap params = new ParameterMap("f_id_in", f_id_in).put("f_status_in", "2,3");
+                ParamsMap params = new ParamsMap("f_id_in", f_id_in).put("f_status_in", "2,3");
                 attachment.setAttachmentList(attachmentMapper.selectEntityListPage(params));
             }
 
@@ -173,7 +173,7 @@ public abstract class BaseService<P, E> extends SuperService {
             IAttachment businessEntity = (IAttachment) entity;
             String f_id_in = businessEntity.getF_attachment_ids();
             if (!HelpUtil.isEmpty(f_id_in)) {
-                ParameterMap params = new ParameterMap("f_id_in", f_id_in).put("f_status_in", "1,4");
+                ParamsMap params = new ParamsMap("f_id_in", f_id_in).put("f_status_in", "1,4");
                 List<AttachmentEntity> attachmentList = attachmentMapper.selectEntityListPage(params);
                 for (AttachmentEntity attachmentEntity : attachmentList) {
                     if (!HelpUtil.isEmpty(attachmentEntity.getF_local_path())) {

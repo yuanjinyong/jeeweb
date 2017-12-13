@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jeeweb.framework.business.web.controller.SuperController;
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.schema.service.InformationSchemaService;
@@ -22,14 +22,14 @@ public class InformationSchemaApi extends SuperController {
 
     @RequestMapping(value = "/schematas", method = RequestMethod.GET)
     public ResponseResult listSchemata() {
-        ParameterMap params = $params();
+        ParamsMap params = $params();
         return new ResponseResult(new Result(params.page(informationSchemaService.selectSchemataListPage(params))),
                 HttpStatus.OK);
     }
 
     @RequestMapping(value = "/tables", method = RequestMethod.GET)
     public ResponseResult listTable() {
-        ParameterMap params = $params();
+        ParamsMap params = $params();
         return new ResponseResult(new Result(params.page(informationSchemaService.selectTableListPage(params))),
                 HttpStatus.OK);
     }
@@ -43,7 +43,7 @@ public class InformationSchemaApi extends SuperController {
 
     @RequestMapping(value = "/columns", method = RequestMethod.GET)
     public ResponseResult listColumn() {
-        ParameterMap params = $params();
+        ParamsMap params = $params();
         return new ResponseResult(new Result(params.page(informationSchemaService.selectColumnListPage(params))),
                 HttpStatus.OK);
     }

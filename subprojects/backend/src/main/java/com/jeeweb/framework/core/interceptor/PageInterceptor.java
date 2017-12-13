@@ -29,7 +29,7 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.framework.core.utils.MetaUtil;
 
@@ -84,8 +84,8 @@ public class PageInterceptor implements Interceptor {
         BoundSql boundSql = (BoundSql) metaObject.getValue("delegate.boundSql");
         // 如果没有传入任何参数或者入参不是统一的MapEntity，则不进行翻页数据的处理
         Object parameterObject = boundSql.getParameterObject();
-        if (parameterObject != null && parameterObject instanceof ParameterMap) {
-            ParameterMap params = (ParameterMap) parameterObject;
+        if (parameterObject != null && parameterObject instanceof ParamsMap) {
+            ParamsMap params = (ParamsMap) parameterObject;
             // 要传入了pageSize或orderBy且SqlId以“ListPage”结尾，才进行翻页数据的处理
             if (params.hasPagenation() || !HelpUtil.isEmpty(params.getOrderBy())) {
                 if (mappedStatement.getId().matches(sqlIdRegex)) {
@@ -110,7 +110,7 @@ public class PageInterceptor implements Interceptor {
         PreparedStatement countStmt = null;
         ResultSet resultSet = null;
         try {
-            ParameterMap params = (ParameterMap) boundSql.getParameterObject();
+            ParamsMap params = (ParamsMap) boundSql.getParameterObject();
             String countSql = generatCountSql(mappedStatement, boundSql);
             countStmt = connection.prepareStatement(countSql);
             BoundSql countBoundSql = new BoundSql(mappedStatement.getConfiguration(), countSql,
@@ -207,7 +207,7 @@ public class PageInterceptor implements Interceptor {
      */
     private String generatePageSql(BoundSql boundSql) {
         String sql = boundSql.getSql();
-        ParameterMap params = (ParameterMap) boundSql.getParameterObject();
+        ParamsMap params = (ParamsMap) boundSql.getParameterObject();
 
         StringBuffer pageSql = new StringBuffer();
         if (DB_PRODUCT_NAME_MYSQL.equals(databaseProductName)) {

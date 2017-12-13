@@ -18,7 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import com.jeeweb.framework.core.listener.Startup;
 import com.jeeweb.framework.core.listener.StartupItem;
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.platform.security.utils.RequestUtil;
 import com.jeeweb.platform.sys.entity.UrlEntity;
 import com.jeeweb.platform.sys.service.UrlService;
@@ -40,7 +40,7 @@ public class LoadUrlStartupItem implements StartupItem {
         List<UrlEntity> entityList = new ArrayList<>();
         entityList.addAll(buildUrlEntityList(ac.getBean(RequestMappingHandlerMapping.class).getHandlerMethods()));
         entityList.addAll(buildUrlEntityList(ac.getBean(EndpointHandlerMapping.class).getHandlerMethods()));
-        urlService.deleteEntities(new ParameterMap("f_auto", true));
+        urlService.deleteEntities(new ParamsMap("f_auto", true));
         urlService.insertEntities(entityList);
     }
 

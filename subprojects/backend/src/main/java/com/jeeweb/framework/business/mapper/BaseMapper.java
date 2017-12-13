@@ -3,7 +3,7 @@ package com.jeeweb.framework.business.mapper;
 import java.util.List;
 
 import com.jeeweb.framework.core.mapper.SuperMapper;
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.model.RowMap;
 
 
@@ -11,9 +11,9 @@ import com.jeeweb.framework.core.model.RowMap;
 public interface BaseMapper<P, E> extends SuperMapper {
     E selectEntity(P primaryKey);
 
-    List<E> selectEntityListPage(ParameterMap params);
+    List<E> selectEntityListPage(ParamsMap params);
 
-    List<RowMap> selectMapEntityListPage(ParameterMap params);
+    List<RowMap> selectMapEntityListPage(ParamsMap params);
 
     int insertEntity(E entity);
 
@@ -25,7 +25,7 @@ public interface BaseMapper<P, E> extends SuperMapper {
 
     int deleteEntity(P primaryKey);
 
-    int deleteEntities(ParameterMap params);
+    int deleteEntities(ParamsMap params);
 
     Integer isCanDeleteEntity(P primaryKey);
 }

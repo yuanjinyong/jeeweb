@@ -107,12 +107,12 @@
         <include refid="From_Clause" />
         WHERE t.f_id = #{f_id}
     </select>
-    <select id="selectEntityListPage" parameterType="com.jeeweb.framework.core.model.ParameterMap" resultType="com.jeeweb.platform.sys.entity.MenuEntity">
+    <select id="selectEntityListPage" parameterType="com.jeeweb.framework.core.model.ParamsMap" resultType="com.jeeweb.platform.sys.entity.MenuEntity">
         <include refid="Select_Clause" />
         <include refid="From_Clause" />
         <include refid="Where_Clause" />
     </select>
-    <select id="selectMapEntityListPage" parameterType="com.jeeweb.framework.core.model.ParameterMap" resultType="com.jeeweb.framework.core.model.RowMap">
+    <select id="selectMapEntityListPage" parameterType="com.jeeweb.framework.core.model.ParamsMap" resultType="com.jeeweb.framework.core.model.RowMap">
         <include refid="Select_Clause" />
         <include refid="From_Clause" />
         <include refid="Where_Clause" />
@@ -155,7 +155,7 @@
     <delete id="deleteEntity" parameterType="java.lang.String">
         DELETE FROM t_sys_menu WHERE f_id=#{f_id}
     </delete>
-    <delete id="deleteEntities" parameterType="com.jeeweb.framework.core.model.ParameterMap">
+    <delete id="deleteEntities" parameterType="com.jeeweb.framework.core.model.ParamsMap">
         DELETE FROM t_sys_menu WHERE 1=1
         <if test="f_id_in != null and f_id_in != ''">AND f_id IN(${f_id_in})</if>
         <if test="f_parent_id != null and f_parent_id != ''">AND f_parent_id = #{f_parent_id}</if>
@@ -195,7 +195,7 @@
             )
         </foreach>
     </insert>
-    <select id="selectTempMenuListPage" parameterType="com.jeeweb.framework.core.model.ParameterMap" resultType="com.jeeweb.platform.sys.entity.MenuEntity">
+    <select id="selectTempMenuListPage" parameterType="com.jeeweb.framework.core.model.ParamsMap" resultType="com.jeeweb.platform.sys.entity.MenuEntity">
         <include refid="Select_Clause" />
         <include refid="From_Clause" />
         RIGHT JOIN (SELECT DISTINCT f_menu_id FROM t_temp_menu) tm ON tm.f_menu_id = t.f_id

@@ -24,7 +24,7 @@ import com.jeeweb.framework.core.export.excel.ExcelColumn;
 import com.jeeweb.framework.core.export.excel.ExcelSheet;
 import com.jeeweb.framework.core.export.excel.ExcelWorkbook;
 import com.jeeweb.framework.core.export.excel.ExcelXlsView;
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.framework.core.model.RowMap;
@@ -45,7 +45,7 @@ public class UserApi extends BaseApi<Integer, UserEntity> {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseResult list() {
-        ParameterMap params = $params();
+        ParamsMap params = $params();
         params.put("f_account_notIn", "'" + UserEntity.SUPERADMIN + "'");
         List<UserEntity> entities = getService().selectEntityListPage(params);
         return new ResponseResult(new Result(params.page(entities)), HttpStatus.OK);
@@ -80,7 +80,7 @@ public class UserApi extends BaseApi<Integer, UserEntity> {
 
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     public ModelAndView export() {
-        ParameterMap params = $params();
+        ParamsMap params = $params();
         List<RowMap> entities = getService().selectMapEntityListPage(params);
 
         ExcelSheet sheet = new ExcelSheet("用户", "用户", entities);

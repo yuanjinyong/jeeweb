@@ -28,7 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.jeeweb.framework.business.web.controller.SuperController;
 import com.jeeweb.framework.business.web.view.AttachmentView;
 import com.jeeweb.framework.core.exception.BusinessException;
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.framework.core.utils.HelpUtil;
@@ -46,7 +46,7 @@ public class AttachmentDataApi extends SuperController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseResult list() {
-        ParameterMap params = $params();
+        ParamsMap params = $params();
         params.put("f_tenant_id", 0);
 
         List<AttachmentEntity> entities = attachmentService.selectEntityListPage(params);

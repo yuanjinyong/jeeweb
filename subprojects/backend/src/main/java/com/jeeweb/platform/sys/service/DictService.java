@@ -16,7 +16,7 @@ import com.jeeweb.framework.business.mapper.BaseMapper;
 import com.jeeweb.framework.business.mapper.SqlMapper;
 import com.jeeweb.framework.business.service.BaseService;
 import com.jeeweb.framework.core.aware.SpringContextAware;
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.platform.sys.entity.DictEntity;
@@ -44,7 +44,7 @@ public class DictService extends BaseService<Integer, DictEntity> implements Ini
     public DictEntity selectEntity(Integer primaryKey) {
         DictEntity entity = getMapper().selectEntity(primaryKey);
         entity.setItemList(
-                selectDictItemList(new ParameterMap("f_dict_code", entity.getF_code()).setOrderBy("f_item_order")));
+                selectDictItemList(new ParamsMap("f_dict_code", entity.getF_code()).setOrderBy("f_item_order")));
         return entity;
     }
 
@@ -90,12 +90,12 @@ public class DictService extends BaseService<Integer, DictEntity> implements Ini
 
         LOG.info("====加载通用字典组。");
         List<DictItemEntity> dictItemList = dictItemMapper
-                .selectEntityListPage(new ParameterMap().setOrderBy("f_dict_code,f_item_order"));
+                .selectEntityListPage(new ParamsMap().setOrderBy("f_dict_code,f_item_order"));
         addDict(dicts, dictItemList);
 
         LOG.info("====加载单表字典组。");
         List<DictEntity> dictList = dictMapper
-                .selectEntityListPage(new ParameterMap("f_table_name_notEqual", "t_sys_dict_item"));
+                .selectEntityListPage(new ParamsMap("f_table_name_notEqual", "t_sys_dict_item"));
         for (DictEntity dict : dictList) {
             addDict(dicts, dict);
         }
@@ -132,14 +132,14 @@ public class DictService extends BaseService<Integer, DictEntity> implements Ini
     // TODO 后续需要改为Redis缓存
     @Transactional(readOnly = true)
     public List<DictItemEntity> getDictItemList(String dictCode) {
-        return selectDictItemList(new ParameterMap("f_dict_code", dictCode).setOrderBy("f_item_order"));
+        return selectDictItemList(new ParamsMap("f_dict_code", dictCode).setOrderBy("f_item_order"));
     }
 
     // TODO 后续需要改为Redis缓存
     @Transactional(readOnly = true)
     public Map<Object, Object> getDictItemMap(String dictCode) {
         Map<Object, Object> dictMap = new HashMap<>();
-        List<RowMap> dictItemList = dictItemMapper.selectMapEntityListPage(new ParameterMap("f_dict_code", dictCode));
+        List<RowMap> dictItemList = dictItemMapper.selectMapEntityListPage(new ParamsMap("f_dict_code", dictCode));
         for (RowMap dictItemMap : dictItemList) {
             dictMap.put(dictItemMap.get("f_item_code"), dictItemMap.get("f_item_name"));
         }
@@ -149,7 +149,7 @@ public class DictService extends BaseService<Integer, DictEntity> implements Ini
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    private List<DictItemEntity> selectDictItemList(ParameterMap params) {
+    private List<DictItemEntity> selectDictItemList(ParamsMap params) {
         return dictItemMapper.selectEntityListPage(params);
     }
 
@@ -171,6 +171,6 @@ public class DictService extends BaseService<Integer, DictEntity> implements Ini
     }
 
     private void deleteDictItemList(DictEntity dict) {
-        dictItemMapper.deleteEntities(new ParameterMap("f_dict_code", dict.getF_code()));
+        dictItemMapper.deleteEntities(new ParamsMap("f_dict_code", dict.getF_code()));
     }
 }

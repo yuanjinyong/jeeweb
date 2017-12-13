@@ -15,7 +15,7 @@ import com.jeeweb.framework.business.mapper.BaseMapper;
 import com.jeeweb.framework.business.mapper.SqlMapper;
 import com.jeeweb.framework.business.service.BaseService;
 import com.jeeweb.framework.core.exception.BusinessException;
-import com.jeeweb.framework.core.model.ParameterMap;
+import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.framework.core.utils.TreeUtil;
@@ -44,7 +44,7 @@ public class MenuService extends BaseService<String, MenuEntity> {
     @Transactional(readOnly = true)
     public MenuEntity selectEntity(String primaryKey) {
         MenuEntity menu = super.selectEntity(primaryKey);
-        menu.setUrlList(selectMenuUrlList(new ParameterMap("f_menu_id", menu.getF_id()).setOrderBy("f_url,f_methods")));
+        menu.setUrlList(selectMenuUrlList(new ParamsMap("f_menu_id", menu.getF_id()).setOrderBy("f_url,f_methods")));
         return menu;
     }
 
@@ -66,7 +66,7 @@ public class MenuService extends BaseService<String, MenuEntity> {
     @Override
     protected void beforeDeleteEntity(MenuEntity entity) {
         // 查出所有的子菜单，先删除子菜单及其URL
-        ParameterMap params = new ParameterMap("f_parent_path_like", entity.getF_full_path());
+        ParamsMap params = new ParamsMap("f_parent_path_like", entity.getF_full_path());
         menuUrlMapper.deleteEntities(params);
 
         // 再删除自己的URL
@@ -74,7 +74,7 @@ public class MenuService extends BaseService<String, MenuEntity> {
     }
 
     @Override
-    public void deleteEntities(ParameterMap params) {
+    public void deleteEntities(ParamsMap params) {
         throw new BusinessException("不支持一次删除多条菜单！");
     }
 
@@ -88,22 +88,22 @@ public class MenuService extends BaseService<String, MenuEntity> {
         List<MenuEntity> menuList = new ArrayList<>();
         menuList.add(menu);
         menuList.addAll(menuMapper.selectEntityListPage(
-                new ParameterMap("f_parent_path_like", menu.getF_full_path()).setOrderBy("f_parent_path,f_order")));
+                new ParamsMap("f_parent_path_like", menu.getF_full_path()).setOrderBy("f_parent_path,f_order")));
 
         List<Map<String, Object>> menuUrlList = new ArrayList<>();
         menuUrlList.addAll(sqlMapper.selectListPage("SELECT * FROM `t_sys_menu_url` WHERE f_menu_id = #{f_menu_id}",
-                new ParameterMap("f_menu_id", menu.getF_id()).setOrderBy("f_menu_id,f_url_id")));
+                new ParamsMap("f_menu_id", menu.getF_id()).setOrderBy("f_menu_id,f_url_id")));
         menuUrlList.addAll(sqlMapper.selectListPage(
                 "SELECT * FROM `t_sys_menu_url` WHERE f_menu_id IN (SELECT f_id FROM `t_sys_menu` WHERE f_parent_path LIKE CONCAT('%', #{f_parent_path_like}, '%'))",
-                new ParameterMap("f_parent_path_like", menu.getF_full_path()).setOrderBy("f_menu_id,f_url_id")));
+                new ParamsMap("f_parent_path_like", menu.getF_full_path()).setOrderBy("f_menu_id,f_url_id")));
 
         List<Map<String, Object>> roleDistMenuList = new ArrayList<>();
         roleDistMenuList.addAll(sqlMapper.selectListPage(
                 "SELECT * FROM `t_sys_role_menu_distribution` WHERE f_role_id < 1000 AND f_menu_id = #{f_menu_id}",
-                new ParameterMap("f_menu_id", menu.getF_id()).setOrderBy("f_role_id,f_menu_id")));
+                new ParamsMap("f_menu_id", menu.getF_id()).setOrderBy("f_role_id,f_menu_id")));
         roleDistMenuList.addAll(sqlMapper.selectListPage(
                 "SELECT * FROM `t_sys_role_menu_distribution` WHERE  f_role_id < 1000 AND f_menu_id IN (SELECT f_id FROM `t_sys_menu` WHERE f_parent_path LIKE CONCAT('%', #{f_parent_path_like}, '%'))",
-                new ParameterMap("f_parent_path_like", menu.getF_full_path()).setOrderBy("f_role_id,f_menu_id")));
+                new ParamsMap("f_parent_path_like", menu.getF_full_path()).setOrderBy("f_role_id,f_menu_id")));
         Collections.sort(roleDistMenuList, new Comparator<Map<String, Object>>() {
             @Override
             public int compare(Map<String, Object> o1, Map<String, Object> o2) {
@@ -120,10 +120,10 @@ public class MenuService extends BaseService<String, MenuEntity> {
         List<Map<String, Object>> roleAuthMenuList = new ArrayList<>();
         roleAuthMenuList.addAll(sqlMapper.selectListPage(
                 "SELECT * FROM `t_sys_role_menu_authorization` WHERE f_role_id < 1000 AND f_menu_id = #{f_menu_id}",
-                new ParameterMap("f_menu_id", menu.getF_id()).setOrderBy("f_role_id,f_menu_id")));
+                new ParamsMap("f_menu_id", menu.getF_id()).setOrderBy("f_role_id,f_menu_id")));
         roleAuthMenuList.addAll(sqlMapper.selectListPage(
                 "SELECT * FROM `t_sys_role_menu_authorization` WHERE  f_role_id < 1000 AND f_menu_id IN (SELECT f_id FROM `t_sys_menu` WHERE f_parent_path LIKE CONCAT('%', #{f_parent_path_like}, '%'))",
-                new ParameterMap("f_parent_path_like", menu.getF_full_path()).setOrderBy("f_role_id,f_menu_id")));
+                new ParamsMap("f_parent_path_like", menu.getF_full_path()).setOrderBy("f_role_id,f_menu_id")));
         Collections.sort(roleAuthMenuList, new Comparator<Map<String, Object>>() {
             @Override
             public int compare(Map<String, Object> o1, Map<String, Object> o2) {
@@ -145,7 +145,7 @@ public class MenuService extends BaseService<String, MenuEntity> {
         return data;
     }
 
-    private List<RowMap> selectMenuUrlList(ParameterMap params) {
+    private List<RowMap> selectMenuUrlList(ParamsMap params) {
         return menuUrlMapper.selectEntityListPage(params);
     }
 
@@ -165,6 +165,6 @@ public class MenuService extends BaseService<String, MenuEntity> {
     }
 
     private void deleteMenuUrl(MenuEntity menu) {
-        menuUrlMapper.deleteEntities(new ParameterMap("f_menu_id", menu.getF_id()));
+        menuUrlMapper.deleteEntities(new ParamsMap("f_menu_id", menu.getF_id()));
     }
 }
