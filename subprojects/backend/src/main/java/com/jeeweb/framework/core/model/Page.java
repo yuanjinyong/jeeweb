@@ -20,8 +20,8 @@ public class Page<T> {
         this(10, 0);
     }
 
-    public Page(Sort sort) {
-        this(10, 0, sort);
+    public Page(String orderBy) {
+        this(10, 0, orderBy);
     }
 
     public Page(List<T> items) {
@@ -37,13 +37,13 @@ public class Page<T> {
     }
 
     public Page(Integer pageSize, Integer currentPage) {
-        this(pageSize, currentPage, new Sort());
+        this(pageSize, currentPage, null);
     }
 
-    public Page(Integer pageSize, Integer currentPage, Sort sort) {
+    public Page(Integer pageSize, Integer currentPage, String orderBy) {
         this.pageSize = pageSize;
         this.pageNo = currentPage;
-        this.orderBy = sort.toString();
+        this.orderBy = orderBy;
     }
 
     public Integer getTotalCount() {

@@ -13,11 +13,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.springframework.util.StringUtils;
-
-import com.jeeweb.framework.core.exception.BusinessException;
-import com.jeeweb.framework.core.model.IValue;
 
 public class HelpUtil extends StringUtils {
     public static final String DATETIME_PATTERN_DEFUALT = "yyyy-MM-dd HH:mm:ss";
@@ -77,12 +75,12 @@ public class HelpUtil extends StringUtils {
         return joinToInString(list, null);
     }
 
-    public static <O, V> String joinToInString(List<O> list, IValue<O, V> value) {
+    public static <O, V> String joinToInString(List<O> list, Function<O, V> function) {
         StringBuffer sb = new StringBuffer();
         for (O e : list) {
             Object val = e;
-            if (value != null) {
-                val = value.getValue(e);
+            if (function != null) {
+                val = function.apply(e);
             }
 
             if (val instanceof String) {
@@ -132,14 +130,14 @@ public class HelpUtil extends StringUtils {
         }
     }
 
-    public static <O, V> List<V> listToList(List<O> list, IValue<O, V> value) {
+    public static <O, V> List<V> listToList(List<O> list, Function<O, V> function) {
         if (list == null) {
             return null;
         }
 
         List<V> newList = new ArrayList<>();
         for (O e : list) {
-            newList.add(value.getValue(e));
+            newList.add(function.apply(e));
         }
         return newList;
     }
@@ -208,18 +206,19 @@ public class HelpUtil extends StringUtils {
         return Timestamp.valueOf(getSimpleDateFormat("yyyy-MM-dd 23:59:59.999999999").format(time.getTime()));
     }
 
-    public static Timestamp addDays(Timestamp time, int amount) {
+    public static Timestamp addTime(Timestamp time, int unit, int amount) {
         Calendar c = Calendar.getInstance();
         c.setTime(time);
-        c.add(Calendar.DATE, amount);
+        c.add(unit, amount);
         return new Timestamp(c.getTimeInMillis());
     }
 
+    public static Timestamp addDays(Timestamp time, int amount) {
+        return addTime(time, Calendar.DAY_OF_MONTH, amount);
+    }
+
     public static Timestamp addMonths(Timestamp time, int amount) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(time);
-        c.add(Calendar.MONTH, amount);
-        return new Timestamp(c.getTimeInMillis());
+        return addTime(time, Calendar.MONTH, amount);
     }
 
     public static String formatDatetime(Date date) {
@@ -246,8 +245,12 @@ public class HelpUtil extends StringUtils {
         try {
             return getSimpleDateFormat(pattern).parse(dateStr);
         } catch (ParseException e) {
-            throw new BusinessException("解析日期失败！", e);
+            throw new RuntimeException("解析日期失败！", e);
         }
+    }
+
+    public static Timestamp truncateTimestamp(Timestamp time, String pattern) {
+        return parseTimestamp(formatDatetime(time, pattern), DATETIME_PATTERN_DEFUALT);
     }
 
     public static Timestamp parseTimestamp(String dateStr) {
