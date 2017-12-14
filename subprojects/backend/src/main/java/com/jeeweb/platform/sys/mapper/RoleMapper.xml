@@ -63,7 +63,7 @@
         <include refid="From_Clause" />
         <include refid="Where_Clause" />
     </select>
-    <select id="selectMapEntityListPage" parameterType="com.jeeweb.framework.core.model.ParamsMap" resultType="com.jeeweb.framework.core.model.RowMap">
+    <select id="selectRowMapListPage" parameterType="com.jeeweb.framework.core.model.ParamsMap" resultType="com.jeeweb.framework.core.model.RowMap">
         <include refid="Select_Clause" />
         <include refid="From_Clause" />
         <include refid="Where_Clause" />

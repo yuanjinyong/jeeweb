@@ -139,7 +139,7 @@ public class DictService extends BaseService<Integer, DictEntity> implements Ini
     @Transactional(readOnly = true)
     public Map<Object, Object> getDictItemMap(String dictCode) {
         Map<Object, Object> dictMap = new HashMap<>();
-        List<RowMap> dictItemList = dictItemMapper.selectMapEntityListPage(new ParamsMap("f_dict_code", dictCode));
+        List<RowMap> dictItemList = dictItemMapper.selectRowMapListPage(new ParamsMap("f_dict_code", dictCode));
         for (RowMap dictItemMap : dictItemList) {
             dictMap.put(dictItemMap.get("f_item_code"), dictItemMap.get("f_item_name"));
         }

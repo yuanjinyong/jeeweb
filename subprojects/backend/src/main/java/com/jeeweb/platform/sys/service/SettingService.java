@@ -38,7 +38,7 @@ public class SettingService extends BaseService<Integer, SettingEntity> {
     @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
     public <T> T getValue(String code, T defaultValue, Class<T> clz) {
-        List<RowMap> rows = settingMapper.selectMapEntityListPage(new ParamsMap("f_code", code));
+        List<RowMap> rows = settingMapper.selectRowMapListPage(new ParamsMap("f_code", code));
         if (HelpUtil.isEmpty(rows)) {
             return null;
         }

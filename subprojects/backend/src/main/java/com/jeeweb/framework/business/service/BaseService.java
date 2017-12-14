@@ -47,7 +47,7 @@ public abstract class BaseService<P, E> extends SuperService {
 
     @Transactional(readOnly = true)
     public List<RowMap> selectMapEntityListPage(ParamsMap params) {
-        return getMapper().selectMapEntityListPage(params);
+        return getMapper().selectRowMapListPage(params);
     }
 
     public void insertEntity(E entity) {

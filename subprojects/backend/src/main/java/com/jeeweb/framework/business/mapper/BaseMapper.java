@@ -13,7 +13,7 @@ public interface BaseMapper<P, E> extends SuperMapper {
 
     List<E> selectEntityListPage(ParamsMap params);
 
-    List<RowMap> selectMapEntityListPage(ParamsMap params);
+    List<RowMap> selectRowMapListPage(ParamsMap params);
 
     int insertEntity(E entity);
 

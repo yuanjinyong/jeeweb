@@ -80,7 +80,7 @@ public class SecurityCacheService {
 
     public void loadUrlAuthoritiesCache() {
         List<RowMap> menuUrlMapList = menuUrlMapper
-                .selectMapEntityListPage(new ParamsMap("f_status", 1).setOrderBy("f_patterns, f_methods"));
+                .selectRowMapListPage(new ParamsMap("f_status", 1).setOrderBy("f_patterns, f_methods"));
 
         urlAuthoritiesCache.clear();
 
