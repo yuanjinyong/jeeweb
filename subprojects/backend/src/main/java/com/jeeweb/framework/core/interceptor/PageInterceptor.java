@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -25,6 +27,7 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.property.PropertyTokenizer;
 import org.apache.ibatis.scripting.xmltags.ForEachSqlNode;
 import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.type.TypeHandler;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,8 +43,12 @@ import com.jeeweb.framework.core.utils.MetaUtil;
  * @author 袁进勇
  */
 @Component
-@Intercepts({
-        @Signature(type = StatementHandler.class, method = "prepare", args = { Connection.class, Integer.class }) })
+@Intercepts({ //
+        @Signature(type = StatementHandler.class, method = "prepare", //
+                args = { Connection.class, Integer.class }), //
+        @Signature(type = StatementHandler.class, method = "query", //
+                args = { Statement.class, ResultHandler.class }) //
+})
 public class PageInterceptor implements Interceptor {
     private static final String DB_PRODUCT_NAME_MYSQL = "MySQL";
     private static final String DB_PRODUCT_NAME_SQLSERVER = "Microsoft SQL Server";
@@ -58,31 +65,58 @@ public class PageInterceptor implements Interceptor {
 
         MetaObject metaObject = MetaUtil.getMetaObject(invocation.getTarget());
         MappedStatement mappedStatement = (MappedStatement) metaObject.getValue("delegate.mappedStatement");
-        BoundSql boundSql = (BoundSql) metaObject.getValue("delegate.boundSql");
-        Log log = mappedStatement.getStatementLog();
-        if (log.isTraceEnabled()) {
-            log.trace(new StringBuffer("执行SQL：").append(mappedStatement.getId()).append("\n对应XML：")
-                    .append(mappedStatement.getResource()).append("\n原始的SQL如下：\n    ").append(boundSql.getSql())
-                    .toString());
-        }
-
         if (!mappedStatement.getId().matches(sqlIdRegex)) {
             return invocation.proceed();
         }
 
-        // 如果没有传入任何参数或者入参不是统一的ParamsMap，则不进行总记录数和翻页数据的处理
+        // 如果没有传入任何参数或者入参不是统一的ParamsMap，则不进行处理
+        BoundSql boundSql = (BoundSql) metaObject.getValue("delegate.boundSql");
         Object parameterObject = boundSql.getParameterObject();
         if (parameterObject == null || !(parameterObject instanceof ParamsMap)) {
             return invocation.proceed();
         }
 
+        if ("prepare".equals(invocation.getMethod().getName())) {
+            Log log = mappedStatement.getStatementLog();
+            if (log.isTraceEnabled()) {
+                log.trace(new StringBuffer("执行SQL：").append(mappedStatement.getId()).append("\n对应XML：")
+                        .append(mappedStatement.getResource()).append("\n原始的SQL如下：\n    ").append(boundSql.getSql())
+                        .toString());
+            }
+
+            return prepare(invocation, mappedStatement, boundSql);
+        }
+
+        return query(invocation, mappedStatement, boundSql);
+    }
+
+    private Object query(Invocation invocation, MappedStatement mappedStatement, BoundSql boundSql) throws Throwable {
+        // 如果入参中已经有了为0的totalCount，则不需要再去查询数据了
+        ParamsMap params = (ParamsMap) boundSql.getParameterObject();
+        Integer totalCount = params.getTotalCount();
+        if (totalCount != null && totalCount == 0) {
+            Log log = mappedStatement.getStatementLog();
+            if (log.isDebugEnabled()) {
+                log.debug(new StringBuffer("检测到").append(ParamsMap.TOTAL_COUNT).append('=')
+                        .append("0，不再执行查询SQL语句，直接返回空列表。").toString());
+            }
+            return new ArrayList<>();
+        }
+
+        return invocation.proceed();
+    }
+
+    private Object prepare(Invocation invocation, MappedStatement mappedStatement, BoundSql boundSql) throws Throwable {
+        MetaObject metaObject = MetaUtil.getMetaObject(invocation.getTarget());
+        Connection connection = (Connection) invocation.getArgs()[0];
         try {
-            Connection connection = (Connection) invocation.getArgs()[0];
             processTotalCount(connection, mappedStatement, boundSql);
             processPagenation(connection, mappedStatement, boundSql, metaObject);
-            return invocation.proceed();
+            Object result = invocation.proceed();
+            return result;
         } catch (Exception e) {
             if (e instanceof SQLException) {
+                Log log = mappedStatement.getStatementLog();
                 log.error(new StringBuffer("执行SQL：").append(mappedStatement.getId()).append("\n对应XML：")
                         .append(mappedStatement.getResource()).append("\n原始的SQL如下：\n    ").append(boundSql.getSql())
                         .toString());
