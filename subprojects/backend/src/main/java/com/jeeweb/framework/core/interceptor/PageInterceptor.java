@@ -61,7 +61,7 @@ public class PageInterceptor implements Interceptor {
         BoundSql boundSql = (BoundSql) metaObject.getValue("delegate.boundSql");
         Log log = mappedStatement.getStatementLog();
         if (log.isTraceEnabled()) {
-            log.trace(new StringBuffer("\n执行SQL：").append(mappedStatement.getId()).append("\n对应XML：")
+            log.trace(new StringBuffer("执行SQL：").append(mappedStatement.getId()).append("\n对应XML：")
                     .append(mappedStatement.getResource()).append("\n原始的SQL如下：\n    ").append(boundSql.getSql())
                     .toString());
         }
@@ -83,7 +83,7 @@ public class PageInterceptor implements Interceptor {
             return invocation.proceed();
         } catch (Exception e) {
             if (e instanceof SQLException) {
-                log.error(new StringBuffer("\n执行SQL：").append(mappedStatement.getId()).append("\n对应XML：")
+                log.error(new StringBuffer("执行SQL：").append(mappedStatement.getId()).append("\n对应XML：")
                         .append(mappedStatement.getResource()).append("\n原始的SQL如下：\n    ").append(boundSql.getSql())
                         .toString());
             }
@@ -96,8 +96,8 @@ public class PageInterceptor implements Interceptor {
             throws Exception, SQLException {
         Log log = mappedStatement.getStatementLog();
         ParamsMap params = (ParamsMap) boundSql.getParameterObject();
-        // 如果入参中已经传入了totalCount，则不需要再去查询出总数了
-        if (params.getTotalCount() == null || params.getTotalCount() >= 0) {
+        // 如果入参中已经传入了有值的totalCount，则不需要再去查询出总数了
+        if (!params.hasTotalCount() || params.getTotalCount() != null) {
             log.trace("无需查询总记录数。");
             return;
         }
@@ -116,7 +116,7 @@ public class PageInterceptor implements Interceptor {
             if (resultSet.next()) {
                 params.setTotalCount(resultSet.getInt(1));
                 if (log.isDebugEnabled()) {
-                    log.debug(new StringBuffer("\n设置总记录数：").append(ParamsMap.TOTAL_COUNT).append('=')
+                    log.debug(new StringBuffer("设置总记录数：").append(ParamsMap.TOTAL_COUNT).append('=')
                             .append(params.getTotalCount()).append("\n").append(countSql).toString());
                 }
             }
@@ -156,7 +156,7 @@ public class PageInterceptor implements Interceptor {
         if (params.getPageNo() == null) {
             params.defaultPageNo();
             if (log.isDebugEnabled()) {
-                log.debug(new StringBuffer("\n设置当前页号：").append(ParamsMap.PAGE_NO).append("=").append(params.getPageNo())
+                log.debug(new StringBuffer("设置当前页号：").append(ParamsMap.PAGE_NO).append("=").append(params.getPageNo())
                         .toString());
             }
         }
@@ -164,7 +164,7 @@ public class PageInterceptor implements Interceptor {
         String pageSql = generatePageSql(connection.getMetaData().getDatabaseProductName(), boundSql.getSql(), params);
         metaObject.setValue("delegate.boundSql.sql", pageSql);
         if (log.isDebugEnabled()) {
-            log.debug(new StringBuffer("\n重写分页和排序后的SQL如下：\n").append(pageSql).toString());
+            log.debug(new StringBuffer("重写分页和排序后的SQL如下：\n").append(pageSql).toString());
         }
     }
 

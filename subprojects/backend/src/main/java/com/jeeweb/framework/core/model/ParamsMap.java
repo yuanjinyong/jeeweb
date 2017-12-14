@@ -434,6 +434,10 @@ public class ParamsMap extends TreeMap<String, Object> {
         return this.$int(PAGE_SIZE, 0) > 0;
     }
 
+    public boolean hasTotalCount() {
+        return this.containsKey(TOTAL_COUNT);
+    }
+
     public boolean hasOrderBy() {
         String orderBy = this.$(ORDER_BY, null);
         return !(orderBy == null || orderBy.trim().length() == 0);

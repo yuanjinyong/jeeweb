@@ -30,7 +30,7 @@ var VueGrid = {
       getPermissions: null,
       params: {
         orderBy: null,
-        totalCount: -1
+        totalCount: null
       }
     },
     animateRows: true,
@@ -259,7 +259,7 @@ var VueGrid = {
     buildFilter (gridParams) {
       let filters = {}
       for (let key in gridParams.filterModel) {
-        gridParams.context.params.totalCount = -1 // TODO 这里需要优化，当只有页码变更时，这会导致设置成-1，从而导致后台查询总数。
+        gridParams.context.params.totalCount = null // TODO 这里需要优化，当只有页码变更时，这会导致设置成-1，从而导致后台查询总数。
 
         let where = gridParams.filterModel[key]
         if ((where.type === 'in' || where.type === 'notIn') && !(where.filter && where.filter.length > 0)) {
@@ -334,7 +334,7 @@ var VueGrid = {
             gridParams.successCallback(response.body.data.items, response.body.data.totalCount)
           } else {
             // gridParams.failCallback()
-            gridParams.context.params.totalCount = -1
+            gridParams.context.params.totalCount = null
             gridParams.successCallback([], 0)
           }
           if (gridParams.context.params.totalCount === 0) {
@@ -342,12 +342,12 @@ var VueGrid = {
           }
         }, (response) => {
           // gridParams.failCallback()
-          gridParams.context.params.totalCount = -1
+          gridParams.context.params.totalCount = null
           gridParams.successCallback([], 0)
           gridOptions.api.showNoRowsOverlay()
         })
       } else {
-        gridParams.context.params.totalCount = -1
+        gridParams.context.params.totalCount = null
         gridParams.successCallback([], 0)
         gridOptions.api.showNoRowsOverlay()
         Vue.prototype.$alert('请通过gridOptions.context.url配置项设置加载数据的URL地址！', '错误', {
@@ -360,9 +360,9 @@ var VueGrid = {
       // console.log('getRows4Normal', typeof this.api)
       let gridOptions = this
       if (gridOptions.context.url) {
-        gridOptions.context.params.totalCount = -1
+        gridOptions.context.params.totalCount = null
         if (gridOptions.context.params.tree) {
-          gridOptions.context.params.totalCount = null
+          delete gridOptions.context.params.totalCount
         }
         gridOptions.api.showLoadingOverlay()
         Vue.http.get(gridOptions.context.url, {params: Object.assign({}, gridOptions.context.params)}).then((response) => {
@@ -371,12 +371,12 @@ var VueGrid = {
             gridOptions.context.params.totalCount = response.body.data.totalCount
             gridOptions.api.setRowData(response.body.data.items)
           } else {
-            gridOptions.context.params.totalCount = -1
+            gridOptions.context.params.totalCount = null
             gridOptions.api.setRowData([])
           }
         }, (response) => {
           gridOptions.api.hideOverlay()
-          gridOptions.context.params.totalCount = -1
+          gridOptions.context.params.totalCount = null
           gridOptions.api.setRowData([])
         })
       }
@@ -394,7 +394,7 @@ var VueGrid = {
     },
     reload (params) {
       let gridOptions = this
-      Vue.lodash.merge(gridOptions.context.params, params, {totalCount: -1})
+      Vue.lodash.merge(gridOptions.context.params, params, {totalCount: null})
       if (gridOptions.rowModelType === 'inMemory') {
         gridOptions.getRows4Normal()
       } else {

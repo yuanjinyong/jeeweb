@@ -232,7 +232,7 @@
         })
       },
       _refreshGrid () {
-        this.gridOptions.context.params.totalCount = -1
+        this.gridOptions.context.params.totalCount = null
         this.gridOptions.api.setDatasource(this.gridOptions.datasource)
       }
     }
