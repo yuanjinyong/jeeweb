@@ -149,7 +149,7 @@
     </update>
 
     <!-- delete -->
-    <select id="isCanDeleteEntity" parameterType="java.lang.String" resultType="java.lang.Integer">
+    <select id="isCanDeleteEntity" parameterType="java.lang.String" resultType="java.lang.Long">
         SELECT 0 FROM DUAL
     </select>
     <delete id="deleteEntity" parameterType="java.lang.String">

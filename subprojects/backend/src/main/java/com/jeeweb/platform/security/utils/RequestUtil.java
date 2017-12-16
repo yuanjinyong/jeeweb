@@ -16,6 +16,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
+import com.jeeweb.framework.business.enums.Enums;
 import com.jeeweb.platform.sys.entity.UrlEntity;
 
 /**
@@ -75,8 +76,10 @@ public final class RequestUtil {
         if (method != null) {
             entity.setF_handler_method(method.getMethod().toString());
         }
-        entity.setF_is_log("[]".equals(entity.getF_methods()) || "[GET]".equals(entity.getF_methods()) ? 2 : 1);
-        entity.setF_is_auto(1);
+        entity.setF_is_log(
+                "[]".equals(entity.getF_methods()) || "[GET]".equals(entity.getF_methods()) ? Enums.FALSE
+                        : Enums.TRUE);
+        entity.setF_is_auto(Enums.TRUE);
 
         entity.setF_id(entity.generateF_id());
 

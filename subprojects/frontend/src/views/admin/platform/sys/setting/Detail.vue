@@ -15,8 +15,8 @@
       </el-form-item>
       <el-form-item class="jw-field jw-field-1" label="显示" prop="f_is_editable">
         <el-radio-group v-model="entity.f_is_editable">
-          <el-radio :label="1">是</el-radio>
-          <el-radio :label="2">否</el-radio>
+          <el-radio :label="101">是</el-radio>
+          <el-radio :label="102">否</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item class="jw-field jw-field-1" label="出厂值" prop="f_init_value">
@@ -53,7 +53,7 @@
               f_name: null,
               f_desc: null,
               f_order: 999999999,
-              f_is_editable: 1,
+              f_is_editable: 101,
               f_field_type: 'String',
               f_field_cfg: null,
               f_init_value: null,

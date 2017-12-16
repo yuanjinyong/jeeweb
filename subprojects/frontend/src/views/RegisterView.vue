@@ -43,9 +43,9 @@
                   </el-form-item>
                   <el-form-item class="jw-field jw-field-1" label="企业类型" prop="f_type">
                     <el-select v-model="company.f_type" disabled>
-                      <el-option :value="1" :label="'施工方'"></el-option>
-                      <el-option :value="2" :label="'供应商'"></el-option>
-                      <el-option :value="3" :label="'业主'"></el-option>
+                      <el-option :value="101" :label="'施工方'"></el-option>
+                      <el-option :value="102" :label="'供应商'"></el-option>
+                      <el-option :value="103" :label="'业主'"></el-option>
                     </el-select>
                   </el-form-item>
                   <el-form-item class="jw-field jw-field-2" label="地址" prop="f_address">
@@ -104,9 +104,9 @@
                   </el-form-item>
                   <el-form-item class="jw-field jw-field-1" label="企业类型" prop="f_type">
                     <el-select v-model="company.f_type" disabled>
-                      <el-option :value="1" :label="'施工方'"></el-option>
-                      <el-option :value="2" :label="'供应商'"></el-option>
-                      <el-option :value="3" :label="'业主'"></el-option>
+                      <el-option :value="101" :label="'施工方'"></el-option>
+                      <el-option :value="102" :label="'供应商'"></el-option>
+                      <el-option :value="103" :label="'业主'"></el-option>
                     </el-select>
                   </el-form-item>
                   <el-form-item class="jw-field jw-field-2" label="地址" prop="f_address">
@@ -143,7 +143,7 @@
         activeCollapses: ['company', 'creator'],
         company: {
           f_name: null,
-          f_type: 1, // 类型，1、施工方；2、供应商；3、业主
+          f_type: 101, // 类型：101、施工方；102、供应商；103、业主
           f_address: null,
           f_desc: null,
           creator: {

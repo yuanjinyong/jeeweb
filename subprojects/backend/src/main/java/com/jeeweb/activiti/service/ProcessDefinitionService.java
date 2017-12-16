@@ -19,11 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jeeweb.activiti.entity.ProcessDefinitionEntity;
 import com.jeeweb.framework.business.mapper.BaseMapper;
+import com.jeeweb.framework.business.model.IUser;
 import com.jeeweb.framework.core.exception.BusinessException;
 import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.platform.security.utils.SecurityUtil;
-import com.jeeweb.platform.sys.entity.UserEntity;
 
 @Service
 @Transactional
@@ -95,7 +95,7 @@ public class ProcessDefinitionService extends ActivitiService<String, ProcessDef
         LOG.info("启动[{}]流程：varables={}。", processDefinitionId, varables);
 
         // 设置流程发起人
-        UserEntity user = SecurityUtil.getCurUser();
+        IUser user = SecurityUtil.getCurUser();
         identityService.setAuthenticatedUserId(user.getF_id().toString());
 
         ProcessInstance processInstance = formService.submitStartFormData(processDefinitionId, varables);
@@ -119,7 +119,7 @@ public class ProcessDefinitionService extends ActivitiService<String, ProcessDef
         LOG.info("启动[{}]流程：varables={}。", processDefinitionKey, varables);
 
         // 设置流程发起人
-        UserEntity user = SecurityUtil.getCurUser();
+        IUser user = SecurityUtil.getCurUser();
         identityService.setAuthenticatedUserId(user.getF_id().toString());
 
         // 找出租户部署的最高版本的流程定义

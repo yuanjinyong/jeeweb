@@ -30,14 +30,14 @@
       </el-form-item>
       <el-form-item class="jw-field jw-field-1" label="记录日志" prop="f_is_log">
         <el-radio-group v-model="entity.f_is_log">
-          <el-radio :label="1" disabled>是</el-radio>
-          <el-radio :label="2" disabled>否</el-radio>
+          <el-radio :label="101" disabled>是</el-radio>
+          <el-radio :label="102" disabled>否</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item class="jw-field jw-field-1" label="扫描生成" prop="f_is_auto">
         <el-radio-group v-model="entity.f_is_auto">
-          <el-radio :label="1" disabled>是</el-radio>
-          <el-radio :label="2" disabled>否</el-radio>
+          <el-radio :label="101" disabled>是</el-radio>
+          <el-radio :label="102" disabled>否</el-radio>
         </el-radio-group>
       </el-form-item>
     </template>

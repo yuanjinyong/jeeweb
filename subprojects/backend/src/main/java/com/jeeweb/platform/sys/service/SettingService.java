@@ -19,7 +19,7 @@ import com.jeeweb.platform.sys.mapper.SettingMapper;
 
 @Service
 @Transactional
-public class SettingService extends BaseService<Integer, SettingEntity> {
+public class SettingService extends BaseService<Long, SettingEntity> {
     // private static final Logger LOG = LoggerFactory.getLogger(SettingService.class);
     @Autowired
     private SettingMapper settingMapper;
@@ -27,7 +27,7 @@ public class SettingService extends BaseService<Integer, SettingEntity> {
     // private JsonRedisTemplate<SettingEntity> jsonRedisTemplate;
 
     @Override
-    protected BaseMapper<Integer, SettingEntity> getMapper() {
+    protected BaseMapper<Long, SettingEntity> getMapper() {
         return settingMapper;
     }
 

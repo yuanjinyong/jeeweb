@@ -29,14 +29,14 @@
       </el-form-item>
       <el-form-item class="jw-field jw-field-1" label="状态" prop="f_status">
         <el-radio-group v-model="entity.f_status">
-          <el-radio :label="1">启用</el-radio>
-          <el-radio :label="2">禁用</el-radio>
+          <el-radio :label="101">启用</el-radio>
+          <el-radio :label="102">禁用</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item class="jw-field jw-field-1" label="适用平台">
-        <el-checkbox v-model="entity.f_is_web" :true-label="1" :false-label="2">Web</el-checkbox>
-        <el-checkbox v-model="entity.f_is_android" :true-label="1" :false-label="2">Android</el-checkbox>
-        <el-checkbox v-model="entity.f_is_ios" :true-label="1" :false-label="2">IOS</el-checkbox>
+        <el-checkbox v-model="entity.f_is_web" :true-label="101" :false-label="102">Web</el-checkbox>
+        <el-checkbox v-model="entity.f_is_android" :true-label="101" :false-label="102">Android</el-checkbox>
+        <el-checkbox v-model="entity.f_is_ios" :true-label="101" :false-label="102">IOS</el-checkbox>
       </el-form-item>
       <el-form-item class="jw-field jw-field-3" label="路由路径" prop="f_route_path" v-show="entity.f_type === 2">
         <el-input v-model="entity.f_route_path"></el-input>
@@ -139,10 +139,10 @@
               f_parent_path: parentEntity.f_parent_path + parentEntity.f_id + '/',
               f_type: parentEntity.f_type + 1,
               f_order: order,
-              f_status: 1,
-              f_is_web: 1,
-              f_is_android: 1,
-              f_is_ios: 1,
+              f_status: 101,
+              f_is_web: 101,
+              f_is_android: 101,
+              f_is_ios: 101,
               urlList: []
             }
 

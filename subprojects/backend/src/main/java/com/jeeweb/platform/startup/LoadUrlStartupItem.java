@@ -16,6 +16,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import com.jeeweb.framework.business.enums.Enums;
 import com.jeeweb.framework.core.listener.Startup;
 import com.jeeweb.framework.core.listener.StartupItem;
 import com.jeeweb.framework.core.model.ParamsMap;
@@ -40,7 +41,7 @@ public class LoadUrlStartupItem implements StartupItem {
         List<UrlEntity> entityList = new ArrayList<>();
         entityList.addAll(buildUrlEntityList(ac.getBean(RequestMappingHandlerMapping.class).getHandlerMethods()));
         entityList.addAll(buildUrlEntityList(ac.getBean(EndpointHandlerMapping.class).getHandlerMethods()));
-        urlService.deleteEntities(new ParamsMap("f_auto", true));
+        urlService.deleteEntities(new ParamsMap("f_auto", Enums.TRUE));
         urlService.insertEntities(entityList);
     }
 

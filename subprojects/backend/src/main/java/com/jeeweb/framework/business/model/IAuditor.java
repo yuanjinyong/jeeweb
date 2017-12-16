@@ -10,35 +10,9 @@ import java.sql.Timestamp;
  *
  */
 public interface IAuditor extends ICancel {
+    Long getF_auditor_id();
 
-    /**
-     * 1 新建
-     */
-    public static final Integer STATUS_NEW = 1;
-
-    /**
-     * 2 待审核
-     */
-    public static final Integer STATUS_PENDING = 2;
-
-    /**
-     * 3 正常、已审核、审核通过
-     */
-    public static final Integer STATUS_APPROVED = 3;
-
-    /**
-     * 4 拒绝、审核未通过
-     */
-    public static final Integer STATUS_REJECTED = 4;
-
-    /**
-     * 5 取消
-     */
-    public static final Integer STATUS_CANCEL = 5;
-
-    Integer getF_auditor_id();
-
-    void setF_auditor_id(Integer f_auditor_id);
+    void setF_auditor_id(Long f_auditor_id);
 
     String getF_auditor_name();
 
@@ -52,7 +26,9 @@ public interface IAuditor extends ICancel {
 
     void setF_audited_comments(String f_audited_comments);
 
+    @Override
     Integer getF_status();
 
+    @Override
     void setF_status(Integer f_status);
 }

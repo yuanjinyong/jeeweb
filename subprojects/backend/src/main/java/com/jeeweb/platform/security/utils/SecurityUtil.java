@@ -1,5 +1,6 @@
 package com.jeeweb.platform.security.utils;
 
+import com.jeeweb.framework.business.model.IUser;
 import com.jeeweb.framework.core.exception.BusinessException;
 import com.jeeweb.platform.security.context.TokenContextHolder;
 import com.jeeweb.platform.security.context.UserContextHolder;
@@ -10,17 +11,17 @@ public class SecurityUtil {
         return TokenContextHolder.getContext();
     }
 
-    public static Integer getCurUserId() {
+    public static Long getCurUserId() {
         return getCurUser().getF_id();
     }
 
-    public static UserEntity getCurUser() {
-        UserEntity userEntity = getCurUser(null);
-        if (userEntity == null) {
+    public static IUser getCurUser() {
+        IUser user = getCurUser(null);
+        if (user == null) {
             throw new BusinessException("获取用户信息失败，请先登录！");
         }
 
-        return userEntity;
+        return user;
     }
 
     public static UserEntity getCurUser(UserEntity defaultValue) {

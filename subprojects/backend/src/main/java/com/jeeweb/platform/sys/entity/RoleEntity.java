@@ -3,17 +3,17 @@ package com.jeeweb.platform.sys.entity;
 import com.jeeweb.framework.business.entity.BaseEntity;
 import com.jeeweb.framework.business.model.IPreset;
 
-public class RoleEntity extends BaseEntity<Integer> implements IPreset {
-    public static final Integer ID_ADMIN_SYS = 1; // 系统管理员角色
-    public static final Integer ID_NORMAL_USER = 2; // 普通用户角色
-    public static final Integer ID_ADMIN_PLATFORM = 3; // 平台管理员角色
-    public static final Integer ID_ADMIN_COMPANY = 4; // 企业管理员角色
+public class RoleEntity extends BaseEntity<Long> implements IPreset {
+    public static final Long ID_ADMIN_SYS = 1L; // 系统管理员角色
+    public static final Long ID_NORMAL_USER = 2L; // 普通用户角色
+    public static final Long ID_ADMIN_PLATFORM = 3L; // 平台管理员角色
+    public static final Long ID_ADMIN_COMPANY = 4L; // 企业管理员角色
 
     private static final long serialVersionUID = 5663590213239944053L;
 
     private String f_name;// 角色名称
     private String f_desc;// 角色描述
-    private Integer f_is_preset;// 是否系统预置，1、系统预置；2、操作员创建
+    private Integer f_is_preset;// 是否系统预置：101、系统预置；102、操作员创建
     private String f_remark;// 角色描述
 
     public String getF_name() {

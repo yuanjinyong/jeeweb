@@ -34,12 +34,12 @@ import com.jeeweb.platform.sys.service.UserService;
 
 @RestController
 @RequestMapping(value = "/api/platform/sys/users")
-public class UserApi extends BaseApi<Integer, UserEntity> {
+public class UserApi extends BaseApi<Long, UserEntity> {
     @Resource
     private UserService userService;
 
     @Override
-    protected BaseService<Integer, UserEntity> getService() {
+    protected BaseService<Long, UserEntity> getService() {
         return userService;
     }
 
@@ -61,17 +61,17 @@ public class UserApi extends BaseApi<Integer, UserEntity> {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseResult get(@PathVariable("id") Integer primaryKey) {
+    public ResponseResult get(@PathVariable("id") Long primaryKey) {
         return super.getEntity(primaryKey);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseResult update(@PathVariable("id") Integer primaryKey, @RequestBody UserEntity entity) {
+    public ResponseResult update(@PathVariable("id") Long primaryKey, @RequestBody UserEntity entity) {
         return super.updateEntity(primaryKey, entity);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseResult delete(@PathVariable("id") Integer primaryKey) {
+    public ResponseResult delete(@PathVariable("id") Long primaryKey) {
         // return super.deleteEntity(primaryKey);
         // 这里改为注销，不是普通的物理删除。
         userService.deregisterUser(primaryKey);
@@ -113,26 +113,26 @@ public class UserApi extends BaseApi<Integer, UserEntity> {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @RequestMapping(value = "/{id}/menus", method = RequestMethod.GET)
-    public ResponseResult listMenu(@PathVariable("id") Integer primaryKey) {
+    public ResponseResult listMenu(@PathVariable("id") Long primaryKey) {
         RowMap menuMap = userService.selectUserMenuList(primaryKey);
         return new ResponseResult(new Result(menuMap), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}/menus", method = RequestMethod.POST)
-    public ResponseResult saveMenu(@PathVariable("id") Integer primaryKey) {
+    public ResponseResult saveMenu(@PathVariable("id") Long primaryKey) {
         userService.updateUserMenuList(primaryKey, HelpUtil.splitToList($("distMenuIds")),
                 HelpUtil.splitToList($("authMenuIds")));
         return new ResponseResult(new Result(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}/unlock", method = RequestMethod.POST)
-    public ResponseResult unlock(@PathVariable("id") Integer primaryKey) {
+    public ResponseResult unlock(@PathVariable("id") Long primaryKey) {
         userService.unlockUser(primaryKey);
         return new ResponseResult(new Result(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}/reset/password", method = RequestMethod.POST)
-    public ResponseResult resetPassword(@PathVariable("id") Integer primaryKey) {
+    public ResponseResult resetPassword(@PathVariable("id") Long primaryKey) {
         userService.resetPassword(primaryKey);
         return new ResponseResult(new Result(), HttpStatus.OK);
     }

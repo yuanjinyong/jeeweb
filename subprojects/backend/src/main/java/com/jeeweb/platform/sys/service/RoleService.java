@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jeeweb.framework.business.enums.Enums;
 import com.jeeweb.framework.business.mapper.BaseMapper;
 import com.jeeweb.framework.business.service.BaseService;
 import com.jeeweb.framework.core.exception.BusinessException;
@@ -22,19 +23,19 @@ import com.jeeweb.platform.sys.utils.SysUtil;
 
 @Service
 @Transactional
-public class RoleService extends BaseService<Integer, RoleEntity> {
+public class RoleService extends BaseService<Long, RoleEntity> {
     @Autowired
     private RoleMapper roleMapper;
     @Autowired
     private RoleMenuMapper roleMenuMapper;
 
     @Override
-    protected BaseMapper<Integer, RoleEntity> getMapper() {
+    protected BaseMapper<Long, RoleEntity> getMapper() {
         return roleMapper;
     }
 
     @Override
-    public void deleteEntity(Integer primaryKey) {
+    public void deleteEntity(Long primaryKey) {
         // 先删除角色下关联的菜单
         deleteRoleMenu(primaryKey);
 
@@ -55,10 +56,10 @@ public class RoleService extends BaseService<Integer, RoleEntity> {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Transactional(readOnly = true)
-    public RowMap selectRoleMenuList(Integer roleId) {
+    public RowMap selectRoleMenuList(Long roleId) {
         ParamsMap params = new ParamsMap();
         params.put("f_role_id", roleId);
-        params.put("f_status", 1);
+        params.put("f_status", Enums.ENABLE);
         params.put("orderBy", "f_parent_path,f_order");
         SysUtil.appendCurUserAndRoles(params);
         List<RowMap> distMenus = TreeUtil.listToTree(roleMenuMapper.selectDistMenuListPage(params), "f_id");
@@ -66,7 +67,7 @@ public class RoleService extends BaseService<Integer, RoleEntity> {
         return new RowMap("distMenus", distMenus).put("authMenus", authMenus);
     }
 
-    public void updateRoleMenuList(Integer f_role_id, List<String> distMenuIds, List<String> authMenuIds) {
+    public void updateRoleMenuList(Long f_role_id, List<String> distMenuIds, List<String> authMenuIds) {
         // 只有超级管理员账号才能给系统管理员角色授权
         if (f_role_id == RoleEntity.ID_ADMIN_SYS && !SecurityUtil.getCurUser().isSuperAdmin()) {
             throw new BusinessException("系统管理员角色的授权不能被修改！");
@@ -79,7 +80,7 @@ public class RoleService extends BaseService<Integer, RoleEntity> {
         insertRoleMenu(f_role_id, distMenuIds, authMenuIds);
     }
 
-    private void insertRoleMenu(Integer f_role_id, List<String> distMenuIds, List<String> authMenuIds) {
+    private void insertRoleMenu(Long f_role_id, List<String> distMenuIds, List<String> authMenuIds) {
         if (!HelpUtil.isEmpty(distMenuIds)) {
             List<RowMap> roleMenuList = new ArrayList<>();
             for (String f_menu_id : distMenuIds) {
@@ -105,7 +106,7 @@ public class RoleService extends BaseService<Integer, RoleEntity> {
         }
     }
 
-    private void deleteRoleMenu(Integer f_role_id) {
+    private void deleteRoleMenu(Long f_role_id) {
         // 删除角色下关联的菜单
         roleMenuMapper.deleteDistMenus(new ParamsMap("f_role_id", f_role_id));
         roleMenuMapper.deleteAuthMenus(new ParamsMap("f_role_id", f_role_id));

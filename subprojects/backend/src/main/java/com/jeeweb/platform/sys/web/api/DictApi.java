@@ -19,12 +19,12 @@ import com.jeeweb.platform.sys.service.DictService;
 
 @RestController
 @RequestMapping(value = "/api/platform/sys/dicts")
-public class DictApi extends BaseApi<Integer, DictEntity> {
+public class DictApi extends BaseApi<Long, DictEntity> {
     @Resource
     private DictService dictService;
 
     @Override
-    protected BaseService<Integer, DictEntity> getService() {
+    protected BaseService<Long, DictEntity> getService() {
         return dictService;
     }
 
@@ -39,17 +39,17 @@ public class DictApi extends BaseApi<Integer, DictEntity> {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseResult get(@PathVariable("id") Integer primaryKey) {
+    public ResponseResult get(@PathVariable("id") Long primaryKey) {
         return super.getEntity(primaryKey);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseResult update(@PathVariable("id") Integer primaryKey, @RequestBody DictEntity entity) {
+    public ResponseResult update(@PathVariable("id") Long primaryKey, @RequestBody DictEntity entity) {
         return super.updateEntity(primaryKey, entity);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseResult delete(@PathVariable("id") Integer primaryKey) {
+    public ResponseResult delete(@PathVariable("id") Long primaryKey) {
         return super.deleteEntity(primaryKey);
     }
 

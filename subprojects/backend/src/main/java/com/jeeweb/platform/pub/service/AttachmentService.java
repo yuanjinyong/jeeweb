@@ -13,13 +13,13 @@ import com.jeeweb.platform.pub.mapper.AttachmentMapper;
 
 @Service
 @Transactional
-public class AttachmentService extends BaseService<Integer, AttachmentEntity> {
+public class AttachmentService extends BaseService<Long, AttachmentEntity> {
     // private static final Logger LOG = LoggerFactory.getLogger(AttachmentService.class);
     @Autowired
     private AttachmentMapper attachmentMapper;
 
     @Override
-    protected BaseMapper<Integer, AttachmentEntity> getMapper() {
+    protected BaseMapper<Long, AttachmentEntity> getMapper() {
         
         return attachmentMapper;
     }

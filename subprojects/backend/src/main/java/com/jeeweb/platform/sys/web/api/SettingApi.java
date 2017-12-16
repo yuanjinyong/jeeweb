@@ -17,12 +17,12 @@ import com.jeeweb.platform.sys.service.SettingService;
 
 @RestController
 @RequestMapping(value = "/api/platform/sys/settings")
-public class SettingApi extends BaseApi<Integer, SettingEntity> {
+public class SettingApi extends BaseApi<Long, SettingEntity> {
     @Resource
     private SettingService settingService;
 
     @Override
-    protected BaseService<Integer, SettingEntity> getService() {
+    protected BaseService<Long, SettingEntity> getService() {
         return settingService;
     }
 
@@ -37,17 +37,17 @@ public class SettingApi extends BaseApi<Integer, SettingEntity> {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseResult get(@PathVariable("id") Integer primaryKey) {
+    public ResponseResult get(@PathVariable("id") Long primaryKey) {
         return super.getEntity(primaryKey);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseResult update(@PathVariable("id") Integer primaryKey, @RequestBody SettingEntity entity) {
+    public ResponseResult update(@PathVariable("id") Long primaryKey, @RequestBody SettingEntity entity) {
         return super.updateEntity(primaryKey, entity);
     }
 
     @RequestMapping(value = "/{id}/value", method = RequestMethod.PUT)
-    public ResponseResult updateValue(@PathVariable("id") Integer primaryKey, @RequestBody SettingEntity entity) {
+    public ResponseResult updateValue(@PathVariable("id") Long primaryKey, @RequestBody SettingEntity entity) {
         SettingEntity newEntity = new SettingEntity();
         newEntity.setF_id(entity.getF_id());
         newEntity.setF_value(entity.getF_value());
@@ -55,7 +55,7 @@ public class SettingApi extends BaseApi<Integer, SettingEntity> {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseResult delete(@PathVariable("id") Integer primaryKey) {
+    public ResponseResult delete(@PathVariable("id") Long primaryKey) {
         return super.deleteEntity(primaryKey);
     }
 }

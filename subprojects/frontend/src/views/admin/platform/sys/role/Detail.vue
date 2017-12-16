@@ -6,8 +6,8 @@
       </el-form-item>
       <el-form-item class="jw-field jw-field-1" label="系统预置" prop="f_is_preset">
         <el-radio-group v-model="entity.f_is_preset">
-          <el-radio :label="1" disabled>是</el-radio>
-          <el-radio :label="2" disabled>否</el-radio>
+          <el-radio :label="101" disabled>是</el-radio>
+          <el-radio :label="102" disabled>否</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item class="jw-field jw-field-2" label="描述" prop="f_desc">
@@ -35,7 +35,7 @@
             url: 'api/platform/sys/roles'
           },
           createEntity (options, cb) {
-            cb({f_is_preset: 2})
+            cb({f_is_preset: 102})
           }
         },
         entity: {},

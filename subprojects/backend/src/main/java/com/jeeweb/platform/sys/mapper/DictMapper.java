@@ -5,6 +5,6 @@ import com.jeeweb.framework.business.mapper.BaseMapper;
 import com.jeeweb.platform.sys.entity.DictEntity;
 
 
-public interface DictMapper extends BaseMapper<Integer, DictEntity> {
+public interface DictMapper extends BaseMapper<Long, DictEntity> {
 
 }

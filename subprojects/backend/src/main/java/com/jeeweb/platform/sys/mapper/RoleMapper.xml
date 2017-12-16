@@ -53,7 +53,7 @@
 
 
     <!-- select -->
-    <select id="selectEntity" parameterType="java.lang.Integer" resultType="com.jeeweb.platform.sys.entity.RoleEntity">
+    <select id="selectEntity" parameterType="java.lang.Long" resultType="com.jeeweb.platform.sys.entity.RoleEntity">
         <include refid="Select_Clause" />
         <include refid="From_Clause" />
         WHERE t.f_id = #{f_id}
@@ -71,7 +71,7 @@
 
     <!-- insert -->
     <insert id="insertEntity" parameterType="com.jeeweb.platform.sys.entity.RoleEntity">
-        <selectKey resultType="java.lang.Integer" keyProperty="f_id" order="AFTER">
+        <selectKey resultType="java.lang.Long" keyProperty="f_id" order="AFTER">
             SELECT @@IDENTITY
         </selectKey>
         <include refid="Insert_Clause" />
@@ -107,10 +107,10 @@
         SELECT 0 SUB_COUNT, '没有数据关联，可以直接删除。' TIPS FROM DUAL
         ) t WHERE t.SUB_COUNT > 0
     -->
-    <select id="isCanDeleteEntity" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    <select id="isCanDeleteEntity" parameterType="java.lang.Long" resultType="java.lang.Long">
         SELECT COUNT(1) SUB_COUNT FROM t_sys_user_role WHERE f_role_id = #{f_id}
     </select>
-    <delete id="deleteEntity" parameterType="java.lang.Integer">
+    <delete id="deleteEntity" parameterType="java.lang.Long">
         DELETE FROM t_sys_role WHERE f_id=#{f_id}
     </delete>
     <delete id="deleteEntities" parameterType="com.jeeweb.framework.core.model.ParamsMap">

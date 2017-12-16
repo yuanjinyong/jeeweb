@@ -7,7 +7,7 @@ import com.jeeweb.framework.business.entity.BaseEntity;
 import com.jeeweb.framework.business.model.IPreset;
 
 
-public class DictEntity extends BaseEntity<Integer> implements IPreset {
+public class DictEntity extends BaseEntity<Long> implements IPreset {
     private static final long serialVersionUID = 1L;
 
     private String f_code; // 字典组编码
@@ -19,7 +19,7 @@ public class DictEntity extends BaseEntity<Integer> implements IPreset {
     private String f_name_column; // 字典项描述对应数据库表中字段
     private String f_order_column; // 字典项排序对应数据库表中字段
     private String f_where_clause; // 拼接到查询SQL语句中的where条件
-    private Integer f_is_preset; // 是否系统预置，1、是；2、否
+    private Integer f_is_preset; // 是否系统预置：101、是；102、否
     private String f_remark; // 备注
 
     private List<DictItemEntity> itemList; // 字典项列表

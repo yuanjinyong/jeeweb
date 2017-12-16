@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jeeweb.framework.business.entity.TreeNodeEntity;
+import com.jeeweb.framework.business.enums.AuditorStatus;
+import com.jeeweb.framework.business.enums.Enums;
 import com.jeeweb.framework.business.mapper.BaseMapper;
 import com.jeeweb.framework.business.model.IAttachment;
 import com.jeeweb.framework.business.model.IAuditor;
@@ -15,15 +17,16 @@ import com.jeeweb.framework.business.model.ICancel;
 import com.jeeweb.framework.business.model.ICreator;
 import com.jeeweb.framework.business.model.IModifier;
 import com.jeeweb.framework.business.model.IPreset;
+import com.jeeweb.framework.business.model.IUser;
 import com.jeeweb.framework.core.exception.BusinessException;
 import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.service.SuperService;
 import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.platform.pub.entity.AttachmentEntity;
+import com.jeeweb.platform.pub.enums.AttachmentStatus;
 import com.jeeweb.platform.pub.mapper.AttachmentMapper;
 import com.jeeweb.platform.security.utils.SecurityUtil;
-import com.jeeweb.platform.sys.entity.UserEntity;
 
 public abstract class BaseService<P, E> extends SuperService {
     protected Logger log = LoggerFactory.getLogger(this.getClass());
@@ -128,7 +131,7 @@ public abstract class BaseService<P, E> extends SuperService {
 
     protected void fillModifier(E entity) {
         if (entity instanceof IModifier) {
-            UserEntity user = SecurityUtil.getCurUser();
+            IUser user = SecurityUtil.getCurUser();
             IModifier modifier = (IModifier) entity;
             modifier.setF_modifier_id(user.getF_id());
             modifier.setF_modifier_name(user.getF_name());
@@ -138,7 +141,7 @@ public abstract class BaseService<P, E> extends SuperService {
 
     protected <T> void fillCreator(T entity) {
         if (entity instanceof ICreator) {
-            UserEntity user = SecurityUtil.getCurUser();
+            IUser user = SecurityUtil.getCurUser();
             ICreator creator = (ICreator) entity;
             creator.setF_creator_id(user.getF_id());
             creator.setF_creator_name(user.getF_name());
@@ -149,7 +152,7 @@ public abstract class BaseService<P, E> extends SuperService {
     protected void fillPreset(E entity) {
         if (entity instanceof IPreset) {
             IPreset preset = (IPreset) entity;
-            preset.setF_is_preset(IPreset.NO); // 系统预置数据是不能通过程序来修改的，这里能够写入的数据都不是系统预置的。
+            preset.setF_is_preset(Enums.FALSE); // 系统预置数据是不能通过程序来修改的，这里能够写入的数据都不是系统预置的。
         }
     }
 
@@ -158,7 +161,8 @@ public abstract class BaseService<P, E> extends SuperService {
             IAttachment attachment = (IAttachment) entity;
             String f_id_in = attachment.getF_attachment_ids();
             if (!HelpUtil.isEmpty(f_id_in)) {
-                ParamsMap params = new ParamsMap("f_id_in", f_id_in).put("f_status_in", "2,3");
+                ParamsMap params = new ParamsMap("f_id_in", f_id_in).put("f_status_in",
+                        HelpUtil.joinToInString(AttachmentStatus.ARCHIVED, AttachmentStatus.UPLOADED));
                 attachment.setAttachmentList(attachmentMapper.selectEntityListPage(params));
             }
 
@@ -173,16 +177,17 @@ public abstract class BaseService<P, E> extends SuperService {
             IAttachment businessEntity = (IAttachment) entity;
             String f_id_in = businessEntity.getF_attachment_ids();
             if (!HelpUtil.isEmpty(f_id_in)) {
-                ParamsMap params = new ParamsMap("f_id_in", f_id_in).put("f_status_in", "1,4");
+                ParamsMap params = new ParamsMap("f_id_in", f_id_in).put("f_status_in",
+                        HelpUtil.joinToInString(AttachmentStatus.INIT, AttachmentStatus.PREDELETE));
                 List<AttachmentEntity> attachmentList = attachmentMapper.selectEntityListPage(params);
                 for (AttachmentEntity attachmentEntity : attachmentList) {
                     if (!HelpUtil.isEmpty(attachmentEntity.getF_local_path())) {
                         attachmentEntity.setF_entity_name(businessEntity.getClass().getName());
                         attachmentEntity.setF_entity_id(businessEntity.getF_id());
-                        attachmentEntity.setF_status(AttachmentEntity.STATUS_ARCHIVED);
+                        attachmentEntity.setF_status(AttachmentStatus.ARCHIVED);
                     }
                     if (!HelpUtil.isEmpty(attachmentEntity.getF_remote_path())) {
-                        attachmentEntity.setF_status(AttachmentEntity.STATUS_UPLOADED);
+                        attachmentEntity.setF_status(AttachmentStatus.UPLOADED);
                     }
                     attachmentMapper.updateEntity(attachmentEntity);
                 }
@@ -203,7 +208,7 @@ public abstract class BaseService<P, E> extends SuperService {
             List<AttachmentEntity> attachmentList = selectAttachmentList(selectEntity(primaryKey));
             if (!HelpUtil.isEmpty(attachmentList)) {
                 for (AttachmentEntity attachmentEntity : attachmentList) {
-                    attachmentEntity.setF_status(AttachmentEntity.STATUS_PREDELETE);
+                    attachmentEntity.setF_status(AttachmentStatus.PREDELETE);
                     attachmentMapper.updateEntity(attachmentEntity);
                 }
             }
@@ -223,7 +228,7 @@ public abstract class BaseService<P, E> extends SuperService {
     protected void checkPresetForDelete(E entity) {
         if (entity instanceof IPreset) {
             IPreset preset = (IPreset) entity;
-            if (preset.getF_is_preset() == IPreset.YES) {
+            if (Enums.$true(preset.getF_is_preset())) {
                 throw new BusinessException("系统预置数据，不能删除！");
             }
         }
@@ -237,16 +242,16 @@ public abstract class BaseService<P, E> extends SuperService {
         E oldEntity = getMapper().selectEntity(primaryKey);
         IAuditor auditor = (IAuditor) entity;
         IAuditor oldAuditor = (IAuditor) oldEntity;
-        if (oldAuditor.getF_status() != IAuditor.STATUS_PENDING
-                && oldAuditor.getF_status() != IAuditor.STATUS_REJECTED) {
+        if (!AuditorStatus.PENDING.equals(oldAuditor.getF_status())
+                && !AuditorStatus.REJECTED.equals(oldAuditor.getF_status())) {
             throw new BusinessException("只有待审批和驳回的申请才可进行审批！");
         }
-        if (auditor.getF_status() == IAuditor.STATUS_REJECTED && HelpUtil.isEmpty(auditor.getF_audited_comments())) {
+        if (AuditorStatus.REJECTED.equals(auditor.getF_status()) && HelpUtil.isEmpty(auditor.getF_audited_comments())) {
             throw new BusinessException("驳回时，必须填写审批意见！");
         }
         checkAuditor(oldEntity);
 
-        UserEntity user = SecurityUtil.getCurUser();
+        IUser user = SecurityUtil.getCurUser();
         oldAuditor.setF_auditor_id(user.getF_id());
         oldAuditor.setF_auditor_name(user.getF_name());
         oldAuditor.setF_audited_time(HelpUtil.getNowTime());
@@ -269,8 +274,8 @@ public abstract class BaseService<P, E> extends SuperService {
 
         if (entity instanceof IAuditor) {
             IAuditor auditor = (IAuditor) entity;
-            if (!(IAuditor.STATUS_PENDING == auditor.getF_status()
-                    || IAuditor.STATUS_REJECTED == auditor.getF_status())) {
+            if (!(AuditorStatus.PENDING.equals(auditor.getF_status())
+                    || AuditorStatus.REJECTED.equals(auditor.getF_status()))) {
                 throw new BusinessException("只有待审核和审核未通过的记录才可以取消！");
             }
         }

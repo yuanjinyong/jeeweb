@@ -10,9 +10,9 @@ import java.sql.Timestamp;
  *
  */
 public interface ICreator {
-    Integer getF_creator_id();
+    Long getF_creator_id();
 
-    void setF_creator_id(Integer f_creator_id);
+    void setF_creator_id(Long f_creator_id);
 
     String getF_creator_name();
 

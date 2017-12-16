@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jeeweb.framework.business.enums.BooleanEnum;
+import com.jeeweb.framework.business.enums.Enums;
 import com.jeeweb.framework.business.mapper.BaseMapper;
 import com.jeeweb.framework.business.service.BaseService;
 import com.jeeweb.framework.core.exception.BusinessException;
@@ -58,7 +58,7 @@ public class CodeGenerateService extends BaseService<Long, GenerateRuleEntity> {
 
         entity.setTableList(selectTableEntities(new ParamsMap("f_rule_id", entity.getF_id()).setOrderBy("f_order")));
         for (GenerateRuleTableEntity table : entity.getTableList()) {
-            if (BooleanEnum.$true(table.getF_is_main())) {
+            if (Enums.$true(table.getF_is_main())) {
                 entity.setMainTable(table);
                 break;
             }
@@ -105,7 +105,7 @@ public class CodeGenerateService extends BaseService<Long, GenerateRuleEntity> {
             table.setFieldList(generateRuleFieldMapper
                     .selectEntityListPage(new ParamsMap("f_table_id", table.getF_id()).setOrderBy("f_order")));
             for (GenerateRuleFieldEntity field : table.getFieldList()) {
-                if (BooleanEnum.$true(field.getF_is_primary())) {
+                if (Enums.$true(field.getF_is_primary())) {
                     table.setPrimaryField(field);
                     break;
                 }

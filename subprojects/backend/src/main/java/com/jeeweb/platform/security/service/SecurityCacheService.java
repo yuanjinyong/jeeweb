@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.util.UrlPathHelper;
 
+import com.jeeweb.framework.business.enums.Enums;
 import com.jeeweb.framework.core.model.ParamsMap;
 import com.jeeweb.framework.core.model.RowMap;
 import com.jeeweb.framework.core.utils.HelpUtil;
@@ -31,6 +32,8 @@ import com.jeeweb.platform.security.utils.RequestUtil;
 import com.jeeweb.platform.sys.entity.MenuEntity;
 import com.jeeweb.platform.sys.entity.UrlEntity;
 import com.jeeweb.platform.sys.entity.UserEntity;
+import com.jeeweb.platform.sys.enums.MenuType;
+import com.jeeweb.platform.sys.enums.UserStatus;
 import com.jeeweb.platform.sys.mapper.MenuUrlMapper;
 import com.jeeweb.platform.sys.mapper.UserMapper;
 import com.jeeweb.platform.sys.mapper.UserMenuMapper;
@@ -80,7 +83,7 @@ public class SecurityCacheService {
 
     public void loadUrlAuthoritiesCache() {
         List<RowMap> menuUrlMapList = menuUrlMapper
-                .selectRowMapListPage(new ParamsMap("f_status", 1).setOrderBy("f_patterns, f_methods"));
+                .selectRowMapListPage(new ParamsMap("f_status", Enums.ENABLE).setOrderBy("f_patterns, f_methods"));
 
         urlAuthoritiesCache.clear();
 
@@ -103,7 +106,7 @@ public class SecurityCacheService {
 
         for (Map.Entry<String, SecurityUser> entry : securityUserCache.entrySet()) {
             UserEntity user = userMapper.selectUserByAccount(entry.getKey());
-            if (user != null && user.getF_is_can_login() == 1) {
+            if (user != null && Enums.$true(user.getF_is_can_login())) {
                 securityUserCache.put(user.getF_account(), new SecurityUser(user, getUserAuthorities(user)));
             } else {
                 securityUserCache.remove(entry.getKey());
@@ -122,7 +125,7 @@ public class SecurityCacheService {
             if (securityUserCache.containsKey(f_account)) {
                 securityUserCache.remove(f_account);
 
-                if (user.getF_is_can_login() == 1) {
+                if (Enums.$true(user.getF_is_can_login())) {
                     SecurityUser securityUser = new SecurityUser(user, getUserAuthorities(user));
                     securityUserCache.put(securityUser.getUsername(), securityUser);
                 }
@@ -134,15 +137,14 @@ public class SecurityCacheService {
 
     private List<GrantedAuthority> getUserAuthorities(UserEntity user) {
         List<RowMap> roleList = userRoleMapper.selectEntityListPage(new ParamsMap("f_user_id", user.getF_id()));
-        List<Integer> roleIdList = new ArrayList<>();
+        List<Long> roleIdList = new ArrayList<>();
         user.setRoleIdList(roleIdList);
         for (RowMap role : roleList) {
-            roleIdList.add(role.$int("f_role_id", null));
+            roleIdList.add(role.$long("f_role_id", null));
         }
 
-        ParamsMap params = new ParamsMap("f_status", MenuEntity.STATUS_ENABLE);
-        params.put("f_type_in",
-                HelpUtil.joinToInString(MenuEntity.TYPE_PAGE, MenuEntity.TYPE_BUTTON, MenuEntity.TYPE_TOKEN));
+        ParamsMap params = new ParamsMap("f_status", Enums.ENABLE);
+        params.put("f_type_in", HelpUtil.joinToInString(MenuType.PAGE, MenuType.BUTTON, MenuType.TOKEN));
         if (!user.isSuperAdmin()) {
             params.put("f_user_id", user.getF_id());
         }
@@ -216,8 +218,8 @@ public class SecurityCacheService {
             user = userMapper.selectUserByTelephone(f_account);
         }
 
-        if (user != null && user.getF_is_can_login() == 1) {
-            if (user.getF_status() == UserEntity.STATUS_LOCKED) {
+        if (user != null && Enums.$true(user.getF_is_can_login())) {
+            if (UserStatus.LOCKED.equals(user.getF_status())) {
                 LOG.error("账号[{}]已锁定，请联系系统管理员解锁！", f_account);
                 throw new UsernameNotFoundException("账号[" + f_account + "]已锁定，请联系系统管理员解锁");
             }

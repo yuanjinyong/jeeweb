@@ -10,7 +10,7 @@
   export default Vue.extend({
     data () {
       return {
-        value: 2
+        value: 102
       }
     },
     created () {

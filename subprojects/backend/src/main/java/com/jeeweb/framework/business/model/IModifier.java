@@ -10,9 +10,9 @@ import java.sql.Timestamp;
  *
  */
 public interface IModifier {
-    Integer getF_modifier_id();
+    Long getF_modifier_id();
 
-    void setF_modifier_id(Integer f_modifier_id);
+    void setF_modifier_id(Long f_modifier_id);
 
     String getF_modifier_name();
 

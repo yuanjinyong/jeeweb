@@ -9,26 +9,17 @@ public class MenuEntity extends TreeNodeEntity<String, MenuEntity> {
     public static final String ROOT_ID = "ROOT";
     public static final String ROOT_PATH = "/ROOT/";
 
-    public static final Integer TYPE_ROOT = 0;
-    public static final Integer TYPE_FOLDER = 1;
-    public static final Integer TYPE_PAGE = 2;
-    public static final Integer TYPE_BUTTON = 3;
-    public static final Integer TYPE_TOKEN = 4;
-
-    public static final Integer STATUS_ENABLE = 1;
-    public static final Integer STATUS_DISABLE = 2;
-
     private static final long serialVersionUID = -8736669826481868926L;
 
     private String f_name; // 菜单名称
     private String f_desc; // 菜单描述
     private String f_icon; // 图标
-    private Integer f_type; // 类型，1、目录；2、页面；3、按钮；4、令牌
+    private Integer f_type; // 类型：1、目录；2、页面；3、按钮；4、令牌
     private String f_route_path; // 菜单对应的URL，目录和按钮不需要填写，只有对应页面的菜单才需要填写
-    private Integer f_is_web; // Web端是否启用，1启用，2不启用
-    private Integer f_is_android; // Android端是否启用，1启用，2不启用
-    private Integer f_is_ios; // IOS端是否启用，1启用，2不启用
-    private Integer f_status; // 当前站是否启用，1、启用；2、禁用
+    private Integer f_is_web; // Web端是否启用：101启用、102不启用
+    private Integer f_is_android; // Android端是否启用：101启用、102不启用
+    private Integer f_is_ios; // IOS端是否启用：101启用、102不启用
+    private Integer f_status; // 当前站是否启用：101、启用；102、禁用
     private String f_remark; // 备注
     private List<RowMap> urlList; // 页面或者按钮需要访问的URL地址
 

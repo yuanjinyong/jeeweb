@@ -4,14 +4,14 @@ package com.jeeweb.platform.sys.entity;
 import com.jeeweb.framework.business.entity.BaseEntity;
 
 
-public class SettingEntity extends BaseEntity<Integer> {
+public class SettingEntity extends BaseEntity<Long> {
     private static final long serialVersionUID = 1L;
 
     private String f_code; // 编码
     private String f_name; // 名称
     private String f_desc; // 描述
     private Integer f_order; // 排序
-    private Integer f_is_editable; // 是否开放给客户编辑，1、是；2、否
+    private Integer f_is_editable; // 是否开放给客户编辑：101、是；102、否
     private String f_field_type; // 输入控件类型，比如varchar，int，decimal，datetime，dict
     private String f_field_cfg; // 输入控件配置
     private String f_init_value; // 出厂值

@@ -106,7 +106,7 @@
         headerName: '系统预置',
         field: 'f_is_preset',
         type: 'DictRender',
-        cellRendererParams: {dict: 'YesNo2'},
+        cellRendererParams: {dict: 'TrueFalse'},
         width: 75
       }, {
         headerName: '状态',
@@ -169,7 +169,7 @@
             title: '注销用户',
             permission: 'remove',
             isDisabled (params, entity) {
-              return entity.f_status === 3 || entity.f_is_preset === 1
+              return entity.f_status === 103 || entity.f_is_preset === 101
             }
           }, {
             id: 'unlock',
@@ -178,7 +178,7 @@
             icon: 'fa fa-unlock',
             permission: 'unlock',
             isDisabled (params, entity) {
-              return entity.f_status !== 2
+              return entity.f_status !== 102
             },
             onClick (params, entity) {
               params.context.featureComponent.onUnlock(entity)
@@ -190,7 +190,7 @@
             icon: 'fa fa-cog',
             permission: 'resetPassword',
             isDisabled (params, entity) {
-              return entity.f_status === 3 || entity.f_is_preset === 1
+              return entity.f_status === 103 || entity.f_is_preset === 101
             },
             onClick (params, entity) {
               params.context.featureComponent.onResetPassword(entity)

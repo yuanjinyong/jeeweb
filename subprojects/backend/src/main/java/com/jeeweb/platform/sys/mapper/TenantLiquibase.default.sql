@@ -4,8 +4,8 @@
 -- changeset 袁进勇:20170429000001
 -- comment: 创建租户表结构
 CREATE TABLE `t_sys_tenant` (
-  `f_id` int(11) NOT NULL AUTO_INCREMENT,
-  `f_parent_id` int(11) DEFAULT NULL COMMENT '父级租户',
+  `f_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `f_parent_id` bigint(20) DEFAULT NULL COMMENT '父级租户',
   `f_parent_path` varchar(2000) COLLATE utf8_bin NOT NULL COMMENT '树形结构的路径，以“/”开头、分隔和结尾。',
   `f_order` int(11) NOT NULL DEFAULT '10' COMMENT '同一个父级租户下的排序',
   `f_name` varchar(256) COLLATE utf8_bin NOT NULL COMMENT '名称',

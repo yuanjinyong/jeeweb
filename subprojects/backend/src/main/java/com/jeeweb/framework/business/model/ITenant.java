@@ -8,9 +8,9 @@ package com.jeeweb.framework.business.model;
  *
  */
 public interface ITenant {
-    Integer getF_tenant_id();
+    Long getF_tenant_id();
 
-    void setF_tenant_id(Integer f_tenant_id);
+    void setF_tenant_id(Long f_tenant_id);
 
     String getF_tenant_name();
 

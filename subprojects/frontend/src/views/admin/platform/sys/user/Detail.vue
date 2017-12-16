@@ -39,14 +39,14 @@
       </el-form-item>
       <el-form-item class="jw-field jw-field-1" label="允许登录" prop="f_is_can_login">
         <el-radio-group v-model="entity.f_is_can_login" disabled>
-          <el-radio :label="1" disabled>是</el-radio>
-          <el-radio :label="2" disabled>否</el-radio>
+          <el-radio :label="101" disabled>是</el-radio>
+          <el-radio :label="102" disabled>否</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item class="jw-field jw-field-1" label="系统预置" prop="f_is_preset">
         <el-radio-group v-model="entity.f_is_preset" disabled>
-          <el-radio :label="1" disabled>是</el-radio>
-          <el-radio :label="2" disabled>否</el-radio>
+          <el-radio :label="101" disabled>是</el-radio>
+          <el-radio :label="102" disabled>否</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item class="jw-field jw-field-2" label="备注" prop="f_remark">
@@ -82,9 +82,9 @@
           createEntity (options, cb) {
             cb({
               f_department_id: 0,
-              f_is_can_login: 1,
-              f_is_preset: 2,
-              f_status: 1,
+              f_is_can_login: 101,
+              f_is_preset: 102,
+              f_status: 101,
               roleIdList: []
             })
           }

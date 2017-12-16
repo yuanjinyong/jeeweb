@@ -90,7 +90,7 @@
         headerName: '是否预置',
         field: 'f_is_preset',
         type: 'DictRender',
-        cellRendererParams: {dict: 'YesNo2'},
+        cellRendererParams: {dict: 'TrueFalse'},
         width: 75
       }, {
         headerName: '备注',
@@ -126,7 +126,7 @@
             id: 'remove',
             permission: 'remove',
             isDisabled (params, entity) {
-              return entity.f_is_preset === 1
+              return entity.f_is_preset === 101
             }
           }]
         },

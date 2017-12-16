@@ -111,7 +111,7 @@
 
 
     <!-- select -->
-    <select id="selectEntity" parameterType="java.lang.Integer" resultType="com.jeeweb.platform.sys.entity.UserEntity">
+    <select id="selectEntity" parameterType="java.lang.Long" resultType="com.jeeweb.platform.sys.entity.UserEntity">
         <include refid="Select_Clause" />
         <include refid="From_Clause" />
         WHERE t.f_id = #{f_id}
@@ -129,7 +129,7 @@
 
     <!-- insert -->
     <insert id="insertEntity" parameterType="com.jeeweb.platform.sys.entity.UserEntity">
-        <selectKey resultType="java.lang.Integer" keyProperty="f_id" order="AFTER">
+        <selectKey resultType="java.lang.Long" keyProperty="f_id" order="AFTER">
             SELECT @@IDENTITY
         </selectKey>
         <include refid="Insert_Clause" />
@@ -163,10 +163,10 @@
     </update>
 
     <!-- delete -->
-    <select id="isCanDeleteEntity" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    <select id="isCanDeleteEntity" parameterType="java.lang.Long" resultType="java.lang.Long">
         SELECT 1 FROM DUAL
     </select>
-    <delete id="deleteEntity" parameterType="java.lang.Integer">
+    <delete id="deleteEntity" parameterType="java.lang.Long">
         DELETE FROM t_sys_user WHERE f_id=#{f_id}
     </delete>
     <delete id="deleteEntities" parameterType="com.jeeweb.framework.core.model.ParamsMap">
@@ -182,17 +182,17 @@
         tenant.f_name f_tenant_name
         <include refid="From_Clause" />
         LEFT JOIN t_sys_tenant tenant ON tenant.f_id = t.f_tenant_id
-        WHERE t.f_is_can_login = 1 AND t.f_account = #{f_account}
+        WHERE t.f_is_can_login = 101 AND t.f_account = #{f_account}
     </select>
     <select id="selectUserByTelephone" parameterType="java.lang.String" resultType="com.jeeweb.platform.sys.entity.UserEntity">
         <include refid="Select_Clause" />
         <include refid="From_Clause" />
-        WHERE t.f_is_can_login = 1 AND t.f_status = 1 AND t.f_telephone = #{f_telephone}
+        WHERE t.f_is_can_login = 101 AND t.f_status = 101 AND t.f_telephone = #{f_telephone}
     </select>
-    <update id="unlockUser" parameterType="java.lang.Integer">
+    <update id="unlockUser" parameterType="java.lang.Long">
         UPDATE t_sys_user SET
         f_locked_time=null,
-        f_status=1,
+        f_status=101,
         f_id=#{f_id}
         WHERE f_id=#{f_id}
     </update>

@@ -33,6 +33,7 @@ import com.jeeweb.framework.core.model.ResponseResult;
 import com.jeeweb.framework.core.model.Result;
 import com.jeeweb.framework.core.utils.HelpUtil;
 import com.jeeweb.platform.pub.entity.AttachmentEntity;
+import com.jeeweb.platform.pub.enums.AttachmentStatus;
 import com.jeeweb.platform.pub.service.AttachmentService;
 import com.jeeweb.platform.security.utils.SecurityUtil;
 import com.jeeweb.platform.sys.utils.SysUtil;
@@ -156,7 +157,7 @@ public class AttachmentDataApi extends SuperController {
 
     private AttachmentEntity buildAttachmentEntity(int index, FileItem fileItem) {
         String originalFileName = fileItem.getName();
-        Integer f_creator_id = SecurityUtil.getCurUserId();
+        Long f_creator_id = SecurityUtil.getCurUserId();
         Timestamp f_create_time = HelpUtil.getNowTime();
 
         StringBuffer tempFileName = new StringBuffer(HelpUtil.getNowTime("yyyyMM")).append('/')
@@ -167,15 +168,15 @@ public class AttachmentDataApi extends SuperController {
         }
 
         AttachmentEntity entity = new AttachmentEntity();
-        entity.setF_tenant_id(0); // 这里写入0
-                                  // 由具体业务保存时保存对应的租户
+        entity.setF_tenant_id(0L); // 这里写入0
+                                   // 由具体业务保存时保存对应的租户
         // entity.setF_entity_name(""); 由具体业务保存时保存对应的实体名称
         // entity.setF_entity_id(0);由具体业务保存时保存对应的主键ID
         entity.setF_name(originalFileName);
         entity.setF_type(fileItem.getContentType());
         entity.setF_local_path(tempFileName.toString());
         entity.setF_size(fileItem.getSize()); // 文件大小，单位字节
-        entity.setF_status(1); // 这里状态永远设置为1、临时，当表单提交时，由具体的业务侧在表单保存时修改为已归档状态。
+        entity.setF_status(AttachmentStatus.INIT); // 这里状态永远设置为待归档，当表单提交时，由具体的业务侧在表单保存时修改为已归档状态。
         entity.setF_creator_id(f_creator_id);
         entity.setF_created_time(f_create_time);
 
@@ -188,7 +189,7 @@ public class AttachmentDataApi extends SuperController {
     }
 
     @RequestMapping(value = "/{id}/url", method = RequestMethod.GET)
-    public ResponseResult url(@PathVariable("id") Integer primaryKey) {
+    public ResponseResult url(@PathVariable("id") Long primaryKey) {
         AttachmentEntity entity = attachmentService.selectEntity(primaryKey);
         // TODO
         // if (CompanyContext.getCompanyId(0) != entity.getF_company_id()) {
@@ -201,15 +202,15 @@ public class AttachmentDataApi extends SuperController {
     }
 
     @RequestMapping(value = "/{id}/download", method = RequestMethod.GET)
-    public ModelAndView download(@PathVariable("id") Integer primaryKey, HttpServletResponse response) {
+    public ModelAndView download(@PathVariable("id") Long primaryKey, HttpServletResponse response) {
         AttachmentEntity entity = attachmentService.selectEntity(primaryKey);
         // TODO
         // if (CompanyContext.getCompanyId(0) != entity.getF_company_id()) {
         // throw new BusinessException("附件不存在！");
         // }
 
-        if (entity.getF_status() == AttachmentEntity.STATUS_INIT
-                || entity.getF_status() == AttachmentEntity.STATUS_ARCHIVED) {
+        if (AttachmentStatus.INIT.equals(entity.getF_status())
+                || AttachmentStatus.ARCHIVED.equals(entity.getF_status())) {
             return new ModelAndView(new AttachmentView(new File(getAttachmentDir(), entity.getF_local_path()),
                     entity.getF_size(), entity.getF_type(), entity.getF_name()), new HashMap<>());
         } else {

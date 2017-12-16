@@ -15,8 +15,8 @@ CREATE TABLE `t_sys_url` (
   `f_produces` varchar(128) COLLATE utf8_bin DEFAULT NULL,
   `f_custom` varchar(128) COLLATE utf8_bin DEFAULT NULL,
   `f_handler_method` varchar(512) COLLATE utf8_bin DEFAULT NULL COMMENT '处理方法',
-  `f_is_log` int(11) NOT NULL DEFAULT '2' COMMENT '是否记录日志。如查询列表，详情界面等，都不记录，而删除、修改、增加就需要记录',
-  `f_is_auto` int(11) NOT NULL DEFAULT '1' COMMENT '是否自动扫描生成',
+  `f_is_log` tinyint(3) unsigned NOT NULL DEFAULT '102' COMMENT '是否记录日志。如查询列表，详情界面等，都不记录，而删除、修改、增加就需要记录',
+  `f_is_auto` tinyint(3) unsigned NOT NULL DEFAULT '101' COMMENT '是否自动扫描生成',
   PRIMARY KEY (`f_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='URL定义表';
 -- rollback DROP TABLE IF EXISTS t_sys_url;

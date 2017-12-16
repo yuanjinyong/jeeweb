@@ -133,7 +133,7 @@
         headerName: '状态',
         field: 'f_status',
         type: ['DictRender', 'DictFilter'],
-        cellRendererParams: {dict: 'YesNo2'},
+        cellRendererParams: {dict: 'TrueFalse'},
         width: 64
       }, {
         headerName: '备注',

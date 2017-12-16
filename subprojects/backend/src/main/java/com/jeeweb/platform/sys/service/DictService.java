@@ -26,7 +26,7 @@ import com.jeeweb.platform.sys.mapper.DictMapper;
 
 @Service
 @Transactional
-public class DictService extends BaseService<Integer, DictEntity> implements InitializingBean {
+public class DictService extends BaseService<Long, DictEntity> implements InitializingBean {
     private static final Logger LOG = LoggerFactory.getLogger(DictService.class);
 
     @Autowired
@@ -35,13 +35,13 @@ public class DictService extends BaseService<Integer, DictEntity> implements Ini
     private DictItemMapper dictItemMapper;
 
     @Override
-    protected BaseMapper<Integer, DictEntity> getMapper() {
+    protected BaseMapper<Long, DictEntity> getMapper() {
         return dictMapper;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public DictEntity selectEntity(Integer primaryKey) {
+    public DictEntity selectEntity(Long primaryKey) {
         DictEntity entity = getMapper().selectEntity(primaryKey);
         entity.setItemList(
                 selectDictItemList(new ParamsMap("f_dict_code", entity.getF_code()).setOrderBy("f_item_order")));
@@ -57,7 +57,7 @@ public class DictService extends BaseService<Integer, DictEntity> implements Ini
     }
 
     @Override
-    public void updateEntity(Integer primaryKey, DictEntity entity) {
+    public void updateEntity(Long primaryKey, DictEntity entity) {
         deleteDictItemList(entity);
         insertDictItemList(entity);
 
@@ -162,7 +162,7 @@ public class DictService extends BaseService<Integer, DictEntity> implements Ini
 
         int i = 0;
         for (DictItemEntity item : itemList) {
-            item.setF_tenant_id(0);
+            item.setF_tenant_id(0L);
             item.setF_dict_code(dict.getF_code());
             item.setF_item_order(i++);
         }

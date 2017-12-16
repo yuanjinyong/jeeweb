@@ -15,14 +15,14 @@ import com.jeeweb.platform.pub.service.AttachmentService;
 
 @RestController
 @RequestMapping(value = "/api/platform/pub/attachments")
-public class AttachmentApi extends BaseApi<Integer, AttachmentEntity> {
+public class AttachmentApi extends BaseApi<Long, AttachmentEntity> {
     // private static final Logger LOG = LoggerFactory.getLogger(AttachmentApi.class);
 
     @Resource
     private AttachmentService attachmentService;
 
     @Override
-    protected BaseService<Integer, AttachmentEntity> getService() {
+    protected BaseService<Long, AttachmentEntity> getService() {
         return attachmentService;
     }
 
@@ -32,7 +32,7 @@ public class AttachmentApi extends BaseApi<Integer, AttachmentEntity> {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseResult get(@PathVariable("id") Integer primaryKey) {
+    public ResponseResult get(@PathVariable("id") Long primaryKey) {
         return super.getEntity(primaryKey);
     }
 }

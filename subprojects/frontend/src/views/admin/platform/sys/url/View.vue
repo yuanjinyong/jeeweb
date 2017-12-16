@@ -66,7 +66,7 @@
         headerName: '记录日志',
         field: 'f_is_log',
         type: ['DictRender', 'DictFilter'],
-        cellRendererParams: {dict: 'YesNo2'},
+        cellRendererParams: {dict: 'TrueFalse'},
         width: 75
       }, {
         headerName: '后台处理方法',

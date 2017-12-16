@@ -21,12 +21,12 @@ import com.jeeweb.platform.sys.service.RoleService;
 
 @RestController
 @RequestMapping(value = "/api/platform/sys/roles")
-public class RoleApi extends BaseApi<Integer, RoleEntity> {
+public class RoleApi extends BaseApi<Long, RoleEntity> {
     @Resource
     private RoleService roleService;
 
     @Override
-    protected BaseService<Integer, RoleEntity> getService() {
+    protected BaseService<Long, RoleEntity> getService() {
         return roleService;
     }
 
@@ -41,17 +41,17 @@ public class RoleApi extends BaseApi<Integer, RoleEntity> {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseResult get(@PathVariable("id") Integer primaryKey) {
+    public ResponseResult get(@PathVariable("id") Long primaryKey) {
         return super.getEntity(primaryKey);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseResult update(@PathVariable("id") Integer primaryKey, @RequestBody RoleEntity entity) {
+    public ResponseResult update(@PathVariable("id") Long primaryKey, @RequestBody RoleEntity entity) {
         return super.updateEntity(primaryKey, entity);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseResult delete(@PathVariable("id") Integer primaryKey) {
+    public ResponseResult delete(@PathVariable("id") Long primaryKey) {
         return super.deleteEntity(primaryKey);
     }
 
@@ -64,13 +64,13 @@ public class RoleApi extends BaseApi<Integer, RoleEntity> {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @RequestMapping(value = "/{id}/menus", method = RequestMethod.GET)
-    public ResponseResult listMenu(@PathVariable("id") Integer primaryKey) {
+    public ResponseResult listMenu(@PathVariable("id") Long primaryKey) {
         RowMap menuMap = roleService.selectRoleMenuList(primaryKey);
         return new ResponseResult(new Result(menuMap), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}/menus", method = RequestMethod.POST)
-    public ResponseResult saveMenu(@PathVariable("id") Integer primaryKey) {
+    public ResponseResult saveMenu(@PathVariable("id") Long primaryKey) {
         roleService.updateRoleMenuList(primaryKey, HelpUtil.splitToList($("distMenuIds")),
                 HelpUtil.splitToList($("authMenuIds")));
         return new ResponseResult(new Result(), HttpStatus.OK);

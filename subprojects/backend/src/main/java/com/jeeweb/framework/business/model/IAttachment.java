@@ -12,7 +12,7 @@ import com.jeeweb.platform.pub.entity.AttachmentEntity;
  *
  */
 public interface IAttachment {
-    Integer getF_id();
+    Long getF_id();
 
     String getF_attachment_ids();
 

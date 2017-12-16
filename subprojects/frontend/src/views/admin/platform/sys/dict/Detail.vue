@@ -43,8 +43,8 @@
       </el-form-item>
       <el-form-item class="jw-field jw-field-1" label="系统预置" prop="f_is_preset">
         <el-radio-group v-model="entity.f_is_preset">
-          <el-radio :label="1" :disabled="!curUser.superAdmin">是</el-radio>
-          <el-radio :label="2" :disabled="!curUser.superAdmin">否</el-radio>
+          <el-radio :label="101" :disabled="!curUser.superAdmin">是</el-radio>
+          <el-radio :label="102" :disabled="!curUser.superAdmin">否</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item class="jw-field jw-field-2" label="查询Where条件" prop="f_where_clause">
@@ -107,7 +107,7 @@
               f_name_column: 'f_item_name',
               f_order_column: 'f_item_order',
               f_where_clause: null,
-              f_is_preset: 2,
+              f_is_preset: 102,
               f_remark: null,
               itemList: []
             }
@@ -179,7 +179,7 @@
         cellRendererParams: {
           options: {
             isDisabled (params, entity) {
-              if (entity.f_id && entity.f_is_preset === '1') {
+              if (entity.f_id && entity.f_is_preset === '101') {
                 return true
               } else {
                 return false
@@ -199,7 +199,7 @@
         field: 'f_is_preset',
         type: 'DictEditor',
         cellRendererParams: {
-          dict: 'YesNo2',
+          dict: 'TrueFalse',
           options: {
             isDisabled (params, entity) {
               if (entity.f_id) {
@@ -241,7 +241,7 @@
           }, {
             id: 'remove',
             isDisabled (params, entity) {
-              return params.context.featureComponent.options.operation === 'view' || (entity.f_id && entity.f_is_preset === '1')
+              return params.context.featureComponent.options.operation === 'view' || (entity.f_id && entity.f_is_preset === '101')
             },
             onClick (params, entity) {
               params.context.featureComponent.onRemoveItem(entity)
@@ -297,7 +297,7 @@
           f_item_code: null,
           f_item_text: null,
           f_item_order: 10,
-          f_is_preset: 2
+          f_is_preset: 102
         })
         this.gridOptions.api.setRowData(this.entity.itemList)
       },

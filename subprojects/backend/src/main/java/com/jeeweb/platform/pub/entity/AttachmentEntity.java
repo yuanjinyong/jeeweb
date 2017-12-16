@@ -5,52 +5,32 @@ import java.sql.Timestamp;
 import com.jeeweb.framework.business.entity.BaseEntity;
 import com.jeeweb.framework.business.model.ICreator;
 
-public class AttachmentEntity extends BaseEntity<Integer> implements ICreator {
+public class AttachmentEntity extends BaseEntity<Long> implements ICreator {
     public static final String DOWNLOAD_URL = "api/platform/data/attachments/%d/download";
-
-    /**
-     * 1、待归档
-     */
-    public static final Integer STATUS_INIT = 1;
-
-    /**
-     * 2、已归档
-     */
-    public static final Integer STATUS_ARCHIVED = 2;
-
-    /**
-     * 3、已上传
-     */
-    public static final Integer STATUS_UPLOADED = 3;
-
-    /**
-     * 4、待删除
-     */
-    public static final Integer STATUS_PREDELETE = 4;
 
     private static final long serialVersionUID = 1L;
 
-    private Integer f_tenant_id; // 企业ID，用于做数据隔离
+    private Long f_tenant_id; // 企业ID，用于做数据隔离
     private String f_entity_name; // 业务实体类名
-    private Integer f_entity_id; // 业务实体对象ID
+    private Long f_entity_id; // 业务实体对象ID
     private String f_name; // 文件名
     private String f_type; // 文件类型
     private Long f_size; // 字节数
     private String f_local_path; // 本地存储路径
     private String f_remote_path; // 远程存储路径
-    private Integer f_creator_id; // 创建人，系统用户ID
+    private Long f_creator_id; // 创建人，系统用户ID
     private String f_creator_name; // 创建人名称
     private Timestamp f_created_time; // 创建时间
-    private Integer f_status; // 状态，1、待归档；2、已归档；3、已上传；4、待删除；
+    private Integer f_status; // 状态：101、待归档；102、已归档；103、已上传；104、待删除；
 
     private String name;
     private String url;
 
-    public Integer getF_tenant_id() {
+    public Long getF_tenant_id() {
         return f_tenant_id;
     }
 
-    public void setF_tenant_id(Integer f_company_id) {
+    public void setF_tenant_id(Long f_company_id) {
         this.f_tenant_id = f_company_id;
     }
 
@@ -62,11 +42,11 @@ public class AttachmentEntity extends BaseEntity<Integer> implements ICreator {
         this.f_entity_name = f_entity_name;
     }
 
-    public Integer getF_entity_id() {
+    public Long getF_entity_id() {
         return f_entity_id;
     }
 
-    public void setF_entity_id(Integer f_entity_id) {
+    public void setF_entity_id(Long f_entity_id) {
         this.f_entity_id = f_entity_id;
     }
 
@@ -111,12 +91,12 @@ public class AttachmentEntity extends BaseEntity<Integer> implements ICreator {
     }
 
     @Override
-    public Integer getF_creator_id() {
+    public Long getF_creator_id() {
         return f_creator_id;
     }
 
     @Override
-    public void setF_creator_id(Integer f_creator_id) {
+    public void setF_creator_id(Long f_creator_id) {
         this.f_creator_id = f_creator_id;
     }
 
