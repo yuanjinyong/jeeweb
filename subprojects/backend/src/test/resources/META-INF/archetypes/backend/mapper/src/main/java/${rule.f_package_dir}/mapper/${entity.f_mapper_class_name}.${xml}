@@ -11,7 +11,7 @@ def whereClause = new StringBuffer("        WHERE 1=1")
 def updateClause = new StringBuffer("        UPDATE ${entity.f_table_name} SET")
 
 entity.fieldList.eachWithIndex { field, idx ->
-    if (field.f_is_select == 1) {
+    if (field.f_is_select == 101) {
         if (field.f_column_name == "f_tenant_name") {
 //            selectClause.append(",\n        tn.f_name ${field.f_column_name}")
 //            fromClause.append("\n        LEFT JOIN t_sys_tenant tn ON tn.f_id = t.f_tenant_id")
@@ -22,18 +22,18 @@ entity.fieldList.eachWithIndex { field, idx ->
             selectClause.append(",\n        t.${field.f_column_name}")
         }
     }
-    if (field.f_is_insert == 1) {
+    if (field.f_is_insert == 101) {
         insertClause.append(",\n        ${field.f_column_name}")
         insertValueClause.append(",\n        #{${field.f_column_name}}")
         insertValuesClause.append(",\n            #{item.${field.f_column_name}}")
     }
-    if (field.f_is_update == 1) {
+    if (field.f_is_update == 101) {
         updateClause.append("\n        <if test=\"${field.f_column_name} != null\">${field.f_column_name}=#{${field.f_column_name}},</if>")
     }
-    if (field.f_is_equal == 1) {
+    if (field.f_is_equal == 101) {
         whereClause.append("\n        <if test=\"${field.f_column_name} != null and ${field.f_column_name} != ''\">AND t.${field.f_column_name} = #{${field.f_column_name}}</if>")
     }
-    if (field.f_is_like == 1) {
+    if (field.f_is_like == 101) {
         if (field.f_column_name == "f_tenant_name") {
             whereClause.append("\n        <if test=\"${field.f_column_name}_like != null and ${field.f_column_name}_like != ''\">AND tn.f_name LIKE CONCAT('%', #{${field.f_column_name}_like}, '%')</if>")
         } else if (field.f_column_name == "f_creator_name") {
@@ -42,7 +42,7 @@ entity.fieldList.eachWithIndex { field, idx ->
             whereClause.append("\n        <if test=\"${field.f_column_name}_like != null and ${field.f_column_name}_like != ''\">AND t.${field.f_column_name} LIKE CONCAT('%', #{${field.f_column_name}_like}, '%')</if>")
         }
     }
-    if (field.f_is_left_like == 1) {
+    if (field.f_is_left_like == 101) {
         if (field.f_column_name == "f_tenant_name") {
             whereClause.append("\n        <if test=\"${field.f_column_name}_leftLike != null and ${field.f_column_name}_leftLike != ''\">AND tn.f_name LIKE CONCAT('%', #{${field.f_column_name}_leftLike})</if>")
         } else if (field.f_column_name == "f_creator_name") {
@@ -51,7 +51,7 @@ entity.fieldList.eachWithIndex { field, idx ->
             whereClause.append("\n        <if test=\"${field.f_column_name}_leftLike != null and ${field.f_column_name}_leftLike != ''\">AND t.${field.f_column_name} LIKE CONCAT('%', #{${field.f_column_name}_leftLike})</if>")
         }
     }
-    if (field.f_is_right_like == 1) {
+    if (field.f_is_right_like == 101) {
         if (field.f_column_name == "f_tenant_name") {
             whereClause.append("\n        <if test=\"${field.f_column_name}_rightLike != null and ${field.f_column_name}_rightLike != ''\">AND tn.f_name LIKE CONCAT(#{${field.f_column_name}_rightLike}, '%')</if>")
         } else if (field.f_column_name == "f_creator_name") {
@@ -60,13 +60,13 @@ entity.fieldList.eachWithIndex { field, idx ->
             whereClause.append("\n        <if test=\"${field.f_column_name}_rightLike != null and ${field.f_column_name}_rightLike != ''\">AND t.${field.f_column_name} LIKE CONCAT(#{${field.f_column_name}_rightLike}, '%')</if>")
         }
     }
-    if (field.f_is_in == 1) {
+    if (field.f_is_in == 101) {
         whereClause.append("\n        <if test=\"${field.f_column_name}_in != null and ${field.f_column_name}_in != ''\">AND t.${field.f_column_name} IN (\${${field.f_column_name}_in})</if>")
     }
-    if (field.f_is_not_in == 1) {
+    if (field.f_is_not_in == 101) {
         whereClause.append("\n        <if test=\"${field.f_column_name}_notIn != null and ${field.f_column_name}_notIn != ''\">AND t.${field.f_column_name} NOT IN (\${${field.f_column_name}_notIn})</if>")
     }
-    if (field.f_is_between == 1) {
+    if (field.f_is_between == 101) {
         whereClause.append("\n        <if test=\"${field.f_column_name}_begin != null and ${field.f_column_name}_begin != ''\">AND t.${field.f_column_name} &gt;= #{${field.f_column_name}_begin}</if>")
         whereClause.append("\n        <if test=\"${field.f_column_name}_end != null and ${field.f_column_name}_end != ''\">AND t.${field.f_column_name} &lt;= #{${field.f_column_name}_end}</if>")
     }
@@ -145,7 +145,7 @@ if (entity.primaryField.f_java_type == "java.lang.Integer") {
     </update>
 
     <!-- delete -->
-    <select id="isCanDeleteEntity" parameterType="${entity.primaryField.f_java_type}" resultType="java.lang.Integer">
+    <select id="isCanDeleteEntity" parameterType="${entity.primaryField.f_java_type}" resultType="java.lang.Long">
         SELECT 0 FROM DUAL
     </select>
     <delete id="deleteEntity" parameterType="${entity.primaryField.f_java_type}">

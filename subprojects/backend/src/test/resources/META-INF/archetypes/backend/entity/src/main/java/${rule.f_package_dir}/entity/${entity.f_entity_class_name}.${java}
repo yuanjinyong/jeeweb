@@ -8,18 +8,18 @@ entity.fieldList.eachWithIndex { field, idx ->
     if (!field.f_java_type.startsWith("java.lang.") && !importJavaTypes.contains(field.f_java_type)) {
         importJavaTypes.add(field.f_java_type);
     }
-    if (field.f_is_super_class_field == 2) {
+    if (field.f_is_super_class_field == 102) {
         properties.append("    private ${field.f_short_java_type} ${field.f_column_name}; // ${field.f_column_comment}\n")
 
         methods.append("\n")
-        if (field.f_is_override_field == 1) {
+        if (field.f_is_override_field == 101) {
         methods.append("    @Override\n")
         }
         methods.append("    public ${field.f_short_java_type} get${field.f_column_name.capitalize()}() {\n")
         methods.append("        return ${field.f_column_name};\n")
         methods.append("    }\n")
         methods.append("\n")
-        if (field.f_is_override_field == 1) {
+        if (field.f_is_override_field == 101) {
         methods.append("    @Override\n")
         }
         methods.append("    public void set${field.f_column_name.capitalize()}(${field.f_short_java_type} ${field.f_column_name}) {\n")
