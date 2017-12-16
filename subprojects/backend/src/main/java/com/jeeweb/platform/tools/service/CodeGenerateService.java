@@ -105,7 +105,7 @@ public class CodeGenerateService extends BaseService<Long, GenerateRuleEntity> {
             table.setFieldList(generateRuleFieldMapper
                     .selectEntityListPage(new ParamsMap("f_table_id", table.getF_id()).setOrderBy("f_order")));
             for (GenerateRuleFieldEntity field : table.getFieldList()) {
-                if (field.getF_is_primary() == 1) {
+                if (BooleanEnum.$true(field.getF_is_primary())) {
                     table.setPrimaryField(field);
                     break;
                 }
@@ -157,7 +157,11 @@ public class CodeGenerateService extends BaseService<Long, GenerateRuleEntity> {
             return;
         }
 
-        File projectDir = new File(rootPath.getFile().substring(1, rootPath.getFile().indexOf("/src/")));
+        Integer idx = rootPath.getFile().indexOf("/src/");
+        if (idx < 0) {
+            idx = rootPath.getFile().indexOf("/bin/");
+        }
+        File projectDir = new File(rootPath.getFile().substring(1, idx));
         File archetypesDir = new File(projectDir, "src/test/resources/META-INF/archetypes");
         File tempDir = new File(projectDir.getParentFile(), "t_" + UUID.randomUUID());
 

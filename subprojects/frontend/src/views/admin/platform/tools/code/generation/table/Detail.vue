@@ -124,7 +124,7 @@
               f_db_name: 'jeeweb',
               f_table_name: null,
               f_order: 1,
-              f_is_main: 1,
+              f_is_main: 101,
               f_entity_interface: null,
               f_entity_base_class: vm.baseClasses[0].fullName,
               f_entity_class: vm.generateRule.f_package_name + '.entity.' + vm.generateRule.f_code + 'Entity',
@@ -397,7 +397,33 @@
             this.entity.fieldList = []
             response.body.data.items.forEach((column) => {
               let field = this._buildFieldEntity(column)
+              field.f_order = this.entity.fieldList.length
               this.entity.fieldList.push(field)
+              if (column.COLUMN_NAME === 'f_creator_id') {
+                this.entity.fieldList.push({
+                  f_order: this.entity.fieldList.length,
+                  f_column_name: 'f_creator_name',
+                  f_column_comment: '创建人姓名',
+                  f_column_type: 'varchar',
+                  f_java_type: 'java.lang.String',
+                  f_is_primary: 102,
+                  f_is_super_class_field: 102,
+                  f_is_override_field: 101,
+                  f_is_insert: 102,
+                  f_is_update: 102,
+                  f_is_select: 102,
+                  f_is_equal: 102,
+                  f_is_like: 102,
+                  f_is_left_like: 102,
+                  f_is_right_like: 102,
+                  f_is_in: 102,
+                  f_is_not_in: 102,
+                  f_is_between: 102,
+                  f_is_search: 102,
+                  f_is_grid: 102,
+                  f_is_form: 102
+                })
+              }
             })
           } else {
             this.entity.fieldList = []
