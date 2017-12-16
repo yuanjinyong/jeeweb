@@ -27,5 +27,5 @@ public interface BaseMapper<P, E> extends SuperMapper {
 
     int deleteEntities(ParamsMap params);
 
-    Integer isCanDeleteEntity(P primaryKey);
+    Long isCanDeleteEntity(P primaryKey);
 }

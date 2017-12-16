@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.jeeweb.framework.business.entity.BaseEntity;
 
-public class GenerateRuleEntity extends BaseEntity<Integer> {
+public class GenerateRuleEntity extends BaseEntity<Long> {
     private static final long serialVersionUID = -2759064061686001170L;
 
     private String f_code; // 名称

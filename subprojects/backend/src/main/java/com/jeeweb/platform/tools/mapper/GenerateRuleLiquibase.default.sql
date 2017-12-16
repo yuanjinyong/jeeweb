@@ -4,7 +4,7 @@
 -- changeset 袁进勇:20170401000001
 -- comment: 创建代码生成规则表结构
 CREATE TABLE `t_tool_generate_rule` (
-  `f_id` int(11) NOT NULL AUTO_INCREMENT,
+  `f_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `f_code` varchar(256) COLLATE utf8_bin NOT NULL COMMENT '编码',
   `f_name` varchar(512) COLLATE utf8_bin DEFAULT NULL COMMENT '名称',
   `f_menu_id` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '菜单ID',

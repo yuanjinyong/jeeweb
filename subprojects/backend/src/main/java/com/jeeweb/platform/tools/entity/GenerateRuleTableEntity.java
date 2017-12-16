@@ -4,14 +4,14 @@ import java.util.List;
 
 import com.jeeweb.framework.business.entity.BaseEntity;
 
-public class GenerateRuleTableEntity extends BaseEntity<Integer> {
+public class GenerateRuleTableEntity extends BaseEntity<Long> {
     private static final long serialVersionUID = 9118850333556862796L;
 
-    private Integer f_rule_id; // 生成规则ID
+    private Long f_rule_id; // 生成规则ID
     private String f_db_name; // 数据库名称
     private String f_table_name; // 数据库表名
     private Integer f_order; // 排序
-    private Integer f_is_main; // 是否为主表，1是，2否
+    private Integer f_is_main; // 是否为主表：101、是；102、否
 
     private String f_entity_interface; // Java实体类实现的接口列表
     private String f_entity_class; // Java实体类的全路径类名
@@ -34,11 +34,11 @@ public class GenerateRuleTableEntity extends BaseEntity<Integer> {
     private GenerateRuleFieldEntity primaryField;
     private List<GenerateRuleFieldEntity> fieldList;
 
-    public Integer getF_rule_id() {
+    public Long getF_rule_id() {
         return f_rule_id;
     }
 
-    public void setF_rule_id(Integer f_rule_id) {
+    public void setF_rule_id(Long f_rule_id) {
         this.f_rule_id = f_rule_id;
     }
 

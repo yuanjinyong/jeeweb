@@ -73,7 +73,7 @@
 
 
     <!-- select -->
-    <select id="selectEntity" parameterType="java.lang.Integer" resultType="com.jeeweb.platform.tools.entity.GenerateRuleEntity">
+    <select id="selectEntity" parameterType="java.lang.Long" resultType="com.jeeweb.platform.tools.entity.GenerateRuleEntity">
         <include refid="Select_Clause" />
         <include refid="From_Clause" />
         WHERE t.f_id = #{f_id}
@@ -93,7 +93,7 @@
 
     <!-- insert -->
     <insert id="insertEntity" parameterType="com.jeeweb.platform.tools.entity.GenerateRuleEntity">
-        <selectKey resultType="java.lang.Integer" keyProperty="f_id" order="AFTER">
+        <selectKey resultType="java.lang.Long" keyProperty="f_id" order="AFTER">
             SELECT @@IDENTITY
         </selectKey>
         <include refid="Insert_Clause" />
@@ -122,10 +122,10 @@
     </update>
 
     <!-- delete -->
-    <select id="isCanDeleteEntity" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    <select id="isCanDeleteEntity" parameterType="java.lang.Long" resultType="java.lang.Long">
         SELECT 0 FROM DUAL
     </select>
-    <delete id="deleteEntity" parameterType="java.lang.Integer">
+    <delete id="deleteEntity" parameterType="java.lang.Long">
         DELETE FROM t_tool_generate_rule WHERE f_id=#{f_id}
     </delete>
     <delete id="deleteEntities" parameterType="com.jeeweb.framework.core.model.ParamsMap">

@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jeeweb.framework.business.enums.BooleanEnum;
 import com.jeeweb.framework.business.mapper.BaseMapper;
 import com.jeeweb.framework.business.service.BaseService;
 import com.jeeweb.framework.core.exception.BusinessException;
@@ -33,7 +34,7 @@ import com.jeeweb.platform.tools.mapper.GenerateRuleTableMapper;
 
 @Service
 @Transactional
-public class CodeGenerateService extends BaseService<Integer, GenerateRuleEntity> {
+public class CodeGenerateService extends BaseService<Long, GenerateRuleEntity> {
     private static final Logger LOG = LoggerFactory.getLogger(CodeGenerateService.class);
 
     @Autowired
@@ -46,18 +47,18 @@ public class CodeGenerateService extends BaseService<Integer, GenerateRuleEntity
     private ArchetypeService archetypeService;
 
     @Override
-    protected BaseMapper<Integer, GenerateRuleEntity> getMapper() {
+    protected BaseMapper<Long, GenerateRuleEntity> getMapper() {
         return generateRuleMapper;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public GenerateRuleEntity selectEntity(Integer primaryKey) {
+    public GenerateRuleEntity selectEntity(Long primaryKey) {
         GenerateRuleEntity entity = super.selectEntity(primaryKey);
 
         entity.setTableList(selectTableEntities(new ParamsMap("f_rule_id", entity.getF_id()).setOrderBy("f_order")));
         for (GenerateRuleTableEntity table : entity.getTableList()) {
-            if (table.getF_is_main() == 1) {
+            if (BooleanEnum.$true(table.getF_is_main())) {
                 entity.setMainTable(table);
                 break;
             }
@@ -74,14 +75,14 @@ public class CodeGenerateService extends BaseService<Integer, GenerateRuleEntity
     }
 
     @Override
-    public void updateEntity(Integer primaryKey, GenerateRuleEntity entity) {
+    public void updateEntity(Long primaryKey, GenerateRuleEntity entity) {
         deleteTableEntities(entity.getF_id());
         insertTableEntities(entity);
         super.updateEntity(primaryKey, entity);
     }
 
     @Override
-    public void deleteEntity(Integer primaryKey) {
+    public void deleteEntity(Long primaryKey) {
         deleteTableEntities(primaryKey);
         super.deleteEntity(primaryKey);
     }
@@ -139,7 +140,7 @@ public class CodeGenerateService extends BaseService<Integer, GenerateRuleEntity
         return fieldList;
     }
 
-    public void deleteTableEntities(Integer f_rule_id) {
+    public void deleteTableEntities(Long f_rule_id) {
         ParamsMap deleteParams = new ParamsMap("f_rule_id", f_rule_id);
         generateRuleFieldMapper.deleteEntities(deleteParams);
         generateRuleTableMapper.deleteEntities(deleteParams);
@@ -149,7 +150,7 @@ public class CodeGenerateService extends BaseService<Integer, GenerateRuleEntity
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Transactional(readOnly = true)
-    public void generateCode(Integer f_rule_id) {
+    public void generateCode(Long f_rule_id) {
 
         URL rootPath = this.getClass().getResource("/");
         if (!"file".equals(rootPath.getProtocol())) {

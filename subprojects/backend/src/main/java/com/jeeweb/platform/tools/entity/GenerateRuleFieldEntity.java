@@ -2,32 +2,32 @@ package com.jeeweb.platform.tools.entity;
 
 import com.jeeweb.framework.business.entity.BaseEntity;
 
-public class GenerateRuleFieldEntity extends BaseEntity<Integer> {
+public class GenerateRuleFieldEntity extends BaseEntity<Long> {
     private static final long serialVersionUID = -4363776482523982780L;
 
-    private Integer f_table_id; // 数据库表信息ID
+    private Long f_table_id; // 数据库表信息ID
     private Integer f_order; // 排序
     private String f_column_name; // 字段名
     private String f_column_comment; // 字段描述
     private String f_column_type; // 字段类型
     private String f_java_type; // 字段对应Java数据类型
     private String f_short_java_type; // 字段对应Java数据类型的类名
-    private Integer f_is_primary; // 是否为主健，1是，2否
-    private Integer f_is_super_class_field; // 是否为父类字段，1是，2否
-    private Integer f_is_override_field; // 是否为覆写或实现接口字段，1是，2否
-    private Integer f_is_insert; // 是否为插入字段，1是，2否
-    private Integer f_is_update; // 是否为更新字段，1是，2否
-    private Integer f_is_select; // 是否为查询字段，1是，2否
-    private Integer f_is_equal; // 是否为等于查询条件，1是，2否
-    private Integer f_is_like; // 是否为左右模糊查询条件，1是，2否
-    private Integer f_is_left_like; // 是否为左模糊查询条件，1是，2否
-    private Integer f_is_right_like; // 是否为右模糊查询条件，1是，2否
-    private Integer f_is_in; // 是否为IN查询条件，1是，2否
-    private Integer f_is_not_in; // 是否为NOT IN查询条件，1是，2否
-    private Integer f_is_between; // 是否为BETWEEN查询条件，1是，2否
-    private Integer f_is_search; // 是否在搜索栏中显示，1是，2否
-    private Integer f_is_grid; // 是否在Grid表格中显示，1是，2否
-    private Integer f_is_form; // 是否在Form表单中显示，1是，2否
+    private Integer f_is_primary; // 是否为主健：101、是；102、否
+    private Integer f_is_super_class_field; // 是否为父类字段：101、是；102、否
+    private Integer f_is_override_field; // 是否为覆写或实现接口字段：101、是；102、否
+    private Integer f_is_insert; // 是否为插入字段：101、是；102、否
+    private Integer f_is_update; // 是否为更新字段：101、是；102、否
+    private Integer f_is_select; // 是否为查询字段：101、是；102、否
+    private Integer f_is_equal; // 是否为等于查询条件：101、是；102、否
+    private Integer f_is_like; // 是否为左右模糊查询条件：101、是；102、否
+    private Integer f_is_left_like; // 是否为左模糊查询条件：101、是；102、否
+    private Integer f_is_right_like; // 是否为右模糊查询条件：101、是；102、否
+    private Integer f_is_in; // 是否为IN查询条件：101、是；102、否
+    private Integer f_is_not_in; // 是否为NOT IN查询条件：101、是；102、否
+    private Integer f_is_between; // 是否为BETWEEN查询条件：101、是；102、否
+    private Integer f_is_search; // 是否在搜索栏中显示：101、是；102、否
+    private Integer f_is_grid; // 是否在Grid表格中显示：101、是；102、否
+    private Integer f_is_form; // 是否在Form表单中显示：101、是；102、否
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private String f_is_nullable;
@@ -40,11 +40,11 @@ public class GenerateRuleFieldEntity extends BaseEntity<Integer> {
     private Long f_datetime_precision;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public Integer getF_table_id() {
+    public Long getF_table_id() {
         return f_table_id;
     }
 
-    public void setF_table_id(Integer f_table_id) {
+    public void setF_table_id(Long f_table_id) {
         this.f_table_id = f_table_id;
     }
 

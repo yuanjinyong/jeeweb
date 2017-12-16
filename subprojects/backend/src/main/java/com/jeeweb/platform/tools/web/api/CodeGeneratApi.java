@@ -19,12 +19,12 @@ import com.jeeweb.platform.tools.service.CodeGenerateService;
 
 @RestController
 @RequestMapping(value = "/api/platform/tools/code/generate/rules")
-public class CodeGeneratApi extends BaseApi<Integer, GenerateRuleEntity> {
+public class CodeGeneratApi extends BaseApi<Long, GenerateRuleEntity> {
     @Resource
     private CodeGenerateService codeGenerateService;
 
     @Override
-    protected BaseService<Integer, GenerateRuleEntity> getService() {
+    protected BaseService<Long, GenerateRuleEntity> getService() {
         return codeGenerateService;
     }
 
@@ -39,17 +39,17 @@ public class CodeGeneratApi extends BaseApi<Integer, GenerateRuleEntity> {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseResult get(@PathVariable("id") Integer primaryKey) {
+    public ResponseResult get(@PathVariable("id") Long primaryKey) {
         return super.getEntity(primaryKey);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseResult update(@PathVariable("id") Integer primaryKey, @RequestBody GenerateRuleEntity entity) {
+    public ResponseResult update(@PathVariable("id") Long primaryKey, @RequestBody GenerateRuleEntity entity) {
         return super.updateEntity(primaryKey, entity);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseResult delete(@PathVariable("id") Integer primaryKey) {
+    public ResponseResult delete(@PathVariable("id") Long primaryKey) {
         return super.deleteEntity(primaryKey);
     }
 
@@ -57,7 +57,7 @@ public class CodeGeneratApi extends BaseApi<Integer, GenerateRuleEntity> {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @RequestMapping(value = "/{id}/generate", method = RequestMethod.PUT)
-    public ResponseResult generate(@PathVariable("id") Integer primaryKey) {
+    public ResponseResult generate(@PathVariable("id") Long primaryKey) {
         codeGenerateService.generateCode(primaryKey);
         return new ResponseResult(new Result(), HttpStatus.OK);
     }
