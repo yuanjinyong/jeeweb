@@ -19,8 +19,8 @@
       </el-form-item>
       <el-form-item class="jw-field jw-field-1" label="主表" prop="f_is_main">
         <el-radio-group v-model="entity.f_is_main" @change="onIsMainChange">
-          <el-radio :label="1">是</el-radio>
-          <el-radio :label="2">否</el-radio>
+          <el-radio :label="101">是</el-radio>
+          <el-radio :label="102">否</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item class="jw-field jw-field-1" label="父类" prop="f_entity_base_class">
@@ -210,6 +210,9 @@
                 dict: [{
                   f_item_code: 'java.lang.String',
                   f_item_text: 'java.lang.String'
+                }, {
+                  f_item_code: 'java.lang.Long',
+                  f_item_text: 'java.lang.Long'
                 }, {
                   f_item_code: 'java.lang.Integer',
                   f_item_text: 'java.lang.Integer'
@@ -405,7 +408,7 @@
       _buildFieldEntity (column) {
         var cfg = {
           javaType: {
-            bigint: 'java.lang.Integer',
+            bigint: 'java.lang.Long',
             // blob
             // char
             date: 'java.sql.Timestamp',
@@ -445,22 +448,22 @@
           f_column_comment: column.COLUMN_COMMENT,
           f_column_type: column.COLUMN_TYPE,
           f_java_type: cfg.javaType[column.DATA_TYPE],
-          f_is_primary: column.COLUMN_KEY === 'PRI' ? 1 : 2,
-          f_is_super_class_field: cfg.superClassField.indexOf(column.COLUMN_NAME) >= 0 ? 1 : 2,
-          f_is_override_field: cfg.overrideField.indexOf(column.COLUMN_NAME) >= 0 ? 1 : 2,
-          f_is_insert: cfg.suppressInsertField.indexOf(column.COLUMN_NAME) >= 0 ? 2 : 1,
-          f_is_update: cfg.suppressUpdateField.indexOf(column.COLUMN_NAME) >= 0 ? 2 : 1,
-          f_is_select: 1,
-          f_is_equal: cfg.equalField.indexOf(column.COLUMN_NAME) >= 0 ? 1 : 2,
-          f_is_like: cfg.likeField.indexOf(column.COLUMN_NAME) >= 0 ? 1 : 2,
-          f_is_left_like: 2,
-          f_is_right_like: 2,
-          f_is_in: cfg.inField.indexOf(column.COLUMN_NAME) >= 0 ? 1 : 2,
-          f_is_not_in: 2,
-          f_is_between: cfg.betweenField.indexOf(column.COLUMN_NAME) >= 0 ? 1 : 2,
-          f_is_search: 2,
-          f_is_grid: 2,
-          f_is_form: 2
+          f_is_primary: column.COLUMN_KEY === 'PRI' ? 101 : 102,
+          f_is_super_class_field: cfg.superClassField.indexOf(column.COLUMN_NAME) >= 0 ? 101 : 102,
+          f_is_override_field: cfg.overrideField.indexOf(column.COLUMN_NAME) >= 0 ? 101 : 102,
+          f_is_insert: cfg.suppressInsertField.indexOf(column.COLUMN_NAME) >= 0 ? 102 : 101,
+          f_is_update: cfg.suppressUpdateField.indexOf(column.COLUMN_NAME) >= 0 ? 102 : 101,
+          f_is_select: 101,
+          f_is_equal: cfg.equalField.indexOf(column.COLUMN_NAME) >= 0 ? 101 : 102,
+          f_is_like: cfg.likeField.indexOf(column.COLUMN_NAME) >= 0 ? 101 : 102,
+          f_is_left_like: 102,
+          f_is_right_like: 102,
+          f_is_in: cfg.inField.indexOf(column.COLUMN_NAME) >= 0 ? 101 : 102,
+          f_is_not_in: 102,
+          f_is_between: cfg.betweenField.indexOf(column.COLUMN_NAME) >= 0 ? 101 : 102,
+          f_is_search: 102,
+          f_is_grid: 102,
+          f_is_form: 102
         }
       },
       _loadSchematas () {
@@ -469,7 +472,7 @@
         })
       },
       onIsMainChange () {
-        if (this.entity.f_is_main === 2) {
+        if (this.entity.f_is_main === 102) {
           this.entity.f_service_base_class = null
           this.entity.f_service_class = null
           this.entity.f_rest_base_class = null

@@ -152,8 +152,8 @@ DELETE FROM t_sys_dict WHERE f_code = 'TrueFalse';
 
 insert  into `t_sys_dict`(`f_code`,`f_name`,`f_db_name`,`f_table_name`,`f_tenant_column`,`f_code_column`,`f_name_column`,`f_order_column`,`f_where_clause`,`f_is_preset`,`f_remark`) values ('TrueFalse','布尔型的是否','defaultSqlMapper','t_sys_dict_item','f_tenant_id','f_item_code','f_item_text','f_item_order','',1,NULL);
 
-insert  into `t_sys_dict_item`(`f_tenant_id`,`f_dict_code`,`f_item_order`,`f_item_code`,`f_item_text`,`f_is_preset`) values (0,'TrueFalse',1,'true','是',1);
-insert  into `t_sys_dict_item`(`f_tenant_id`,`f_dict_code`,`f_item_order`,`f_item_code`,`f_item_text`,`f_is_preset`) values (0,'TrueFalse',2,'false','否',1);
+insert  into `t_sys_dict_item`(`f_tenant_id`,`f_dict_code`,`f_item_order`,`f_item_code`,`f_item_text`,`f_is_preset`) values (0,'TrueFalse',101,'true','是',1);
+insert  into `t_sys_dict_item`(`f_tenant_id`,`f_dict_code`,`f_item_order`,`f_item_code`,`f_item_text`,`f_is_preset`) values (0,'TrueFalse',102,'false','否',1);
 -- rollback DELETE FROM t_sys_dict_item WHERE f_dict_code = 'TrueFalse';
 -- rollback DELETE FROM t_sys_dict WHERE f_code = 'TrueFalse';
 

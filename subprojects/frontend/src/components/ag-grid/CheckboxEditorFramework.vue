@@ -1,5 +1,5 @@
 <template>
-  <el-checkbox ref="input" v-model="value" :true-label="1" :false-label="2" @change="onChange"
+  <el-checkbox ref="input" v-model="value" :true-label="101" :false-label="102" @change="onChange"
     style="line-height: 24px;">
   </el-checkbox>
 </template>

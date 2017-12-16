@@ -115,7 +115,7 @@
         headerName: '主表',
         field: 'f_is_main',
         type: ['DictRender', 'DictFilter'],
-        cellRendererParams: {dict: 'YesNo2'},
+        cellRendererParams: {dict: 'TrueFalse'},
         width: 60
       }, {
         headerName: 'Entity类名',
