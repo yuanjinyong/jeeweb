@@ -107,8 +107,8 @@ public class MenuService extends BaseService<String, MenuEntity> {
         Collections.sort(roleDistMenuList, new Comparator<Map<String, Object>>() {
             @Override
             public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-                Integer r1 = (Integer) o1.get("f_role_id");
-                Integer r2 = (Integer) o2.get("f_role_id");
+            	Long r1 = (Long) o1.get("f_role_id");
+            	Long r2 = (Long) o2.get("f_role_id");
                 if (r1 == r2) {
                     return ((String) o1.get("f_menu_id")).compareTo((String) o2.get("f_menu_id"));
                 }
@@ -127,8 +127,8 @@ public class MenuService extends BaseService<String, MenuEntity> {
         Collections.sort(roleAuthMenuList, new Comparator<Map<String, Object>>() {
             @Override
             public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-                Integer r1 = (Integer) o1.get("f_role_id");
-                Integer r2 = (Integer) o2.get("f_role_id");
+            	Long r1 = (Long) o1.get("f_role_id");
+            	Long r2 = (Long) o2.get("f_role_id");
                 if (r1 == r2) {
                     return ((String) o1.get("f_menu_id")).compareTo((String) o2.get("f_menu_id"));
                 }

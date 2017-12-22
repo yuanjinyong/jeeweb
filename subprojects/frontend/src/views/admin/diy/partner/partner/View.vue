@@ -124,7 +124,7 @@
         field: 'f_status',
         pinned: 'right',
         type: ['DictRender', 'DictFilter'],
-        cellRendererParams: {dict: 'TrueFalse'},
+        cellRendererParams: {dict: 'PartnerStatus'},
         width: 64
       }, {
         headerName: '备注',
