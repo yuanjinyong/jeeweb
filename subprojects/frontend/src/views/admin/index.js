@@ -3,6 +3,7 @@ import HomeView from './HomeView'
 import LoginView from './LoginView'
 
 import activiti from './activiti'
+import diy from './diy'
 import platform from './platform'
 import profile from './profile'
 
@@ -18,6 +19,12 @@ export default [{
       template: '<router-view></router-view>'
     },
     children: activiti
+  }, {
+    path: 'diy',
+    component: {
+      template: '<router-view></router-view>'
+    },
+    children: diy
   }, {
     path: 'platform',
     component: {

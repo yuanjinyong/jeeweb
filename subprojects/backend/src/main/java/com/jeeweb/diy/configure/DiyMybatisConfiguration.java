@@ -10,6 +10,7 @@ import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,7 @@ import org.springframework.util.ObjectUtils;
  *
  */
 @Configuration
+@MapperScan(basePackages = { "com.jeeweb.diy.**.mapper.**" }, sqlSessionTemplateRef = "diySqlSessionTemplate")
 public class DiyMybatisConfiguration {
     @Autowired(required = false)
     private Interceptor[] interceptors;
