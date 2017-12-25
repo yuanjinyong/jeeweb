@@ -95,14 +95,12 @@ public abstract class SuperController {
         return HelpUtil.isEmpty(value) ? defaultValue : Double.parseDouble(value);
     }
 
-    public static ParamsMap $params() {
-        return $params(null);
+    public static <T> Page<T> $page() {
+        return $params().page();
     }
 
-    public static <T> Page<T> $page() {
-        Page<T> page = new Page<>($int(ParamsMap.PAGE_SIZE, 0), $int(ParamsMap.PAGE_NO, 0));
-        page.setOrderBy($(ParamsMap.ORDER_BY, null));
-        return page;
+    public static ParamsMap $params() {
+        return $params(null);
     }
 
     public static ParamsMap $params(String prefix) {

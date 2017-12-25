@@ -6,6 +6,7 @@ package com.jeeweb.framework.core.model;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -441,6 +442,10 @@ public class ParamsMap extends TreeMap<String, Object> {
     public boolean hasOrderBy() {
         String orderBy = this.$(ORDER_BY, null);
         return !(orderBy == null || orderBy.trim().length() == 0);
+    }
+
+    public <E> Page<E> page() {
+        return this.page(Collections.emptyList());
     }
 
     public <E> Page<E> page(List<E> pageItems) {

@@ -89,6 +89,7 @@ public class HelpUtil extends StringUtils {
                 sb.append(',').append(val);
             }
         }
+
         return sb.length() == 0 ? null : sb.substring(1);
     }
 
@@ -139,6 +140,7 @@ public class HelpUtil extends StringUtils {
         for (O e : list) {
             newList.add(function.apply(e));
         }
+
         return newList;
     }
 
