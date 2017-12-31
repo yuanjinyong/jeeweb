@@ -7,6 +7,9 @@ Vue.component(Dict.name, Dict)
 import Form from './Form'
 Vue.component(Form.name, Form)
 
+import InputSelector from './InputSelector'
+Vue.component(InputSelector.name, InputSelector)
+
 import Layout from './Layout'
 Vue.component(Layout.name, Layout)
 
