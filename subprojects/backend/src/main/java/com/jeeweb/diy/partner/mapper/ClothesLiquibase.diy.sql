@@ -4,7 +4,7 @@
 -- changeset 袁进勇:20171205000001
 -- comment: 创建 衣服 表结构
 CREATE TABLE `t_diy_clothes` (
-  `f_id` bigint(20) NOT NULL COMMENT 'ID',
+  `f_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `f_partner_id` bigint(20) NOT NULL COMMENT '关联合作伙伴ID',
   `f_style_id` bigint(20) NOT NULL COMMENT '关联衣服款式ID',
   `f_size_id` bigint(20) NOT NULL COMMENT '关联衣服尺码ID',

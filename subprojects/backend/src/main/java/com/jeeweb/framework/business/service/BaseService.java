@@ -152,7 +152,13 @@ public abstract class BaseService<P, E> extends SuperService {
     protected void fillPreset(E entity) {
         if (entity instanceof IPreset) {
             IPreset preset = (IPreset) entity;
-            preset.setF_is_preset(Enums.FALSE); // 系统预置数据是不能通过程序来修改的，这里能够写入的数据都不是系统预置的。
+            if (SecurityUtil.getCurUser().isSuperAdmin()) {
+                if (preset.getF_is_preset() == null) {
+                    preset.setF_is_preset(Enums.TRUE);
+                }
+            } else {
+                preset.setF_is_preset(Enums.FALSE); // 系统预置数据是不能通过程序来修改的，这里能够写入的数据都不是系统预置的。
+            }
         }
     }
 
