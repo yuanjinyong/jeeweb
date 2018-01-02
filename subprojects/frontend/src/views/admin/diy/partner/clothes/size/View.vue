@@ -3,6 +3,8 @@
     <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
     <clothes-size-detail ref="detail" :detail-options="detailOptions"></clothes-size-detail>
+
+    <partner-detail ref="partnerDetail" :detail-options="partnerDetailOptions"></partner-detail>
   </div>
 </template>
 
@@ -14,10 +16,19 @@
     name: 'clothesSizeView',
     mixins: [ViewlMixin],
     components: {
+      PartnerDetail: r => require.ensure([], () => r(require('views/admin/diy/partner/partner/Detail')), 'diy-partner-partner'),
       ClothesSizeDetail: r => require.ensure([], () => r(require('./Detail')), 'diy-partner-clothes-size')
     },
     data () {
       return {
+        partnerDetailOptions: {
+          context: {
+            featureComponent: this,
+            getGridComponent (options) {
+              return options.context.featureComponent.$refs['grid']
+            }
+          }
+        },
         detailOptions: {
           context: {
             featureComponent: this,
@@ -68,7 +79,19 @@
         pinned: 'left',
         suppressSorting: false,
         sortColId: 'convert(f_partner_name USING gbk)',
-        type: ['LikeFilter'],
+        type: ['ViewRender', 'LikeFilter'],
+        cellRendererParams: {
+          operation: {
+            title: '查看合作伙伴',
+            onClick (params, entity) {
+              params.context.featureComponent.$refs['partnerDetail'].open({
+                operation: this.operation.id,
+                title: this.operation.title,
+                params: {f_id: entity.f_partner_id}
+              })
+            }
+          }
+        },
         width: 160
       }, {
         headerName: '编码',

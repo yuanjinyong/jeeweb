@@ -21,7 +21,7 @@
   <div class="jw-input-selector">
     <el-select ref="input" class="jw-input-selector-input" popper-class="jw-input-selector-popper"
                v-model="ids" :size="size" multiple readonly placeholder="请选择…"
-               @click.native="openSelector" @remove-tag="onRemoveTag">
+               @visible-change="openSelector" @remove-tag="onRemoveTag">
       <el-option v-for="item in model" :key="item.id" :label="item.name" :value="item.id"></el-option>
     </el-select>
 
@@ -100,12 +100,10 @@
 
         this.model = null
       },
-      openSelector () {
-        if (this.disabled) {
-          return
+      openSelector (visible) {
+        if (visible) {
+          this.$refs['selector'].open()
         }
-
-        this.$refs['selector'].open()
       },
       onSelected (selectedRows, cb) {
         let entity = selectedRows[0]
