@@ -64,6 +64,9 @@
         },
         entity: {},
         rules: {
+          f_partner_name: [
+            {required: true, message: '请选择伙伴', trigger: 'blur'}
+          ],
           f_code: [
             {required: true, message: '请输入颜色编码', trigger: 'blur'},
             {max: 20, message: '长度在20个字符以内', trigger: 'blur'}
@@ -78,16 +81,11 @@
     computed: {
       partner: {
         get () {
-          return this.entity.f_partner_id ? {f_id: this.entity.f_partner_id, f_name: this.entity.f_partner_name} : null
+          return {f_id: this.entity.f_partner_id, f_name: this.entity.f_partner_name}
         },
         set (partner) {
-          if (partner) {
-            this.entity.f_partner_id = partner.f_id
-            this.entity.f_partner_name = partner.f_name
-          } else {
-            this.entity.f_partner_id = null
-            this.entity.f_partner_name = null
-          }
+          this.entity.f_partner_id = partner.f_id
+          this.entity.f_partner_name = partner.f_name
         }
       }
     }

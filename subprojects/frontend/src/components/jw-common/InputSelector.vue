@@ -2,28 +2,27 @@
   .jw-input-selector-input.el-select .el-input .el-input__icon {
     transform: translateY(-50%);
   }
+
   .jw-input-selector-input.el-select .el-input .el-input__icon.is-reverse {
     transform: translateY(-50%);
   }
+
   .jw-input-selector-input .el-icon-caret-top:before {
     content: "\E61D";
+  }
+
+  .jw-input-selector-popper {
+    display: none;
   }
 </style>
 
 
 <template>
   <div class="jw-input-selector">
-    <el-select ref="input" class="jw-input-selector-input"
-               v-model="ids"
-               multiple readonly
-               @click.native.stop="openSelector()"
-               placeholder="请选择…">
-      <el-option
-        v-for="item in model"
-        :key="item.id"
-        :label="item.name"
-        :value="item.id">
-      </el-option>
+    <el-select ref="input" class="jw-input-selector-input" popper-class="jw-input-selector-popper"
+               v-model="ids" :size="size" multiple readonly placeholder="请选择…"
+               @click.native="openSelector" @remove-tag="onRemoveTag">
+      <el-option v-for="item in model" :key="item.id" :label="item.name" :value="item.id"></el-option>
     </el-select>
 
     <jw-selector ref="selector" class="jw-input-selector-selector" :selector-options="options.selectorOptions">
@@ -37,11 +36,20 @@
   export default {
     name: 'jwInputSelector',
     props: {
-      value: {type: Object | Array, default () { return {} }},
+      value: {
+        type: Object | Array,
+        default () {
+          return {f_id: null, f_name: null}
+        }
+      },
       disabled: {type: Boolean, default: false},
-      clearable: {type: Boolean, default: false},
       size: {type: String, default: null},
-      inputOptions: {type: Object, default () { return {} }}
+      inputOptions: {
+        type: Object,
+        default () {
+          return {}
+        }
+      }
     },
     data () {
       return {
@@ -65,9 +73,10 @@
         get () {
           return this.model ? this.model.map((item, idx) => {
             return item.id
-          }) : null
+          }) : []
         },
-        set (ids) {}
+        set (ids) {
+        }
       }
     },
     watch: {
@@ -82,10 +91,14 @@
     methods: {
       _setModel (val) {
         if (val) {
-          this.model = [{id: val[this.options.idFiled], name: val[this.options.nameFiled]}]
-        } else {
-          this.model = null
+          let id = val[this.options.idFiled]
+          if (id || id === 0) {
+            this.model = [{id: id, name: val[this.options.nameFiled]}]
+            return
+          }
         }
+
+        this.model = null
       },
       openSelector () {
         if (this.disabled) {
@@ -95,12 +108,23 @@
         this.$refs['selector'].open()
       },
       onSelected (selectedRows, cb) {
-        console.info('selectedRows', selectedRows)
         let entity = selectedRows[0]
         this._setModel(entity)
         this.$emit('input', entity)
         this.$emit('on-change', entity)
         cb()
+      },
+      onRemoveTag (tagComponent) {
+        this.model = null
+
+        let entity = {}
+        entity[this.options.idFiled] = null
+        entity[this.options.nameFiled] = null
+        this.$emit('input', entity)
+
+        entity[this.options.idFiled] = tagComponent.value
+        entity[this.options.nameFiled] = tagComponent.label
+        this.$emit('on-remove', entity)
       }
     }
   }
