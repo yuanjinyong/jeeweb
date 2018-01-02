@@ -180,8 +180,9 @@
         {
           headerName: '字段名',
           field: 'f_column_name',
+          tooltipField: 'f_column_name',
           pinned: 'left',
-          width: 120
+          width: 150
         },
         {
           headerName: 'Database',
@@ -190,11 +191,12 @@
               headerName: '描述',
               field: 'f_column_comment',
               tooltipField: 'f_column_comment',
-              width: 280
+              width: 250
             },
             {
               headerName: '列类型',
               field: 'f_column_type',
+              tooltipField: 'f_column_type',
               width: 100
             }]
         },
@@ -209,28 +211,28 @@
               cellRendererParams: {
                 dict: [{
                   f_item_code: 'java.lang.String',
-                  f_item_text: 'java.lang.String'
+                  f_item_text: 'String'
                 }, {
                   f_item_code: 'java.lang.Long',
-                  f_item_text: 'java.lang.Long'
+                  f_item_text: 'Long'
                 }, {
                   f_item_code: 'java.lang.Integer',
-                  f_item_text: 'java.lang.Integer'
+                  f_item_text: 'Integer'
                 }, {
                   f_item_code: 'java.math.BigDecimal',
-                  f_item_text: 'java.math.BigDecimal'
+                  f_item_text: 'BigDecimal'
                 }, {
                   f_item_code: 'java.sql.Timestamp',
-                  f_item_text: 'java.sql.Timestamp'
+                  f_item_text: 'Timestamp'
                 }, {
                   f_item_code: 'java.lang.Double',
-                  f_item_text: 'java.lang.Double'
+                  f_item_text: 'Double'
                 }, {
                   f_item_code: 'java.lang.Boolean',
-                  f_item_text: 'java.lang.Boolean'
+                  f_item_text: 'Boolean'
                 }]
               },
-              width: 180
+              width: 110
             },
             {
               headerName: '主键',
@@ -399,21 +401,22 @@
               let field = this._buildFieldEntity(column)
               field.f_order = this.entity.fieldList.length
               this.entity.fieldList.push(field)
-              if (column.COLUMN_NAME === 'f_creator_id') {
+              if (/f_.+_id/.test(column.COLUMN_NAME)) {
+                let f_column_name = column.COLUMN_NAME.replace(/_id/, '_name')
                 this.entity.fieldList.push({
                   f_order: this.entity.fieldList.length,
-                  f_column_name: 'f_creator_name',
-                  f_column_comment: '创建人姓名',
+                  f_column_name: f_column_name,
+                  f_column_comment: f_column_name === 'f_creator_name' ? '创建人姓名' : column.COLUMN_COMMENT.replace(/ID/, '名称'),
                   f_column_type: 'varchar',
                   f_java_type: 'java.lang.String',
                   f_is_primary: 102,
                   f_is_super_class_field: 102,
-                  f_is_override_field: 101,
+                  f_is_override_field: f_column_name === 'f_creator_name' ? 101 : 102,
                   f_is_insert: 102,
                   f_is_update: 102,
-                  f_is_select: 102,
+                  f_is_select: f_column_name === 'f_creator_name' ? 102 : 101,
                   f_is_equal: 102,
-                  f_is_like: 102,
+                  f_is_like: f_column_name === 'f_creator_name' ? 102 : 101,
                   f_is_left_like: 102,
                   f_is_right_like: 102,
                   f_is_in: 102,

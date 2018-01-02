@@ -1,6 +1,6 @@
 package com.jeeweb.diy.partner.enums;
 
-public final class ClothesStyleStatus {
+public final class ClothesStatus {
     /**
      * 101、出售
      */

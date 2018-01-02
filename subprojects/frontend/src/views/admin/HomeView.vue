@@ -81,29 +81,17 @@
       return {
         currentApplication: null,
         applicationList: [{
-          id: 'RoleDetail',
-          title: '新增角色',
-          icon: 'fa fa-flag',
-          name: 'platform-sys-role',
-          path: 'admin/platform/sys/role/Detail'
+          id: 'ClothesDetail',
+          title: '新增衣服',
+          icon: 'fa fa-user-secret',
+          name: 'diy-partner-clothes',
+          path: 'admin/diy/partner/clothes/Detail'
         }, {
           id: 'UserDetail',
           title: '新增用户',
           icon: 'fa fa-user',
           name: 'platform-sys-user',
           path: 'admin/platform/sys/user/Detail'
-        }, {
-          id: 'DictDetail',
-          title: '新增字典组',
-          icon: 'fa fa-book',
-          name: 'platform-sys-dict',
-          path: 'admin/platform/sys/dict/Detail'
-        }, {
-          id: 'SettingDetail',
-          title: '新增系统设置项',
-          icon: 'fa fa-wrench',
-          name: 'platform-sys-setting',
-          path: 'admin/platform/sys/setting/Detail'
         }, {
           id: 'more',
           title: '更多',

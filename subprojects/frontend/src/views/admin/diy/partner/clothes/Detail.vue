@@ -1,32 +1,38 @@
 <template>
   <jw-form ref="form" :form-options="options" :entity="entity" :rules="rules">
     <template slot="fieldset">
+      <el-form-item class="jw-field jw-field-2" label="合作伙伴名称" prop="f_partner_name">
+        <jw-input-selector v-model="partner" :input-options="inputPartnerOptions">
+          <partner-view ref="partnerView" :mode="'selector'"></partner-view>
+        </jw-input-selector>
+      </el-form-item>
+      <el-form-item class="jw-field jw-field-1" label="编码" prop="f_code">
+        <el-input v-model="entity.f_code"></el-input>
+      </el-form-item>
       <el-form-item class="jw-field jw-field-1" label="名称" prop="f_name">
         <el-input v-model="entity.f_name"></el-input>
-      </el-form-item>
-      <el-form-item class="jw-field jw-field-1" label="负责人姓名" prop="f_leader">
-        <el-input v-model="entity.f_leader"></el-input>
       </el-form-item>
       <el-form-item class="jw-field jw-field-2" label="描述" prop="f_desc">
         <el-input v-model="entity.f_desc" type="textarea" autosize></el-input>
       </el-form-item>
-      <el-form-item class="jw-field jw-field-1" label="固定电话" prop="f_phone">
-        <el-input v-model="entity.f_phone"></el-input>
+      <el-form-item class="jw-field jw-field-1" label="成本价" prop="f_cost_price">
+        <el-input-number v-model="entity.f_cost_price" :step="1"></el-input-number>
       </el-form-item>
-      <el-form-item class="jw-field jw-field-1" label="手机号码" prop="f_mobile">
-        <el-input v-model="entity.f_mobile"></el-input>
+      <el-form-item class="jw-field jw-field-1" label="重量" prop="f_weight">
+        <el-input-number v-model="entity.f_weight" :step="10"></el-input-number>
       </el-form-item>
-      <el-form-item class="jw-field jw-field-2" label="地址" prop="f_address">
-        <el-input v-model="entity.f_address"></el-input>
+      <el-form-item class="jw-field jw-field-1" label="类型" prop="f_type">
+        <jw-dict v-model="entity.f_crowd_type" :dict-code="'ClothesSizeType'">
+        </jw-dict>
       </el-form-item>
       <el-form-item class="jw-field jw-field-1" label="状态" prop="f_is_preset">
         <el-radio-group v-model="entity.f_status">
-          <el-radio :label="101">正常合作</el-radio>
-          <el-radio :label="102">暂停合作</el-radio>
+          <el-radio :label="101">出售</el-radio>
+          <el-radio :label="102">停售</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item class="jw-field jw-field-2" label="备注" prop="f_remark">
-        <el-input v-model="entity.f_remark" type="textarea" autosize></el-input>
+        <el-input v-model="entity.f_remark" type="textarea" :autosize="{minRows: 8, maxRows: 20}"></el-input>
       </el-form-item>
     </template>
   </jw-form>
@@ -37,25 +43,67 @@
   import {DetailMixin} from 'mixins'
 
   export default {
-    name: 'partnerDetail',
+    name: 'clothesDetail',
     mixins: [DetailMixin],
+    components: {
+      PartnerView: r => require.ensure([], () => r(require('views/admin/diy/partner/partner/View')), 'diy-partner-partner')
+    },
     data () {
       return {
+        inputPartnerOptions: {
+          selectorOptions: {
+            height: 400,
+            context: {
+              name: '合作伙伴',
+              featureComponent: this,
+              getViewComponent (options) {
+                return options.context.featureComponent.$refs['partnerView']
+              }
+            }
+          }
+        },
         options: {
           context: {
-            name: '合作伙伴',
-            url: 'api/diy/partner/partners'
+            name: '衣服',
+            url: 'api/diy/partner/clothes'
           },
           createEntity (options, cb) {
-            cb({f_status: 101})
+            cb({
+              f_partner_id: null,
+              f_partner_name: null,
+              f_code: null,
+              f_name: null,
+              f_desc: null,
+              f_cost_price: 0.00,
+              f_crowd_type: 101,
+              f_weight: 0,
+              f_creator_id: null,
+              f_created_time: null,
+              f_status: 101,
+              f_remark: null
+            })
           }
         },
         entity: {},
         rules: {
+          f_partner_name: [
+            {required: true, message: '请选择伙伴', trigger: 'blur'}
+          ],
           f_name: [
-            {required: true, message: '请输入合作伙伴名称', trigger: 'blur'},
-            {max: 200, message: '长度在200个字符以内', trigger: 'blur'}
+            {required: true, message: '请输入衣服款式名称', trigger: 'blur'},
+            {max: 80, message: '长度在80个字符以内', trigger: 'blur'}
           ]
+        }
+      }
+    },
+    computed: {
+      partner: {
+        get () {
+          return {f_id: this.entity.f_partner_id, f_name: this.entity.f_partner_name}
+        },
+        set (partner) {
+          this.entity.f_partner_id = partner.f_id
+          this.entity.f_partner_name = partner.f_name
         }
       }
     }

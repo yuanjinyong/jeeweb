@@ -72,7 +72,7 @@
         hide: this.mode !== 'selector',
         type: 'Checkbox'
       }, {
-        type: ['IndexRender', this.mode !== 'selector' ? 'AddHeader' : 'Null']
+        type: ['IndexRender', 'AddHeader']
       }, {
         headerName: '合作伙伴',
         field: 'f_partner_name',

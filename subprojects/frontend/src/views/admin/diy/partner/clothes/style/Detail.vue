@@ -25,12 +25,6 @@
         <jw-dict v-model="entity.f_crowd_type" :dict-code="'ClothesSizeType'">
         </jw-dict>
       </el-form-item>
-      <el-form-item class="jw-field jw-field-1" label="状态" prop="f_is_preset">
-        <el-radio-group v-model="entity.f_status">
-          <el-radio :label="101">出售</el-radio>
-          <el-radio :label="102">停售</el-radio>
-        </el-radio-group>
-      </el-form-item>
       <el-form-item class="jw-field jw-field-2" label="备注" prop="f_remark">
         <el-input v-model="entity.f_remark" type="textarea" :autosize="{minRows: 8, maxRows: 20}"></el-input>
       </el-form-item>
@@ -77,9 +71,6 @@
               f_cost_price: 0.00,
               f_crowd_type: 101,
               f_weight: 0,
-              f_creator_id: null,
-              f_created_time: null,
-              f_status: 101,
               f_remark: null
             })
           }

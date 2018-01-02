@@ -146,18 +146,18 @@ INSERT INTO `t_sys_dict_item`(`f_tenant_id`,`f_dict_code`,`f_item_order`,`f_item
 
 
 -- changeset 袁进勇:20171231084840 runOnChange:true
--- comment: 字典 ClothesStyleStatus 衣服款式状态
+-- comment: 字典 ClothesStatus 衣服状态
 -- ClothesStyleStatus 衣服款式状态 BEGIN ************************
-DELETE FROM `t_sys_dict_item` WHERE f_dict_code = 'ClothesStyleStatus';
-DELETE FROM `t_sys_dict` WHERE f_code = 'ClothesStyleStatus';
+DELETE FROM `t_sys_dict_item` WHERE f_dict_code = 'ClothesStatus';
+DELETE FROM `t_sys_dict` WHERE f_code = 'ClothesStatus';
 
-INSERT INTO `t_sys_dict`(`f_code`,`f_name`,`f_db_name`,`f_table_name`,`f_tenant_column`,`f_code_column`,`f_name_column`,`f_order_column`,`f_where_clause`,`f_is_preset`,`f_remark`) VALUES ('ClothesStyleStatus','衣服款式状态','defaultSqlMapper','t_sys_dict_item','0','f_item_code','f_item_name','f_item_order',NULL,101,NULL);
+INSERT INTO `t_sys_dict`(`f_code`,`f_name`,`f_db_name`,`f_table_name`,`f_tenant_column`,`f_code_column`,`f_name_column`,`f_order_column`,`f_where_clause`,`f_is_preset`,`f_remark`) VALUES ('ClothesStatus','衣服款式状态','defaultSqlMapper','t_sys_dict_item','0','f_item_code','f_item_name','f_item_order',NULL,101,NULL);
 
-INSERT INTO `t_sys_dict_item`(`f_tenant_id`,`f_dict_code`,`f_item_order`,`f_item_code`,`f_item_text`,`f_is_preset`) VALUES (0,'ClothesStyleStatus',0,'101','出售',101);
-INSERT INTO `t_sys_dict_item`(`f_tenant_id`,`f_dict_code`,`f_item_order`,`f_item_code`,`f_item_text`,`f_is_preset`) VALUES (0,'ClothesStyleStatus',1,'102','停售',101);
--- rollback DELETE FROM `t_sys_dict_item` WHERE f_dict_code = 'ClothesStyleStatus';
--- rollback DELETE FROM `t_sys_dict` WHERE f_code = 'ClothesStyleStatus';
--- ClothesStyleStatus 衣服款式状态 END **************************
+INSERT INTO `t_sys_dict_item`(`f_tenant_id`,`f_dict_code`,`f_item_order`,`f_item_code`,`f_item_text`,`f_is_preset`) VALUES (0,'ClothesStatus',0,'101','出售',101);
+INSERT INTO `t_sys_dict_item`(`f_tenant_id`,`f_dict_code`,`f_item_order`,`f_item_code`,`f_item_text`,`f_is_preset`) VALUES (0,'ClothesStatus',1,'102','停售',101);
+-- rollback DELETE FROM `t_sys_dict_item` WHERE f_dict_code = 'ClothesStatus';
+-- rollback DELETE FROM `t_sys_dict` WHERE f_code = 'ClothesStatus';
+-- ClothesStyleStatus 衣服状态 END **************************
 
 
 
@@ -255,6 +255,38 @@ INSERT INTO `t_sys_role_menu_distribution`(`f_role_id`,`f_menu_id`) VALUES (1,'D
 -- rollback DELETE FROM `t_sys_menu_url` WHERE f_menu_id LIKE 'DIY-HZHB-YFKS%';
 -- rollback DELETE FROM `t_sys_menu` WHERE f_id LIKE 'DIY-HZHB-YFKS%';
 -- DIY-HZHB-YFKS 衣服款式管理 END **************************
+
+
+
+-- changeset 请修改为自己的姓名:20180102231046 runOnChange:true
+-- comment: 菜单 DIY-HZHB-YFGL 衣服管理
+-- DIY-HZHB-YFGL 衣服管理 BEGIN ************************
+DELETE FROM `t_sys_role_menu_authorization` WHERE f_menu_id LIKE 'DIY-HZHB-YFGL%';
+DELETE FROM `t_sys_role_menu_distribution` WHERE f_menu_id LIKE 'DIY-HZHB-YFGL%';
+DELETE FROM `t_sys_menu_url` WHERE f_menu_id LIKE 'DIY-HZHB-YFGL%';
+DELETE FROM `t_sys_menu` WHERE f_id LIKE 'DIY-HZHB-YFGL%';
+
+INSERT INTO `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) VALUES ('DIY-HZHB-YFGL','DIY-HZHB','/ROOT/DIY-HZHB/',180,'衣服管理','衣服管理页面','fa fa-user-secret',2,'/admin/diy/partner/clothes',101,101,101,101,NULL);
+INSERT INTO `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) VALUES ('DIY-HZHB-YFGL-ZJ','DIY-HZHB-YFGL','/ROOT/DIY-HZHB/DIY-HZHB-YFGL/',10,'增加','增加衣服',NULL,3,NULL,101,101,101,101,NULL);
+INSERT INTO `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) VALUES ('DIY-HZHB-YFGL-XG','DIY-HZHB-YFGL','/ROOT/DIY-HZHB/DIY-HZHB-YFGL/',20,'修改','修改衣服',NULL,3,NULL,101,101,101,101,NULL);
+INSERT INTO `t_sys_menu`(`f_id`,`f_parent_id`,`f_parent_path`,`f_order`,`f_name`,`f_desc`,`f_icon`,`f_type`,`f_route_path`,`f_is_web`,`f_is_android`,`f_is_ios`,`f_status`,`f_remark`) VALUES ('DIY-HZHB-YFGL-SC','DIY-HZHB-YFGL','/ROOT/DIY-HZHB/DIY-HZHB-YFGL/',30,'删除','删除衣服',NULL,3,NULL,101,101,101,101,NULL);
+
+INSERT INTO `t_sys_menu_url`(`f_menu_id`,`f_url_id`) VALUES ('DIY-HZHB-YFGL','ef40f233db585b1f6daf664ec5dd82fb');
+INSERT INTO `t_sys_menu_url`(`f_menu_id`,`f_url_id`) VALUES ('DIY-HZHB-YFGL','fc0722e0da05a5ce821e3077526e386f');
+INSERT INTO `t_sys_menu_url`(`f_menu_id`,`f_url_id`) VALUES ('DIY-HZHB-YFGL-SC','0569104ac86d9cd97b091dcf5bafd5b8');
+INSERT INTO `t_sys_menu_url`(`f_menu_id`,`f_url_id`) VALUES ('DIY-HZHB-YFGL-XG','76b1411489c8dc31bee0b68fcc6cf56c');
+INSERT INTO `t_sys_menu_url`(`f_menu_id`,`f_url_id`) VALUES ('DIY-HZHB-YFGL-ZJ','aa3d11b57140e29107a1511050d7278d');
+
+INSERT INTO `t_sys_role_menu_distribution`(`f_role_id`,`f_menu_id`) VALUES (1,'DIY-HZHB-YFGL');
+INSERT INTO `t_sys_role_menu_distribution`(`f_role_id`,`f_menu_id`) VALUES (1,'DIY-HZHB-YFGL-SC');
+INSERT INTO `t_sys_role_menu_distribution`(`f_role_id`,`f_menu_id`) VALUES (1,'DIY-HZHB-YFGL-XG');
+INSERT INTO `t_sys_role_menu_distribution`(`f_role_id`,`f_menu_id`) VALUES (1,'DIY-HZHB-YFGL-ZJ');
+-- rollback DELETE FROM `t_sys_role_menu_authorization` WHERE f_menu_id LIKE 'DIY-HZHB-YFGL%';
+-- rollback DELETE FROM `t_sys_role_menu_distribution` WHERE f_menu_id LIKE 'DIY-HZHB-YFGL%';
+-- rollback DELETE FROM `t_sys_menu_url` WHERE f_menu_id LIKE 'DIY-HZHB-YFGL%';
+-- rollback DELETE FROM `t_sys_menu` WHERE f_id LIKE 'DIY-HZHB-YFGL%';
+-- DIY-HZHB-YFGL 衣服管理 END **************************
+
 
 
 

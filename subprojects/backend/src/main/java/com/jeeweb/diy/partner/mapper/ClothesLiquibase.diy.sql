@@ -1,7 +1,7 @@
 -- liquibase formatted
 
 
--- changeset 袁进勇:20171205000001
+-- changeset 袁进勇:20171205000002
 -- comment: 创建 衣服 表结构
 CREATE TABLE `t_diy_clothes` (
   `f_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -13,6 +13,7 @@ CREATE TABLE `t_diy_clothes` (
   `f_desc` text COMMENT '描述',
   `f_creator_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建人ID',
   `f_created_time` datetime NOT NULL COMMENT '创建时间',
+  `f_status` tinyint(3) unsigned NOT NULL DEFAULT '101' COMMENT '状态：101、出售；102、停售',
   `f_remark` longtext COMMENT '备注',
   PRIMARY KEY (`f_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='衣服';

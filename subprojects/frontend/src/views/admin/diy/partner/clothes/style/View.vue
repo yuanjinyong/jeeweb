@@ -72,7 +72,7 @@
         hide: this.mode !== 'selector',
         type: 'Checkbox'
       }, {
-        type: ['IndexRender', this.mode !== 'selector' ? 'AddHeader' : 'Null']
+        type: ['IndexRender', 'AddHeader']
       }, {
         headerName: '合作伙伴',
         field: 'f_partner_name',
@@ -122,17 +122,6 @@
         field: 'f_weight',
         width: 100
       }, {
-        headerName: '创建人',
-        field: 'f_creator_id',
-        type: ['DictRender'],
-        cellRendererParams: {dict: 'UserNameAll'},
-        width: 100
-      }, {
-        headerName: '创建时间',
-        field: 'f_created_time',
-        suppressSorting: false,
-        type: ['TimestampRender', 'TimestampFilter']
-      }, {
         headerName: '描述',
         field: 'f_desc',
         tooltipField: 'f_desc',
@@ -143,13 +132,6 @@
         tooltipField: 'f_remark',
         suppressSizeToFit: false,
         width: 300
-      }, {
-        headerName: '状态',
-        field: 'f_status',
-        pinned: 'right',
-        type: ['DictRender', 'DictFilter'],
-        cellRendererParams: {dict: 'ClothesStyleStatus'},
-        width: 64
       }, {
         hide: this.mode === 'selector',
         type: 'OperationRender',

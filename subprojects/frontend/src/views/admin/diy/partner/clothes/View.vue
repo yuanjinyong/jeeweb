@@ -2,7 +2,12 @@
   <div :style="contentStyle">
     <ag-grid ref="grid" class="ag-fresh jw-grid" :grid-options="gridOptions"></ag-grid>
 
-    <partner-detail ref="detail" :detail-options="detailOptions"></partner-detail>
+    <clothes-detail ref="detail" :detail-options="detailOptions"></clothes-detail>
+
+    <partner-detail ref="partnerDetail" :detail-options="partnerDetailOptions"></partner-detail>
+    <clothes-color-detail ref="clothesColorDetail" :detail-options="clothesColorDetailOptions"></clothes-color-detail>
+    <clothes-size-detail ref="clothesSizeDetail" :detail-options="clothesSizeDetailOptions"></clothes-size-detail>
+    <clothes-style-detail ref="clothesStyleDetail" :detail-options="clothesStyleDetailOptions"></clothes-style-detail>
   </div>
 </template>
 
@@ -11,13 +16,49 @@
   import {ViewlMixin} from 'mixins'
 
   export default {
-    name: 'partnerView',
+    name: 'clothesStyleView',
     mixins: [ViewlMixin],
     components: {
-      PartnerDetail: r => require.ensure([], () => r(require('./Detail')), 'diy-partner-clothes')
+      PartnerDetail: r => require.ensure([], () => r(require('views/admin/diy/partner/partner/Detail')), 'diy-partner-partner'),
+      ClothesColorDetail: r => require.ensure([], () => r(require('views/admin/diy/partner/clothes/color/Detail')), 'diy-partner-clothes-color'),
+      ClothesSizeDetail: r => require.ensure([], () => r(require('views/admin/diy/partner/clothes/size/Detail')), 'diy-partner-clothes-size'),
+      ClothesStyleDetail: r => require.ensure([], () => r(require('views/admin/diy/partner/clothes/style/Detail')), 'diy-partner-clothes-style'),
+      ClothesDetail: r => require.ensure([], () => r(require('./Detail')), 'diy-partner-clothes')
     },
     data () {
       return {
+        partnerDetailOptions: {
+          context: {
+            featureComponent: this,
+            getGridComponent (options) {
+              return options.context.featureComponent.$refs['grid']
+            }
+          }
+        },
+        clothesColorDetailOptions: {
+          context: {
+            featureComponent: this,
+            getGridComponent (options) {
+              return options.context.featureComponent.$refs['grid']
+            }
+          }
+        },
+        clothesSizeDetailOptions: {
+          context: {
+            featureComponent: this,
+            getGridComponent (options) {
+              return options.context.featureComponent.$refs['grid']
+            }
+          }
+        },
+        clothesStyleDetailOptions: {
+          context: {
+            featureComponent: this,
+            getGridComponent (options) {
+              return options.context.featureComponent.$refs['grid']
+            }
+          }
+        },
         detailOptions: {
           context: {
             featureComponent: this,
@@ -28,8 +69,8 @@
         },
         gridOptions: this.$grid.buildOptions({
           context: {
-            name: '合作伙伴',
-            url: 'api/diy/partner/partners',
+            name: '衣服',
+            url: 'api/diy/partner/clothes',
             featureComponent: this,
             getPermissions (params, operation) {
               return params.context.featureComponent.permission
@@ -50,9 +91,9 @@
       },
       permission () {
         return {
-          add: this.hasPermission('DIY-HZHB-HZHB-ZJ'),
-          edit: this.hasPermission('DIY-HZHB-HZHB-XG'),
-          remove: this.hasPermission('DIY-HZHB-HZHB-SC')
+          add: this.hasPermission('DIY-HZHB-YFGL-ZJ'),
+          edit: this.hasPermission('DIY-HZHB-YFGL-XG'),
+          remove: this.hasPermission('DIY-HZHB-YFGL-SC')
         }
       }
     },
@@ -61,43 +102,55 @@
         hide: this.mode !== 'selector',
         type: 'Checkbox'
       }, {
-        type: ['IndexRender', this.mode !== 'selector' ? 'AddHeader' : 'Null']
+        type: ['IndexRender', 'AddHeader']
+      }, {
+        headerName: '合作伙伴',
+        field: 'f_partner_name',
+        pinned: 'left',
+        suppressSorting: false,
+        sortColId: 'convert(f_partner_name USING gbk)',
+        type: ['ViewRender', 'LikeFilter'],
+        cellRendererParams: {
+          operation: {
+            title: '查看合作伙伴',
+            onClick (params, entity) {
+              params.context.featureComponent.$refs['partnerDetail'].open({
+                operation: this.operation.id,
+                title: this.operation.title,
+                params: {f_id: entity.f_partner_id}
+              })
+            }
+          }
+        },
+        width: 160
+      }, {
+        headerName: '编码',
+        field: 'f_code',
+        pinned: 'left',
+        suppressSorting: false,
+        type: ['ViewRender', 'LikeFilter'],
+        width: 100
       }, {
         headerName: '名称',
         field: 'f_name',
-        pinned: 'left',
         suppressSorting: false,
         sortColId: 'convert(f_name USING gbk)',
-        type: ['ViewRender', 'LikeFilter'],
+        type: ['LikeFilter'],
         width: 160
       }, {
-        headerName: '负责人姓名',
-        field: 'f_leader',
-        tooltipField: 'f_leader',
-        suppressSorting: false,
-        sortColId: 'convert(f_leader USING gbk)',
-        type: ['LikeFilter'],
+        headerName: '人群类型',
+        field: 'f_crowd_type',
+        type: ['DictRender', 'DictFilter'],
+        cellRendererParams: {dict: 'ClothesStyleCrowdType'},
+        width: 120
+      }, {
+        headerName: '成本价(元)',
+        field: 'f_cost_price',
         width: 100
       }, {
-        headerName: '固定电话',
-        field: 'f_phone',
-        tooltipField: 'f_phone',
-        suppressSorting: false,
-        type: ['LikeFilter'],
+        headerName: '重量(g)',
+        field: 'f_weight',
         width: 100
-      }, {
-        headerName: '手机号码',
-        field: 'f_mobile',
-        tooltipField: 'f_mobile',
-        suppressSorting: false,
-        type: ['LikeFilter'],
-        width: 100
-      }, {
-        headerName: '地址',
-        field: 'f_address',
-        tooltipField: 'f_address',
-        type: ['LikeFilter'],
-        width: 200
       }, {
         headerName: '创建人',
         field: 'f_creator_id',
@@ -108,11 +161,6 @@
         headerName: '创建时间',
         field: 'f_created_time',
         suppressSorting: false,
-        cellRendererParams: {
-          options: {
-            format: 'YYYY年MM月DD日HH时mm分ss秒'
-          }
-        },
         type: ['TimestampRender', 'TimestampFilter']
       }, {
         headerName: '描述',
@@ -120,18 +168,18 @@
         tooltipField: 'f_desc',
         width: 300
       }, {
-        headerName: '状态',
-        field: 'f_status',
-        pinned: 'right',
-        type: ['DictRender', 'DictFilter'],
-        cellRendererParams: {dict: 'PartnerStatus'},
-        width: 64
-      }, {
         headerName: '备注',
         field: 'f_remark',
         tooltipField: 'f_remark',
         suppressSizeToFit: false,
         width: 300
+      }, {
+        headerName: '状态',
+        field: 'f_status',
+        pinned: 'right',
+        type: ['DictRender', 'DictFilter'],
+        cellRendererParams: {dict: 'ClothesStyleStatus'},
+        width: 64
       }, {
         hide: this.mode === 'selector',
         type: 'OperationRender',
