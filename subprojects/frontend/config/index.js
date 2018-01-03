@@ -33,7 +33,7 @@ var setCookie = function (proxyRes, req, res) {
 module.exports = {
   build: {
     env: require('./prod.env'),
-    title: '筑库网项目管理系统',
+    title: 'Java Web管理系统',
     index: path.resolve(assetsRoot, 'index.html'),
     assetsRoot: assetsRoot,
     assetsSubDirectory: assetsSubDirectory,
