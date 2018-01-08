@@ -3,10 +3,10 @@
 
 <template>
   <div>
-    <el-row style="background-color: #39f;">
+    <el-row style="background-color: #324157;">
       <el-col :span="24" style="padding: 5px 20px;">
         <div style="display: inline-block;">
-          <img src="assets/img/logo.png">
+          <img src="assets/img/logo64.png">
         </div>
         <div style="position: absolute; right: 0px; bottom: 0px;padding: 20px;" v-if="showButton && curUser">
           <jw-company-dropdown style="display: inline-block;"></jw-company-dropdown>
