@@ -131,7 +131,7 @@ public class PageInterceptor implements Interceptor {
         Log log = mappedStatement.getStatementLog();
         ParamsMap params = (ParamsMap) boundSql.getParameterObject();
         // 如果入参中已经传入了有值的totalCount，则不需要再去查询出总数了
-        if (!params.hasTotalCount() || params.getTotalCount() != null) {
+        if ((!params.hasTotalCount()) || (params.getTotalCount() != null && params.getTotalCount() != -1)) {
             log.trace("无需查询总记录数。");
             return;
         }

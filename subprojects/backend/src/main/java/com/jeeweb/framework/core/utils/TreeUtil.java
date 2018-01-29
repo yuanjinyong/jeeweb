@@ -59,6 +59,28 @@ public final class TreeUtil {
 
         return nodeTree;
     }
+    
+    public static <T extends TreeNodeEntity<?, T>> List<T> toTreeForList(List<T> nodeList) {
+    	List<T> nodeTree = new ArrayList<>();
+    	 // 组织好父子关系
+        Map<Object, T> nodeMap = new HashMap<>();
+        for (T node : nodeList) {
+            nodeMap.put(node.getF_id(), node);
+            // T parentNode = nodeMap.get(node.getF_parent_id());
+            T parentNode = getParentNode(nodeMap, node.getF_parent_id(), node.getF_parent_path());
+            if (parentNode == null) {
+                nodeTree.add(node);
+            } else {
+                parentNode.getChildren().add(node);
+            }
+
+            if (node.getChildren() == null) {
+                node.setChildren(new ArrayList<T>());
+            }
+        }
+        return nodeTree;    	
+    }
+    
 
     public static List<RowMap> listToTree(List<RowMap> nodeList, String f_id) {
         return listToTree(nodeList, f_id, "f_parent_id", "f_parent_path");
